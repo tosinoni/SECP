@@ -1,2 +1,8 @@
+language: java
+
+jdk:
+  - oraclejdk8
+
+script: mvn verify -Ptest
  notifications:
     slack: visucius:uMzvqrTZFcAxdOm6VAggcuhN
