@@ -22,6 +22,8 @@ Install Bower:
 
 In the SECP directory, run the server:
 
+      npm install
+      bower install
       mvn compile exec:exec -pl SECP-service
 
 Your server will run at [http://localhost:8080](http://localhost:8080).
