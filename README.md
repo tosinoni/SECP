@@ -1,7 +1,7 @@
 # SECP
 Secure Electronic Communication Platform
 
-The platform uses [AngularJS](http://angularjs.org) for client side and [Dropwizard](http://dropwizard.codahale.com) for server side.
+The platform uses [AngularJS](http://angularjs.org) for client side and [Dropwizard](http://www.dropwizard.io) for server side.
 
 ##	Steps for setting up development environment
 Install [Git](http://git-scm.com), [node.js](http://nodejs.org), [JDK 8](https://www.java.com), and [Maven 3](http://maven.apache.org/).

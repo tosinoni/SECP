@@ -1,5 +1,5 @@
 language: java
 
-script: mvn verify -P test
+script: mvn clean install -B
 notifications:
     slack: visucius:uMzvqrTZFcAxdOm6VAggcuhN
