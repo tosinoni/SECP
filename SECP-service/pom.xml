@@ -56,11 +56,7 @@
             <artifactId>websocket-server</artifactId>
             <version>9.4.7.v20170914</version>
         </dependency>
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-util</artifactId>
-            <version>9.4.7.v20170914</version>
-        </dependency>
+
     </dependencies>
 
     <build>
