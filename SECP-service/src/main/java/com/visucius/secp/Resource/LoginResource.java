@@ -26,11 +26,12 @@ public class LoginResource {
     {
         UserLoginResponse userLoginResponse = this.loginController.handle(userLoginRequest);
 
-        if(userLoginResponse.Success) {
-            Response.status(userLoginResponse.status).entity(userLoginResponse.Message).build();
+        if(userLoginResponse.success) {
+            Response.status(userLoginResponse.status)
+                .entity(userLoginResponse.message + userLoginResponse.accessToken).build();
         }
 
-        throw new WebApplicationException(userLoginResponse.Message, userLoginResponse.status);
+        throw new WebApplicationException(userLoginResponse.message, userLoginResponse.status);
 
     }
 }

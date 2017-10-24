@@ -1,9 +1,6 @@
 package com.visucius.secp.UseCase;
 
-
-import com.visucius.secp.Contracts.IPasswordRepository;
 import com.visucius.secp.Contracts.IRequestHandler;
-import com.visucius.secp.Contracts.IUserRepository;
 import com.visucius.secp.DTO.UserRegistrationRequest;
 import com.visucius.secp.DTO.UserRegistrationResponse;
 
@@ -11,13 +8,8 @@ import javax.ws.rs.core.Response;
 
 public class UserRegistrationController implements IRequestHandler<UserRegistrationRequest, UserRegistrationResponse> {
 
-    private final IPasswordRepository passwordRepository;
-    private final IUserRepository userRepository;
-
-    public UserRegistrationController(IPasswordRepository passwordRepository, IUserRepository userRepository)
+    public UserRegistrationController()
     {
-        this.userRepository = userRepository;
-        this.passwordRepository = passwordRepository;
     }
 
     @Override

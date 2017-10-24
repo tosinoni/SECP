@@ -25,10 +25,10 @@ public class RegisterResource {
     public Response registerUser(UserRegistrationRequest request) {
         UserRegistrationResponse response = userRegistrationController.handle(request);
 
-        if (response.Success) {
-            return Response.status(response.status).entity(response.Message).build();
+        if (response.success) {
+            return Response.status(response.status).entity(response.message).build();
         }
 
-        throw new WebApplicationException(response.Message, response.status);
+        throw new WebApplicationException(response.message, response.status);
     }
 }

@@ -54,9 +54,9 @@ public class SECPService extends Application<SECPConfiguration> {
     public void run(SECPConfiguration configuration,
                     Environment environment) throws Exception {
 
-        final UserRegistrationController userRegistrationController = new UserRegistrationController(null,null);
+        final UserRegistrationController userRegistrationController = new UserRegistrationController();
         final RegisterResource registerResource = new RegisterResource(userRegistrationController);
-        final UserLoginController userLoginController = new UserLoginController(null,null);
+        final UserLoginController userLoginController = new UserLoginController();
         final LoginResource loginResource = new LoginResource(userLoginController);
 
         environment.jersey().register(registerResource);
