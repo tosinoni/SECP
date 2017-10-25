@@ -17,6 +17,7 @@ public class UserLoginController implements IRequestHandler<UserLoginRequest, Us
     @Override
     public UserLoginResponse handle(UserLoginRequest userLoginRequest) {
         // @TODO implement user login
-        return new UserLoginResponse(true,"Login Successfull", Response.Status.OK,"");
+
+        return new UserLoginResponse(true,"Login Successful", Response.Status.OK,"");
     }
 }

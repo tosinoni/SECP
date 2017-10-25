@@ -12,9 +12,6 @@ public class UserRegistrationRequest implements IRequest<UserRegistrationRespons
     public String lastName;
 
     @JsonProperty
-    public int permissionLevel;
-
-    @JsonProperty
     public String email;
 
     @JsonProperty
