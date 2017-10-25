@@ -6,6 +6,8 @@ import com.visucius.secp.DTO.UserRegistrationResponse;
 import com.visucius.secp.util.InputValidator;
 
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserRegistrationController implements IRequestHandler<UserRegistrationRequest, UserRegistrationResponse> {
 
@@ -15,6 +17,7 @@ public class UserRegistrationController implements IRequestHandler<UserRegistrat
     public static final String EMAIL_INVALID = "Email is not valid.";
     public static final String PASSWORD_INVALID = "Password is not valid";
     public static final String USER_CREATED = "User Created";
+    public static final String USER_NOT_CREATED = "User not created";
 
     public UserRegistrationController()
     {
@@ -23,30 +26,36 @@ public class UserRegistrationController implements IRequestHandler<UserRegistrat
     @Override
     public UserRegistrationResponse handle(UserRegistrationRequest userRegistrationRequest) {
 
+        List<String> errors = new ArrayList<>();
+
         if(!InputValidator.isNameValid(userRegistrationRequest.firstName))
         {
-            return new UserRegistrationResponse(false,FIRST_NAME_INVALID, Response.Status.BAD_REQUEST);
+            errors.add(FIRST_NAME_INVALID);
         }
 
         if(!InputValidator.isNameValid(userRegistrationRequest.lastName))
         {
-            return new UserRegistrationResponse(false,LAST_NAME_INVALID, Response.Status.BAD_REQUEST);
+            errors.add(LAST_NAME_INVALID);
 
         }
 
         if(!InputValidator.isEmailValid(userRegistrationRequest.email))
         {
-            return new UserRegistrationResponse(false,EMAIL_INVALID, Response.Status.BAD_REQUEST);
+            errors.add(EMAIL_INVALID);
 
         }
 
         if(!InputValidator.isPasswordValid(userRegistrationRequest.password))
         {
-            return new UserRegistrationResponse(false,PASSWORD_INVALID, Response.Status.BAD_REQUEST);
+            errors.add(PASSWORD_INVALID);
         }
 
+        if(errors.size() > 0)
+            return new UserRegistrationResponse(false,USER_NOT_CREATED, Response.Status.BAD_REQUEST,errors);
 
-        return new UserRegistrationResponse(true, USER_CREATED, Response.Status.CREATED);
+        //@TODO Store user
+
+        return new UserRegistrationResponse(true, USER_CREATED, Response.Status.CREATED,errors);
     }
 }
 

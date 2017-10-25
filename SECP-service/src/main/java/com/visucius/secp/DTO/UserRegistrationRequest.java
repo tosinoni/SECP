@@ -17,6 +17,11 @@ public class UserRegistrationRequest implements IRequest<UserRegistrationRespons
     @JsonProperty
     public String password;
 
+    public UserRegistrationRequest()
+    {
+
+    }
+
     public UserRegistrationRequest(String firstName, String lastName, String email, String password)
     {
         this.firstName = firstName;

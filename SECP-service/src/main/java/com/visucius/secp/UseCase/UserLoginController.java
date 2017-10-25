@@ -1,6 +1,5 @@
 package com.visucius.secp.UseCase;
 
-import com.visucius.secp.Contracts.IPasswordRepository;
 import com.visucius.secp.Contracts.IRequestHandler;
 import com.visucius.secp.DTO.UserLoginRequest;
 import com.visucius.secp.DTO.UserLoginResponse;

@@ -8,7 +8,6 @@ import com.visucius.secp.UseCase.UserRegistrationController;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 @Path("/register")
 public class RegisterResource {
@@ -22,13 +21,14 @@ public class RegisterResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response registerUser(UserRegistrationRequest request) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public UserRegistrationResponse registerUser(UserRegistrationRequest request) {
         UserRegistrationResponse response = userRegistrationController.handle(request);
 
         if (response.success) {
-            return Response.status(response.status).entity(response.message).build();
+            return response;
         }
 
-        throw new WebApplicationException(response.message, response.status);
+        throw new WebApplicationException(response.getErrors(), response.status);
     }
 }

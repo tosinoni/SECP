@@ -30,8 +30,8 @@ public class UserRegistrationControllerTest {
 
         assertFalse(response.success);
         assertEquals(response.status, Response.Status.BAD_REQUEST);
-        assertEquals(response.message, UserRegistrationController.FIRST_NAME_INVALID);
-
+        assertTrue(response.errors.contains(UserRegistrationController.FIRST_NAME_INVALID));
+        assertEquals(response.message, UserRegistrationController.USER_NOT_CREATED);
     }
 
     @Test
@@ -45,7 +45,8 @@ public class UserRegistrationControllerTest {
 
         assertFalse(response.success);
         assertEquals(response.status, Response.Status.BAD_REQUEST);
-        assertEquals(response.message, UserRegistrationController.LAST_NAME_INVALID);
+        assertTrue(response.errors.contains(UserRegistrationController.LAST_NAME_INVALID));
+        assertEquals(response.message, UserRegistrationController.USER_NOT_CREATED);
     }
 
     @Test
@@ -60,8 +61,8 @@ public class UserRegistrationControllerTest {
 
         assertFalse(response.success);
         assertEquals(response.status, Response.Status.BAD_REQUEST);
-        assertEquals(response.message, UserRegistrationController.FIRST_NAME_INVALID);
-
+        assertTrue(response.errors.contains(UserRegistrationController.FIRST_NAME_INVALID));
+        assertEquals(response.message, UserRegistrationController.USER_NOT_CREATED);
     }
 
     @Test
@@ -76,7 +77,8 @@ public class UserRegistrationControllerTest {
 
         assertFalse(response.success);
         assertEquals(response.status, Response.Status.BAD_REQUEST);
-        assertEquals(response.message, UserRegistrationController.LAST_NAME_INVALID);
+        assertTrue(response.errors.contains(UserRegistrationController.LAST_NAME_INVALID));
+        assertEquals(response.message, UserRegistrationController.USER_NOT_CREATED);
     }
 
     @Test
@@ -90,7 +92,8 @@ public class UserRegistrationControllerTest {
 
         assertFalse(response.success);
         assertEquals(response.status, Response.Status.BAD_REQUEST);
-        assertEquals(response.message, UserRegistrationController.PASSWORD_INVALID);
+        assertTrue(response.errors.contains(UserRegistrationController.PASSWORD_INVALID));
+        assertEquals(response.message, UserRegistrationController.USER_NOT_CREATED);
     }
 
     @Test
@@ -104,7 +107,8 @@ public class UserRegistrationControllerTest {
 
         assertFalse(response.success);
         assertEquals(response.status, Response.Status.BAD_REQUEST);
-        assertEquals(response.message, UserRegistrationController.PASSWORD_INVALID);
+        assertTrue(response.errors.contains(UserRegistrationController.PASSWORD_INVALID));
+        assertEquals(response.message, UserRegistrationController.USER_NOT_CREATED);
     }
 
     @Test
@@ -118,7 +122,8 @@ public class UserRegistrationControllerTest {
 
         assertFalse(response.success);
         assertEquals(response.status, Response.Status.BAD_REQUEST);
-        assertEquals(response.message, UserRegistrationController.PASSWORD_INVALID);
+        assertTrue(response.errors.contains(UserRegistrationController.PASSWORD_INVALID));
+        assertEquals(response.message, UserRegistrationController.USER_NOT_CREATED);
     }
 
     @Test
@@ -132,7 +137,8 @@ public class UserRegistrationControllerTest {
 
         assertFalse(response.success);
         assertEquals(response.status, Response.Status.BAD_REQUEST);
-        assertEquals(response.message, UserRegistrationController.PASSWORD_INVALID);
+        assertTrue(response.errors.contains(UserRegistrationController.PASSWORD_INVALID));
+        assertEquals(response.message, UserRegistrationController.USER_NOT_CREATED);
     }
 
     @Test
@@ -147,7 +153,8 @@ public class UserRegistrationControllerTest {
 
         assertFalse(response.success);
         assertEquals(response.status, Response.Status.BAD_REQUEST);
-        assertEquals(response.message, UserRegistrationController.EMAIL_INVALID);
+        assertTrue(response.errors.contains(UserRegistrationController.EMAIL_INVALID));
+        assertEquals(response.message, UserRegistrationController.USER_NOT_CREATED);
     }
 
     @Test
@@ -162,7 +169,8 @@ public class UserRegistrationControllerTest {
 
         assertFalse(response.success);
         assertEquals(response.status, Response.Status.BAD_REQUEST);
-        assertEquals(response.message, UserRegistrationController.EMAIL_INVALID);
+        assertTrue(response.errors.contains(UserRegistrationController.EMAIL_INVALID));
+        assertEquals(response.message, UserRegistrationController.USER_NOT_CREATED);
     }
 
     @Test
@@ -177,6 +185,7 @@ public class UserRegistrationControllerTest {
 
         assertTrue(response.success);
         assertEquals(response.status, Response.Status.CREATED);
+        assertTrue(response.errors.isEmpty());
         assertEquals(response.message, UserRegistrationController.USER_CREATED);
     }
 
