@@ -51,6 +51,12 @@
             <artifactId>derby</artifactId>
             <version>10.11.1.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty.websocket</groupId>
+            <artifactId>websocket-server</artifactId>
+            <version>9.4.7.v20170914</version>
+        </dependency>
+
     </dependencies>
 
     <build>
