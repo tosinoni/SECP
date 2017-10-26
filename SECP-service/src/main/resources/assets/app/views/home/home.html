@@ -1,17 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
+<div class="container-fluid">
 
-<head>
-    <script src="login_register.js"></script>
-    <link rel="stylesheet" type="text/css" href="login_register.css" />
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+    <head>
+        <link rel="stylesheet" type="text/css" href="../../css/login_register.css" />
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
 
-<body class="center">
-    <div id="motto">
-        <p> Safe. Secure. Reliable.</p>
-    </div>
+    <body class="center" ng-app="">
+        <div id="motto">
+            <p> Safe. Secure. Reliable.</p>
+        </div>
         <div id="login" class="center">
             <form autocomplete="on">
                 <h1>Log in</h1>
@@ -32,7 +30,7 @@
                 </p>
                 <p class="change_link">
                     Not a member yet ?
-                    <button type="button" onclick="displayRegisterForm()">Join us</button>
+                    <button type="button" ng-click="displayRegisterForm()">Join us</button>
                 </p>
             </form>
         </div>
@@ -57,10 +55,9 @@
                 </p>
                 <p class="change_link">
                     Already a member ?
-                    <button type="button" onclick="displayLoginForm()">Log in</button>
+                    <button type="button" ng-click="displayLoginForm()">Log in</button>
                 </p>
             </form>
         </div>
-</body>
-
-</html>
+    </body>
+</div>
