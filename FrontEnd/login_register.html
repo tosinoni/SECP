@@ -1,10 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+    <script src="login_register.js"></script>
+    <link rel="stylesheet" type="text/css" href="login_register.css" />
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
-<body>
 
+<body class="center">
+    <div id="motto">
+        <p> Safe. Secure. Reliable.</p>
+    </div>
+        <div id="login" class="center">
+            <form autocomplete="on">
+                <h1>Log in</h1>
+                <p>
+                    <label for="username"> Your email </label>
+                    <input id="username" name="username" required="required" type="email" placeholder="mymail@mail.com" />
+                </p>
+                <p>
+                    <label for="password"> Your password </label>
+                    <input id="password" name="password" required="required" type="password" placeholder="eg. X8df!90EO" />
+                </p>
+                <p class="keeplogin">
+                    <input type="checkbox" name="loginkeeping" id="loginkeeping" value="loginkeeping" />
+                    <label for="loginkeeping">Keep me logged in</label>
+                </p>
+                <p class="login button">
+                    <input type="submit" value="Login" />
+                </p>
+                <p class="change_link">
+                    Not a member yet ?
+                    <button type="button" onclick="displayRegisterForm()">Join us</button>
+                </p>
+            </form>
+        </div>
+        <div id="register" class="hiddenForm">
+            <form autocomplete="on">
+                <h1> Sign up </h1>
+                <p>
+                    <label for="emailsignup"> Your email</label>
+                    <input id="emailsignup" name="emailsignup" required="required" type="email" placeholder="myemail@mail.com" />
+                </p>
+                <p>
+                    <label for="passwordsignup">Your password </label>
+                    <input id="passwordsignup" name="passwordsignup" required="required" type="password" placeholder="eg. X8df!90EO" />
+                </p>
+                <p>
+                    <label for="passwordsignup_confirm">Please confirm your password </label>
+                    <input id="passwordsignup_confirm" name="passwordsignup_confirm" required="required" type="password" placeholder="eg. X8df!90EO"
+                    />
+                </p>
+                <p class="signin button">
+                    <input type="submit" value="Sign up" />
+                </p>
+                <p class="change_link">
+                    Already a member ?
+                    <button type="button" onclick="displayLoginForm()">Log in</button>
+                </p>
+            </form>
+        </div>
 </body>
+
 </html>

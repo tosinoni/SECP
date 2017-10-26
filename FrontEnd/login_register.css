@@ -1,0 +1,19 @@
+.hiddenForm {
+    display: none;
+}
+
+body {
+    margin:0;
+	padding:0;
+	height: 100%;
+    background: url(https://static.pexels.com/photos/317353/pexels-photo-317353.jpeg);
+    background-attachment:fixed;
+    background-size:cover;
+}
+
+.center {
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+    text-align: center;
+}
