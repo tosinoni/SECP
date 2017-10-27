@@ -3,61 +3,87 @@
     <head>
         <link rel="stylesheet" type="text/css" href="../../css/login_register.css" />
         <meta charset="UTF-8">
-        <title>Title</title>
+        <title>Welcome to SECP</title>
     </head>
 
-    <body class="center" ng-app="">
+    <body ng-controller="HomeController">
+        <div id="bg"></div>
         <div id="motto">
-            <p> Safe. Secure. Reliable.</p>
+            <p>Safe. Secure. Reliable.</p>
         </div>
-        <div id="login" class="center">
+        <div class="form-group" ng-show="show=='loginForm'">
             <form autocomplete="on">
-                <h1>Log in</h1>
-                <p>
-                    <label for="username"> Your email </label>
-                    <input id="username" name="username" required="required" type="email" placeholder="mymail@mail.com" />
-                </p>
-                <p>
-                    <label for="password"> Your password </label>
-                    <input id="password" name="password" required="required" type="password" placeholder="eg. X8df!90EO" />
-                </p>
-                <p class="keeplogin">
-                    <input type="checkbox" name="loginkeeping" id="loginkeeping" value="loginkeeping" />
-                    <label for="loginkeeping">Keep me logged in</label>
-                </p>
-                <p class="login button">
-                    <input type="submit" value="Login" />
-                </p>
-                <p class="change_link">
-                    Not a member yet ?
-                    <button type="button" ng-click="displayRegisterForm()">Join us</button>
-                </p>
+                <h1 id="formHeader">Log in</h1>
+
+                <div class="group">
+                    <input type="email" required="required" />
+                    <span class="highlight"></span>
+                    <span class="bar"></span>
+                    <label>Email</label>
+                </div>
+                <div class="group">
+                    <input type="password" required="required" />
+                    <span class="highlight"></span>
+                    <span class="bar"></span>
+                    <label>Password</label>
+                </div>
+
+                <div class="btn-box">
+                    <button type="submit" class="btn btn-submit">Log in</button>
+                </div>
+
             </form>
+
+            <p class="change_link">
+                Not a member yet ?
+                <button type="button" ng-click="show = 'registerForm'" class="btn btn-submit">Join us</button>
+            </p>
         </div>
-        <div id="register" class="hiddenForm">
+
+
+        <div class="form-group" ng-show="show=='registerForm'">
             <form autocomplete="on">
-                <h1> Sign up </h1>
-                <p>
-                    <label for="emailsignup"> Your email</label>
-                    <input id="emailsignup" name="emailsignup" required="required" type="email" placeholder="myemail@mail.com" />
-                </p>
-                <p>
-                    <label for="passwordsignup">Your password </label>
-                    <input id="passwordsignup" name="passwordsignup" required="required" type="password" placeholder="eg. X8df!90EO" />
-                </p>
-                <p>
-                    <label for="passwordsignup_confirm">Please confirm your password </label>
-                    <input id="passwordsignup_confirm" name="passwordsignup_confirm" required="required" type="password" placeholder="eg. X8df!90EO"
-                    />
-                </p>
-                <p class="signin button">
-                    <input type="submit" value="Sign up" />
-                </p>
-                <p class="change_link">
-                    Already a member ?
-                    <button type="button" ng-click="displayLoginForm()">Log in</button>
-                </p>
+                <h1 id="formHeader">Sign up</h1>
+                <div class="group">
+                    <input id="firstName" type="text" required="required" />
+                    <span class="highlight"></span>
+                    <span class="bar"></span>
+                    <label>First Name</label>
+                </div>
+                <div class="group">
+                    <input id="lastName" type="text" required="required" />
+                    <span class="highlight"></span>
+                    <span class="bar"></span>
+                    <label>Last Name</label>
+                </div>
+                <div class="group">
+                    <input id="email" type="email" required="required" />
+                    <span class="highlight"></span>
+                    <span class="bar"></span>
+                    <label>Email</label>
+                </div>
+                <div class="group">
+                    <input id="passwordsignup" type="password" required="required" />
+                    <span class="highlight"></span>
+                    <span class="bar"></span>
+                    <label>Password</label>
+                </div>
+                <div class="group">
+                    <input id="passwordsignup_confirm" type="password" required="required" />
+                    <span class="highlight"></span>
+                    <span class="bar"></span>
+                    <label>Confirm Password</label>
+                </div>
+
+                <div class="btn-box">
+                    <button type="submit" class="btn btn-submit">Sign up</button>
+                </div>
             </form>
+
+            <p class="change_link">
+                Already a member ?
+                <button type="button" ng-click="show = 'loginForm'" class="btn btn-submit">Log in</button>
+            </p>
         </div>
     </body>
 </div>
