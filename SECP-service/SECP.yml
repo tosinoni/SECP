@@ -2,16 +2,16 @@ sampleProperty: hello!
 
 # Database settings.
 database:
-  driverClass: org.apache.derby.jdbc.EmbeddedDriver
-  url: jdbc:derby:/tmp/mydb;create=true
-  user: admin
-  password: admin
+  driverClass: com.mysql.jdbc.Driver
+  url: jdbc:mysql://localhost:3306/secp?createDatabaseIfNotExist=true
+  user: root
+  password:
   minSize: 8
   maxSize: 200
-  validationQuery: values 1
+  validationQuery: select 1
   properties:
     hibernate.temp.use_jdbc_metadata_defaults: false
-    hibernate.dialect: org.hibernate.dialect.DerbyTenSevenDialect
+    hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
     hibernate.hbm2ddl.auto: update
     hibernate.format_sql: true
 

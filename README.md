@@ -14,7 +14,7 @@ Install Bower:
 
     npm install -g bower
 
-Install Bower:
+Install grunt:
 
     npm install -g grunt
 
@@ -30,13 +30,20 @@ Your server will run at [http://localhost:8080](http://localhost:8080).
 
 ## Running the client
 
-In the SECP directory, run the server:
+In the SECP directory, run the client:
 
       grunt server
 
 The Grunt server will run at [http://localhost:9000](http://localhost:9000).  It will proxy REST requests to the Dropwizard server running at [http://localhost:8080](http://localhost:8080).
 
 The Grunt server supports hot reloading of client-side HTML/CSS/Javascript file changes, while the Dropwizard service supports hot reloading of Java class file changes. This means you do not have to stop the server when you make changes.
+
+##	Setting up the database
+Install [XAMPP](https://www.apachefriends.org/download.html)
+
+      Open xampp control
+      Start Apache and MySQL
+      Click Admin for MySQL
 
 ##	Information about editing the code
 
