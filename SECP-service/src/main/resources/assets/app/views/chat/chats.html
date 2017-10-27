@@ -1,0 +1,79 @@
+<div>
+
+    <h2>Chats</h2>
+
+    <script type = "text/ng-template" id="chat-save.html">
+        <form name="form" role="form" novalidate
+              class="ng-scope ng-invalid ng-invalid-required ng-dirty"
+              ng-submit="ok()">
+
+            <div class="modal-header">
+                <button type="button" class="close"
+                        ng-click="cancel()">&times;</button>
+                <h4 class="modal-title" id="myChatLabel">Create or edit a Chat</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>ID</label>
+                    <input type="text" class="form-control" name="id"
+                           ng-model="chat.id" readonly>
+                </div>
+
+                
+                <div class="form-group">
+                    <label>myattr:</label>
+                    
+                    <input type="text" class="form-control" name="myattr"
+                           ng-model="chat.myattr" ng-required="false"
+                           />
+                    <span class="error" ng-show="form.myattr.$error.minlength">Must be at least  characters.</span>
+                    <span class="error" ng-show="form.myattr.$error.maxlength">Must be at most  characters.</span>
+                </div>
+                
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" ng-click="cancel()">Cancel
+                </button>
+                <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary">Save</button>
+            </div>
+        </form>
+    </script>
+
+    <button class="btn btn-primary btn-lg" ng-click="create()">
+        <span class="glyphicon glyphicon-flash"></span> Create a new Chat
+    </button>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>ID</th>
+                
+                <th>myattr</th>
+                
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="chat in chats">
+                <td>{{chat.id}}</td>
+                
+                <td>{{chat.myattr }}</td>
+                
+                <td>
+                    <button type="submit"
+                            ng-click="update(chat.id)"
+                            class="btn">
+                        <span class="glyphicon glyphicon-pencil"></span> Edit
+                    </button>
+                    <button type="submit"
+                            ng-click="delete(chat.id)"
+                            class="btn btn-danger">
+                        <span class="glyphicon glyphicon-remove-circle"></span> Delete
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
