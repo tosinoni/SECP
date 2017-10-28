@@ -1,5 +1,6 @@
 package com.visucius.secp;
 
+import com.visucius.secp.UseCase.UserRegistrationController;
 import com.visucius.secp.config.*;
 import com.visucius.secp.daos.*;
 import com.visucius.secp.models.*;
@@ -58,9 +59,10 @@ public class SECPService extends Application<SECPConfiguration> {
                     Environment environment) throws Exception {
         environment.jersey().setUrlPattern("/SECP/*");
 
+        final UserDAO userDAO =  new UserDAO(hibernateBundle.getSessionFactory());
+        final UserRegistrationController userRegistrationController = new UserRegistrationController(userDAO);
 
-
-        environment.jersey().register(new UserResource(
-            new UserDAO(hibernateBundle.getSessionFactory())));
+        environment.jersey().register(
+            new UserResource(userDAO,userRegistrationController));
     }
 }

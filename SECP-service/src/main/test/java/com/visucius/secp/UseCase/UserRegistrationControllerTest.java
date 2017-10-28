@@ -2,8 +2,13 @@ package com.visucius.secp.UseCase;
 
 import com.visucius.secp.DTO.UserRegistrationRequest;
 import com.visucius.secp.DTO.UserRegistrationResponse;
+import com.visucius.secp.daos.UserDAO;
+import com.visucius.secp.models.User;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 import javax.ws.rs.core.Response;
 
@@ -12,10 +17,15 @@ import static org.junit.Assert.*;
 public class UserRegistrationControllerTest {
 
     private UserRegistrationController controller;
+    private UserDAO userDAO;
 
     @Before
     public void setUp() throws Exception {
-        controller = new UserRegistrationController();
+        userDAO = Mockito.mock(UserDAO.class);
+        Mockito.when(userDAO.findByEmail("duplicate@email.com")).thenReturn(new User());
+        Mockito.when(userDAO.findByUserName("duplicateUsername")).thenReturn(new User());
+        Mockito.when(userDAO.save(new User())).thenReturn(new User());
+        controller = new UserRegistrationController(userDAO);
     }
 
     @Test
@@ -24,6 +34,7 @@ public class UserRegistrationControllerTest {
         UserRegistrationRequest request = new UserRegistrationRequest(
             "verrylongfirstnameamefdsafdsafsdfddfdddddsssssssssfsdfsfsdfsfsdfsdfsdffdsfsfsfsf",
             "farah",
+            "alifarah",
             "test@gmail.com",
             "Password1");
         UserRegistrationResponse response = controller.handle(request);
@@ -39,6 +50,7 @@ public class UserRegistrationControllerTest {
         UserRegistrationRequest request = new UserRegistrationRequest(
             "ali",
             "verrylonglastnameamefdsafdsafsdfddfdddddsssssssssfsdfsfsdfsfsdfsdfsdffdsfsfsfsf",
+            "alifarah",
             "test@gmail.com",
             "Password1");
         UserRegistrationResponse response = controller.handle(request);
@@ -55,6 +67,7 @@ public class UserRegistrationControllerTest {
         UserRegistrationRequest request = new UserRegistrationRequest(
             "",
             "farah",
+            "alifarah",
             "test@gmail.com",
             "Password1");
         UserRegistrationResponse response = controller.handle(request);
@@ -71,6 +84,7 @@ public class UserRegistrationControllerTest {
         UserRegistrationRequest request = new UserRegistrationRequest(
             "ali",
             "",
+            "alifarah",
             "test@gmail.com",
             "Password1");
         UserRegistrationResponse response = controller.handle(request);
@@ -86,6 +100,7 @@ public class UserRegistrationControllerTest {
         UserRegistrationRequest request = new UserRegistrationRequest(
             "ali",
             "farah",
+            "alifarah",
             "test@gmail.com",
             "");
         UserRegistrationResponse response = controller.handle(request);
@@ -101,6 +116,7 @@ public class UserRegistrationControllerTest {
         UserRegistrationRequest request = new UserRegistrationRequest(
             "ali",
             "farah",
+            "alifarah",
             "test@gmail.com",
             "pass");
         UserRegistrationResponse response = controller.handle(request);
@@ -116,6 +132,7 @@ public class UserRegistrationControllerTest {
         UserRegistrationRequest request = new UserRegistrationRequest(
             "ali",
             "farah",
+            "alifarah",
             "test@gmail.com",
             "Verylongpassword12342343243242324323");
         UserRegistrationResponse response = controller.handle(request);
@@ -131,6 +148,7 @@ public class UserRegistrationControllerTest {
         UserRegistrationRequest request = new UserRegistrationRequest(
             "ali",
             "farah",
+            "alifarah",
             "test@gmail.com",
             "password1");
         UserRegistrationResponse response = controller.handle(request);
@@ -147,6 +165,7 @@ public class UserRegistrationControllerTest {
         UserRegistrationRequest request = new UserRegistrationRequest(
             "ali",
             "farah",
+            "alifarah",
             "testgmail.com",
             "Password1");
         UserRegistrationResponse response = controller.handle(request);
@@ -163,6 +182,7 @@ public class UserRegistrationControllerTest {
         UserRegistrationRequest request = new UserRegistrationRequest(
             "ali",
             "farah",
+            "alifarah",
             "",
             "Password!");
         UserRegistrationResponse response = controller.handle(request);
@@ -179,6 +199,7 @@ public class UserRegistrationControllerTest {
         UserRegistrationRequest request = new UserRegistrationRequest(
             "ali",
             "farah",
+            "alifarah",
             "test@gmail.com",
             "Password1");
         UserRegistrationResponse response = controller.handle(request);
@@ -188,5 +209,36 @@ public class UserRegistrationControllerTest {
         assertTrue(response.errors.isEmpty());
         assertEquals(response.message, UserRegistrationController.USER_CREATED);
     }
+    @Test
+    public void DuplicateUsernameTest() {
+        UserRegistrationRequest request = new UserRegistrationRequest(
+            "ali",
+            "farah",
+            "duplicateUsername",
+            "alifarah",
+            "Password!");
+        UserRegistrationResponse response = controller.handle(request);
 
+        assertFalse(response.success);
+        assertEquals(response.status, Response.Status.BAD_REQUEST);
+        assertTrue(response.errors.contains(UserRegistrationController.DUPLICATE_USERNAME));
+        assertEquals(response.message, UserRegistrationController.USER_NOT_CREATED);
+    }
+
+    @Test
+    public void DuplicateEmailTest()
+    {
+        UserRegistrationRequest request = new UserRegistrationRequest(
+            "ali",
+            "farah",
+            "alifarah",
+            "duplicate@email.com",
+            "Password!");
+        UserRegistrationResponse response = controller.handle(request);
+
+        assertFalse(response.success);
+        assertEquals(response.status, Response.Status.BAD_REQUEST);
+        assertTrue(response.errors.contains(UserRegistrationController.DUPLICATE_EMAIL));
+        assertEquals(response.message, UserRegistrationController.USER_NOT_CREATED);
+    }
 }

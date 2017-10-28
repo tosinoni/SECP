@@ -12,6 +12,9 @@ public class UserRegistrationRequest implements IRequest<UserRegistrationRespons
     public String lastName;
 
     @JsonProperty
+    public String userName;
+
+    @JsonProperty
     public String email;
 
     @JsonProperty
@@ -22,10 +25,11 @@ public class UserRegistrationRequest implements IRequest<UserRegistrationRespons
 
     }
 
-    public UserRegistrationRequest(String firstName, String lastName, String email, String password)
+    public UserRegistrationRequest(String firstName, String lastName, String userName ,String email, String password)
     {
         this.firstName = firstName;
         this.lastName =lastName;
+        this.userName = userName;
         this.email = email;
         this.password = password;
     }

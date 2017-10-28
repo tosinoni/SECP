@@ -1,5 +1,8 @@
 package com.visucius.secp.resources;
 
+import com.visucius.secp.DTO.UserRegistrationRequest;
+import com.visucius.secp.DTO.UserRegistrationResponse;
+import com.visucius.secp.UseCase.UserRegistrationController;
 import com.visucius.secp.daos.UserDAO;
 import com.visucius.secp.models.User;
 import com.codahale.metrics.annotation.Timed;
@@ -23,19 +26,31 @@ public class UserResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserResource.class);
 
-    private final UserDAO dao;
 
-    public UserResource(UserDAO dao) {
+    private final UserDAO dao;
+    private final UserRegistrationController userRegistrationController;
+
+    public UserResource(UserDAO dao, UserRegistrationController userRegistrationController) {
+
         this.dao = dao;
+        this.userRegistrationController = userRegistrationController;
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Timed 
+    @Timed
     @UnitOfWork
-    public User create(User entity) {
-        return dao.save(entity);
+    @Path("/register")
+    public UserRegistrationResponse create(UserRegistrationRequest request) {
+
+        UserRegistrationResponse response = userRegistrationController.handle(request);
+
+        if (response.success) {
+            return response;
+        }
+
+        throw new WebApplicationException(response.getErrors(), response.status);
     }
 
     @GET
@@ -63,7 +78,7 @@ public class UserResource {
     @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Timed 
+    @Timed
     @UnitOfWork
     public User update(@PathParam("id") LongParam id, User entity) {
         Optional<User> ent = dao.find(id.get());
