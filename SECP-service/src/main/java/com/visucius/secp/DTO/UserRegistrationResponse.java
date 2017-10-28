@@ -3,7 +3,9 @@ package com.visucius.secp.DTO;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.visucius.secp.Contracts.ResponseMessage;
+import com.visucius.secp.util.JsonUtil;
 
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -17,8 +19,7 @@ public class UserRegistrationResponse extends ResponseMessage {
     public List<String> errors;
 
     @JsonProperty
-    @edu.umd.cs.findbugs.annotations.SuppressWarnings("URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD")
-    public long userID;
+    private long userID;
 
     public UserRegistrationResponse(boolean success, String message, Response.Status status, List<String> errors)
     {
@@ -43,5 +44,20 @@ public class UserRegistrationResponse extends ResponseMessage {
         }
 
         return builder.toString();
+    }
+
+    public long getUserID() {
+        return this.userID;
+    }
+
+    public String toString()
+    {
+        try {
+            return JsonUtil.convertToJsonString(this);
+        }
+        catch (JsonProcessingException e)
+        {
+            return "";
+        }
     }
 }

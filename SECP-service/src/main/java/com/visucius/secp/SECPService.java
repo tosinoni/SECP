@@ -63,6 +63,6 @@ public class SECPService extends Application<SECPConfiguration> {
         final UserRegistrationController userRegistrationController = new UserRegistrationController(userDAO);
 
         environment.jersey().register(
-            new UserResource(userDAO,userRegistrationController));
+            new UserResource(userRegistrationController));
     }
 }
