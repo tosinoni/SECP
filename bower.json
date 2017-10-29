@@ -9,7 +9,9 @@
     "angular": "~1.2.13",
     "bootstrap-css": "~3.0.0",
     "jquery": "~2.1.0",
-    "lodash": "~2.4.1"
+    "lodash": "~2.4.1",
+    "components-font-awesome": "^4.7.0",
+    "jquery.nicescroll": "~3.0.0"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.13",
