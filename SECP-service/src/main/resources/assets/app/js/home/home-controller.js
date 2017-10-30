@@ -1,3 +1,3 @@
 angular.module('SECP')
-    .controller('HomeController', ['$scope', function ($scope) {
-    }]);
+  .controller('HomeController', ['$scope', function ($scope) {
+  }]);

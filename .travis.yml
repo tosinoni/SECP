@@ -1,2 +1,5 @@
- notifications:
+language: java
+
+script: mvn clean install -B
+notifications:
     slack: visucius:uMzvqrTZFcAxdOm6VAggcuhN
