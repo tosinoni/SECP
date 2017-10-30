@@ -1,89 +1,19 @@
 <div class="container-fluid">
 
     <head>
-        <link rel="stylesheet" type="text/css" href="../../css/login_register.css" />
         <meta charset="UTF-8">
         <title>Welcome to SECP</title>
     </head>
 
     <body ng-controller="HomeController">
-        <div id="bg"></div>
-        <div id="motto">
-            <p>Safe. Secure. Reliable.</p>
-        </div>
-        <div class="form-group" ng-show="show=='loginForm'">
-            <form autocomplete="on">
-                <h1 id="formHeader">Log in</h1>
-
-                <div class="group">
-                    <input type="email" required="required" />
-                    <span class="highlight"></span>
-                    <span class="bar"></span>
-                    <label>Email</label>
-                </div>
-                <div class="group">
-                    <input type="password" required="required" />
-                    <span class="highlight"></span>
-                    <span class="bar"></span>
-                    <label>Password</label>
-                </div>
-
-                <div class="btn-box">
-                    <button type="submit" class="btn btn-submit">Log in</button>
-                </div>
-
-            </form>
-
-            <p class="change_link">
-                Not a member yet ?
-                <button type="button" ng-click="show = 'registerForm'" class="btn btn-submit">Join us</button>
+        <div class="jumbotron">
+            <h1>Jumbotron</h1>
+            <p>This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content
+                or information.</p>
+            <p>
+                <a class="btn btn-primary btn-lg">Learn more</a>
             </p>
         </div>
 
-
-        <div class="form-group" ng-show="show=='registerForm'">
-            <form autocomplete="on">
-                <h1 id="formHeader">Sign up</h1>
-                <div class="group">
-                    <input id="firstName" type="text" required="required" />
-                    <span class="highlight"></span>
-                    <span class="bar"></span>
-                    <label>First Name</label>
-                </div>
-                <div class="group">
-                    <input id="lastName" type="text" required="required" />
-                    <span class="highlight"></span>
-                    <span class="bar"></span>
-                    <label>Last Name</label>
-                </div>
-                <div class="group">
-                    <input id="email" type="email" required="required" />
-                    <span class="highlight"></span>
-                    <span class="bar"></span>
-                    <label>Email</label>
-                </div>
-                <div class="group">
-                    <input id="passwordsignup" type="password" required="required" />
-                    <span class="highlight"></span>
-                    <span class="bar"></span>
-                    <label>Password</label>
-                </div>
-                <div class="group">
-                    <input id="passwordsignup_confirm" type="password" required="required" />
-                    <span class="highlight"></span>
-                    <span class="bar"></span>
-                    <label>Confirm Password</label>
-                </div>
-
-                <div class="btn-box">
-                    <button type="submit" class="btn btn-submit">Sign up</button>
-                </div>
-            </form>
-
-            <p class="change_link">
-                Already a member ?
-                <button type="button" ng-click="show = 'loginForm'" class="btn btn-submit">Log in</button>
-            </p>
-        </div>
     </body>
 </div>
