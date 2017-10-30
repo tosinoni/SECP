@@ -33,6 +33,7 @@ public class SECPService extends Application<SECPConfiguration> {
 
             User.class,
             UserRole.class,
+            Message.class,
             Void.class
         ) {
         @Override
