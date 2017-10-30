@@ -50,7 +50,7 @@ public class UserTest {
 
     @Test
     public void testLastName() {
-        AssertAnnotations.assertField( User.class, "lastname", Column.class);
+        AssertAnnotations.assertField( User.class, "lastnnname", Column.class);
 
         Column c = ReflectTool.getFieldAnnotation(User.class, "lastname", Column.class);
 
