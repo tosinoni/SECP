@@ -9,7 +9,6 @@ import java.util.Date;
 public class Message {
 
     @Id
-    @GeneratedValue
     @Column(name = "message_id", unique = true, nullable = false)
     private int messageId;
 
@@ -20,17 +19,13 @@ public class Message {
     @Column(name = "body")
     private String messageBody;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Message() {
-
-    }
-
-    public Message(Date dateTime, String message_body, User user) {
-        this.dateTime = dateTime;
-        this.messageBody = message_body;
+    public Message(Date dateTime, String messageBody, User user) {
+        this.dateTime = new Date(dateTime.getTime());
+        this.messageBody = messageBody;
         this.user = user;
     }
 
@@ -38,9 +33,9 @@ public class Message {
 
     public void setMessageId(int messageId){this.messageId = messageId;}
 
-    public Date getDateTime(){return dateTime;}
+    public Date getDateTime(){return new Date(dateTime.getTime());}
 
-    public void setDateTime(Date dateTime){this.dateTime = dateTime;}
+    public void setDateTime(Date dateTime){this.dateTime = new Date(dateTime.getTime());}
 
     public String getMessageBody(){return messageBody;}
 
@@ -48,7 +43,7 @@ public class Message {
 
     public User getUser(){return user;}
 
-    public void setUser(){this.user = user;}
+    public void setUser(User user){this.user = user;}
 
     @Override
     public boolean equals(Object o) {
