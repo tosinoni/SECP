@@ -9,7 +9,7 @@ import static org.junit.Assert.assertEquals;
 public class RoleTest {
 
     @Test
-    public void testUserForEntityAndTableAttribute() {
+    public void testRoleForEntityAndTable() {
         AssertAnnotations.assertType(Role.class, Entity.class, Table.class);
     }
 
