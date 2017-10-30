@@ -32,7 +32,7 @@ public class SECPService extends Application<SECPConfiguration> {
     private final HibernateBundle<SECPConfiguration> hibernateBundle = new HibernateBundle<SECPConfiguration>(
 
             User.class,
-            UserRole.class,
+            Role.class,
             Void.class
         ) {
         @Override
