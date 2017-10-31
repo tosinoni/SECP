@@ -32,8 +32,8 @@ public class SECPService extends Application<SECPConfiguration> {
     private final HibernateBundle<SECPConfiguration> hibernateBundle = new HibernateBundle<SECPConfiguration>(
 
             User.class,
-            UserRole.class,
             Message.class,
+            Role.class,
             Void.class
         ) {
         @Override
