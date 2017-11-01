@@ -9,37 +9,39 @@ import java.util.Date;
 public class Message {
 
     @Id
-    @Column(name = "message_id", unique = true, nullable = false)
-    private int messageId;
+    @GeneratedValue
+    @Column(name = "id", unique = true, nullable = false)
+    private int id;
 
     @Column(name = "timestamp")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date dateTime;
+    private Date timestamp;
 
-    @Column(name = "body")
-    private String messageBody;
+    @Column(name = "body", nullable = false)
+    @Lob
+    private String body;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Message(Date dateTime, String messageBody, User user) {
-        this.dateTime = new Date(dateTime.getTime());
-        this.messageBody = messageBody;
+    public Message(Date timestamp, String body, User user) {
+        this.timestamp = new Date(timestamp.getTime());
+        this.body = body;
         this.user = user;
     }
 
-    public long getMessageId(){return messageId;}
+    public long getId(){return id;}
 
-    public void setMessageId(int messageId){this.messageId = messageId;}
+    public void setId(int id){this.id = id;}
 
-    public Date getDateTime(){return new Date(dateTime.getTime());}
+    public Date getTimestamp(){return new Date(timestamp.getTime());}
 
-    public void setDateTime(Date dateTime){this.dateTime = new Date(dateTime.getTime());}
+    public void setTimestamp(Date timestamp){this.timestamp = new Date(timestamp.getTime());}
 
-    public String getMessageBody(){return messageBody;}
+    public String getBody(){return body;}
 
-    public void setMessageBody(String messageBody){this.messageBody = messageBody;}
+    public void setBody(String body){this.body = body;}
 
     public User getUser(){return user;}
 
@@ -50,14 +52,14 @@ public class Message {
         if (this == o) return true;
         if (!(o instanceof Message)) return false;
         Message that = (Message) o;
-        return messageId == that.messageId;
+        return id == that.id;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + messageId;
+        result = prime * result + id;
         result = prime * result + user.hashCode();
         return result;
     }
