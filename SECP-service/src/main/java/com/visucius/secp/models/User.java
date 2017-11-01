@@ -5,10 +5,11 @@ import org.hibernate.validator.constraints.Email;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "users")
+@Table(name = "Users")
 @NamedQueries(
     {
         @NamedQuery(
@@ -25,11 +26,10 @@ public class User {
 
     @Id
     @GeneratedValue
-    @Column(name = "user_id", unique = true, nullable = false)
+    @Column(name = "id", unique = true, nullable = false)
     private long id;
 
-    @NotNull
-    @Column(name = "username", unique = true, nullable = false, length = 20)
+    @Column(name = "username", unique = true, nullable = false)
     private String username;
 
     @Column(name = "firstname", nullable = false)
@@ -42,11 +42,14 @@ public class User {
     @Column(name = "email",unique = true, nullable = false)
     private String email;
 
-    @Column(name = "password", nullable = false, length = 255)
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    private Set<UserRole>  userRoles;
+    @ManyToMany
+    @JoinTable(name = "user_roles",
+        joinColumns = { @JoinColumn(name = "user_id") },
+        inverseJoinColumns = { @JoinColumn(name = "role_id") })
+    private Set<Role> roles = new HashSet<>();
 
     public  User () {
 
@@ -108,12 +111,12 @@ public class User {
         this.password = password;
     }
 
-    public Set<UserRole> getUserRoles() {
-        return userRoles;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setUserRoles(Set<UserRole> userRoles) {
-        this.userRoles = userRoles;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     @Override
