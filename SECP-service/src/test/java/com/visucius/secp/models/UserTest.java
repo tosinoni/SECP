@@ -120,4 +120,15 @@ public class UserTest {
         assertEquals("NamedQueries[1]: name is not equal",
             "com.visucius.secp.models.User.findByEmail", namedQueriesArray[1].name());
     }
+
+    @Test
+    public void testGroups() {
+        //testing all the annotations on the id field
+        AssertAnnotations.assertField( User.class, "groups", ManyToMany.class);
+
+        //testing the @column annotation
+        ManyToMany m = ReflectTool.getFieldAnnotation(User.class, "groups", ManyToMany.class);
+
+        assertEquals("ManyToMany:  mappedBy is not equal", "users", m.mappedBy());
+    }
 }

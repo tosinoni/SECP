@@ -51,6 +51,9 @@ public class User {
         inverseJoinColumns = { @JoinColumn(name = "role_id") })
     private Set<Role> roles = new HashSet<>();
 
+    @ManyToMany(mappedBy = "users")
+    private Set<Group> groups = new HashSet<>();
+
     public  User () {
 
     }
@@ -117,6 +120,10 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Set<Group> getGroups() {
+        return groups;
     }
 
     @Override
