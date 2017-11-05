@@ -1,13 +1,28 @@
 package com.visucius.secp.Contracts;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public abstract class ResponseMessage {
 
+    @JsonIgnore
     public boolean success;
-    public String message;
+    @JsonProperty
+    private String message;
 
-    protected ResponseMessage(boolean success, String message)
+    public ResponseMessage()
+    {
+
+    }
+
+    public ResponseMessage(boolean success, String message)
     {
         this.success = success;
         this.message = message;
+    }
+
+    public String getMessage()
+    {
+        return this.message;
     }
 }
