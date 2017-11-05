@@ -11,11 +11,13 @@ import org.jose4j.jwt.consumer.JwtConsumerBuilder;
 import org.jose4j.keys.HmacKey;
 import org.jose4j.lang.JoseException;
 
+import java.nio.charset.Charset;
+
 public class TokenController {
     private HmacKey signatureKey;
 
     public TokenController (SECPConfiguration secpConfiguration) {
-        signatureKey = new HmacKey(secpConfiguration.getSecretKey().getBytes());
+        signatureKey = new HmacKey(secpConfiguration.getSecretKey().getBytes(Charset.forName("UTF-8")));
     }
 
     public String createTokenFromUsername(String username) throws JoseException {

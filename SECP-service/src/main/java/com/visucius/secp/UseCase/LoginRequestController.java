@@ -42,9 +42,23 @@ public class LoginRequestController {
             throw new WebApplicationException(LOGIN_FAIL_USER_NOT_FOUND, Response.Status.UNAUTHORIZED);
         }
 
-        boolean isAllowed;
+        boolean isValidPassword = isPasswordValid(loginRequestDTO, user);
+
+        if (isValidPassword) {
+            String token = getToken(loginRequestDTO);
+
+            TokenDTO tokenDTO = new TokenDTO(token, user.getLoginRole());
+            return Response.ok().entity(tokenDTO).build();
+        } else {
+            throw new WebApplicationException(LOGIN_FAIL_WRONG_PASSWORD, Response.Status.UNAUTHORIZED);
+        }
+    }
+
+    private boolean isPasswordValid(LoginRequestDTO loginRequestDTO, User user) {
+        boolean isPasswordValid;
+
         try {
-            isAllowed = PasswordUtil.verifyPassword(loginRequestDTO.getPassword(), user.getPassword());
+            isPasswordValid = PasswordUtil.verifyPassword(loginRequestDTO.getPassword(), user.getPassword());
         } catch (PasswordUtil.CannotPerformOperationException e) {
             LOG.error("Unable to compute hash.", e);
             throw new WebApplicationException(LOGIN_FAIL_WRONG_PASSWORD, Response.Status.UNAUTHORIZED);
@@ -53,20 +67,20 @@ public class LoginRequestController {
             throw new WebApplicationException(LOGIN_FAIL_WRONG_PASSWORD, Response.Status.UNAUTHORIZED);
         }
 
-        if (isAllowed) {
-            String authToken;
-            try {
-                authToken = tokenController.createTokenFromUsername(loginRequestDTO.getUsername());
-            } catch (JoseException e) {
-                LOG.error("Unable to create authToken.", e);
-                throw new WebApplicationException(LOGIN_FAIL_USER_NOT_FOUND, Response.Status.UNAUTHORIZED);
-            }
+        return isPasswordValid;
+    }
 
-            TokenDTO tokenDTO = new TokenDTO(authToken, user.getLoginRole());
-            return Response.ok().entity(tokenDTO).build();
-        } else {
-            throw new WebApplicationException(LOGIN_FAIL_WRONG_PASSWORD, Response.Status.UNAUTHORIZED);
+    private String getToken(LoginRequestDTO loginRequestDTO) {
+        String token;
+
+        try {
+            token = tokenController.createTokenFromUsername(loginRequestDTO.getUsername());
+        } catch (JoseException e) {
+            LOG.error("Unable to create authToken.", e);
+            throw new WebApplicationException(LOGIN_FAIL_USER_NOT_FOUND, Response.Status.UNAUTHORIZED);
         }
+
+        return token;
     }
 
     private void validate(LoginRequestDTO loginRequestDTO) {

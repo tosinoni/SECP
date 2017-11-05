@@ -46,18 +46,20 @@ public class User implements Principal {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Enumerated(EnumType.ORDINAL)
-    @Column(name = "loginRole", nullable = false, columnDefinition = "varchar(32) default 'NORMAL'")
-    private LoginRole loginRole = LoginRole.NORMAL;
-
     @ManyToMany
     @JoinTable(name = "user_roles",
         joinColumns = { @JoinColumn(name = "user_id") },
         inverseJoinColumns = { @JoinColumn(name = "role_id") })
     private Set<Role> roles = new HashSet<>();
 
+<<<<<<< HEAD
     @ManyToMany(mappedBy = "users")
     private Set<Group> groups = new HashSet<>();
+=======
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "login_role", nullable = false)
+    private LoginRole loginRole = LoginRole.NORMAL;
+>>>>>>> #44 refactored and clean bugs
 
     public  User () {
 
