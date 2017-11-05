@@ -52,14 +52,12 @@ public class User implements Principal {
         inverseJoinColumns = { @JoinColumn(name = "role_id") })
     private Set<Role> roles = new HashSet<>();
 
-<<<<<<< HEAD
     @ManyToMany(mappedBy = "users")
     private Set<Group> groups = new HashSet<>();
-=======
-    @Enumerated(EnumType.ORDINAL)
+
+    @Enumerated(value = EnumType.STRING)
     @Column(name = "login_role", nullable = false)
     private LoginRole loginRole = LoginRole.NORMAL;
->>>>>>> #44 refactored and clean bugs
 
     public  User () {
 

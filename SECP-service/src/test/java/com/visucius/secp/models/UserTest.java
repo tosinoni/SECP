@@ -144,6 +144,6 @@ public class UserTest {
 
         Enumerated e = ReflectTool.getFieldAnnotation(User.class, "loginRole", Enumerated.class);
 
-        assertEquals("Enumerated loginRole: enum value is not equal", EnumType.ORDINAL, e.value());
+        assertEquals("Enumerated loginRole: enum value is not equal", EnumType.STRING, e.value());
     }
 }
