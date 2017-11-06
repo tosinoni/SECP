@@ -23,49 +23,42 @@ public class TokenAuthFilter<P extends Principal> extends AuthFilter<String, P> 
 
     @Override
     public void filter(ContainerRequestContext containerRequestContext) throws IOException {
-        final String authToken = containerRequestContext.getHeaders().getFirst("authToken");
+        final String authToken = containerRequestContext.getHeaders().getFirst("token");
 
         if (StringUtils.isBlank(authToken)) {
             LOGGER.warn("Error decoding credentials");
+            throw new WebApplicationException(unauthorizedHandler.buildResponse(prefix, realm));
         }
 
-            try {
-            if (!StringUtils.isBlank(authToken)) {
-                try {
-                    final Optional<P> principal = authenticator.authenticate(authToken);
-                    if (principal.isPresent()) {
-                        containerRequestContext.setSecurityContext(new SecurityContext() {
-                            @Override
-                            public Principal getUserPrincipal() {
-                                return principal.get();
-                            }
-
-                            @Override
-                            public boolean isUserInRole(String role) {
-                                return authorizer.authorize(principal.get(), role);
-                            }
-
-                            @Override
-                            public boolean isSecure() {
-                                return containerRequestContext.getSecurityContext().isSecure();
-                            }
-
-                            @Override
-                            public String getAuthenticationScheme() {
-                                return "TOKEN";
-                            }
-                        });
-                        return;
+        try {
+            final Optional<P> principal = authenticator.authenticate(authToken);
+            if (principal.isPresent()) {
+                containerRequestContext.setSecurityContext(new SecurityContext() {
+                    @Override
+                    public Principal getUserPrincipal() {
+                        return principal.get();
                     }
-                } catch (AuthenticationException e) {
-                    LOGGER.warn("Error authenticating credentials", e);
-                    throw new WebApplicationException(unauthorizedHandler.buildResponse(prefix, realm));
-                }
+
+                    @Override
+                    public boolean isUserInRole(String role) {
+                        return authorizer.authorize(principal.get(), role);
+                    }
+
+                    @Override
+                    public boolean isSecure() {
+                        return containerRequestContext.getSecurityContext().isSecure();
+                    }
+
+                    @Override
+                    public String getAuthenticationScheme() {
+                        return "TOKEN";
+                    }
+                });
             }
-        } catch (IllegalArgumentException e) {
-            LOGGER.warn("Error decoding credentials", e);
+        } catch (AuthenticationException e) {
+            LOGGER.warn("Error authenticating credentials", e);
+            throw new WebApplicationException(unauthorizedHandler.buildResponse(prefix, realm));
         }
-        throw new WebApplicationException(unauthorizedHandler.buildResponse(prefix, realm));
     }
 
     /**
