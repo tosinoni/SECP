@@ -6,7 +6,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "group")
+@Table(name = "Groups")
 public class Group {
 
     @Id
@@ -17,8 +17,11 @@ public class Group {
     @Column(name = "name", unique = true, nullable = false)
     private String name;
 
-    @Column(name = "visibility", nullable = false)
-    private String visibility;
+    @ManyToMany()
+    @JoinTable(name = "group_roles",
+        joinColumns = { @JoinColumn(name = "group_id") },
+        inverseJoinColumns = { @JoinColumn(name = "role_id") })
+    private Set<Role> roles = new HashSet<>();
 
     @ManyToMany()
     @JoinTable(name = "group_user",
@@ -26,21 +29,11 @@ public class Group {
         inverseJoinColumns = { @JoinColumn(name = "user_id") })
     private Set<User> users = new HashSet<>();
 
-    public Group(String name, String visibility) {
+    public Group(String name) {
         this.name = name;
-        this.visibility = visibility;
     }
 
     public long getId(){return id;}
-
-    public void setVisibility(String visibility)
-    {
-        this.visibility = visibility;
-    }
-
-    public String getVisibility() {
-        return visibility;
-    }
 
     public void setName(String name) {
         this.name = name;
@@ -51,7 +44,11 @@ public class Group {
     }
 
     public Set<User> getUsers() {
-        return users;
+        return this.users;
+    }
+
+    public Set<Role> getRoles() {
+        return this.roles;
     }
 
     @Override
@@ -64,6 +61,6 @@ public class Group {
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.id,this.name,this.visibility);
+        return Objects.hash(this.id,this.name);
     }
 }

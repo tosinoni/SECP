@@ -10,7 +10,7 @@ public class GroupTest {
 
 
     @Test
-    public void testMessageForEntityAndTableAttribute() {
+    public void testGroupForEntityAndTableAttribute() {
         AssertAnnotations.assertType(Group.class, Entity.class, Table.class);
     }
 
@@ -36,16 +36,6 @@ public class GroupTest {
         assertEquals("column name: name is not equal", "name", c.name());
         assertEquals("column name: unique is false", true, c.unique());
         assertEquals("column name: nullable is true", false, c.nullable());
-    }
-
-    @Test
-    public void testVisibility() {
-        AssertAnnotations.assertField( Group.class, "visibility", Column.class);
-
-        Column c = ReflectTool.getFieldAnnotation(Group.class, "visibility", Column.class);
-
-        assertEquals("column visibility:  name is not equal", "visibility", c.name());
-        assertEquals("column visibility: nullable is true", false, c.nullable());
     }
 
     @Test

@@ -115,12 +115,13 @@ public class User {
     }
 
     public Set<Role> getRoles() {
-        return roles;
+        return this.roles;
     }
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+
 
     public Set<Group> getGroups() {
         return groups;
