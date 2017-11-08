@@ -56,4 +56,23 @@ public class GroupTest {
         joinColumn = j.inverseJoinColumns()[0];
         assertEquals("JoinColumn users: name is not equal", "user_id", joinColumn.name());
     }
+
+    @Test
+    public void testRoles() {
+        AssertAnnotations.assertField( Group.class, "roles", ManyToMany.class, JoinTable.class);
+
+        //testing the @JoinTable annotation
+        JoinTable j = ReflectTool.getFieldAnnotation(Group.class, "roles", JoinTable.class);
+        assertEquals("JoinTable roles:  name is not equal", "group_roles", j.name());
+        assertEquals("JoinTable roles:  joinColumns size is not 1", 1, j.joinColumns().length);
+        assertEquals("JoinTable roles:  inverseJoinColumns size is not 1", 1, j.inverseJoinColumns().length);
+
+        //testing the joincolumn inside JoinColumns
+        JoinColumn joinColumn = j.joinColumns()[0];
+        assertEquals("JoinColumn roles: name is not equal", "group_id", joinColumn.name());
+
+        //testing the joincolumn inside inverseJoinColumns
+        joinColumn = j.inverseJoinColumns()[0];
+        assertEquals("JoinColumn users: name is not equal", "role_id", joinColumn.name());
+    }
 }
