@@ -9,6 +9,14 @@ public class LoginRequestDTO {
     @JsonProperty
     private String password;
 
+    public  LoginRequestDTO() {
+        this(null, null);
+    }
+
+    public LoginRequestDTO(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
     public String getUsername() {
         return username;
     }

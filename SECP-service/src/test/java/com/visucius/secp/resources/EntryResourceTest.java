@@ -37,28 +37,35 @@ public class EntryResourceTest {
     }
 
     @Test
+    public void testLoginWithEmptyUserNameAndPasswordString() {
+        LoginRequestDTO loginRequestDTO = new LoginRequestDTO("", "");
+        Response response = resources.client().target(url).request().post(Entity.json(loginRequestDTO));
+        ResponseValidator.validate(response, 400, "Login Failed. Please provide your username.");
+    }
+
+    @Test
     public void testLoginWithNoUsername() {
-        LoginRequestDTO loginRequestDTO = new LoginRequestDTO();
-        loginRequestDTO.setPassword("password");
+        LoginRequestDTO loginRequestDTO = createLoginInfo();
+        loginRequestDTO.setUsername(null);
+
         Response response = resources.client().target(url).request().post(Entity.json(loginRequestDTO));
         ResponseValidator.validate(response, 400, "Login Failed. Please provide your username.");
     }
 
     @Test
     public void testLoginWithNoPassword() {
-        LoginRequestDTO loginRequestDTO = new LoginRequestDTO();
-        loginRequestDTO.setUsername("username");
+        LoginRequestDTO loginRequestDTO = createLoginInfo();
+        loginRequestDTO.setPassword(null);
+
         Response response = resources.client().target(url).request().post(Entity.json(loginRequestDTO));
         ResponseValidator.validate(response, 400, "Login Failed. Please provide your password.");
     }
 
     @Test
     public void testLoginWithInvalidUsername() {
-        LoginRequestDTO loginRequestDTO = new LoginRequestDTO();
-        loginRequestDTO.setUsername("username");
-        loginRequestDTO.setPassword("password");
+        LoginRequestDTO loginRequestDTO = createLoginInfo();
 
-        Mockito.when(userDAO.findByUserName("duplicateUsername")).thenReturn(new User());
+        Mockito.when(userDAO.findByUserName("username")).thenReturn(null);
 
         Response response = resources.client().target(url).request().post(Entity.json(loginRequestDTO));
         ResponseValidator.validate(response, 401, "Login Failed. username does not exist.");
@@ -66,9 +73,7 @@ public class EntryResourceTest {
 
     @Test
     public void testLoginWithInvalidPassword() throws Exception {
-        LoginRequestDTO loginRequestDTO = new LoginRequestDTO();
-        loginRequestDTO.setUsername("username");
-        loginRequestDTO.setPassword("password");
+        LoginRequestDTO loginRequestDTO = createLoginInfo();
 
         User mockedUser = new User();
         mockedUser.setUsername("username");
@@ -81,9 +86,7 @@ public class EntryResourceTest {
 
     @Test
     public void testLoginSuccess() throws Exception {
-        LoginRequestDTO loginRequestDTO = new LoginRequestDTO();
-        loginRequestDTO.setUsername("username");
-        loginRequestDTO.setPassword("password");
+        LoginRequestDTO loginRequestDTO = createLoginInfo();
 
         User mockedUser = new User();
         mockedUser.setUsername("username");
@@ -96,5 +99,9 @@ public class EntryResourceTest {
         ResponseValidator.validate(response, 200);
         ResponseValidator.validate(response, "token", "token12345");
         ResponseValidator.validate(response, "loginRole", "NORMAL");
+    }
+
+    private LoginRequestDTO createLoginInfo() {
+        return new LoginRequestDTO("username", "password");
     }
 }
