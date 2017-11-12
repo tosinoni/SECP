@@ -27,6 +27,9 @@ public class Conversation {
     @ManyToMany
     private Set<User> users = new HashSet<>();
 
+    @Column(name = "conversation_type", unique = true)
+    private conversationType CT;
+
     public long getId() {return id;}
 
     public Set<User> getUsers(){return this.users;}
@@ -34,12 +37,14 @@ public class Conversation {
     public Set<Message> getMessages(){return this.messages;}
 
     public Conversation(Set<User> users){
+        this.users = users;
 
-        conversationType CT = conversationType.PRIVATE;
+        this.CT = conversationType.PRIVATE;
 
         if (users.size() > 2){
-            CT = conversationType.GROUP;
+            this.CT = conversationType.GROUP;
         }
+
     }
 
     @Override
