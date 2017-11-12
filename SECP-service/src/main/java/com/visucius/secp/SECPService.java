@@ -1,26 +1,29 @@
 package com.visucius.secp;
 
+import com.visucius.secp.UseCase.LoginRequestController;
+import com.visucius.secp.UseCase.TokenController;
 import com.visucius.secp.UseCase.UserRegistrationController;
+import com.visucius.secp.auth.SECPAuthenticator;
+import com.visucius.secp.auth.SECPAuthorizer;
+import com.visucius.secp.auth.TokenAuthFilter;
 import com.visucius.secp.config.*;
 import com.visucius.secp.daos.*;
 import com.visucius.secp.models.*;
 import com.visucius.secp.resources.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.google.common.base.Optional;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
+import io.dropwizard.auth.AuthDynamicFeature;
+import io.dropwizard.auth.AuthValueFactoryProvider;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
-import org.hibernate.SessionFactory;
+import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class SECPService extends Application<SECPConfiguration> {
     private static final Logger LOG = LoggerFactory.getLogger(SECPService.class);
@@ -61,10 +64,33 @@ public class SECPService extends Application<SECPConfiguration> {
                     Environment environment) throws Exception {
         environment.jersey().setUrlPattern("/SECP/*");
 
-        final UserDAO userDAO =  new UserDAO(hibernateBundle.getSessionFactory());
-        final UserRegistrationController userRegistrationController = new UserRegistrationController(userDAO);
 
+        //********************** Register DAO *************************************************
+        final UserDAO userDAO =  new UserDAO(hibernateBundle.getSessionFactory());
+
+
+
+        //********************** Register Services/Controllers *********************************
+        final UserRegistrationController userRegistrationController = new UserRegistrationController(userDAO);
+        final TokenController tokenController = new TokenController(configuration);
+        final LoginRequestController loginRequestController = new LoginRequestController(tokenController, userDAO);
+
+
+
+
+        //********************** Register authentication for User *****************************
+        environment.jersey().register(RolesAllowedDynamicFeature.class);
+        final TokenAuthFilter<User> tokenAuthFilter = new TokenAuthFilter.Builder<User>()
+            .setAuthorizer(new SECPAuthorizer())
+            .setAuthenticator(new SECPAuthenticator(userDAO, tokenController)).buildAuthFilter();
+        environment.jersey().register(new AuthDynamicFeature(tokenAuthFilter));
+        environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
+
+
+
+
+        //************************** Registering Resources *************************************
         environment.jersey().register(
-            new UserResource(userRegistrationController));
+            new EntryResource(userRegistrationController, loginRequestController));
     }
 }
