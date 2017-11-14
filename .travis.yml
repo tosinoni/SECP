@@ -1,8 +1,9 @@
 language: java
 
 script: 
-	mvn clean install -B
-	bash <(curl -s https://codecov.io/bash)
+  - mvn clean install -B
+  - bash <(curl -s https://codecov.io/bash)
+
 notifications:
     slack: visucius:uMzvqrTZFcAxdOm6VAggcuhN
 cache:
