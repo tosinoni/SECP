@@ -29,6 +29,9 @@ public class Group {
         inverseJoinColumns = { @JoinColumn(name = "user_id") })
     private Set<User> users = new HashSet<>();
 
+    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
+    private Set<Message> messages = new HashSet<>();
+
     public Group(String name) {
         this.name = name;
     }
@@ -50,6 +53,8 @@ public class Group {
     public Set<Role> getRoles() {
         return this.roles;
     }
+
+    public Set<Message> getMessages() {return this.messages;}
 
     @Override
     public boolean equals(Object o) {

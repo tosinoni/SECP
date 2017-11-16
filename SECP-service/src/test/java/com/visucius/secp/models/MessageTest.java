@@ -2,6 +2,7 @@ package com.visucius.secp.models;
 
 import static org.junit.Assert.*;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.hibernate.validator.constraints.Email;
 import org.junit.Assert;
 import org.junit.Test;
@@ -56,5 +57,17 @@ public class MessageTest {
         JoinColumn joinColumn = ReflectTool.getFieldAnnotation(Message.class, "user", JoinColumn.class);
         assertEquals("JoinColumn user: name is not equal", "user_id", joinColumn.name());
         assertEquals("JoinColumn user: nullable is true", false, joinColumn.nullable());
+    }
+
+    @Test
+    public void testGroup() {
+        AssertAnnotations.assertField(Message.class, "group",ManyToOne.class, JoinColumn.class);
+
+        ManyToOne m = ReflectTool.getFieldAnnotation(Message.class, "group", ManyToOne.class);
+        assertEquals("ManyToOne: Fetch is not equal", FetchType.LAZY, m.fetch());
+
+        JoinColumn joinColumn = ReflectTool.getFieldAnnotation(Message.class, "group", JoinColumn.class);
+        assertEquals("JoinColumn group: name is not equal", "group_id", joinColumn.name());
+        assertEquals("JoinColumn group: nullable is true", false, joinColumn.nullable());
     }
 }

@@ -75,4 +75,14 @@ public class GroupTest {
         joinColumn = j.inverseJoinColumns()[0];
         assertEquals("JoinColumn users: name is not equal", "role_id", joinColumn.name());
     }
+
+    @Test
+    public void testMessages() {
+        AssertAnnotations.assertField(Group.class, "messages",OneToMany.class);
+
+        //testing @OneToMany annotation
+        OneToMany o = ReflectTool.getFieldAnnotation(Group.class, "messages", OneToMany.class);
+
+        assertEquals("OneToMany: mappedBy is not equal", "group", o.mappedBy());
+    }
 }
