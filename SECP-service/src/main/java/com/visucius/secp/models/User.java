@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.Email;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import java.security.Principal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,7 +23,7 @@ import java.util.Set;
         )
     }
 )
-public class User {
+public class User implements Principal {
 
     @Id
     @GeneratedValue
@@ -53,6 +54,10 @@ public class User {
 
     @ManyToMany(mappedBy = "users")
     private Set<Group> groups = new HashSet<>();
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "login_role", nullable = false)
+    private LoginRole loginRole = LoginRole.NORMAL;
 
     public  User () {
 
@@ -122,9 +127,24 @@ public class User {
         this.roles = roles;
     }
 
-
     public Set<Group> getGroups() {
         return groups;
+    }
+
+    /*
+     * The below three methods are needed for authentication and authorization
+    */
+    @Override
+    public String getName() {
+        return username;
+    }
+
+    public LoginRole getLoginRole() {
+        return loginRole;
+    }
+
+    public void setLoginRole(LoginRole loginRole) {
+        this.loginRole = loginRole;
     }
 
     @Override

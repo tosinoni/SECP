@@ -10,15 +10,15 @@ public class SECPConfiguration extends Configuration {
 
     @NotNull
     @JsonProperty
-    private String sampleProperty;
+    private String secretKey;
 
     @Valid
     @NotNull
     @JsonProperty
     private DataSourceFactory database = new DataSourceFactory();
 
-    public String getSampleProperty() {
-        return sampleProperty;
+    public String getSecretKey() {
+        return secretKey;
     }
 
     public DataSourceFactory getDataSourceFactory() {

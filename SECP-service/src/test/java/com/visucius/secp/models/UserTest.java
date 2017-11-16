@@ -98,6 +98,7 @@ public class UserTest {
         assertEquals("JoinColumn roles: name is not equal", "role_id", joinColumn.name());
     }
 
+
     @Test
     public void testTableName() {
 
@@ -124,11 +125,25 @@ public class UserTest {
     @Test
     public void testGroups() {
         //testing all the annotations on the id field
-        AssertAnnotations.assertField( User.class, "groups", ManyToMany.class);
+        AssertAnnotations.assertField(User.class, "groups", ManyToMany.class);
 
         //testing the @column annotation
         ManyToMany m = ReflectTool.getFieldAnnotation(User.class, "groups", ManyToMany.class);
 
         assertEquals("ManyToMany:  mappedBy is not equal", "users", m.mappedBy());
+    }
+
+    @Test
+    public void testLoginRole() {
+        AssertAnnotations.assertField( User.class, "loginRole", Column.class, Enumerated.class);
+
+        Column c = ReflectTool.getFieldAnnotation(User.class, "loginRole", Column.class);
+
+        assertEquals("column loginRole:  name is not equal", "login_role", c.name());
+        assertEquals("column loginRole: nullable is true", false, c.nullable());
+
+        Enumerated e = ReflectTool.getFieldAnnotation(User.class, "loginRole", Enumerated.class);
+
+        assertEquals("Enumerated loginRole: enum value is not equal", EnumType.STRING, e.value());
     }
 }

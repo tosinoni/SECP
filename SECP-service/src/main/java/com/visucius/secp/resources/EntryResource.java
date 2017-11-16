@@ -1,37 +1,31 @@
 package com.visucius.secp.resources;
 
+import com.visucius.secp.DTO.LoginRequestDTO;
 import com.visucius.secp.DTO.UserRegistrationRequest;
 import com.visucius.secp.DTO.UserRegistrationResponse;
+import com.visucius.secp.UseCase.LoginRequestController;
 import com.visucius.secp.UseCase.UserRegistrationController;
-import com.visucius.secp.daos.UserDAO;
-import com.visucius.secp.models.User;
 import com.codahale.metrics.annotation.Timed;
-import com.google.common.base.Optional;
-import javax.ws.rs.NotFoundException;
 import io.dropwizard.hibernate.UnitOfWork;
-import io.dropwizard.jersey.params.BooleanParam;
-import io.dropwizard.jersey.params.DateTimeParam;
-import io.dropwizard.jersey.params.IntParam;
-import io.dropwizard.jersey.params.LongParam;
-import org.hibernate.ObjectNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.List;
 
-@Path("/users")
-public class UserResource {
+@Path("/")
+public class EntryResource {
 
-    private static final Logger LOG = LoggerFactory.getLogger(UserResource.class);
+    private static final Logger LOG = LoggerFactory.getLogger(EntryResource.class);
 
     private final UserRegistrationController userRegistrationController;
+    private final LoginRequestController loginRequestController;
 
-    public UserResource(UserRegistrationController userRegistrationController) {
+    public EntryResource(UserRegistrationController userRegistrationController, LoginRequestController loginRequestController) {
 
         this.userRegistrationController = userRegistrationController;
+        this.loginRequestController = loginRequestController;
     }
 
     @POST
@@ -49,5 +43,15 @@ public class UserResource {
         }
 
         throw new WebApplicationException(response.getErrors(), response.status);
+    }
+
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @UnitOfWork
+    @Path("/login")
+    public Response login(LoginRequestDTO loginRequestDTO) {
+        return loginRequestController.login(loginRequestDTO);
     }
 }
