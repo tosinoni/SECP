@@ -84,5 +84,6 @@ public class GroupTest {
         OneToMany o = ReflectTool.getFieldAnnotation(Group.class, "messages", OneToMany.class);
 
         assertEquals("OneToMany: mappedBy is not equal", "group", o.mappedBy());
+        assertEquals("OneToMany: Fetch is not equal", FetchType.LAZY, o.fetch());
     }
 }
