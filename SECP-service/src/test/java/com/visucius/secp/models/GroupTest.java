@@ -1,8 +1,19 @@
 package com.visucius.secp.models;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import javax.persistence.*;
+
+import java.lang.reflect.Field;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 
@@ -85,5 +96,36 @@ public class GroupTest {
 
         assertEquals("OneToMany: mappedBy is not equal", "group", o.mappedBy());
         assertEquals("OneToMany: Fetch is not equal", FetchType.LAZY, o.fetch());
+    }
+
+    @Test
+    public void test_SetAndGetId(){
+        Group group = new Group("Group 1");
+        group.setId(1);
+        assertEquals("Id not equal", group.getId(), 1);
+    }
+
+    @Test
+    public void testGetUsers(){
+        Group group = new Group("Group 1");
+        Set<User> users = new HashSet<>();
+        group.setUsers(users);
+        assertEquals("Users not equal", group.getUsers(),users);
+    }
+
+    @Test
+    public void testGetRoles(){
+        Group group = new Group("Group 1");
+        Set<Role> roles = new HashSet<>();
+        group.setRoles(roles);
+        assertEquals("Roles not equal", group.getRoles(),roles);
+    }
+
+    @Test
+    public void testGetMessages(){
+        Group group = new Group("Group 1");
+        Set<Message> messages = new HashSet<>();
+        group.setMessages(messages);
+        assertEquals("Messages not equal", group.getMessages(),messages);
     }
 }

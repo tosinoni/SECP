@@ -8,6 +8,11 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MessageTest {
 
@@ -70,4 +75,49 @@ public class MessageTest {
         assertEquals("JoinColumn group: name is not equal", "group_id", joinColumn.name());
         assertEquals("JoinColumn group: nullable is true", false, joinColumn.nullable());
     }
+
+    @Test
+    public void test_setAndGetId(){
+        User user = new User();
+        Group group = new Group("Group 1");
+        Message message = new Message("Body", user, group);
+
+        message.setId(1);
+        assertEquals("ID does not match",message.getId(),1);
+    }
+
+    @Test
+    public void test_setAndGetTimestamp() throws ParseException {
+        User user = new User();
+        Group group = new Group("Group 1");
+        Message message = new Message("Body", user, group);
+
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = dateFormat.parse("01/01/2017");
+        long time = date.getTime();
+        Timestamp timestamp = new Timestamp(time);
+
+        message.setTimestamp(timestamp);
+        assertEquals("timestamp not equal", message.getTimestamp(),date);
+    }
+
+    @Test
+    public void test_setAndGetBody(){
+        User user = new User();
+        Group group = new Group("Group 1");
+        Message message = new Message("Body", user, group);
+
+        message.setBody("TestBody");
+        assertEquals("Body not equal", message.getBody(), "TestBody");
+    }
+
+    @Test
+    public void test_getGroup(){
+        User user = new User();
+        Group group = new Group("Group 1");
+        Message message = new Message("Body", user, group);
+
+        assertEquals("Group not equal", message.getGroup(), group);
+    }
+
 }
