@@ -29,10 +29,11 @@ public class Message {
     @JoinColumn(name = "group_id", nullable = false)
     private Group group;
 
-    public Message(String body, User user) {
+    public Message(String body, User user, Group group) {
         this.timestamp = new Date(timestamp.getTime());
         this.body = body;
         this.user = user;
+        this.group = group;
     }
 
     public long getId(){return id;}
