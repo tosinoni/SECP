@@ -49,4 +49,16 @@ public class RoleTest {
 
         assertEquals("ManyToMany:  mappedBy is not equal", "roles", m.mappedBy());
     }
+
+
+    @Test
+    public void testGroups() {
+        //testing all the annotations on the id field
+        AssertAnnotations.assertField( Role.class, "groups", ManyToMany.class);
+
+        //testing the @column annotation
+        ManyToMany m = ReflectTool.getFieldAnnotation(Role.class, "groups", ManyToMany.class);
+
+        assertEquals("ManyToMany:  mappedBy is not equal", "roles", m.mappedBy());
+    }
 }
