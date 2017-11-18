@@ -9,21 +9,14 @@ angular.module('SECP')
       $scope.currentUser = Chat.getCurrentUser();
 
       $scope.sendMessage = function() {
-
          var message = {
             'text': $scope.messageInput
          };
-
-         console.log($scope.messages.slice(-1));
-
          $scope.messages.slice(-1)[0].contents.push(message)
-
          //clearing the message input in the textarea
          $scope.messageInput = null;
-
-         console.log($scope.messages);
-
       };
+      
       $scope.create = function () {
         $scope.clear();
         $scope.open();
