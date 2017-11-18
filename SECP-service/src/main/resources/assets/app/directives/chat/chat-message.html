@@ -1,0 +1,30 @@
+<div>
+    <div class="message-list-wrapper" id="chat-scroll">
+        <ul class="message-list">
+            <li class="text-center">
+                <a href="javascript:void(0);" class="btn btn-default"><i class="fa fa-spinner"></i> Load More Messages</a>
+            </li>
+
+            <li ng-class="currentUser.username !== message.username ? 'left' : 'right'" ng-repeat="message in messages track by message.id">
+                <span class="username">{{message.username}}</span>
+                <small class="timestamp">
+                    <i class="fa fa-clock-o"></i>{{message.time}}
+                </small>
+                <span class="avatar available tooltips" data-toggle="tooltip " data-placement="right"
+                      data-original-title="{{message.username}}">
+                    <img ng-src="{{message.imgSrc}}" alt="avatar" class="img-circle">
+                </span>
+                <div class="body">
+                    <div ng-repeat="content in message.contents">
+                        <div class="message well well-sm">
+                            {{content.text}}
+                            <p ng-show="content.imgSrc">
+                                <img ng-src="{{content.imgSrc}}" alt="">
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

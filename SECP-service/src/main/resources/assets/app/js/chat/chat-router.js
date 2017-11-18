@@ -5,11 +5,6 @@ angular.module('SECP')
     $routeProvider
       .when('/chats', {
         templateUrl: 'views/chat/chats.html',
-        controller: 'ChatController',
-        resolve:{
-          resolvedChat: ['Chat', function (Chat) {
-            return Chat.query();
-          }]
-        }
+        controller: 'ChatController'
       })
     }]);

@@ -1,11 +1,29 @@
 'use strict';
 
 angular.module('SECP')
-  .controller('ChatController', ['$scope', '$modal', 'resolvedChat', 'Chat',
-    function ($scope, $modal, resolvedChat, Chat) {
+  .controller('ChatController', ['$scope', '$modal', 'Chat',
+    function ($scope, $modal, Chat) {
 
-      $scope.chats = resolvedChat;
+      //declaring variables
+      $scope.messages = Chat.getMessages();
+      $scope.currentUser = Chat.getCurrentUser();
 
+      $scope.sendMessage = function() {
+
+         var message = {
+            'text': $scope.messageInput
+         };
+
+         console.log($scope.messages.slice(-1));
+
+         $scope.messages.slice(-1)[0].contents.push(message)
+
+         //clearing the message input in the textarea
+         $scope.messageInput = null;
+
+         console.log($scope.messages);
+
+      };
       $scope.create = function () {
         $scope.clear();
         $scope.open();
@@ -41,9 +59,9 @@ angular.module('SECP')
 
       $scope.clear = function () {
         $scope.chat = {
-          
+
           "myattr": "",
-          
+
           "id": ""
         };
       };
@@ -69,7 +87,7 @@ angular.module('SECP')
     function ($scope, $modalInstance, chat) {
       $scope.chat = chat;
 
-      
+
 
       $scope.ok = function () {
         $modalInstance.close($scope.chat);
