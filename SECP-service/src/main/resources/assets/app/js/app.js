@@ -7,10 +7,15 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date', 'ang
         controller: 'HomeController',
         css: "css/home.css"
       })
-      .when('/login-register', {
-        templateUrl: 'views/login-register/login-register.html',
-        controller: 'LoginRegisterController',
-        css: 'css/login_register.css'
+      .when('/login', {
+        templateUrl: 'views/login/login.html',
+        controller: 'LoginController',
+        css: 'css/login.css'
+      })
+      .when('/register', {
+        templateUrl: 'views/register/register.html',
+        controller: 'RegisterController',
+        css: 'css/register.css'
       })
       .otherwise({ redirectTo: '/' });
   }]);
