@@ -20,25 +20,23 @@
             <label>Email</label>
         </div>
         <div class="group">
-            <input id="passwordsignup" type="password" required="required" />
+            <input id="passwordsignup" type="password" required="required" ng-model="password1" />
             <span class="highlight"></span>
             <span class="bar"></span>
             <label>Password</label>
         </div>
         <div class="group">
-            <input id="passwordsignup_confirm" type="password" required="required" />
+            <input id="passwordsignup_confirm" type="password" required="required" ng-model="password2" ng-pattern="password1" />
             <span class="highlight"></span>
             <span class="bar"></span>
             <label>Confirm Password</label>
         </div>
+        <!-- <span data-ng-show="myForm.password2.$error.match">Emails have to match!</span> -->
+        <span ng-show="register.password2.$error.pattern">Repeat Password should have the same value with email!</span>
+
 
         <div class="btn-box">
             <button type="submit" class="btn btn-submit">Sign up</button>
         </div>
     </form>
-
-    <p class="change_link">
-        Already a member ?
-        <button type="button" ng-click="show = 'loginForm'" class="btn btn-submit">Log in</button>
-    </p>
 </div>
