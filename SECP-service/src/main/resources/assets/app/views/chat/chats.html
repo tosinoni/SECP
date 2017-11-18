@@ -52,115 +52,13 @@
                                 <span class="recipient-username">Yanique Robinson</span>
                                 <a href="javascript:void(0);" class="pull-right"><i class="fa fa-search"></i></a>
                             </div>
-
                             <div>
-
-                                <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 452px;">
-                                    <div class="message-list-wrapper" style="overflow: hidden; width: auto; height: 452px;">
-                                        <ul class="message-list">
-                                            <li class="text-center">
-                                                <a href="javascript:void(0);" class="btn btn-default"><i class="fa fa-spinner"></i> Load More Messages</a>
-                                            </li>
-                                            <li class="left">
-                                                <span class="username">Yanique Robinson</span>
-                                                <small class="timestamp">
-                                                    <i class="fa fa-clock-o"></i>9 mins ago
-                                                </small>
-                                                <span class="avatar available tooltips" data-toggle="tooltip " data-placement="right" data-original-title="Yanique Robinson">
-                                                <img src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar" class="img-circle">
-                                            </span>
-                                                <div class="body">
-                                                    <div class="message well well-sm">
-                                                        Hey, are you busy at the moment?
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="right">
-                                                <span class="username">Kevin Mckoy</span>
-                                                <small class="timestamp">
-                                                    <i class="fa fa-clock-o"></i>5 mins ago
-                                                </small>
-                                                <span class="avatar tooltips" data-toggle="tooltip " data-placement="left" data-original-title="Kevin Mckoy">
-                                                <img src="http://bootdey.com/img/Content/avatar/avatar2.png" alt="avatar" class="img-circle">
-                                            </span>
-                                                <div class="body">
-                                                    <div class="message well well-sm">
-                                                        Um, no actually. I've just wrapped up my last project for the day.
-                                                    </div>
-                                                    <div class="clearfix"></div>
-                                                    <div class="message well well-sm">
-                                                        Whats up?
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="left">
-                                                <span class="username">Yanique Robinson</span>
-                                                <small class="timestamp">
-                                                    <i class="fa fa-clock-o"></i>3 mins ago
-                                                </small>
-                                                <span class="avatar available tooltips" data-toggle="tooltip " data-placement="right" data-original-title="Yanique Robinson">
-                                                <img src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar" class="img-circle">
-                                            </span>
-                                                <div class="body">
-                                                    <div class="message well well-sm">
-                                                        Well, I wanted to find out if you have any plans for tonight.
-                                                    </div>
-                                                    <div class="clearfix"></div>
-                                                    <div class="message well well-sm">
-                                                        <p><a href="#" class="white">Barbara</a> and I are going to this restaurant out of town.</p>
-                                                        <img src="http://lorempixel.com/300/200/nature/3" alt="">
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="right">
-                                                <span class="username">Kevin Mckoy</span>
-                                                <small class="timestamp">
-                                                    <i class="fa fa-clock-o"></i>2 mins ago
-                                                </small>
-                                                <span class="avatar tooltips" data-toggle="tooltip " data-placement="left" data-original-title="Kevin Mckoy">
-                                                <img src="http://bootdey.com/img/Content/avatar/avatar2.png" alt="avatar" class="img-circle">
-                                            </span>
-                                                <div class="body">
-                                                    <div class="message well well-sm">
-                                                        Wow that sounds great.
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="left">
-                                                <span class="username">Yanique Robinson</span>
-                                                <small class="timestamp">
-                                                    <i class="fa fa-clock-o"></i>56 secs ago
-                                                </small>
-                                                <span class="avatar available tooltips" data-toggle="tooltip " data-placement="right" data-original-title="Yanique Robinson">
-                                                    <img src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar" class="img-circle">
-                                                </span>
-                                                <div class="body">
-                                                    <div class="message well well-sm">
-                                                        Ok! We'll swing by your office at 5.
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="right">
-                                                <span class="username">Kevin Mckoy</span>
-                                                <small class="timestamp">
-                                                    <i class="fa fa-clock-o"></i>3 secs ago
-                                                </small>
-                                                <span class="avatar tooltips" data-toggle="tooltip " data-placement="left" data-original-title="Kevin Mckoy">
-                                                    <img src="http://bootdey.com/img/Content/avatar/avatar2.png" alt="avatar" class="img-circle">
-                                                </span>
-                                                <div class="body">
-                                                    <div class="message well well-sm">
-                                                        Cool. I'l see you guys then.
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div><div class="slimScrollBar" style="width: 7px; position: absolute; top: 265px; opacity: 0.4; display: none; border-radius: 7px; z-index: 99; right: 1px; height: 187.092px; background: rgb(0, 0, 0);"></div><div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; opacity: 0.2; z-index: 90; right: 1px; background: rgb(51, 51, 51);"></div></div>
-
+                                <chat-message messages="messages" current-user="currentUser"> </chat-message>
+                            </div>
                                 <div class="compose-box">
                                     <div class="row">
                                         <div class="col-xs-12 mg-btm-10">
-                                            <textarea id="btn-input" class="form-control input-sm" placeholder="Type your message here..."></textarea>
+                                            <textarea id="btn-input" ng-model="messageInput" class="form-control input-sm" placeholder="Type your message here..."></textarea>
                                         </div>
                                         <div class="col-xs-8">
                                             <button class="btn btn-green btn-sm">
@@ -171,7 +69,7 @@
                                             </button>
                                         </div>
                                         <div class="col-xs-4">
-                                            <button class="btn btn-green btn-sm pull-right">
+                                            <button ng-disabled="!messageInput" class="btn btn-green btn-sm pull-right" ng-click="sendMessage()">
                                                 <i class="fa fa-paper-plane"></i> Send
                                             </button>
                                         </div>
