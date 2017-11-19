@@ -1,20 +1,9 @@
 package com.visucius.secp.models;
 
-import org.junit.Before;
 import org.junit.Test;
-
 import javax.persistence.*;
-
-import java.lang.reflect.Field;
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
 import static org.junit.Assert.assertEquals;
 
 public class GroupTest {

@@ -1,12 +1,7 @@
 package com.visucius.secp.models;
 
 import static org.junit.Assert.*;
-
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import org.hibernate.validator.constraints.Email;
-import org.junit.Assert;
 import org.junit.Test;
-
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.text.DateFormat;
