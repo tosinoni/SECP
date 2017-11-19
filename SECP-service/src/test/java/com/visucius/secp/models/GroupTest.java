@@ -1,9 +1,9 @@
 package com.visucius.secp.models;
 
 import org.junit.Test;
-
 import javax.persistence.*;
-
+import java.util.HashSet;
+import java.util.Set;
 import static org.junit.Assert.assertEquals;
 
 public class GroupTest {
@@ -74,5 +74,47 @@ public class GroupTest {
         //testing the joincolumn inside inverseJoinColumns
         joinColumn = j.inverseJoinColumns()[0];
         assertEquals("JoinColumn users: name is not equal", "role_id", joinColumn.name());
+    }
+
+    @Test
+    public void testMessages() {
+        AssertAnnotations.assertField(Group.class, "messages",OneToMany.class);
+
+        //testing @OneToMany annotation
+        OneToMany o = ReflectTool.getFieldAnnotation(Group.class, "messages", OneToMany.class);
+
+        assertEquals("OneToMany: mappedBy is not equal", "group", o.mappedBy());
+        assertEquals("OneToMany: Fetch is not equal", FetchType.LAZY, o.fetch());
+    }
+
+    @Test
+    public void test_SetAndGetId(){
+        Group group = new Group("Group 1");
+        group.setId(1);
+        assertEquals("Id not equal", group.getId(), 1);
+    }
+
+    @Test
+    public void testGetUsers(){
+        Group group = new Group("Group 1");
+        Set<User> users = new HashSet<>();
+        group.setUsers(users);
+        assertEquals("Users not equal", group.getUsers(),users);
+    }
+
+    @Test
+    public void testGetRoles(){
+        Group group = new Group("Group 1");
+        Set<Role> roles = new HashSet<>();
+        group.setRoles(roles);
+        assertEquals("Roles not equal", group.getRoles(),roles);
+    }
+
+    @Test
+    public void testGetMessages(){
+        Group group = new Group("Group 1");
+        Set<Message> messages = new HashSet<>();
+        group.setMessages(messages);
+        assertEquals("Messages not equal", group.getMessages(),messages);
     }
 }

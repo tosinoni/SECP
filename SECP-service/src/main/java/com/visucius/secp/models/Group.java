@@ -29,11 +29,16 @@ public class Group {
         inverseJoinColumns = { @JoinColumn(name = "user_id") })
     private Set<User> users = new HashSet<>();
 
+    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
+    private Set<Message> messages = new HashSet<>();
+
     public Group(String name) {
         this.name = name;
     }
 
-    public long getId(){return id;}
+    public int getId(){return id;}
+
+    public void setId(int id){this.id = id;}
 
     public void setName(String name) {
         this.name = name;
@@ -47,9 +52,17 @@ public class Group {
         return this.users;
     }
 
+    public void setUsers(Set<User> users){this.users = users;}
+
     public Set<Role> getRoles() {
         return this.roles;
     }
+
+    public void setRoles(Set<Role> roles){this.roles = roles;}
+
+    public Set<Message> getMessages() {return this.messages;}
+
+    public void setMessages(Set<Message> messages){this.messages = messages;}
 
     @Override
     public boolean equals(Object o) {
