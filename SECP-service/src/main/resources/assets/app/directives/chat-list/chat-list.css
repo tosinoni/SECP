@@ -1,0 +1,10 @@
+.slimScrollStyle {
+    position: relative;
+    overflow: hidden;
+    width: auto;
+}
+
+.chatListWraperStyle {
+    overflow-y: auto;
+    width: auto;
+}

@@ -5,8 +5,13 @@ angular.module('SECP')
     function ($scope, $modal, Chat) {
 
       //declaring variables
-      $scope.messages = Chat.getMessages();
+      $scope.contacts = [];
       $scope.currentUser = Chat.getCurrentUser();
+
+
+      Chat.getChatList().then(function(data) {
+        $scope.contacts = data;
+      });
 
       $scope.sendMessage = function() {
          var message = {
@@ -16,7 +21,14 @@ angular.module('SECP')
          //clearing the message input in the textarea
          $scope.messageInput = null;
       };
-      
+
+      $scope.contactSelected = function(contact) {
+         $scope.selectedChat = contact;
+         Chat.getMessages(contact).then(function(data) {
+            $scope.messages = data;
+         });
+      };
+
       $scope.create = function () {
         $scope.clear();
         $scope.open();
