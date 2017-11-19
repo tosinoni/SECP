@@ -17,7 +17,7 @@
                 "id" : "1",
                 "username": "Yanique Robinson",
                 "timestamp": "9 mins ago",
-                "userImg": "http://bootdey.com/img/Content/avatar/avatar1.png",
+                "userImg": "http://bootdey.com/img/Content/avatar/avatar2.png",
                 "contents": [
                     {
                         "text" : "Hey, are you busy at the moment?"
@@ -28,7 +28,7 @@
                 "id" : "2",
                 "username": "Kevin Mckoy",
                 "timestamp": "5 mins ago",
-                "userImg": "http://bootdey.com/img/Content/avatar/avatar2.png",
+                "userImg": "http://bootdey.com/img/Content/avatar/avatar7.png",
                 "contents": [
                     {
                         "text" : "Um, no actually. I've just wrapped up my last project for the day"
@@ -42,7 +42,7 @@
                 "id" : "3",
                 "username": "Yanique Robinson",
                 "timestamp": "3 mins ago",
-                "userImg": "http://bootdey.com/img/Content/avatar/avatar1.png",
+                "userImg": "http://bootdey.com/img/Content/avatar/avatar2.png",
                 "contents": [
                     {
                         "text" : "Well, I wanted to find out if you have any plans for tonight"
@@ -57,7 +57,7 @@
                 "id" : "4",
                 "username": "Kevin Mckoy",
                 "timestamp": "2 mins ago",
-                "userImg": "http://bootdey.com/img/Content/avatar/avatar2.png",
+                "userImg": "http://bootdey.com/img/Content/avatar/avatar7.png",
                 "contents": [
                     {
                         "text" : "Wow that sounds great."
@@ -68,7 +68,7 @@
                 "id" : "5",
                 "username": "Yanique Robinson",
                 "timestamp": "56 secs ago",
-                "userImg": "http://bootdey.com/img/Content/avatar/avatar1.png",
+                "userImg": "http://bootdey.com/img/Content/avatar/avatar2.png",
                 "contents": [
                     {
                         "text" : "Ok! We'll swing by your office at 5"
@@ -79,7 +79,7 @@
                 "id" : "6",
                 "username": "Kevin Mckoy",
                 "timestamp": "3 secs ago",
-                "userImg": "http://bootdey.com/img/Content/avatar/avatar2.png",
+                "userImg": "http://bootdey.com/img/Content/avatar/avatar7.png",
                 "contents": [
                     {
                         "text" : "Cool. I'll see you guys then."
