@@ -1,12 +1,15 @@
+@import url("https://fonts.googleapis.com/css?family=Raleway:400,700");
 .form-group {
-    text-align: center;
+  text-align: center;
 }
 
 form {
   width: 320px;
   margin: 45px auto;
+  font-family:"Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 form h1 {
+  font-family:"Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 3em;
   font-weight: 300;
   text-align: center;
@@ -17,6 +20,7 @@ form h1 {
   position: relative;
   margin: 45px 0;
 }
+
 input,
 textarea {
   color: #a5a3a3;
@@ -29,14 +33,23 @@ textarea {
   outline: none;
   resize: none;
 }
-input:focus ~ label, input:valid ~ label,
-textarea:focus ~ label,
-textarea:valid ~ label {
+
+form input:focus:invalid ~ label {
+  top: -14px;
+  font-size: 12px;
+  color: #fe0000;
+}
+form input:focus:valid ~ label {
   top: -14px;
   font-size: 12px;
   color: #2196F3;
 }
-form input:focus:invalid ~ label {
+form input:not([value=""]):not(:focus):valid ~ label {
+  top: -14px;
+  font-size: 12px;
+  color: #2196F3;
+}
+form input:not([value=""]):not(:focus):invalid ~ label{
   top: -14px;
   font-size: 12px;
   color: #fe0000;
@@ -72,11 +85,4 @@ label {
 .btn:hover {
   background: rgb(25, 107, 170);
   color: #bce0fb;
-}
-
-.input.invalid,
-.textarea.invalid {
-  top: -14px;
-  font-size: 12px;
-  color: #fe0000;
 }

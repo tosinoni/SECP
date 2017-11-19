@@ -1,20 +1,17 @@
 <div class="container-fluid">
 
-    <div id="motto">
-        <p>Safe. Secure. Reliable.</p>
-    </div>
     <div class="form-group">
         <form autocomplete="on">
             <h1 id="formHeader">Log in</h1>
 
             <div class="group">
-                <input type="email" required="required" />
+                <input type="email" required="required" onkeyup="this.setAttribute('value', this.value);" value="" />
                 <span class="highlight"></span>
                 <span class="bar"></span>
                 <label>Email</label>
             </div>
             <div class="group">
-                <input type="password" required="required" />
+                <input type="password" required="required" onkeyup="this.setAttribute('value', this.value);" value="" />
                 <span class="highlight"></span>
                 <span class="bar"></span>
                 <label>Password</label>
