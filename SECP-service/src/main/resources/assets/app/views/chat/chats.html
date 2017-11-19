@@ -19,41 +19,13 @@
                                     </div>
                                 </div>
                             </div>
-                            <div>
-                                <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto;">
-                                    <div class="chat-list-wrapper" style="overflow-y: auto; width: auto;">
-                                        <ul class="chat-list">
-                                            <li class="new active">
-                                            <span class="avatar available">
-                                                <img src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar" class="img-circle">
-                                            </span>
-                                                <div class="body">
-                                                    <div class="header">
-                                                        <span class="username">Gavin Free</span>
-                                                        <small class="timestamp text-muted">
-                                                            <i class="fa fa-clock-o"></i>1 secs ago
-                                                        </small>
-                                                    </div>
-                                                    <p>
-                                                        Hey, have you finished up with the Ladybug project?
-                                                    </p>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div><div class="slimScrollBar" style="width: 7px; position: absolute; top: 0px; opacity: 0.4; display: none; border-radius: 7px; z-index: 99; right: 1px; height: 478.639px; background: rgb(0, 0, 0);"></div><div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; opacity: 0.2; z-index: 90; right: 1px; background: rgb(51, 51, 51);"></div></div>
-                            </div>
 
+                            <chat-list contacts="contacts" contact-selected-fn="contactSelected(contact)"> </chat-list>
                         </div>
 
                         <div class="col-md-8">
-
-                            <div class="recipient-box">
-                                <img src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar" class="img-circle" style="width:25px">
-                                <span class="recipient-username">Yanique Robinson</span>
-                                <a href="javascript:void(0);" class="pull-right"><i class="fa fa-search"></i></a>
-                            </div>
                             <div>
-                                <chat-message messages="messages" current-user="currentUser"> </chat-message>
+                                <chat-message messages="messages" current-user="currentUser" selected-chat="selectedChat"> </chat-message>
                             </div>
                                 <div class="compose-box">
                                     <div class="row">

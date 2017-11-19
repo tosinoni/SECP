@@ -1,3 +1,10 @@
+<div class="recipient-box">
+    <img src="{{selectedChat.img}}" alt="avatar" class="img-circle" style="width:25px">
+    <span class="recipient-username">{{selectedChat.username}}</span>
+    <a href="javascript:void(0);" class="pull-right"><i class="fa fa-search"></i></a>
+</div>
+
+
 <div>
     <div class="message-list-wrapper" id="chat-scroll">
         <ul class="message-list">
@@ -8,11 +15,11 @@
             <li ng-class="currentUser.username !== message.username ? 'left' : 'right'" ng-repeat="message in messages track by message.id">
                 <span class="username">{{message.username}}</span>
                 <small class="timestamp">
-                    <i class="fa fa-clock-o"></i>{{message.time}}
+                    <i class="fa fa-clock-o"></i>{{message.timestamp}}
                 </small>
                 <span class="avatar available tooltips" data-toggle="tooltip " data-placement="right"
                       data-original-title="{{message.username}}">
-                    <img ng-src="{{message.imgSrc}}" alt="avatar" class="img-circle">
+                    <img ng-src="{{message.userImg}}" alt="avatar" class="img-circle">
                 </span>
                 <div class="body">
                     <div ng-repeat="content in message.contents">
