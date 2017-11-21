@@ -25,10 +25,14 @@ public class Message {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Message(Date timestamp, String body, User user) {
-        this.timestamp = new Date(timestamp.getTime());
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "group_id", nullable = false)
+    private Group group;
+
+    public Message(String body, User user, Group group) {
         this.body = body;
         this.user = user;
+        this.group = group;
     }
 
     public long getId(){return id;}
@@ -46,6 +50,8 @@ public class Message {
     public User getUser(){return user;}
 
     public void setUser(User user){this.user = user;}
+
+    public Group getGroup(){return this.group;}
 
     @Override
     public boolean equals(Object o) {
