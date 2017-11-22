@@ -12,7 +12,7 @@ angular.module('SECP')
          },
         templateUrl: 'directives/chat-message/chat-message.html',
         link: function ($scope, element, attrs) {
-
+            $(".message-list-wrapper").niceScroll({autohidemode:'leave'});
             $scope.$watch('messages', function(messages, oldmessages) {
                 //move the scroll button down to see the latest message
                 $('#chat-scroll').animate({
