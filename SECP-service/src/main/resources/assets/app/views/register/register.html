@@ -20,6 +20,12 @@
             <label>Email</label>
         </div>
         <div class="group">
+            <input id="username" type="text" required="required" onkeyup="this.setAttribute('value', this.value);" value="" />
+            <span class="highlight"></span>
+            <span class="bar"></span>
+            <label>Username</label>
+        </div>
+        <div class="group">
             <input id="passwordsignup" type="password" required="required" onkeyup="this.setAttribute('value', this.value);" value=""
             />
             <span class="highlight"></span>
@@ -33,9 +39,6 @@
             <span class="bar"></span>
             <label>Confirm Password</label>
         </div>
-        <!-- <span data-ng-show="myForm.password2.$error.match">Emails have to match!</span> -->
-        <!-- <span ng-show="register.password2.$error.pattern">Repeat Password should have the same value with email!</span> -->
-
 
         <div class="btn-box">
             <button type="submit" class="btn btn-submit">Sign up</button>
