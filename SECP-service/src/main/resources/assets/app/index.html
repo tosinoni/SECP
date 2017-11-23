@@ -1,36 +1,39 @@
 <!doctype html>
 <html lang="en" ng-app="SECP">
+
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SECP</title>
   <link href="lib/bootstrap-css/css/bootstrap.css" rel="stylesheet">
-  <link href="lib/jquery-ui/themes/smoothness/jquery-ui.css" rel="stylesheet"/>
   <link href="css/app.css" rel="stylesheet">
 </head>
-<body>
- <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-   <div class="container">
-     <div class="navbar-header">
-       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-         <span class="sr-only">Toggle navigation</span>
-         <span class="icon-bar"></span>
-         <span class="icon-bar"></span>
-         <span class="icon-bar"></span>
-       </button>
-       <a class="navbar-brand" href="#">SECP</a>
-     </div>
 
-     <!-- Collect the nav links, forms, and other content for toggling -->
-     <div class="collapse navbar-collapse navbar-ex1-collapse">
-       <ul class="nav navbar-nav">
-         
-       </ul>
-     </div>
-     <!-- /.navbar-collapse -->
-   </div>
-   <!-- /.container -->
+<body>
+  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">SECP</a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse navbar-ex1-collapse">
+        <ul class="nav navbar-nav">
+          <li>
+            <a href="#/login">Login</a>
+          </li>
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
   </nav>
   <div class="container" ng-view></div>
   <script src="lib/jquery/dist/jquery.js"></script>
@@ -44,6 +47,13 @@
 
   <script src="js/app.js"></script>
   <script src="js/home/home-controller.js"></script>
-  
+
+  <script src="js/login/login-controller.js"></script>
+  <script src="js/register/register-controller.js"></script>
+
+  <!-- switching between css -->
+  <script src="lib/angular-css/angular-css.min.js"></script>
+
 </body>
+
 </html>
