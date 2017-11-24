@@ -1,0 +1,141 @@
+/*
+ *	HTML5 Device Mockups MODIFIED
+ *
+ *	By:
+ *		Tomi Hiltunen
+ *		tomi@mitakuuluu.fi
+ *		http://fi.linkedin.com/in/tomihiltunen/
+ *
+ *		Angelos Arnis
+ *		http://fi.linkedin.com/in/angelosarnis/
+ *
+ *	Inluded in this package:
+ *		- iPhone5 (black/white, portrait/landscape)
+ *		- iPad2 (black/white, portrait/landscape)
+ *		- iMac
+ *		- MacBook Pro (retina model)
+ *		- Nexus 7
+ *		- Lumia 920
+ *		- Microsoft Surface
+ *		- Galaxy S3
+ *
+ *  Added by ben182 (@beno182):
+ *		- iPhone 6
+ *  	- iPhone 6 Plus
+ *		- iPhone SE
+ *		- iPad Air
+ *		- iPad Air 2
+ *		- iPad Pro
+ *		- Macbook 2015
+ *
+ *
+ */
+
+ /* GENERAL STYLE */
+
+.device-mockup {
+	position: relative;
+	width: 100%;
+	padding-bottom: 61.775701%;
+}
+
+	.device-mockup > .device {
+		position: absolute;
+		top: 0; bottom: 0; left: 0; right: 0;
+		width: 100%; height: 100%;
+		background-size: 100% 100%;
+		background-repeat: no-repeat;
+		background-image: url("macbook/macbook.png");
+	}
+
+		.device-mockup > .device > .screen {
+			position: absolute;
+			top:    11.0438729%;
+			bottom: 14.6747352%;
+			left:   13.364486%;
+			right:  13.364486%;
+			overflow: hidden;
+		}
+
+		.device-mockup > .device > .button {
+			position: absolute;
+			top: 0; left: 0;
+			display: none;
+			overflow: hidden;
+			border-radius: 100%;
+			-webkit-border-radius: 100%;
+			-moz-border-radius: 100%;
+			cursor: pointer;
+		}
+
+
+/* DEVICES */
+
+/* MacBook Pro */
+.device-mockup.macbook {
+	padding-bottom: 61.775701%;
+}
+
+.device-mockup.macbook > .device {
+	background-image: url("macbook/macbook.png");
+}
+
+.device-mockup.macbook > .device > .screen {
+	top: 11.0438729%; bottom: 14.6747352%; left: 13.364486%; right: 13.364486%;
+}
+
+
+/* Microsoft Surface */
+.device-mockup.surface,
+.device-mockup.surface.landscape {
+	padding-bottom: 64.7584973%;
+}
+
+.device-mockup.surface > .device,
+.device-mockup.surface.landscape > .device {
+	background-image: url("surface/surface.png");
+}
+
+.device-mockup.surface > .device > .screen,
+.device-mockup.surface.landscape > .device > .screen {
+	top: 14.5488029%; bottom: 14.9171271%; left: 9.36195587%; right: 9.36195587%;
+}
+
+/* Galaxy S5 */
+.device-mockup.galaxy_s5,
+.device-mockup.galaxy_s5.portrait {
+  padding-bottom: 194.188862%;
+}
+
+.device-mockup.galaxy_s5.landscape {
+  padding-bottom: 51.496259%;
+}
+
+.device-mockup.galaxy_s5 > .device,
+.device-mockup.galaxy_s5.black > .device,
+.device-mockup.galaxy_s5.portrait.black > .device {
+  background-image: url("galaxy_s5/galaxy_s5_port_black.png");
+}
+
+.device-mockup.galaxy_s5.landscape > .device,
+.device-mockup.galaxy_s5.landscape.black > .device {
+  background-image: url("galaxy_s5/galaxy_s5_land_black.png");
+}
+
+.device-mockup.galaxy_s5.white > .device,
+.device-mockup.galaxy_s5.portrait.white > .device {
+  background-image: url("galaxy_s5/galaxy_s5_port_white.png");
+}
+
+.device-mockup.galaxy_s5.landscape.white > .device {
+  background-image: url("galaxy_s5/galaxy_s5_land_white.png");
+}
+
+.device-mockup.galaxy_s5 > .device > .screen,
+.device-mockup.galaxy_s5.portrait > .device > .screen {
+  top: 10.2%; bottom: 10.1%; left: 6.3%; right: 6.4%;
+}
+
+.device-mockup.galaxy_s5.landscape > .device > .screen {
+  top: 6.6%; bottom: 6.2%; left: 10.15%; right: 10%;
+}
