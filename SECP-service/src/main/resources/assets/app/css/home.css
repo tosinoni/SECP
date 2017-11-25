@@ -351,3 +351,9 @@ footer ul li a.active {
         margin-bottom: 0px;
     }
 }
+
+@media (max-width: 512px) {
+    section.contact h2 {
+        font-size: 34px;
+    }
+}
