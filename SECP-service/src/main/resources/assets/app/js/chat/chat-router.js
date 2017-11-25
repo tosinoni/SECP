@@ -5,6 +5,7 @@ angular.module('SECP')
     $routeProvider
       .when('/chats', {
         templateUrl: 'views/chat/chats.html',
+        css: 'css/chat.css',
         controller: 'ChatController'
       })
     }]);
