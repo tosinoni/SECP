@@ -1,6 +1,6 @@
 // Declare app level module which depends on filters, and services
 angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date', 'angularCSS'])
-  .config(['$routeProvider', function ($routeProvider) {
+  .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
     $routeProvider
       .when('/', {
         templateUrl: 'views/home/home.html',
@@ -18,5 +18,11 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date', 'ang
         css: 'css/register.css'
       })
       .otherwise({ redirectTo: '/' });
+
+      // use the HTML5 History API
+      $locationProvider.html5Mode({
+             enabled: true,
+             requireBase: false
+      });
   }]);
 
