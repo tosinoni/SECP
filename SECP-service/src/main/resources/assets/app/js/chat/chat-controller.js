@@ -22,6 +22,16 @@ angular.module('SECP')
          $scope.messageInput = null;
       };
 
+        $scope.sendMessageUsingEnter = function() {
+            var code = event.keyCode || event.which;
+            if (code === 13) {
+                if (!event.shiftKey) {
+                    event.preventDefault();
+                    $scope.sendMessage();
+                }
+            }
+        };
+
       $scope.contactSelected = function(contact) {
          $scope.selectedChat = contact;
          Chat.getMessages(contact).then(function(data) {

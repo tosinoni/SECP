@@ -30,7 +30,7 @@
                                 <div class="compose-box">
                                     <div class="row">
                                         <div class="col-xs-12 mg-btm-10">
-                                            <textarea id="btn-input" ng-model="messageInput" class="form-control input-sm" placeholder="Type your message here..."></textarea>
+                                            <textarea id="btn-input" ng-model="messageInput" ng-keydown="sendMessageUsingEnter()" class="form-control input-sm" placeholder="Type your message here..."></textarea>
                                         </div>
                                         <div class="col-xs-8">
                                             <button class="btn btn-green btn-sm">
