@@ -4,12 +4,9 @@ secretKey: o5KnhuFU8q8bo6qPxG2Z75q3yLlNiVCSOUd0vqbv6X8E8QLUSbP6Uxn7hn2678NZ3sQ1Z
 # Database settings.
 database:
   driverClass: com.mysql.jdbc.Driver
-  url: jdbc:mysql://localhost:3306/secp?createDatabaseIfNotExist=true
-  user: root
-  password:
-  minSize: 8
-  maxSize: 200
-  validationQuery: select 1
+  url: jdbc:mysql://aaxtpk0cgefevd.cpppkhaefajm.us-east-2.rds.amazonaws.com:3306/ebdb
+  user: secp
+  password: Got2btuf
   properties:
     hibernate.temp.use_jdbc_metadata_defaults: false
     hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
