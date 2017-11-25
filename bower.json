@@ -1,5 +1,5 @@
 {
-  "name": "SECP",
+  "name": "secp",
   "version": "0.0.0",
   "dependencies": {
     "angular-bootstrap": "~0.10.0",
