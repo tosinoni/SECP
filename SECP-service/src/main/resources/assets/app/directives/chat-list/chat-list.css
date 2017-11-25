@@ -42,12 +42,6 @@
 .chat .chat-wrapper .chat-list-wrapper .chat-list li.active .body .timestamp {
     color: black;
 }
-.chat .chat-wrapper .chat-list-wrapper .chat-list li.new {
-
-}
-.chat .chat-wrapper .chat-list-wrapper .chat-list li.new .body .timestamp {
-
-}
 }
 
 @media screen and (max-width: 991px) {
