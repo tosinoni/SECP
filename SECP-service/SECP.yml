@@ -17,7 +17,7 @@ database:
   #driverClass: org.postgresql.Driver
   #url: jdbc:postgresql://localhost:5432/mydb?prepareThreshold=0
   #user: admin
-  #password: admin
+  #message: admin
   #minSize: 8
   #maxSize: 200
   #validationQuery: select version()

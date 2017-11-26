@@ -6,7 +6,10 @@ import com.visucius.secp.DTO.UserRegistrationResponse;
 import com.visucius.secp.UseCase.LoginRequestController;
 import com.visucius.secp.UseCase.UserRegistrationController;
 import com.codahale.metrics.annotation.Timed;
+import com.visucius.secp.models.User;
 import io.dropwizard.hibernate.UnitOfWork;
+import io.dropwizard.jersey.params.LongParam;
+import io.dropwizard.jersey.params.NonEmptyStringParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,5 +56,19 @@ public class EntryResource {
     @Path("/login")
     public Response login(LoginRequestDTO loginRequestDTO) {
         return loginRequestController.login(loginRequestDTO);
+    }
+
+    @GET
+    @Path("/auth")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Timed
+    @UnitOfWork
+    public Response verifyUser(@PathParam("username") String username) {
+        User user = userRegistrationController.findUserByUsername(username);
+
+        if(user == null) {
+            return Response.status(Response.Status.NO_CONTENT).build();
+        }
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 }

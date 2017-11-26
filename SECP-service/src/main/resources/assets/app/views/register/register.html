@@ -1,47 +1,56 @@
 <div class="form-group content-area sample-show-hide">
-    <form autocomplete="on">
+    <form name="frm" autocomplete="on" novalidate ng-submit="register()">
         <h1 id="formHeader">Sign up</h1>
         <div class="group">
-            <input id="firstName" type="text" required="required" onkeyup="this.setAttribute('value', this.value);" value="" />
+            <input id="firstName" type="text" name="fisrtname" ng-model="user.fisrtname" required="required" value="" />
             <span class="highlight"></span>
             <span class="bar"></span>
             <label>First Name</label>
         </div>
         <div class="group">
-            <input id="lastName" type="text" required="required" onkeyup="this.setAttribute('value', this.value);" value="" />
+            <input id="lastName" type="text" name="lastname" ng-model="user.lastname" required="required" value="" />
             <span class="highlight"></span>
             <span class="bar"></span>
             <label>Last Name</label>
         </div>
         <div class="group">
-            <input id="email" type="email" required="required" onkeyup="this.setAttribute('value', this.value);" value="" />
+            <input id="email" type="email" name="email" ng-model="user.email" required="required" value="" />
             <span class="highlight"></span>
             <span class="bar"></span>
+            <span class="error" ng-show="!frm.email.$pristine && frm.email.$invalid">Enter a valid email.</span>
             <label>Email</label>
         </div>
         <div class="group">
-            <input id="username" type="text" required="required" onkeyup="this.setAttribute('value', this.value);" value="" />
+            <input id="key" type="text" name="username" ng-model="user.username" required="required" ng-minlength="3" value="" />
             <span class="highlight"></span>
             <span class="bar"></span>
+            <span class="error" ng-show="frm.username.$touched && frm.username.$error.minlength">username is too short</span>
+            <span class="error" ng-show="frm.username.$touched && frm.username.$error.usernameExists">username already exists</span>
             <label>Username</label>
         </div>
         <div class="group">
-            <input id="passwordsignup" type="password" required="required" onkeyup="this.setAttribute('value', this.value);" value=""
+            <input id="passwordsignup" type="password" ng-minlength="6" ng-maxlength="20"
+                   ng-pattern="/^((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20})$/" name="password" ng-model="user.password" required="required" value=""
             />
             <span class="highlight"></span>
             <span class="bar"></span>
+            <span class="error" ng-show="frm.password.$touched && frm.password.$error.minlength">Password must contain atleast 6 charecters.</span>
+            <span class="error" ng-show="frm.password.$touched && frm.password.$error.maxlength">Max-length of password reached.</span>
+            <span class="error" ng-show="frm.password.$touched && frm.password.$error.pattern">Password must contain an uppercase letter and a number.</span>
+
             <label>Password</label>
         </div>
         <div class="group">
-            <input id="passwordsignup_confirm" type="password" required="required" onkeyup="this.setAttribute('value', this.value);"
+            <input id="passwordsignup_confirm" name="confirmedPassword" ng-model="confirmedPassword" type="password" required="required"
                 value="" />
             <span class="highlight"></span>
             <span class="bar"></span>
             <label>Confirm Password</label>
+            <span class="error" ng-show="!frm.confirmedPassword.$pristine && frm.confirmedPassword.$invalid">Password does not match.</span>
         </div>
 
         <div class="btn-box">
-            <button type="submit" class="btn btn-submit">Sign up</button>
+            <button type="submit" class="btn btn-submit" ng-disabled="frm.$invalid">Sign up</button>
         </div>
     </form>
 </div>
