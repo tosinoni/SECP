@@ -1,0 +1,26 @@
+<div class="slimScrollDiv">
+    <div class="chat-list-wrapper">
+        <ul class="chat-list">
+            <li ng-class="{active : activeContact === contact}" ng-repeat="contact in contacts track by contact.id"
+                ng-click="setActive(contact)">
+                <span ng-class="['avatar', '{{contact.status}}']">
+                    <img ng-src="{{contact.img}}" alt="{{contact.username}}" class="img-circle">
+                </span>
+                <div class="body">
+                    <div class="header">
+                        <span class="username">{{contact.username}}</span>
+                        <small class="timestamp text-muted">
+                            <i class="fa fa-clock-o"></i>{{contact.message.timestamp}}
+                        </small>
+                    </div>
+                    <p>
+                        {{contact.message.text}}
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<link type="text/css" rel="stylesheet" href="directives/chat-list/chat-list.css"/>
+
