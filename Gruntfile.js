@@ -75,7 +75,7 @@ module.exports = function (grunt) {
           ],
           middleware: function (connect) {
             return [
-              modRewrite(['!\\.html|\\.js|\\.svg|\\.css|\\.png$ /index.html [L]']),
+              modRewrite(['!\\.html|\\.js|\\.svg|\\.css|\\.png|\\woff|\\ttf|\\swf|\\.jpg$ /index.html [L]']),
               proxySnippet,
               connect.static(require('path').resolve('SECP-service/src/main/resources/assets/app'))
             ];
