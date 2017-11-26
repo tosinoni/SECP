@@ -235,7 +235,7 @@ section.contact ul.list-social li.social-twitter a {
     background-color: #1da1f2;
 }
 section.contact ul.list-social li.social-twitter a:hover {
-    background-color: #0d95e8;
+    background-color: #0072e8;
 }
 section.contact ul.list-social li.social-android a {
     background-color: #A4C639;
@@ -243,17 +243,11 @@ section.contact ul.list-social li.social-android a {
 section.contact ul.list-social li.social-android a:hover {
     background-color: #33c600;
 }
-section.contact ul.list-social li.social-instagram a {
-    background-color: #3b5998;
-}
-section.contact ul.list-social li.social-instagram a:hover {
-    background-color: #344e86;
-}
 section.contact ul.list-social li.social-github a {
     background-color: #dd4b39;
 }
 section.contact ul.list-social li.social-github a:hover {
-    background-color: #d73925;
+    background-color: #d70800;
 }
 footer {
     padding: 25px 0;
@@ -299,9 +293,9 @@ footer ul li a.active {
 .btn-outline:focus,
 .btn-outline:active,
 .btn-outline.active {
-    color: white;
-    border-color: #fdcc52;
-    background-color: #fdcc52;
+    color: #2196F3;
+    border-color: white;
+    background-color: white;
 }
 .btn {
     border-radius: 300px;
@@ -312,6 +306,7 @@ footer ul li a.active {
 .btn-xl {
     font-size: 11px;
     padding: 15px 45px;
+    margin-bottom: 5px;
 }
 .img-fluid {
     max-width: 100%;
@@ -345,4 +340,19 @@ footer ul li a.active {
 .ml-auto,
 .mx-auto {
     margin-left: auto !important;
+}
+
+@media (max-width: 768px) {
+    .device-container{
+        display: none;
+    }
+    section.features .section-heading {
+        margin-bottom: 0px;
+    }
+}
+
+@media (max-width: 512px) {
+    section.contact h2 {
+        font-size: 34px;
+    }
 }
