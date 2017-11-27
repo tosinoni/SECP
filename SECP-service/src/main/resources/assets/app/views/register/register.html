@@ -14,7 +14,7 @@
             <label>Last Name</label>
         </div>
         <div class="group">
-            <input id="email" type="email" ng-pattern="/^[a-z0-9!#$%&'*+/=?^_`{|}~.-]+@[a-z0-9-]+.[a-z0-9-]/"
+            <input id="email" type="email"
                    name="email" unique-field-validation="{{verifyEmailUrl}}" ng-model="user.email" required="required" value="" />
             <span class="highlight"></span>
             <span class="bar"></span>
