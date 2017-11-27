@@ -4,18 +4,15 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date', 'ang
     $routeProvider
       .when('/', {
         templateUrl: 'views/home/home.html',
-        controller: 'HomeController',
-        css: "css/home.css"
+        controller: 'HomeController'
       })
       .when('/login', {
         templateUrl: 'views/login/login.html',
-        controller: 'LoginController',
-        css: 'css/login.css'
+        controller: 'LoginController'
       })
       .when('/register', {
         templateUrl: 'views/register/register.html',
-        controller: 'RegisterController',
-        css: 'css/register.css'
+        controller: 'RegisterController'
       })
       .otherwise({ redirectTo: '/' });
 
