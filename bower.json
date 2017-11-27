@@ -10,8 +10,12 @@
     "bootstrap-css": "~3.0.0",
     "jquery": "~2.1.0",
     "lodash": "~2.4.1",
-    "angular-css": "1.0.8",
-    "typopro": "^3.7.6"
+    "typopro": "^3.7.6",
+    "components-font-awesome": "^4.7.0",
+    "jquery.nicescroll": "~3.7.6",
+    "sweetalert2": "^6.11.2",
+    "simple-line-icons": "^2.4.1",
+    "angular-route-styles": "*"
   },
   "devDependencies": {
     "angular-mocks": "~1.6.7",
