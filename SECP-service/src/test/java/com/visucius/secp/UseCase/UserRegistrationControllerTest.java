@@ -242,4 +242,38 @@ public class UserRegistrationControllerTest {
         assertTrue(response.errors.contains(UserRegistrationController.DUPLICATE_EMAIL));
         assertEquals(response.getMessage(), UserRegistrationController.USER_NOT_CREATED);
     }
+
+    @Test
+    public void testFindUserByInValidEmail()
+    {
+        User user = controller.findUserByEmail(null);
+        assertEquals("user does not exist", null, user);
+    }
+
+    @Test
+    public void testFindUserByValidEmail()
+    {
+        String email = "joh@doe.com";
+        Mockito.when(userDAO.findByEmail(email)).thenReturn(new User("johnDoe", email ));
+        User user = controller.findUserByEmail(email);
+        assertNotNull("user does not exists", user);
+        assertEquals("Email is not equal", email, user.getEmail());
+    }
+
+    @Test
+    public void testFindUserByInValidUserName()
+    {
+        User user = controller.findUserByUsername(null);
+        assertEquals("user does not exist", null, user);
+    }
+
+    @Test
+    public void testFindUserByValidUserName()
+    {
+        String username = "johnDoe";
+        Mockito.when(userDAO.findByUserName(username)).thenReturn(new User(username, "joh@doe.com" ));
+        User user = controller.findUserByUsername(username);
+        assertNotNull("user does not exists", user);
+        assertEquals("Email is not equal", username, user.getUsername());
+    }
 }

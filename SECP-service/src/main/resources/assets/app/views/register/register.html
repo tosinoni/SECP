@@ -2,30 +2,32 @@
     <form name="frm" autocomplete="on" novalidate ng-submit="register()">
         <h1 id="formHeader">Sign up</h1>
         <div class="group">
-            <input id="firstName" type="text" name="fisrtname" ng-model="user.fisrtname" required="required" value="" />
+            <input id="firstName" type="text" name="fisrtname" ng-model="user.firstName" required="required" value="" />
             <span class="highlight"></span>
             <span class="bar"></span>
             <label>First Name</label>
         </div>
         <div class="group">
-            <input id="lastName" type="text" name="lastname" ng-model="user.lastname" required="required" value="" />
+            <input id="lastName" type="text" name="lastname" ng-model="user.lastName" required="required" value="" />
             <span class="highlight"></span>
             <span class="bar"></span>
             <label>Last Name</label>
         </div>
         <div class="group">
-            <input id="email" type="email" name="email" ng-model="user.email" required="required" value="" />
+            <input id="email" type="email" ng-pattern="/^[a-z0-9!#$%&'*+/=?^_`{|}~.-]+@[a-z0-9-]+.[a-z0-9-]/"
+                   name="email" unique-field-validation="{{verifyEmailUrl}}" ng-model="user.email" required="required" value="" />
             <span class="highlight"></span>
             <span class="bar"></span>
-            <span class="error" ng-show="!frm.email.$pristine && frm.email.$invalid">Enter a valid email.</span>
+            <span class="error" ng-show="frm.email.$touched && frm.email.$error.pattern">Enter a valid email.</span>
+            <span class="error" ng-show="frm.email.$error.invalidInputValue && frm.email.$dirty">Email already exists</span>
             <label>Email</label>
         </div>
         <div class="group">
-            <input id="key" type="text" name="username" ng-model="user.username" required="required" ng-minlength="3" value="" />
+            <input id="key" type="text" name="username" unique-field-validation="{{verifyUsernameUrl}}" ng-model="user.userName" required="required" ng-minlength="3" value="" />
             <span class="highlight"></span>
             <span class="bar"></span>
             <span class="error" ng-show="frm.username.$touched && frm.username.$error.minlength">username is too short</span>
-            <span class="error" ng-show="frm.username.$touched && frm.username.$error.usernameExists">username already exists</span>
+            <span class="error" ng-show="frm.username.$touched && frm.username.$error.invalidInputValue">username already exists</span>
             <label>Username</label>
         </div>
         <div class="group">
@@ -41,12 +43,14 @@
             <label>Password</label>
         </div>
         <div class="group">
-            <input id="passwordsignup_confirm" name="confirmedPassword" ng-model="confirmedPassword" type="password" required="required"
+            <input id="passwordsignup_confirm" name="password_c" ng-model="password_conf" type="password" password-confirmation required
                 value="" />
             <span class="highlight"></span>
             <span class="bar"></span>
             <label>Confirm Password</label>
-            <span class="error" ng-show="!frm.confirmedPassword.$pristine && frm.confirmedPassword.$invalid">Password does not match.</span>
+            <span class="error" ng-show="frm.password_c.$error.noMatch && frm.password.$dirty">
+                Password does not match.
+            </span>
         </div>
 
         <div class="btn-box">

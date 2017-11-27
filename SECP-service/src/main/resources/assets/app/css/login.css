@@ -86,3 +86,13 @@ label {
   background: rgb(25, 107, 170);
   color: #bce0fb;
 }
+
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px white inset;
+    -webkit-text-fill-color: #a5a3a3 !important;
+    -webkit-text-size-adjust: 18px !important;
+}
+
+.error {
+    color: red;
+}

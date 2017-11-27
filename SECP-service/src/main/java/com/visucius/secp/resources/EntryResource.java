@@ -59,16 +59,24 @@ public class EntryResource {
     }
 
     @GET
-    @Path("/auth")
+    @Path("/verify")
     @Produces(MediaType.APPLICATION_JSON)
     @Timed
     @UnitOfWork
-    public Response verifyUser(@PathParam("username") String username) {
-        User user = userRegistrationController.findUserByUsername(username);
+    public Response verifyUser(@QueryParam("username") String username,
+                               @QueryParam("email") String email) {
+
+        User user;
+
+        if(username == null) {
+            user = userRegistrationController.findUserByEmail(email);
+        } else {
+            user = userRegistrationController.findUserByUsername(username);
+        }
 
         if(user == null) {
             return Response.status(Response.Status.NO_CONTENT).build();
         }
-        return Response.status(Response.Status.NO_CONTENT).build();
+        return Response.status(Response.Status.OK).build();
     }
 }

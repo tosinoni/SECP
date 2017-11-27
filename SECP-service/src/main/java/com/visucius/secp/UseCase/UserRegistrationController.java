@@ -105,7 +105,7 @@ public class UserRegistrationController implements IRequestHandler<UserRegistrat
 
     private boolean isUserNameInUse(String userName)
     {
-        return userDAO.findByUserName(userName) != null;
+        return findUserByUsername(userName) != null;
     }
 
     public User findUserByUsername(String userName)
@@ -113,9 +113,15 @@ public class UserRegistrationController implements IRequestHandler<UserRegistrat
         return userDAO.findByUserName(userName);
     }
 
+    public User findUserByEmail(String email)
+    {
+        return userDAO.findByEmail(email);
+    }
+
+
     private boolean isEmailInUser(String email)
     {
-        return userDAO.findByEmail(email) != null;
+        return findUserByEmail(email) != null;
     }
 }
 

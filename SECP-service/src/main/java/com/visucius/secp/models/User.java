@@ -70,6 +70,10 @@ public class User implements Principal {
         this.email = email;
     }
 
+    public User(String userName, String email) {
+        this(null, null, userName, email, null);
+    }
+
     public long getId() {
         return id;
     }

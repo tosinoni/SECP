@@ -1,20 +1,19 @@
 angular.module('SECP')
     .controller('RegisterController', ['$scope', 'RegisterService',
         function ($scope, RegisterService) {
-
-        $scope.$watch("confirmedPassword", function(confirmedPassword) {
-            var v = false;
-
-            if($scope.user) {
-                v = $scope.user.password === confirmedPassword;
-            }
-            $scope.frm.confirmedPassword.$setValidity("unique", v);
-        });
+        $scope.verifyUsernameUrl = "/SECP/verify?username=";
+        $scope.verifyEmailUrl = "/SECP/verify?email=";
 
         $scope.register = function () {
             RegisterService.register($scope.user).then(function(res) {
-                if(res.status == 400) {
-                    console.log(res.data);
+                if(res.status == 201) {
+                    swal('Welcome to SECP!', 'Registration successful!','success');
+                    $scope.frm.$setPristine();
+                    $scope.frm.$setUntouched();
+                    $scope.user = {};
+                    $scope.password_conf = null;
+                } else {
+                    swal('Oops..!', res.data.message,'error');
                 }
 
             });
