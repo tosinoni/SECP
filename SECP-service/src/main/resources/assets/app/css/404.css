@@ -1,0 +1,43 @@
+* {
+    line-height: 1.2;
+    margin: 0;
+}
+html {
+    color: #ffffff;
+    display: table;
+    font-family: sans-serif;
+    height: 100%;
+    text-align: center;
+    width: 100%;
+    background: url("../img/home/bg-pattern.png"), #69C93F;
+    background: url("../img/home/bg-pattern.png"), -webkit-linear-gradient(to left, #69C93F, #2196F3);
+    background: url("../img/home/bg-pattern.png"), linear-gradient(to left, #69C93F, #2196F3);
+}
+body {
+    display: table-cell;
+    vertical-align: middle;
+    margin: 2em auto;
+}
+h1 {
+    color: #ffffff;
+    font-size: 2em;
+    font-weight: 400;
+}
+p {
+    margin: 0 auto;
+    width: 280px;
+}
+@media only screen and (max-width: 280px) {
+    body, p {
+        width: 95%;
+    }
+    h1 {
+        font-size: 1.5em;
+        margin: 0 0 0.3em;
+    }
+}
+@media only screen and (min-width: 600px) {
+    p {
+        width: 500px;
+    }
+}
