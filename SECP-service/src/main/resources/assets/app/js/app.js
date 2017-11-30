@@ -22,6 +22,9 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date', 'rou
         controller: 'ChatController',
         css: 'css/chat.css'
       })
+      .when('/error/404', {
+          templateUrl: 'views/error/404.html'
+      })
       .otherwise({
         templateUrl: 'views/error/404.html'
       });
