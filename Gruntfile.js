@@ -73,12 +73,17 @@ module.exports = function (grunt) {
           base: [
             '<%= yeoman.app %>/app'
           ],
-          middleware: function (connect) {
-            return [
-              modRewrite(['!\\.html|\\.js|\\.svg|\\.css|\\.png|\\woff|\\ttf|\\swf|\\.jpg$ /index.html [L]']),
-              proxySnippet,
-              connect.static(require('path').resolve('SECP-service/src/main/resources/assets/app'))
-            ];
+          middleware: function (connect, options) {
+            var middlewares = [];
+                    middlewares.push(modRewrite([
+                      '!/SECP|/assets|\\.html|\\.js|\\.svg|\\.css|\\.png|\\woff|\\ttf|\\swf|\\.jpg$ /index.html'
+                    ]));
+                    options.base.forEach(function (base) {
+                      // Serve static files.
+                      middlewares.push(connect.static(base));
+                    });
+                    middlewares.push(proxySnippet);
+                    return middlewares;
           }
         }
       },

@@ -33,6 +33,17 @@ textarea {
   resize: none;
 }
 
+input.ng-dirty.ng-invalid ~ label {
+  top: -14px;
+  font-size: 12px;
+  color: #fe0000;
+}
+input.ng-dirty.ng-valid ~ label {
+  top: -14px;
+  font-size: 12px;
+  color: #2196F3;
+}
+
 form input:focus:invalid ~ label {
   top: -14px;
   font-size: 12px;
@@ -42,16 +53,6 @@ form input:focus:valid ~ label {
   top: -14px;
   font-size: 12px;
   color: #2196F3;
-}
-form input:not([value=""]):not(:focus):valid ~ label {
-  top: -14px;
-  font-size: 12px;
-  color: #2196F3;
-}
-form input:not([value=""]):not(:focus):invalid ~ label{
-  top: -14px;
-  font-size: 12px;
-  color: #fe0000;
 }
 
 input[type="password"] {
@@ -84,4 +85,14 @@ label {
 .btn:hover {
   background: rgb(25, 107, 170);
   color: #bce0fb;
+}
+
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px white inset;
+    -webkit-text-fill-color: #a5a3a3 !important;
+    -webkit-text-size-adjust: 18px !important;
+}
+
+.error {
+    color: red;
 }
