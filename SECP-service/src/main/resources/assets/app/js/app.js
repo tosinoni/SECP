@@ -5,24 +5,26 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date', 'rou
       .when('/', {
         templateUrl: 'views/home/home.html',
         controller: 'HomeController',
-        css: 'css/home.css',
+        css: 'css/home.css'
       })
       .when('/login', {
         templateUrl: 'views/login/login.html',
         controller: 'LoginController',
-        css: 'css/login.css',
+        css: 'css/login.css'
       })
       .when('/register', {
         templateUrl: 'views/register/register.html',
         controller: 'RegisterController',
-        css: 'css/register.css',
+        css: 'css/register.css'
       })
       .when('/chats', {
         templateUrl: 'views/chat/chats.html',
         controller: 'ChatController',
-        css: 'css/chat.css',
+        css: 'css/chat.css'
       })
-      .otherwise({ redirectTo: '/' });
+      .otherwise({
+        templateUrl: 'views/error/404.html'
+      });
 
       // use the HTML5 History API
       $locationProvider.html5Mode({

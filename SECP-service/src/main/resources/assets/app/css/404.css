@@ -2,7 +2,8 @@
     line-height: 1.2;
     margin: 0;
 }
-html {
+
+html, body{
     color: #ffffff;
     display: table;
     font-family: sans-serif;
