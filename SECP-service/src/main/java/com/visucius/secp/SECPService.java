@@ -20,6 +20,7 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
+import org.eclipse.jetty.servlet.ErrorPageErrorHandler;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,6 +58,7 @@ public class SECPService extends Application<SECPConfiguration> {
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/login", "index.html", "login"));
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/register", "index.html", "register"));
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/chats", "index.html", "chats"));
+        bootstrap.addBundle(new AssetsBundle("/assets/app", "/error/404", "index.html", "404"));
 
         bootstrap.addBundle(hibernateBundle);
         ObjectMapper mapper = bootstrap.getObjectMapper();
@@ -96,5 +98,10 @@ public class SECPService extends Application<SECPConfiguration> {
         //************************** Registering Resources *************************************
         environment.jersey().register(
             new EntryResource(userRegistrationController, loginRequestController));
+
+        //************************** Error Handling *************************************
+        final ErrorPageErrorHandler epeh = new ErrorPageErrorHandler();
+        epeh.addErrorPage(404, "/error/404");
+        environment.getApplicationContext().setErrorHandler(epeh);
     }
 }
