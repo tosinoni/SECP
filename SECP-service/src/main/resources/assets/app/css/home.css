@@ -71,8 +71,8 @@ header.masthead {
     padding-bottom: 100px;
     color: white;
     background: url("../img/home/bg-pattern.png"), #69C93F;
-    background: url("../img/home/bg-pattern.png"), -webkit-linear-gradient(to left, #69C93F, #2196F3);
-    background: url("../img/home/bg-pattern.png"), linear-gradient(to left, #69C93F, #2196F3);
+    background: url("../img/home/bg-pattern.png"), -webkit-linear-gradient(left, #69C93F, #2196F3);
+    background: url("../img/home/bg-pattern.png"), linear-gradient(left, #69C93F, #2196F3);
 }
 header.masthead .header-content {
     max-width: 500px;
