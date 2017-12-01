@@ -16,6 +16,7 @@ import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.auth.AuthDynamicFeature;
 import io.dropwizard.auth.AuthValueFactoryProvider;
+import io.dropwizard.hibernate.UnitOfWorkAwareProxyFactory;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.db.DataSourceFactory;
@@ -79,10 +80,17 @@ public class SECPService extends Application<SECPConfiguration> {
 
 
         //********************** Register authentication for User *****************************
+
         environment.jersey().register(RolesAllowedDynamicFeature.class);
+        SECPAuthenticator authenticator = new UnitOfWorkAwareProxyFactory(hibernateBundle)
+            .create(SECPAuthenticator.class,
+                new Class<?>[]  { UserDAO.class, TokenController.class},
+                new Object[]    { userDAO, tokenController});
+
+
         final TokenAuthFilter<User> tokenAuthFilter = new TokenAuthFilter.Builder<User>()
             .setAuthorizer(new SECPAuthorizer())
-            .setAuthenticator(new SECPAuthenticator(userDAO, tokenController)).buildAuthFilter();
+            .setAuthenticator(authenticator).buildAuthFilter();
         environment.jersey().register(new AuthDynamicFeature(tokenAuthFilter));
         environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
 

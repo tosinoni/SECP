@@ -6,6 +6,7 @@ import com.visucius.secp.DTO.UserRegistrationResponse;
 import com.visucius.secp.Controllers.User.LoginRequestController;
 import com.visucius.secp.Controllers.User.UserRegistrationController;
 import com.codahale.metrics.annotation.Timed;
+import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +35,7 @@ public class EntryResource {
     @Timed
     @UnitOfWork
     @Path("/register")
-    public Response create(UserRegistrationRequest request) {
+    public Response create(@Auth UserRegistrationRequest request) {
 
         UserRegistrationResponse response = userRegistrationController.registerUser(request);
 
