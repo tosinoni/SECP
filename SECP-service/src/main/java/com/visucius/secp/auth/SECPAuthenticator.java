@@ -1,6 +1,6 @@
 package com.visucius.secp.auth;
 
-import com.visucius.secp.UseCase.TokenController;
+import com.visucius.secp.Controllers.TokenController;
 import com.visucius.secp.daos.UserDAO;
 import com.visucius.secp.models.User;
 import io.dropwizard.auth.AuthenticationException;

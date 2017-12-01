@@ -1,4 +1,4 @@
-package com.visucius.secp.Contracts;
+package com.visucius.secp.DTO;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;

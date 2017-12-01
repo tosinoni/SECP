@@ -3,8 +3,8 @@ package com.visucius.secp.resources;
 import com.visucius.secp.DTO.LoginRequestDTO;
 import com.visucius.secp.DTO.UserRegistrationRequest;
 import com.visucius.secp.DTO.UserRegistrationResponse;
-import com.visucius.secp.UseCase.LoginRequestController;
-import com.visucius.secp.UseCase.UserRegistrationController;
+import com.visucius.secp.Controllers.User.LoginRequestController;
+import com.visucius.secp.Controllers.User.UserRegistrationController;
 import com.codahale.metrics.annotation.Timed;
 import io.dropwizard.hibernate.UnitOfWork;
 import org.slf4j.Logger;
@@ -36,7 +36,7 @@ public class EntryResource {
     @Path("/register")
     public Response create(UserRegistrationRequest request) {
 
-        UserRegistrationResponse response = userRegistrationController.handle(request);
+        UserRegistrationResponse response = userRegistrationController.registerUser(request);
 
         if (response.success) {
             return Response.status(response.status).entity(response.toString()).build();

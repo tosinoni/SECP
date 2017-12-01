@@ -1,5 +1,6 @@
-package com.visucius.secp.UseCase;
+package com.visucius.secp.Controllers.User;
 
+import com.visucius.secp.Controllers.TokenController;
 import com.visucius.secp.DTO.LoginRequestDTO;
 import com.visucius.secp.DTO.TokenDTO;
 import com.visucius.secp.daos.UserDAO;
@@ -32,7 +33,7 @@ public class LoginRequestController {
 
         if (user == null) {
             LOG.warn("User not found.");
-            throw new WebApplicationException(ErrMsg.LOGIN_FAIL_USER_NOT_FOUND, Response.Status.UNAUTHORIZED);
+            throw new WebApplicationException(UserErrorMessage.LOGIN_FAIL_USER_NOT_FOUND, Response.Status.UNAUTHORIZED);
         }
 
         boolean isValidPassword = isPasswordValid(loginRequestDTO, user);
@@ -43,7 +44,7 @@ public class LoginRequestController {
             TokenDTO tokenDTO = new TokenDTO(token, user.getLoginRole());
             return Response.ok().entity(tokenDTO).build();
         } else {
-            throw new WebApplicationException(ErrMsg.LOGIN_FAIL_WRONG_PASSWORD, Response.Status.UNAUTHORIZED);
+            throw new WebApplicationException(UserErrorMessage.LOGIN_FAIL_WRONG_PASSWORD, Response.Status.UNAUTHORIZED);
         }
     }
 
@@ -54,10 +55,10 @@ public class LoginRequestController {
             isPasswordValid = PasswordUtil.verifyPassword(loginRequestDTO.getPassword(), user.getPassword());
         } catch (PasswordUtil.CannotPerformOperationException e) {
             LOG.error("Unable to compute hash.", e);
-            throw new WebApplicationException(ErrMsg.LOGIN_FAIL_WRONG_PASSWORD, Response.Status.UNAUTHORIZED);
+            throw new WebApplicationException(UserErrorMessage.LOGIN_FAIL_WRONG_PASSWORD, Response.Status.UNAUTHORIZED);
         } catch (PasswordUtil.InvalidHashException e) {
             LOG.warn("Unable to compute hash. ", e);
-            throw new WebApplicationException(ErrMsg.LOGIN_FAIL_WRONG_PASSWORD, Response.Status.UNAUTHORIZED);
+            throw new WebApplicationException(UserErrorMessage.LOGIN_FAIL_WRONG_PASSWORD, Response.Status.UNAUTHORIZED);
         }
 
         return isPasswordValid;
@@ -70,7 +71,7 @@ public class LoginRequestController {
             token = tokenController.createTokenFromUsername(loginRequestDTO.getUsername());
         } catch (JoseException e) {
             LOG.error("Unable to create authToken.", e);
-            throw new WebApplicationException(ErrMsg.LOGIN_FAIL_USER_NOT_FOUND, Response.Status.UNAUTHORIZED);
+            throw new WebApplicationException(UserErrorMessage.LOGIN_FAIL_USER_NOT_FOUND, Response.Status.UNAUTHORIZED);
         }
 
         return token;
@@ -78,12 +79,12 @@ public class LoginRequestController {
 
     private void validate(LoginRequestDTO loginRequestDTO) {
         if (loginRequestDTO == null) {
-            throw new WebApplicationException(ErrMsg.LOGIN_FAIL_NO_CREDENTIALS, Response.Status.BAD_REQUEST);
+            throw new WebApplicationException(UserErrorMessage.LOGIN_FAIL_NO_CREDENTIALS, Response.Status.BAD_REQUEST);
         }
         if (StringUtils.isBlank(loginRequestDTO.getUsername())) {
-            throw new WebApplicationException(ErrMsg.LOGIN_FAIL_NO_USERNAME, Response.Status.BAD_REQUEST);
+            throw new WebApplicationException(UserErrorMessage.LOGIN_FAIL_NO_USERNAME, Response.Status.BAD_REQUEST);
         } else if (StringUtils.isBlank(loginRequestDTO.getPassword())) {
-            throw new WebApplicationException(ErrMsg.LOGIN_FAIL_NO_PASSWORD, Response.Status.BAD_REQUEST);
+            throw new WebApplicationException(UserErrorMessage.LOGIN_FAIL_NO_PASSWORD, Response.Status.BAD_REQUEST);
         }
     }
 }

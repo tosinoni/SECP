@@ -1,8 +1,8 @@
 package com.visucius.secp;
 
-import com.visucius.secp.UseCase.LoginRequestController;
-import com.visucius.secp.UseCase.TokenController;
-import com.visucius.secp.UseCase.UserRegistrationController;
+import com.visucius.secp.Controllers.User.LoginRequestController;
+import com.visucius.secp.Controllers.TokenController;
+import com.visucius.secp.Controllers.User.UserRegistrationController;
 import com.visucius.secp.auth.SECPAuthenticator;
 import com.visucius.secp.auth.SECPAuthorizer;
 import com.visucius.secp.auth.TokenAuthFilter;

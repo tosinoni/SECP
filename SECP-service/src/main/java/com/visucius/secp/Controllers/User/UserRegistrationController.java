@@ -1,6 +1,5 @@
-package com.visucius.secp.UseCase;
+package com.visucius.secp.Controllers.User;
 
-import com.visucius.secp.Contracts.IRequestHandler;
 import com.visucius.secp.DTO.UserRegistrationRequest;
 import com.visucius.secp.DTO.UserRegistrationResponse;
 import com.visucius.secp.SECPService;
@@ -15,38 +14,29 @@ import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserRegistrationController implements IRequestHandler<UserRegistrationRequest, UserRegistrationResponse> {
+public class UserRegistrationController{
 
     private static final Logger LOG = LoggerFactory.getLogger(SECPService.class);
 
     private final UserDAO userDAO;
 
-    public static final String FIRST_NAME_INVALID = "First name is not valid.";
-    public static final String LAST_NAME_INVALID = "Last name is not valid.";
-    public static final String User_NAME_INVALID = "Username is not valid.";
-    public static final String EMAIL_INVALID = "Email is not valid.";
-    public static final String PASSWORD_INVALID = "Password is not valid";
-    public static final String USER_CREATED = "User Created";
-    public static final String USER_NOT_CREATED = "User not created";
-    public static final String DUPLICATE_USERNAME = "Username already exists";
-    public static final String DUPLICATE_EMAIL = "Email is in use";
+
 
     public UserRegistrationController(UserDAO userDAO)
     {
         this.userDAO = userDAO;
     }
 
-    @Override
-    public UserRegistrationResponse handle(UserRegistrationRequest request) {
+    public UserRegistrationResponse registerUser(UserRegistrationRequest request) {
 
         List<String> errors = validateInput(request);
-        if(isUserNameInUse(request.userName)) {
-            errors.add(DUPLICATE_USERNAME);
+        if(isUsernameValid(request.userName)) {
+            errors.add(UserErrorMessage.DUPLICATE_USERNAME);
         }
 
-        if(isEmailInUser(request.email))
+        if(isEmailValid(request.email))
         {
-            errors.add(DUPLICATE_EMAIL);
+            errors.add(UserErrorMessage.DUPLICATE_EMAIL);
         }
 
         if(errors.isEmpty())
@@ -55,7 +45,7 @@ public class UserRegistrationController implements IRequestHandler<UserRegistrat
                 String hashPassword = PasswordUtil.createHash(request.password);
                 User user = new User(request.firstName, request.lastName, request.userName, request.email, hashPassword);
                 User createdUser = userDAO.save(user);
-                return new UserRegistrationResponse(true, USER_CREATED, Response.Status.CREATED, errors, createdUser.getId());
+                return new UserRegistrationResponse(true, UserErrorMessage.USER_CREATED, Response.Status.CREATED, errors, createdUser.getId());
 
             } catch (PasswordUtil.CannotPerformOperationException e) {
                 LOG.error(e.getLocalizedMessage());
@@ -66,7 +56,7 @@ public class UserRegistrationController implements IRequestHandler<UserRegistrat
             }
         }
 
-        return new UserRegistrationResponse(false,USER_NOT_CREATED, Response.Status.BAD_REQUEST,errors);
+        return new UserRegistrationResponse(false, UserErrorMessage.USER_NOT_CREATED, Response.Status.BAD_REQUEST,errors);
     }
 
     private List<String> validateInput(UserRegistrationRequest request)
@@ -75,40 +65,40 @@ public class UserRegistrationController implements IRequestHandler<UserRegistrat
 
         if(!InputValidator.isNameValid(request.firstName))
         {
-            errors.add(FIRST_NAME_INVALID);
+            errors.add(UserErrorMessage.FIRST_NAME_INVALID);
         }
 
         if(!InputValidator.isNameValid(request.lastName))
         {
-            errors.add(LAST_NAME_INVALID);
+            errors.add(UserErrorMessage.LAST_NAME_INVALID);
 
         }
 
         if(!InputValidator.isNameValid(request.userName))
         {
-            errors.add(User_NAME_INVALID);
+            errors.add(UserErrorMessage.User_NAME_INVALID);
         }
 
         if(!InputValidator.isEmailValid(request.email))
         {
-            errors.add(EMAIL_INVALID);
+            errors.add(UserErrorMessage.EMAIL_INVALID);
 
         }
 
         if(!InputValidator.isPasswordValid(request.password))
         {
-            errors.add(PASSWORD_INVALID);
+            errors.add(UserErrorMessage.PASSWORD_INVALID);
         }
 
         return errors;
     }
 
-    private boolean isUserNameInUse(String userName)
+    private boolean isUsernameValid(String userName)
     {
         return userDAO.findByUserName(userName) != null;
     }
 
-    private boolean isEmailInUser(String email)
+    private boolean isEmailValid(String email)
     {
         return userDAO.findByEmail(email) != null;
     }

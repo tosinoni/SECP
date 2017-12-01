@@ -1,9 +1,9 @@
 package com.visucius.secp.resources;
 
 import com.visucius.secp.DTO.LoginRequestDTO;
-import com.visucius.secp.UseCase.LoginRequestController;
-import com.visucius.secp.UseCase.TokenController;
-import com.visucius.secp.UseCase.UserRegistrationController;
+import com.visucius.secp.Controllers.User.LoginRequestController;
+import com.visucius.secp.Controllers.TokenController;
+import com.visucius.secp.Controllers.User.UserRegistrationController;
 import com.visucius.secp.daos.UserDAO;
 import com.visucius.secp.helpers.ResponseValidator;
 import com.visucius.secp.models.User;
