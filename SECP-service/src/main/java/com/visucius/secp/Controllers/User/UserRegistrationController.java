@@ -95,8 +95,19 @@ public class UserRegistrationController{
 
     private boolean isUsernameValid(String userName)
     {
-        return userDAO.findByUserName(userName) != null;
+        return findUserByUsername(userName) != null;
     }
+
+    public User findUserByUsername(String userName)
+    {
+        return userDAO.findByUserName(userName);
+    }
+
+    public User findUserByEmail(String email)
+    {
+        return userDAO.findByEmail(email);
+    }
+
 
     private boolean isEmailValid(String email)
     {

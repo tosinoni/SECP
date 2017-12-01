@@ -1,0 +1,61 @@
+[
+    {
+        "id" : "1",
+        "username" : "Gavin Free",
+        "img" : "https://bootdey.com/img/Content/avatar/avatar1.png",
+        "status" : "available",
+        "message" : {
+            "text" : "Hey, have you finished up with the Ladybug project?",
+            "timestamp" : "1 secs ago"
+        }
+    },
+    {
+        "id" : "2",
+        "username" : "Yanique Robinson",
+        "img" : "https://bootdey.com/img/Content/avatar/avatar2.png",
+        "status" : "available",
+        "message" : {
+            "text" : "Cool. I'll see you guys then.",
+            "timestamp" : "3 secs ago"
+        }
+    },
+    {
+        "id" : "3",
+        "username" : "Ryan Haywood",
+        "img" : "https://bootdey.com/img/Content/avatar/avatar3.png",
+        "message" : {
+            "text" : "Kevin, tomorrow is GoT night at my house. Bring your HDMI extension. Thanks.",
+            "timestamp" : "12 mins ago"
+        }
+    },
+    {
+        "id" : "4",
+        "username" : "Geoff Ramsey",
+        "img" : "https://bootdey.com/img/Content/avatar/avatar4.png",
+        "status" : "busy",
+        "message" : {
+            "text" : "Sales want to see you. Something about the new product.",
+            "timestamp" : "1 hour ago"
+        }
+    },
+    {
+        "id" : "5",
+        "username" : "Kara Mendly",
+        "img" : "https://bootdey.com/img/Content/avatar/avatar5.png",
+        "status" : "available",
+        "message" : {
+            "text" : "Meeting next week Tuesday. Nothing serious, just bring teams work progress with you.",
+            "timestamp" : "5 hours ago"
+        }
+    },
+    {
+        "id" : "6",
+        "username" : "Jack Patillo",
+        "status" : "busy",
+        "img" : "https://bootdey.com/img/Content/avatar/avatar6.png",
+        "message" : {
+            "text" : "hey, what does this error mean?",
+            "timestamp" : "12 mins ago"
+        }
+    }
+]
