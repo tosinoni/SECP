@@ -19,7 +19,9 @@ import javax.ws.rs.core.Response;
 public class EntryResourceTest {
 
     private static final String url = "/login";
-    private static final String verifyUrl = "/verify";
+    private static final String verifyEmailUrl = "/user/verify/email";
+    private static final String verifyUsernameUrl = "/user/verify/username";
+
     private UserDAO userDAO = Mockito.mock(UserDAO.class);
     private TokenController tokenController = Mockito.mock((TokenController.class));
     private UserRegistrationController userRegistrationController  = Mockito.mock((UserRegistrationController.class));
@@ -105,7 +107,7 @@ public class EntryResourceTest {
     @Test
     public void testVerifyWithInValidEmail()
     {
-        Response response = resources.client().target(verifyUrl + "?email=" + null).request().get();
+        Response response = resources.client().target(verifyEmailUrl + "/invalid").request().get();
         ResponseValidator.validate(response, 204);
     }
 
@@ -113,15 +115,15 @@ public class EntryResourceTest {
     public void testVerifyWithValidEmail()
     {
         String email = "joh@doe.com";
-        Mockito.when(userRegistrationController.findUserByEmail(email)).thenReturn(new User("johnDoe", email ));
-        Response response = resources.client().target(verifyUrl + "?email=" + email).request().get();
+        Mockito.when(userRegistrationController.isEmailValid(email)).thenReturn(true);
+        Response response = resources.client().target(verifyEmailUrl + "/" + email).request().get();
         ResponseValidator.validate(response, 200);
     }
 
     @Test
     public void testVerifyWithInValidUserName()
     {
-        Response response = resources.client().target(verifyUrl + "?username=" + null).request().get();
+        Response response = resources.client().target(verifyUsernameUrl + "/invalid").request().get();
         ResponseValidator.validate(response, 204);
     }
 
@@ -129,8 +131,8 @@ public class EntryResourceTest {
     public void testVerifyWithValidUserName()
     {
         String username = "johnDoe";
-        Mockito.when(userRegistrationController.findUserByUsername(username)).thenReturn(new User(username, "joh@doe.com" ));
-        Response response = resources.client().target(verifyUrl + "?username=" + username).request().get();
+        Mockito.when(userRegistrationController.isUsernameValid(username)).thenReturn(true);
+        Response response = resources.client().target(verifyUsernameUrl + "/" + username).request().get();
         ResponseValidator.validate(response, 200);
     }
     private LoginRequestDTO createLoginInfo() {

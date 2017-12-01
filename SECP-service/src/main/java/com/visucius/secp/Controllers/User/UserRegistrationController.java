@@ -93,23 +93,18 @@ public class UserRegistrationController{
         return errors;
     }
 
-    private boolean isUsernameValid(String userName)
+    public boolean isUsernameValid(String userName)
     {
         return findUserByUsername(userName) != null;
     }
 
-    public User findUserByUsername(String userName)
+    private User findUserByUsername(String userName)
     {
         return userDAO.findByUserName(userName);
     }
 
-    public User findUserByEmail(String email)
-    {
-        return userDAO.findByEmail(email);
-    }
 
-
-    private boolean isEmailValid(String email)
+    public boolean isEmailValid(String email)
     {
         return userDAO.findByEmail(email) != null;
     }

@@ -246,8 +246,8 @@ public class UserRegistrationControllerTest {
     @Test
     public void testFindUserByInValidEmail()
     {
-        User user = controller.findUserByEmail(null);
-        assertEquals("user does not exist", null, user);
+        boolean isValid = controller.isUsernameValid(null);
+        assertFalse("user does not exist", isValid);
     }
 
     @Test
@@ -255,16 +255,15 @@ public class UserRegistrationControllerTest {
     {
         String email = "joh@doe.com";
         Mockito.when(userDAO.findByEmail(email)).thenReturn(new User("johnDoe", email ));
-        User user = controller.findUserByEmail(email);
-        assertNotNull("user does not exists", user);
-        assertEquals("Email is not equal", email, user.getEmail());
+        boolean isValid = controller.isEmailValid(email);
+        assertTrue("Email does not exist", isValid);
     }
 
     @Test
     public void testFindUserByInValidUserName()
     {
-        User user = controller.findUserByUsername(null);
-        assertEquals("user does not exist", null, user);
+        boolean isValid = controller.isEmailValid(null);
+        assertFalse("user does not exist", isValid);
     }
 
     @Test
@@ -272,8 +271,7 @@ public class UserRegistrationControllerTest {
     {
         String username = "johnDoe";
         Mockito.when(userDAO.findByUserName(username)).thenReturn(new User(username, "joh@doe.com" ));
-        User user = controller.findUserByUsername(username);
-        assertNotNull("user does not exists", user);
-        assertEquals("Email is not equal", username, user.getUsername());
+        boolean isValid = controller.isUsernameValid(username);
+        assertTrue("Email is not equal", isValid);
     }
 }
