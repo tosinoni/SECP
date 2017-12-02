@@ -28,7 +28,5 @@ a:visited{
 }
 
 a:hover {
-    background-color: #2196F3;
-    color: white;
     text-decoration: none;
 }
