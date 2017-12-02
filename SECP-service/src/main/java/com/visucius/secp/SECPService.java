@@ -20,9 +20,15 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
+import org.atmosphere.cpr.ApplicationConfig;
+import org.atmosphere.cpr.AtmosphereServlet;
+import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.servlet.FilterRegistration;
+import javax.servlet.ServletRegistration;
 
 
 public class SECPService extends Application<SECPConfiguration> {
@@ -63,6 +69,19 @@ public class SECPService extends Application<SECPConfiguration> {
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     }
 
+    void initializeAtmosphere(Environment environment) {
+        AtmosphereServlet atmosphereServlet = new AtmosphereServlet();
+        atmosphereServlet.framework().addInitParameter(ApplicationConfig.ANNOTATION_PACKAGE,"com.visucius.secp.resources.atmosphere");
+        atmosphereServlet.framework().addInitParameter(ApplicationConfig.WEBSOCKET_CONTENT_TYPE, "application/json");
+        atmosphereServlet.framework().addInitParameter(ApplicationConfig.WEBSOCKET_SUPPORT, "true");
+        atmosphereServlet.framework().addInitParameter(ApplicationConfig.PROPERTY_COMET_SUPPORT, "org.atmosphere.container.Jetty9AsyncSupportWithWebSocket");
+
+        ServletRegistration.Dynamic servletHolder = environment.servlets().addServlet("Chat", atmosphereServlet);
+        servletHolder.addMapping("/chat/*");
+        servletHolder.setAsyncSupported(true);
+    }
+
+
     @Override
     public void run(SECPConfiguration configuration,
                     Environment environment) throws Exception {
@@ -91,7 +110,8 @@ public class SECPService extends Application<SECPConfiguration> {
         environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
 
 
-
+        //**************************** Initializing atmosphere for websocket ***********************
+        initializeAtmosphere(environment);
 
         //************************** Registering Resources *************************************
         environment.jersey().register(

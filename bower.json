@@ -15,7 +15,8 @@
     "jquery.nicescroll": "~3.7.6",
     "sweetalert2": "^6.11.2",
     "simple-line-icons": "^2.4.1",
-    "angular-route-styles": "*"
+    "angular-route-styles": "*",
+    "atmosphere.js": "atmosphere#^2.3.2"
   },
   "devDependencies": {
     "angular-mocks": "~1.6.7",

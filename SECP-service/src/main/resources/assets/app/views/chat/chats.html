@@ -60,4 +60,38 @@
     </div>
 </div>
 
+<div id="header">
+    <h3 data-ng-bind="model.header" data-ng-init="model.header='Atmosphere Chat. Default transport is WebSocket, fallback is long-polling'"></h3>
+</div>
+<p data-ng-show="!model.connected">Connecting...</p>
+<p>{{model.content}}</p>
+<div class="container">
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Chat room</h3>
+            </div>
+            <div class="panel-body">
+                <div class="messages">
+                    <p data-ng-repeat="message in model.messages">
+                        <span class="time">{{message.date | date:'shortDate'}} {{message.date|date:'shortTime'}}</span>
+                        <span class="author">{{message.author}}</span> :
+                        <span class="text">{{message.text}}</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <span data-ng-show="!model.name">Enter your name:</span>
+    <div data-ng-show="model.logged">
+        <span><b>{{model.name}}</b> says:</span>
+    </div>
+    <form role="form" class="form-horizontal">
+        <div class="form-group">
+            <div class="col-lg-9">
+                <input type="text" class="form-control" id="input" data-ng-disabled="!model.connected" x-webkit-speech/>
+            </div>
+        </div>
+    </form>
+</div>
 </body>

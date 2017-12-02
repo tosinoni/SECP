@@ -24,6 +24,7 @@
         <hibernate.version>5.2.10.Final</hibernate.version>
         <jackson.version>2.5.1</jackson.version>
         <powermock.version>1.6.1</powermock.version>
+        <atmosphere-version>2.4.14</atmosphere-version>
     </properties>
 
     <!-- STOPPED HERE -->
