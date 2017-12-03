@@ -1,0 +1,36 @@
+<body>
+<h1 class="portalheader">
+    <a href="/portal/audit"><i href="/portal" id="backbutton" class="fa fa-chevron-circle-left goback" aria-hidden="true"></i></a>
+    <i class="fa fa-user" aria-hidden="true"></i>
+     Audit Individual
+</h1>
+<form name="useraudit">
+    <div class="audituserlabel"><label>From:</label></div>
+    <div class="audituserinput">
+        <select class="audit-user-select" style="width: 100%" name="username">
+            <option value="">Select</option>
+            <option value="username1">Ali Farah</option>
+            <option value="username2">Lava Tahir</option>
+            <option value="username3">Mohamed Dahrouj</option>
+            <option value="username4">Tosin Oni</option>
+            <option value="username5">Vincent Vu</option>
+        </select>
+    </div>
+    <br>
+    <div class="audituserlabel"><label>To:</label></div>
+    <div class="audituserinput">
+        <select class="audit-user-select" style="width: 100%" name="receiver">
+            <option value="all" selected="selected">Everyone</option>
+            <option value="username1">Ali Farah</option>
+            <option value="username2">Lava Tahir</option>
+            <option value="username3">Mohamed Dahrouj</option>
+            <option value="username4">Tosin Oni</option>
+            <option value="username5">Vincent Vu</option>
+        </select>
+    </div>
+    <div class="btn-box">
+        <button type="submit" class="btn btn-submit" ng-click="validateUserAudit()">Audit</button>
+    </div>
+
+</form>
+</body>

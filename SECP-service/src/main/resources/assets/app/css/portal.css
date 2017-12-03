@@ -1,4 +1,4 @@
-h1{
+.portalheader{
     font-family:"Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 2.5em;
     font-weight: 300;
@@ -29,4 +29,62 @@ a:visited{
 
 a:hover {
     text-decoration: none;
+}
+
+#backbutton{
+    padding-right: 1em;
+}
+
+#backbutton:hover{
+    transform: scale(1.2);
+}
+
+@media (max-width: 480px) {
+    .portalheader {
+        font-size: 1.5em;
+    }
+}
+
+.audituserlabel{
+    margin-left: auto;
+    margin-right: auto;
+    width: 15em;
+    font-family:"Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 1.1em;
+    color: #2196F3;
+}
+
+.audituserinput{
+    margin-left: auto;
+    margin-right: auto;
+    width: 12em;
+}
+
+.btn-box{
+    text-align: center;
+}
+
+.btn {
+    background: #2196F3;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 3px;
+    letter-spacing: 0.06em;
+    outline: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    text-align: center;
+    margin-top: 10px;
+
+}
+
+.btn:hover {
+    background: rgb(25, 107, 170);
+    color: white;
+}
+
+.btn:active, .btn:focus, .btn:visited {
+    background: #2196F3;
+    color: white;
 }

@@ -27,6 +27,17 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date', 'rou
         controller: 'PortalController',
         css: 'css/portal.css'
       })
+      .when('/portal/audit', {
+        templateUrl: 'views/portal/audit.html',
+        controller: 'PortalController',
+        css: 'css/portal.css'
+      })
+      .when('/portal/audit/user', {
+          templateUrl: 'views/portal/audit-user.html',
+          controller:'PortalController',
+          css: 'css/portal.css',
+          js: 'portal/portal-controller.js'
+      })
       .otherwise({ redirectTo: '/' });
 
       // use the HTML5 History API
