@@ -12,7 +12,6 @@ angular.module('SECP')
         login : function(user) {
             return $http.post("/SECP/login", user, config)
             .then(function(res) {
-                 console.log(res.data);
                  var user = res.data;
                  localStorage.setItem('token', user.token);
                  localStorage.setItem('user', user.userID);

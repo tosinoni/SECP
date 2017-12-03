@@ -17,6 +17,10 @@ public class TokenDTO {
     @JsonProperty
     private LoginRole loginRole = LoginRole.NORMAL;
 
+    public TokenDTO() {
+        this(0, null, null, null);
+    }
+
     public TokenDTO(long userID, String username, String token, LoginRole loginRole) {
         this.token = token;
         this.loginRole = loginRole;
