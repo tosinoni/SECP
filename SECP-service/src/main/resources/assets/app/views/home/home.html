@@ -5,8 +5,8 @@
                 <div class="header-content mx-auto">
                     <h1>SECP</h1>
                     <h3 id="introblurb">Mitigate corporate espionage within your organization via secure communication channels and user auditing capabilities.</h3>
-                    <a href="/login" class="btn btn-outline btn-xl js-scroll-trigger">Login</a>
-                    <a href="/register" class="btn btn-outline btn-xl js-scroll-trigger">Register</a>
+                    <a href="/login" ng-cloak ng-show="!isAuthenticated" class="btn btn-outline btn-xl js-scroll-trigger">Login</a>
+                    <a href="/register" ng-cloak ng-show="!isAuthenticated" class="btn btn-outline btn-xl js-scroll-trigger">Register</a>
                 </div>
             </div>
         </div>
