@@ -28,6 +28,24 @@
             <option value="username5">Vincent Vu</option>
         </select>
     </div>
+
+    <div ng-controller="UserAuditSearch">
+        <div class="advancedsearchdiv">
+            <button class="advancedsearchbutton" ng-click="isCollapsed = !isCollapsed">Advanced Search</button>
+        </div>
+        <div collapse="isCollapsed">
+            <hr>
+            <div class="well well-lg">
+                <p>From:</p>
+                <i class="fa fa-calendar" aria-hidden="true"></i> <input class="dateinput" name = "fromdate" type="datetime-local">
+                <br>
+                <br>
+                <p>To:</p>
+                <i class="fa fa-calendar" aria-hidden="true"></i> <input class="dateinput" name = "todate" type="datetime-local">
+            </div>
+        </div>
+    </div>
+
     <div class="btn-box">
         <button type="submit" class="btn btn-submit" ng-click="validateUserAudit()">Audit</button>
     </div>

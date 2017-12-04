@@ -88,3 +88,25 @@ a:hover {
     background: #2196F3;
     color: white;
 }
+
+.advancedsearchdiv{
+    text-align: center;
+}
+
+.advancedsearchbutton {
+    background-color: white;
+    color: black;
+    border: 1px solid #e7e7e7;
+    border-radius: 15px;
+    padding: 0.2em 2em;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 0.7em;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+.advancedsearchbutton:hover {background-color: #e7e7e7;}
