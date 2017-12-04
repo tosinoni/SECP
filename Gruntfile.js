@@ -1,10 +1,11 @@
 'use strict';
 
 var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
+var modRewrite = require('connect-modrewrite');
 
 module.exports = function (grunt) {
   require('load-grunt-tasks')(grunt);
-  require('time-grunt')(grunt); 
+  require('time-grunt')(grunt);
 
   grunt.initConfig({
     yeoman: {
@@ -72,11 +73,17 @@ module.exports = function (grunt) {
           base: [
             '<%= yeoman.app %>/app'
           ],
-          middleware: function (connect) {
-            return [
-              proxySnippet,
-              connect.static(require('path').resolve('SECP-service/src/main/resources/assets/app'))
-            ];
+          middleware: function (connect, options) {
+            var middlewares = [];
+                    middlewares.push(modRewrite([
+                      '!/SECP|/assets|\\.html|\\.js|\\.svg|\\.css|\\.png|\\woff|\\ttf|\\swf|\\.jpg$ /index.html'
+                    ]));
+                    options.base.forEach(function (base) {
+                      // Serve static files.
+                      middlewares.push(connect.static(base));
+                    });
+                    middlewares.push(proxySnippet);
+                    return middlewares;
           }
         }
       },

@@ -13,3 +13,8 @@ logs
 node_modules
 target
 lib
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

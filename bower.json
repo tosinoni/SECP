@@ -1,20 +1,24 @@
 {
-  "name": "SECP",
+  "name": "secp",
   "version": "0.0.0",
   "dependencies": {
     "angular-bootstrap": "~0.10.0",
-    "angular-resource": "~1.2.13",
-    "angular-route": "~1.2.13",
+    "angular-resource": "~1.6.7",
+    "angular-route": "~1.6.7",
     "angular-ui-date": "~0.0.3",
-    "angular": "~1.2.13",
+    "angular": "~1.6.7",
     "bootstrap-css": "~3.0.0",
     "jquery": "~2.1.0",
     "lodash": "~2.4.1",
-    "angular-css": "1.0.8",
-    "typopro": "^3.7.6"
+    "typopro": "^3.7.6",
+    "components-font-awesome": "^4.7.0",
+    "jquery.nicescroll": "~3.7.6",
+    "sweetalert2": "^6.11.2",
+    "simple-line-icons": "^2.4.1",
+    "angular-route-styles": "*"
   },
   "devDependencies": {
-    "angular-mocks": "~1.2.13",
-    "angular-scenario": "~1.2.13"
+    "angular-mocks": "~1.6.7",
+    "angular-scenario": "~1.6.7"
   }
 }
