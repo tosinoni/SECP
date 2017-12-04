@@ -1,0 +1,52 @@
+<body>
+<h1 class="portalheader">
+    <a href="/portal/audit"><i href="/portal" id="backbutton" class="fa fa-chevron-circle-left goback" aria-hidden="true"></i></a>
+    <i class="fa fa-group" aria-hidden="true"></i>
+     Audit Group
+</h1>
+<form name="groupaudit">
+    <div class="audituserlabel"><label>Group:</label></div>
+    <div class="auditgroupinput">
+        <select class="audit-group-select" style="width: 100%" name="group">
+            <option value="">Select</option>
+            <option value="group1">Developers</option>
+            <option value="group2">Managers</option>
+            <option value="group3">UX Design</option>
+            <option value="group4">Production Issues</option>
+            <option value="group5">Group Chat</option>
+        </select>
+    </div>
+
+    <div ng-controller="GroupAuditAdvancedSearch">
+        <div class="advancedsearchdiv">
+            <button class="advancedsearchbutton" ng-click="isCollapsed = !isCollapsed">Filter</button>
+        </div>
+        <div collapse="isCollapsed">
+            <hr>
+            <div class="well well-lg">
+                <p><i class="fa fa-eye" aria-hidden="true"></i> Permission Level(s):</p>
+                <select class="audit-group-select" style="width: 100%" name="permission[]" multiple="multiple">
+                    <option value="">Select</option>
+                    <option value="permission1">Top Secret</option>
+                    <option value="permission2">Secret</option>
+                    <option value="permission3">Basic</option>
+                </select>
+                <br>
+                <br>
+                <p><i class="fa fa-address-card" aria-hidden="true"></i> Role(s):</p>
+                <select class="audit-group-select" style="width: 100%" name="roles[]" multiple="multiple">
+                    <option value="">Select</option>
+                    <option value="role1">General</option>
+                    <option value="role2">Developer</option>
+                    <option value="role3">Manager</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="btn-box">
+        <button type="submit" class="btn btn-submit" ng-click="validateGroupAudit()">Audit</button>
+    </div>
+
+</form>
+</body>
