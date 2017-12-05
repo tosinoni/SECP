@@ -1,0 +1,63 @@
+@import url("https://fonts.googleapis.com/css?family=Raleway:400,700");
+#profile {
+    margin-bottom: 50px;
+    text-align: center;
+}
+#profile h4{
+    margin-top: 25px;
+    margin-bottom: 0;
+    text-transform: none;
+    font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+#profile p{
+    font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin-top: 0;
+}
+
+#profile img{
+    margin: 0 auto;
+    border: 7px solid #fff;
+    display: block;
+    height: 250px;
+    width: 250px;
+    border-radius: 50%;
+}
+#user-security-settings {
+    text-align: left;
+}
+.btn {
+    background: rgb(240, 0, 0);
+    color: #bce0fb;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 3px;
+    letter-spacing: 0.06em;
+    text-decoration: aliceblue;
+    outline: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+  .btn:hover {
+    background: rgb(200, 0, 0);
+    color: #bce0fb;
+  }
+a {
+    font-size: 30px;
+    text-decoration: none;
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 50%;
+}
+
+a:hover {
+    background-color: #ddd;
+    color: black;
+    border-radius: 50%;
+}
+.previous {
+    background-color: #f1f1f1;
+    color: black;
+}
+.round {
+    border-radius: 50%;
+}

@@ -22,12 +22,17 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date', 'rou
         controller: 'ChatController',
         css: 'css/chat.css',
       })
+      .when('/user-profile', {
+        templateUrl: 'views/profile/user-profile.html',
+        controller: 'UserProfileController',
+        css: 'css/user-profile.css',
+      })
       .otherwise({ redirectTo: '/' });
 
-      // use the HTML5 History API
-      $locationProvider.html5Mode({
-             enabled: true,
-             requireBase: false
-      });
+    // use the HTML5 History API
+    $locationProvider.html5Mode({
+      enabled: true,
+      requireBase: false
+    });
   }]);
 
