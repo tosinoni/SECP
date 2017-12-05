@@ -32,9 +32,11 @@ angular.module('SECP')
       //Populates the advanced search time for user auditing
       $('input[name=todate]').val(moment().format('YYYY-MM-DDTHH:mm'))
   }]);
+//Collapsible for User Audit Advanced Search
 angular.module('SECP').controller('UserAuditAdvancedSearch', function ($scope) {
     $scope.isCollapsed = true;
 });
+//Collapsible for Group Audit Advanced Search
 angular.module('SECP').controller('GroupAuditAdvancedSearch', function ($scope) {
     $scope.isCollapsed = true;
 });
