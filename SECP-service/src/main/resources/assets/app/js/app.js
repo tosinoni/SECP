@@ -54,35 +54,30 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date', 'rou
           templateUrl: 'views/portal/audit-user.html',
           controller:'PortalController',
           css: 'css/portal.css',
-          js: 'portal/portal-controller.js',
           requiresLogin: true
       })
       .when('/portal/audit/group', {
           templateUrl: 'views/portal/audit-group.html',
           controller:'PortalController',
           css: 'css/portal.css',
-          js: 'portal/portal-controller.js',
           requiresLogin: true
       })
       .when('/portal/manage', {
           templateUrl: 'views/portal/manage.html',
           controller:'PortalController',
           css: 'css/portal.css',
-          js: 'portal/portal-controller.js',
           requiresLogin: true
       })
       .when('/portal/manage/user', {
           templateUrl: 'views/portal/manage-user.html',
           controller:'PortalController',
           css: 'css/portal.css',
-          js: 'portal/portal-controller.js',
           requiresLogin: true
       })
       .when('/portal/manage/group', {
           templateUrl: 'views/portal/manage-group.html',
           controller:'PortalController',
           css: 'css/portal.css',
-          js: 'portal/portal-controller.js',
           requiresLogin: true
       })
       .when('/error/404', {
