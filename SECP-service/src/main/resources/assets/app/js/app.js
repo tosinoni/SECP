@@ -72,6 +72,12 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date', 'rou
           css: 'css/portal.css',
           js: 'portal/portal-controller.js'
       })
+      .when('/portal/manage/group', {
+          templateUrl: 'views/portal/manage-group.html',
+          controller:'PortalController',
+          css: 'css/portal.css',
+          js: 'portal/portal-controller.js'
+      })
       .when('/error/404', {
         templateUrl: 'views/error/404.html'
       })

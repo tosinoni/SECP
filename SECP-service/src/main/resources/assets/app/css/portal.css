@@ -104,11 +104,11 @@ a:hover {
 
 .advancedsearchbutton:hover {background-color: #e7e7e7;}
 
-.registeruserdiv {
+.registeruserdiv, .registergroupdiv {
     float: right;
 }
 
-.registeruser {
+.registeruser, .registergroup {
     background-color: #2196F3;
     color: white;
     border: 1px solid #2196F3;
@@ -124,7 +124,7 @@ a:hover {
     cursor: pointer;
 }
 
-.registeruser:hover {
+.registeruser:hover, .registergroup:hover {
     background-color: white;
     color: #2196F3;
 }
