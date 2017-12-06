@@ -38,7 +38,12 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date', 'rou
         css: 'css/chat.css',
         requiresLogin: true
       })
-      .otherwise({ redirectTo: '/' });
+      .when('/error/404', {
+        templateUrl: 'views/error/404.html'
+      })
+      .otherwise({
+        templateUrl: 'views/error/404.html'
+      });
 
       // use the HTML5 History API
       $locationProvider.html5Mode({
