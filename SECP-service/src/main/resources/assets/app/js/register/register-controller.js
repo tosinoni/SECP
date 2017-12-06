@@ -1,8 +1,8 @@
 angular.module('SECP')
     .controller('RegisterController',
         function ($scope, RegisterService, Auth, $location) {
-        $scope.verifyUsernameUrl = "/SECP/verify?username=";
-        $scope.verifyEmailUrl = "/SECP/verify?email=";
+        $scope.verifyUsernameUrl = "/SECP/user/verify/username/";
+        $scope.verifyEmailUrl = "/SECP/user/verify/email/";
 
         $scope.register = function () {
             RegisterService.register($scope.user).then(function(res) {
