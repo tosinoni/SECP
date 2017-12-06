@@ -31,6 +31,8 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date', 'rou
         templateUrl: 'views/register/register.html',
         controller: 'RegisterController',
         css: 'css/register.css',
+        requiresLogin: true
+
       })
       .when('/chats', {
         templateUrl: 'views/chat/chats.html',
