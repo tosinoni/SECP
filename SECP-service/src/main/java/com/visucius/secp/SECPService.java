@@ -58,11 +58,11 @@ public class SECPService extends Application<SECPConfiguration> {
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/register", "index.html", "register"));
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/chats", "index.html", "chats"));
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal", "index.html", "portal"));
-        bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/audit", "index.html", "portal"));
-        bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/audit/user", "index.html", "portal"));
-        bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/audit/group", "index.html", "portal"));
-        bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/manage", "index.html", "portal"));
-        bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/manage/user", "index.html", "portal"));
+        bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/audit", "index.html", "audit"));
+        bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/audit/user", "index.html", "audit-user"));
+        bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/audit/group", "index.html", "audit-group"));
+        bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/manage", "index.html", "manage"));
+        bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/manage/user", "index.html", "manage-user"));
 
         bootstrap.addBundle(hibernateBundle);
         ObjectMapper mapper = bootstrap.getObjectMapper();
