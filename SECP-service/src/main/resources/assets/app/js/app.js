@@ -41,42 +41,49 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date', 'rou
       .when('/portal', {
         templateUrl: 'views/portal/portal.html',
         controller: 'PortalController',
-        css: 'css/portal.css'
+        css: 'css/portal.css',
+        requiresLogin: true
       })
       .when('/portal/audit', {
         templateUrl: 'views/portal/audit.html',
         controller: 'PortalController',
-        css: 'css/portal.css'
+        css: 'css/portal.css',
+        requiresLogin: true
       })
       .when('/portal/audit/user', {
           templateUrl: 'views/portal/audit-user.html',
           controller:'PortalController',
           css: 'css/portal.css',
-          js: 'portal/portal-controller.js'
+          js: 'portal/portal-controller.js',
+          requiresLogin: true
       })
       .when('/portal/audit/group', {
           templateUrl: 'views/portal/audit-group.html',
           controller:'PortalController',
           css: 'css/portal.css',
-          js: 'portal/portal-controller.js'
+          js: 'portal/portal-controller.js',
+          requiresLogin: true
       })
       .when('/portal/manage', {
           templateUrl: 'views/portal/manage.html',
           controller:'PortalController',
           css: 'css/portal.css',
-          js: 'portal/portal-controller.js'
+          js: 'portal/portal-controller.js',
+          requiresLogin: true
       })
       .when('/portal/manage/user', {
           templateUrl: 'views/portal/manage-user.html',
           controller:'PortalController',
           css: 'css/portal.css',
-          js: 'portal/portal-controller.js'
+          js: 'portal/portal-controller.js',
+          requiresLogin: true
       })
       .when('/portal/manage/group', {
           templateUrl: 'views/portal/manage-group.html',
           controller:'PortalController',
           css: 'css/portal.css',
-          js: 'portal/portal-controller.js'
+          js: 'portal/portal-controller.js',
+          requiresLogin: true
       })
       .when('/error/404', {
         templateUrl: 'views/error/404.html'
