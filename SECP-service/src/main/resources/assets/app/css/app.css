@@ -38,9 +38,13 @@ body {
 }
 .navbar-nav > li > a:hover {
   border: 1px solid #ddd;
-} 
+}
 .navbar-brand {
   padding-top: 12.5px;
   padding-bottom: 12.5px;
   line-height: 1.9;
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
 }

@@ -1,6 +1,21 @@
 // Declare app level module which depends on filters, and services
-angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date', 'routeStyles'])
-  .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
+angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date', 'routeStyles', 'angular-jwt'])
+  .config(function ($routeProvider, $locationProvider, jwtOptionsProvider, $httpProvider) {
+
+    //configuring authentication
+    jwtOptionsProvider.config({
+        unauthenticatedRedirectPath: '/login',
+        tokenGetter: ['Auth', function(Auth) {
+            if (Auth.isTokenExpired()) {
+                return null;
+            }
+
+            return localStorage.getItem('token');
+        }]
+    });
+    $httpProvider.interceptors.push('jwtInterceptor');
+
+
     $routeProvider
       .when('/', {
         templateUrl: 'views/home/home.html',
@@ -21,13 +36,28 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date', 'rou
         templateUrl: 'views/chat/chats.html',
         controller: 'ChatController',
         css: 'css/chat.css',
+        requiresLogin: true
       })
-      .otherwise({ redirectTo: '/' });
+      .when('/error/404', {
+        templateUrl: 'views/error/404.html'
+      })
+      .otherwise({
+        templateUrl: 'views/error/404.html'
+      });
 
       // use the HTML5 History API
       $locationProvider.html5Mode({
              enabled: true,
              requireBase: false
       });
-  }]);
+  })
+  .run(function($rootScope,Auth,authManager) {
+      $rootScope.logout = function() {
+        Auth.logout();
+        location.reload();
+      }
+
+      authManager.checkAuthOnRefresh();
+      authManager.redirectWhenUnauthenticated();
+  });
 

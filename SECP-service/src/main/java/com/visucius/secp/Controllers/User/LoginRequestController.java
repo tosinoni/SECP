@@ -41,7 +41,7 @@ public class LoginRequestController {
         if (isValidPassword) {
             String token = getToken(loginRequestDTO);
 
-            TokenDTO tokenDTO = new TokenDTO(token, user.getLoginRole());
+            TokenDTO tokenDTO = new TokenDTO(user.getId(), user.getUsername(), token, user.getLoginRole());
             return Response.ok().entity(tokenDTO).build();
         } else {
             throw new WebApplicationException(UserErrorMessage.LOGIN_FAIL_WRONG_PASSWORD, Response.Status.UNAUTHORIZED);
