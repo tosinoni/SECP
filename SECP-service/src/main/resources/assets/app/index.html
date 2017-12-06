@@ -34,8 +34,12 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse navbar-ex1-collapse">
                     <ul class="nav navbar-nav">
-                        <li>
+                        <li ng-cloak ng-show="!isAuthenticated">
                             <a href="/login">Login</a>
+                        </li>
+
+                        <li ng-cloak ng-show="isAuthenticated" ng-click="logout()">
+                            <a href="/">Logout</a>
                         </li>
                     </ul>
                 </div>
@@ -68,14 +72,15 @@
 
         <script src="js/chat/chat-controller.js"></script>
         <script src="js/chat/chat-service.js"></script>
+
         <script src="directives/chat-message/chat-message.js"></script>
         <script src="directives/chat-list/chat-list.js"></script>
         <script src="directives/input-field-validation/unique-field-validation.js"></script>
         <script src="directives/input-field-validation/password-confirmation.js"></script>
 
+        <script src="services/Auth.js"></script>
 
         <!-- switching between css -->
         <script src="lib/angular-route/angular-route.min.js"></script>
         <script src="lib/angular-route-styles/route-styles.js"></script>
-    </body>
-</html>
+        <script src="lib/angular-jwt/dist/angular-jwt.js"></script>

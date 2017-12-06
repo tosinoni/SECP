@@ -78,7 +78,7 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date', 'rou
       .otherwise({
         templateUrl: 'views/error/404.html'
       });
-
+  
       // use the HTML5 History API
       $locationProvider.html5Mode({
              enabled: true,
