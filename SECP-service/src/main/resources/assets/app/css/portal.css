@@ -16,6 +16,7 @@
     border: 1px solid #2196F3;
     padding: 20px;
     margin-bottom: 10px;
+    color: black;
 }
 
 .adminoption:hover {
@@ -52,11 +53,11 @@ a:hover {
     width: 12em;
 }
 
-.btn-box{
+.auditbtn-box{
     text-align: center;
 }
 
-.btn {
+.auditbtn {
     background: #2196F3;
     color: white;
     border: none;
@@ -71,12 +72,12 @@ a:hover {
 
 }
 
-.btn:hover {
+.auditbtn:hover {
     background: rgb(25, 107, 170);
     color: white;
 }
 
-.btn:active, .btn:focus, .btn:visited {
+.auditbtn:active, .auditbtn:focus, .auditbtn:visited {
     background: #2196F3;
     color: white;
 }
