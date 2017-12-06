@@ -31,14 +31,6 @@ a:hover {
     text-decoration: none;
 }
 
-#backbutton{
-    padding-right: 1em;
-}
-
-#backbutton:hover{
-    transform: scale(1.2);
-}
-
 @media (max-width: 480px) {
     .portalheader {
         font-size: 1.5em;
@@ -110,3 +102,28 @@ a:hover {
 }
 
 .advancedsearchbutton:hover {background-color: #e7e7e7;}
+
+.registeruserdiv {
+    float: right;
+}
+
+.registeruser {
+    background-color: #2196F3;
+    color: white;
+    border: 1px solid #2196F3;
+    border-radius: 15px;
+    padding: 0.5em 2em;
+    text-align: right;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 0.4em;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+.registeruser:hover {
+    background-color: white;
+    color: #2196F3;
+}
