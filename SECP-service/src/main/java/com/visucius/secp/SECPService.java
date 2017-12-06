@@ -59,6 +59,13 @@ public class SECPService extends Application<SECPConfiguration> {
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/login", "index.html", "login"));
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/register", "index.html", "register"));
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/chats", "index.html", "chats"));
+        bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal", "index.html", "portal"));
+        bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/audit", "index.html", "audit"));
+        bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/audit/user", "index.html", "audit-user"));
+        bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/audit/group", "index.html", "audit-group"));
+        bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/manage", "index.html", "manage"));
+        bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/manage/user", "index.html", "manage-user"));
+        bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/manage/group", "index.html", "manage-group"));
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/error/404", "index.html", "404"));
 
         bootstrap.addBundle(hibernateBundle);
