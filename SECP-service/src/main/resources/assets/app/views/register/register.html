@@ -18,16 +18,16 @@
                    name="email" unique-field-validation="{{verifyEmailUrl}}" ng-model="user.email" required="required" value="" />
             <span class="highlight"></span>
             <span class="bar"></span>
-            <span class="error" ng-show="frm.email.$touched && frm.email.$error.pattern">Enter a valid email.</span>
-            <span class="error" ng-show="frm.email.$error.invalidInputValue && frm.email.$dirty">Email already exists</span>
+            <span class="error" ng-show="frm.email.$touched && frm.email.$error.pattern">Enter a valid email.<br></span>
+            <span class="error" ng-show="frm.email.$error.invalidInputValue && frm.email.$dirty">Email already exists.</span>
             <label>Email</label>
         </div>
         <div class="group">
             <input id="key" type="text" name="username" unique-field-validation="{{verifyUsernameUrl}}" ng-model="user.userName" required="required" ng-minlength="3" value="" />
             <span class="highlight"></span>
             <span class="bar"></span>
-            <span class="error" ng-show="frm.username.$touched && frm.username.$error.minlength">username is too short</span>
-            <span class="error" ng-show="frm.username.$touched && frm.username.$error.invalidInputValue">username already exists</span>
+            <span class="error" ng-show="frm.username.$touched && frm.username.$error.minlength">Username is too short.<br></span>
+            <span class="error" ng-show="frm.username.$touched && frm.username.$error.invalidInputValue">Username already exists.</span>
             <label>Username</label>
         </div>
         <div class="group">
@@ -36,9 +36,9 @@
             />
             <span class="highlight"></span>
             <span class="bar"></span>
-            <span class="error" ng-show="frm.password.$touched && frm.password.$error.minlength">Password must contain atleast 6 charecters.</span>
-            <span class="error" ng-show="frm.password.$touched && frm.password.$error.maxlength">Max-length of password reached.</span>
-            <span class="error" ng-show="frm.password.$touched && frm.password.$error.pattern">Password must contain an uppercase letter and a number.</span>
+            <span class="error" ng-show="frm.password.$touched && frm.password.$error.minlength">Password must contain at least 6 characters.<br></span>
+            <span class="error" ng-show="frm.password.$touched && frm.password.$error.maxlength">Maximum length of password reached.<br></span>
+            <span class="error" ng-show="frm.password.$touched && frm.password.$error.pattern">Password must contain an uppercase and a number.</span>
 
             <label>Password</label>
         </div>
@@ -48,9 +48,7 @@
             <span class="highlight"></span>
             <span class="bar"></span>
             <label>Confirm Password</label>
-            <span class="error" ng-show="frm.password_c.$error.noMatch && frm.password.$dirty">
-                Password does not match.
-            </span>
+            <span class="error" ng-show="frm.password_c.$error.noMatch && frm.password.$dirty">Passwords do not match.</span>
         </div>
 
         <div class="btn-box">
