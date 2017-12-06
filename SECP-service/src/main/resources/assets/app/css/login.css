@@ -90,9 +90,10 @@ label {
 input:-webkit-autofill {
     -webkit-box-shadow: 0 0 0px 1000px white inset;
     -webkit-text-fill-color: #a5a3a3 !important;
-    -webkit-text-size-adjust: 18px !important;
+    -webkit-text-size-adjust: auto;
 }
 
 .error {
-    color: red;
+    font-size: 12px;
+    color: #fe0000;
 }
