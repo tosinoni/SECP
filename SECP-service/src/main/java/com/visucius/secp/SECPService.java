@@ -61,6 +61,8 @@ public class SECPService extends Application<SECPConfiguration> {
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/audit", "index.html", "portal"));
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/audit/user", "index.html", "portal"));
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/audit/group", "index.html", "portal"));
+        bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/manage", "index.html", "portal"));
+        bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/manage/user", "index.html", "portal"));
 
         bootstrap.addBundle(hibernateBundle);
         ObjectMapper mapper = bootstrap.getObjectMapper();
