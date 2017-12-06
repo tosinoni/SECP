@@ -5,8 +5,7 @@ angular.module('SECP')
       $('.audit-group-select').select2();
       //Ensures the admin is not able to audit without specifying a user
       $scope.validateUserAudit = function() {
-          var user = document.forms["useraudit"]["username"].value;
-          if (user == "") {
+          if (!$scope.auditUser) {
               swal({
                   position: 'top-right',
                   type: 'error',
@@ -18,8 +17,7 @@ angular.module('SECP')
       }
       //Ensures the admin is not able to audit without specifying a group
       $scope.validateGroupAudit = function() {
-          var group = document.forms["groupaudit"]["group"].value;
-          if (group == "") {
+          if (!$scope.auditGroup) {
               swal({
                   position: 'top-right',
                   type: 'error',
