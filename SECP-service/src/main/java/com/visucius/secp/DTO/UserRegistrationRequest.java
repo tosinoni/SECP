@@ -1,9 +1,8 @@
 package com.visucius.secp.DTO;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.visucius.secp.Contracts.IRequest;
 
-public class UserRegistrationRequest implements IRequest<UserRegistrationResponse> {
+public class UserRegistrationRequest {
 
     @JsonProperty
     public String firstName;

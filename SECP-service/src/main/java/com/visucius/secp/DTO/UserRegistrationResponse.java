@@ -4,7 +4,6 @@ package com.visucius.secp.DTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.visucius.secp.Contracts.ResponseMessage;
 import com.visucius.secp.util.JsonUtil;
 
 import javax.ws.rs.core.Response;

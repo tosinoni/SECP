@@ -1,10 +1,11 @@
 package com.visucius.secp.auth;
 
-import com.visucius.secp.UseCase.TokenController;
+import com.visucius.secp.Controllers.TokenController;
 import com.visucius.secp.daos.UserDAO;
 import com.visucius.secp.models.User;
 import io.dropwizard.auth.AuthenticationException;
 import io.dropwizard.auth.Authenticator;
+import io.dropwizard.hibernate.UnitOfWork;
 import org.apache.commons.lang3.StringUtils;
 import org.jose4j.jwt.consumer.InvalidJwtException;
 import org.slf4j.Logger;
@@ -24,6 +25,7 @@ public class SECPAuthenticator implements Authenticator<String, User> {
     }
 
     @Override
+    @UnitOfWork
     public Optional<User> authenticate(String token) throws AuthenticationException {
         String username;
 

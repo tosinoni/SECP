@@ -1,4 +1,4 @@
-package com.visucius.secp.UseCase;
+package com.visucius.secp.Controllers;
 
 import com.visucius.secp.config.SECPConfiguration;
 import org.jose4j.jws.AlgorithmIdentifiers;

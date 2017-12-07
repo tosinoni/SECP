@@ -1,8 +1,8 @@
 package com.visucius.secp;
 
-import com.visucius.secp.UseCase.LoginRequestController;
-import com.visucius.secp.UseCase.TokenController;
-import com.visucius.secp.UseCase.UserRegistrationController;
+import com.visucius.secp.Controllers.User.LoginRequestController;
+import com.visucius.secp.Controllers.TokenController;
+import com.visucius.secp.Controllers.User.UserRegistrationController;
 import com.visucius.secp.auth.SECPAuthenticator;
 import com.visucius.secp.auth.SECPAuthorizer;
 import com.visucius.secp.auth.TokenAuthFilter;
@@ -16,10 +16,12 @@ import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.auth.AuthDynamicFeature;
 import io.dropwizard.auth.AuthValueFactoryProvider;
+import io.dropwizard.hibernate.UnitOfWorkAwareProxyFactory;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
+import org.eclipse.jetty.servlet.ErrorPageErrorHandler;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,6 +59,14 @@ public class SECPService extends Application<SECPConfiguration> {
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/login", "index.html", "login"));
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/register", "index.html", "register"));
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/chats", "index.html", "chats"));
+        bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal", "index.html", "portal"));
+        bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/audit", "index.html", "audit"));
+        bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/audit/user", "index.html", "audit-user"));
+        bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/audit/group", "index.html", "audit-group"));
+        bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/manage", "index.html", "manage"));
+        bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/manage/user", "index.html", "manage-user"));
+        bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/manage/group", "index.html", "manage-group"));
+        bootstrap.addBundle(new AssetsBundle("/assets/app", "/error/404", "index.html", "404"));
 
         bootstrap.addBundle(hibernateBundle);
         ObjectMapper mapper = bootstrap.getObjectMapper();
@@ -83,10 +93,17 @@ public class SECPService extends Application<SECPConfiguration> {
 
 
         //********************** Register authentication for User *****************************
+
         environment.jersey().register(RolesAllowedDynamicFeature.class);
+        SECPAuthenticator authenticator = new UnitOfWorkAwareProxyFactory(hibernateBundle)
+            .create(SECPAuthenticator.class,
+                new Class<?>[]  { UserDAO.class, TokenController.class},
+                new Object[]    { userDAO, tokenController});
+
+
         final TokenAuthFilter<User> tokenAuthFilter = new TokenAuthFilter.Builder<User>()
             .setAuthorizer(new SECPAuthorizer())
-            .setAuthenticator(new SECPAuthenticator(userDAO, tokenController)).buildAuthFilter();
+            .setAuthenticator(authenticator).buildAuthFilter();
         environment.jersey().register(new AuthDynamicFeature(tokenAuthFilter));
         environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
 
@@ -96,5 +113,10 @@ public class SECPService extends Application<SECPConfiguration> {
         //************************** Registering Resources *************************************
         environment.jersey().register(
             new EntryResource(userRegistrationController, loginRequestController));
+
+        //************************** Error Handling *************************************
+        final ErrorPageErrorHandler epeh = new ErrorPageErrorHandler();
+        epeh.addErrorPage(404, "/error/404");
+        environment.getApplicationContext().setErrorHandler(epeh);
     }
 }

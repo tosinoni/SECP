@@ -3,13 +3,12 @@ package com.visucius.secp.resources;
 import com.visucius.secp.DTO.LoginRequestDTO;
 import com.visucius.secp.DTO.UserRegistrationRequest;
 import com.visucius.secp.DTO.UserRegistrationResponse;
-import com.visucius.secp.UseCase.LoginRequestController;
-import com.visucius.secp.UseCase.UserRegistrationController;
+import com.visucius.secp.Controllers.User.LoginRequestController;
+import com.visucius.secp.Controllers.User.UserRegistrationController;
 import com.codahale.metrics.annotation.Timed;
-import com.visucius.secp.models.User;
+import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
-import io.dropwizard.jersey.params.LongParam;
-import io.dropwizard.jersey.params.NonEmptyStringParam;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,9 +36,9 @@ public class EntryResource {
     @Timed
     @UnitOfWork
     @Path("/register")
-    public Response create(UserRegistrationRequest request) {
+    public Response create(@Auth UserRegistrationRequest request) {
 
-        UserRegistrationResponse response = userRegistrationController.handle(request);
+        UserRegistrationResponse response = userRegistrationController.registerUser(request);
 
         if (response.success) {
             return Response.status(response.status).entity(response.toString()).build();
@@ -59,24 +58,30 @@ public class EntryResource {
     }
 
     @GET
-    @Path("/verify")
+    @Path("/user/verify/email/{email}")
     @Produces(MediaType.APPLICATION_JSON)
     @Timed
     @UnitOfWork
-    public Response verifyUser(@QueryParam("username") String username,
-                               @QueryParam("email") String email) {
+    public Response verifyEmailAddress(@PathParam("email") String email) {
 
-        User user;
-
-        if(username == null) {
-            user = userRegistrationController.findUserByEmail(email);
-        } else {
-            user = userRegistrationController.findUserByUsername(username);
+        if(!StringUtils.isBlank(email) && userRegistrationController.isEmailValid(email)) {
+            return Response.status(Response.Status.OK).build();
         }
 
-        if(user == null) {
-            return Response.status(Response.Status.NO_CONTENT).build();
+        return Response.status(Response.Status.NO_CONTENT).build();
+    }
+
+    @GET
+    @Path("/user/verify/username/{username}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Timed
+    @UnitOfWork
+    public Response verifyUsername(@PathParam("username") String username) {
+
+        if(!StringUtils.isBlank(username) && userRegistrationController.isUsernameValid(username)) {
+            return Response.status(Response.Status.OK).build();
         }
-        return Response.status(Response.Status.OK).build();
+
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 }
