@@ -82,7 +82,7 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date', 'rou
           css: 'css/portal.css',
           requiresLogin: true
       })
-      .when('/portal/manage/filter', {
+      .when('/portal/filter', {
           templateUrl: 'views/portal/filter.html',
           controller:'PortalController',
           css: 'css/portal.css',
