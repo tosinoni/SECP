@@ -3,10 +3,9 @@
 angular.module('SECP')
   .factory('RegisterService', function($http) {
 
-    var config = {skipAuthorization: true};
     return {
         register : function(user) {
-            return $http.post("/SECP/register", user, config)
+            return $http.post("/SECP/register", user)
             .then(function(res) {
                    return res;
             }, function(err) {

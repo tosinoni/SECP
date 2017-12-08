@@ -5,6 +5,7 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date', 'rou
     //configuring authentication
     jwtOptionsProvider.config({
         unauthenticatedRedirectPath: '/login',
+        authPrefix: '',
         tokenGetter: ['Auth', function(Auth) {
             if (Auth.isTokenExpired()) {
                 return null;
