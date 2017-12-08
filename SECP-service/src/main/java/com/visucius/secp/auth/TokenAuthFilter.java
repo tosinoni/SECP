@@ -23,7 +23,7 @@ public class TokenAuthFilter<P extends Principal> extends AuthFilter<String, P> 
 
     @Override
     public void filter(ContainerRequestContext containerRequestContext) throws IOException {
-        final String authToken = containerRequestContext.getHeaders().getFirst("token");
+        final String authToken = containerRequestContext.getHeaders().getFirst("Authorization");
 
         if (StringUtils.isBlank(authToken)) {
             LOGGER.warn("Error decoding credentials");
