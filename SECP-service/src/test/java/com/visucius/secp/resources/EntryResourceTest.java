@@ -1,5 +1,6 @@
 package com.visucius.secp.resources;
 
+import com.visucius.secp.Controllers.User.UserController;
 import com.visucius.secp.DTO.LoginRequestDTO;
 import com.visucius.secp.Controllers.User.LoginRequestController;
 import com.visucius.secp.Controllers.TokenController;
@@ -26,11 +27,12 @@ public class EntryResourceTest {
     private TokenController tokenController = Mockito.mock((TokenController.class));
     private UserRegistrationController userRegistrationController  = Mockito.mock((UserRegistrationController.class));
     private LoginRequestController loginRequestController = new LoginRequestController(tokenController, userDAO);
+    private UserController userController = new UserController(userDAO);
 
 
     @Rule
     public final ResourceTestRule resources = ResourceTestRule.builder()
-        .addResource(new EntryResource(userRegistrationController, loginRequestController))
+        .addResource(new EntryResource(userRegistrationController, loginRequestController, userController))
         .build();
 
     @Test

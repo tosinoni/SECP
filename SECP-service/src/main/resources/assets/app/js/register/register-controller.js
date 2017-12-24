@@ -7,19 +7,11 @@ angular.module('SECP')
         $scope.register = function () {
             RegisterService.register($scope.user).then(function(res) {
                 if(res.status == 201) {
-                    var reqBody = {
-                        username: $scope.user.userName,
-                        password: $scope.user.password
-                    };
-
-                    Auth.login(reqBody).then(function(res) {
-                        if(res.status == 200) {
-                            swal('Welcome to SECP!', 'Registration successful!','success');
-                            $location.path('/chats');
-                        } else {
-                            swal('Oops..!', res.data.message,'error');
-                        }
-                    });
+                    swal('Registration successful!', null, 'success');
+                    $scope.frm.$setPristine();
+                    $scope.frm.$setUntouched();
+                    $scope.user = {};
+                    $scope.password_conf = null;
                 } else {
                     swal('Oops..!', res.data.message,'error');
                 }

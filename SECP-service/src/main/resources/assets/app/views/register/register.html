@@ -1,5 +1,5 @@
 <div class="form-group content-area sample-show-hide">
-    <form name="frm" autocomplete="on" novalidate ng-submit="register()">
+    <form name="frm" autocomplete="off" novalidate ng-submit="register()">
         <h1 id="formHeader">Sign up</h1>
         <div class="group">
             <input id="firstName" type="text" name="fisrtname" ng-model="user.firstName" required="required" value="" />
@@ -23,7 +23,7 @@
             <label>Email</label>
         </div>
         <div class="group">
-            <input id="key" type="text" name="username" unique-field-validation="{{verifyUsernameUrl}}" ng-model="user.userName" required="required" ng-minlength="3" value="" />
+            <input id="key" type="text" name="username" autocomplete="off" unique-field-validation="{{verifyUsernameUrl}}" ng-model="user.userName" required="required" ng-minlength="3" value="" />
             <span class="highlight"></span>
             <span class="bar"></span>
             <span class="error" ng-show="frm.username.$touched && frm.username.$error.minlength">Username is too short.<br></span>
@@ -31,7 +31,7 @@
             <label>Username</label>
         </div>
         <div class="group">
-            <input id="passwordsignup" type="password" ng-minlength="6" ng-maxlength="20"
+            <input id="passwordsignup" type="password" ng-minlength="6" ng-maxlength="20" autocomplete="off"
                    ng-pattern="/^((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20})$/" name="password" ng-model="user.password" required="required" value=""
             />
             <span class="highlight"></span>
