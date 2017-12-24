@@ -38,8 +38,9 @@ angular.module('SECP')
         isUserAnAdmin: function() {
             var userID = localStorage.getItem('user');
 
-            return $http.get("/SECP/user/verify/admin/" + userID)
+            return $http.get("/SECP/user/verify/admin/id/" + userID)
             .then(function(res) {
+                console.log(res);
                 if (res.status == 200) {
                     return true;
                 }

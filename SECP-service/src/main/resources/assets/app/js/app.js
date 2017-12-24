@@ -147,8 +147,10 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date', 'rou
       }
 
       $rootScope.$on("$locationChangeStart", function(event) {
+
         // handle route changes
         var loginRole = localStorage.getItem('loginRole');
+
         if($rootScope.isAuthenticated && loginRole == Auth.ADMIN) {
             Auth.isUserAnAdmin().then(function(res){
                 $rootScope.isAdmin = res;

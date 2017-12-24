@@ -91,11 +91,11 @@ public class EntryResource {
     }
 
     @GET
-    @Path("/user/verify/admin/{id}")
+    @Path("/user/verify/admin/id/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Timed
     @UnitOfWork
-    public Response isUserAnAdmin(@Auth @PathParam("id") String id) {
+    public Response isUserAnAdmin(@PathParam("id") String id) {
 
         if(!StringUtils.isBlank(id) && userController.isUserAnAdmin(id)) {
             return Response.status(Response.Status.OK).build();
