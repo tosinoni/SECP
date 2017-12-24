@@ -1,5 +1,6 @@
 package com.visucius.secp.resources;
 
+import com.visucius.secp.Controllers.User.UserController;
 import com.visucius.secp.DTO.LoginRequestDTO;
 import com.visucius.secp.DTO.UserRegistrationRequest;
 import com.visucius.secp.DTO.UserRegistrationResponse;
@@ -23,11 +24,15 @@ public class EntryResource {
 
     private final UserRegistrationController userRegistrationController;
     private final LoginRequestController loginRequestController;
+    private final UserController userController;
 
-    public EntryResource(UserRegistrationController userRegistrationController, LoginRequestController loginRequestController) {
+    public EntryResource(UserRegistrationController userRegistrationController,
+                         LoginRequestController loginRequestController,
+                         UserController userController) {
 
         this.userRegistrationController = userRegistrationController;
         this.loginRequestController = loginRequestController;
+        this.userController = userController;
     }
 
     @POST
@@ -79,6 +84,20 @@ public class EntryResource {
     public Response verifyUsername(@PathParam("username") String username) {
 
         if(!StringUtils.isBlank(username) && userRegistrationController.isUsernameValid(username)) {
+            return Response.status(Response.Status.OK).build();
+        }
+
+        return Response.status(Response.Status.NO_CONTENT).build();
+    }
+
+    @GET
+    @Path("/user/verify/admin/id/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Timed
+    @UnitOfWork
+    public Response isUserAnAdmin(@PathParam("id") String id) {
+
+        if(!StringUtils.isBlank(id) && userController.isUserAnAdmin(id)) {
             return Response.status(Response.Status.OK).build();
         }
 
