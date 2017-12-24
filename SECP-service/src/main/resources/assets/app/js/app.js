@@ -128,7 +128,9 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date', 'rou
       });
   })
   .run(function($rootScope,Auth,authManager) {
-      $rootScope.isCollapsed = true;
+      $(".navbar-nav li a").click(function(event) {
+          $(".navbar-collapse").collapse('hide');
+      });
       $rootScope.logout = function() {
         Auth.logout();
         location.reload();
