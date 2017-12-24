@@ -92,6 +92,7 @@ public class EntryResource {
 
     @GET
     @Path("/user/verify/admin/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
     @Timed
     @UnitOfWork
     public Response isUserAnAdmin(@Auth @PathParam("id") String id) {

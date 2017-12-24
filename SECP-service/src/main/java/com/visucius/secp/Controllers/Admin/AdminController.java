@@ -42,9 +42,9 @@ public class AdminController {
 
         User user = userDAO.find(id).get();
 
-        if (user == null || user.getLoginRole().equals(LoginRole.ADMIN)) {
+        if (user == null || !user.getLoginRole().equals(LoginRole.ADMIN)) {
             LOG.warn("Delete admin failed. User is not an admin.");
-            throw new WebApplicationException(AdminErrorMessage.REGISTER_ADMIN_FAIL_DUPLICATE_ENTRY, Response.Status.BAD_REQUEST);
+            throw new WebApplicationException(AdminErrorMessage.DELETE_ADMIN_FAIL_INVALID_USER, Response.Status.BAD_REQUEST);
         }
 
         user.setLoginRole(LoginRole.NORMAL);
