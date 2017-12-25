@@ -2,9 +2,19 @@
 angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date', 'routeStyles', 'angular-jwt'])
   .config(function ($routeProvider, $locationProvider, jwtOptionsProvider, $httpProvider) {
 
+    //add isAdmin function
+    var isAdmin = function(Auth, $location) {
+        return Auth.isUserAnAdmin().then(function(res){
+            if (!res) {
+                $location.path('/error/404');
+            }
+        });
+    };
+
     //configuring authentication
     jwtOptionsProvider.config({
         unauthenticatedRedirectPath: '/login',
+        authPrefix: '',
         tokenGetter: ['Auth', function(Auth) {
             if (Auth.isTokenExpired()) {
                 return null;
@@ -31,8 +41,10 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date', 'rou
         templateUrl: 'views/register/register.html',
         controller: 'RegisterController',
         css: 'css/register.css',
-        requiresLogin: true
-
+        requiresLogin: true,
+        resolve: {
+            isAdmin: isAdmin
+        }
       })
       .when('/chats', {
         templateUrl: 'views/chat/chats.html',
@@ -44,43 +56,64 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date', 'rou
         templateUrl: 'views/portal/portal.html',
         controller: 'PortalController',
         css: 'css/portal.css',
-        requiresLogin: true
+        requiresLogin: true,
+        resolve: {
+            isAdmin: isAdmin
+        }
       })
       .when('/portal/audit', {
         templateUrl: 'views/portal/audit.html',
         controller: 'PortalController',
         css: 'css/portal.css',
-        requiresLogin: true
+        requiresLogin: true,
+        resolve: {
+            isAdmin: isAdmin
+        }
       })
       .when('/portal/audit/user', {
           templateUrl: 'views/portal/audit-user.html',
           controller:'PortalController',
           css: 'css/portal.css',
-          requiresLogin: true
+          requiresLogin: true,
+          resolve: {
+            isAdmin: isAdmin
+          }
       })
       .when('/portal/audit/group', {
           templateUrl: 'views/portal/audit-group.html',
           controller:'PortalController',
           css: 'css/portal.css',
-          requiresLogin: true
+          requiresLogin: true,
+          resolve: {
+            isAdmin: isAdmin
+          }
       })
       .when('/portal/manage', {
           templateUrl: 'views/portal/manage.html',
           controller:'PortalController',
           css: 'css/portal.css',
-          requiresLogin: true
+          requiresLogin: true,
+          resolve: {
+            isAdmin: isAdmin
+          }
       })
       .when('/portal/manage/user', {
           templateUrl: 'views/portal/manage-user.html',
           controller:'PortalController',
           css: 'css/portal.css',
-          requiresLogin: true
+          requiresLogin: true,
+          resolve: {
+            isAdmin: isAdmin
+          }
       })
       .when('/portal/manage/group', {
           templateUrl: 'views/portal/manage-group.html',
           controller:'PortalController',
           css: 'css/portal.css',
-          requiresLogin: true
+          requiresLogin: true,
+          resolve: {
+            isAdmin: isAdmin
+          }
       })
       .when('/portal/filter', {
           templateUrl: 'views/portal/filter.html',
@@ -101,6 +134,9 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date', 'rou
       });
   })
   .run(function($rootScope,Auth,authManager) {
+      $(".navbar-nav li a").click(function(event) {
+          $(".navbar-collapse").collapse('hide');
+      });
       $rootScope.logout = function() {
         Auth.logout();
         location.reload();
@@ -108,5 +144,26 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date', 'rou
 
       authManager.checkAuthOnRefresh();
       authManager.redirectWhenUnauthenticated();
+
+      $rootScope.getHomeUrl = function() {
+        if(!$rootScope.isAuthenticated) {
+            return '/';
+        } else if(!$rootScope.isAdmin) {
+            return '/chats'
+        }
+        return '/portal';
+      }
+
+      $rootScope.$on("$locationChangeStart", function(event) {
+
+        // handle route changes
+        var loginRole = localStorage.getItem('loginRole');
+
+        if($rootScope.isAuthenticated && loginRole == Auth.ADMIN) {
+            Auth.isUserAnAdmin().then(function(res){
+                $rootScope.isAdmin = res;
+            });
+        }
+      });
   });
 
