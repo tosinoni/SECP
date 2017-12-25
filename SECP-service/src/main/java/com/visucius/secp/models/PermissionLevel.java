@@ -56,7 +56,7 @@ public class PermissionLevel {
         if (!(o instanceof PermissionLevel)) return false;
         PermissionLevel permissionLevel = (PermissionLevel) o;
         return id == permissionLevel.id
-            && permissionLevel.level == this.level;
+            && permissionLevel.level.equals(this.level);
     }
 
     @Override
