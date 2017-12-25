@@ -1,11 +1,14 @@
 package com.visucius.secp.Controllers;
 
-import com.visucius.secp.DTO.GroupCreationRequest;
+import com.google.common.base.Optional;
+import com.google.common.collect.Sets;
+import com.visucius.secp.DTO.GroupRequest;
 import com.visucius.secp.daos.GroupDAO;
 import com.visucius.secp.daos.PermissionLevelDAO;
 import com.visucius.secp.daos.RolesDAO;
 import com.visucius.secp.daos.UserDAO;
 import com.visucius.secp.models.Group;
+import com.visucius.secp.models.PermissionLevel;
 import com.visucius.secp.models.Role;
 import com.visucius.secp.models.User;
 import com.visucius.secp.util.InputValidator;
@@ -21,7 +24,7 @@ import java.util.Set;
 public class GroupController {
 
     private static final Logger LOG = LoggerFactory.getLogger(GroupController.class);
-    public static final int MINIMUM_AMOUNT_OF_ROLES = 1;
+    public static final int MINIMUM_AMOUNT_OF_PERMISSIONS = 1;
 
     private GroupDAO groupRepository;
     private UserDAO userRepository;
@@ -40,10 +43,10 @@ public class GroupController {
     }
 
 
-    public Response createGroup(GroupCreationRequest request)
+    public Response createGroup(GroupRequest request)
     {
 
-        String error = validateCreationRequest(request);
+        String error = validateRequest(request);
         if(StringUtils.isNoneEmpty(error))
         {
                 throw new WebApplicationException(
@@ -53,45 +56,90 @@ public class GroupController {
 
         Group group = new Group(request.name);
         group.setRoles(getRoles(request.roles));
-        group.setUsers(getUsers(request.roles));
+        group.setUsers(getUsers(request.permissionLevels,request.roles));
+        group.setPermissionLevels(getPermissions(request.permissionLevels));
         Group createdGroup = groupRepository.save(group);
 
         return Response.status(Response.Status.CREATED).entity(createdGroup.getId()).build();
     }
 
+    public Response modifyGroup(GroupRequest request, int id)
+    {
+        String error = validateRolesAndPermissions(request.roles,request.permissionLevels);
+        if(StringUtils.isNoneEmpty(error))
+        {
+            throw new WebApplicationException(
+                error,
+                Response.Status.BAD_REQUEST);
+        }
 
-    private String validateCreationRequest(GroupCreationRequest request) {
+        Optional<Group> groupOptional = getGroup(id);
+        if(groupOptional.isPresent())
+        {
+            Group group = groupOptional.get();
+            group.addPermissionLevels(getPermissions(request.permissionLevels));
+            group.addRoles(getRoles(request.roles));
+            group.addUsers(getUsers(request.permissionLevels,request.roles));
+            Group createdGroup = groupRepository.save(group);
+            return Response.status(Response.Status.CREATED).entity(createdGroup.getId()).build();
+        }
+        else
+        {
+            throw new WebApplicationException(
+                GroupErrorMessages.GROUP_DOES_NOT_EXIST,
+                Response.Status.BAD_REQUEST);
+        }
+    }
+
+    private String validateRequest(GroupRequest request) {
 
         if (!isGroupNameValid(request.name)
             || !InputValidator.isNameValid(request.name)) {
             return GroupErrorMessages.GROUP_NAME_INVALID;
         }
 
-        for (long userId : request.permissionLevels) {
-            if (!isPermissionValid(userId)) {
-                return String.format(GroupErrorMessages.Permission_ID_INVALID, userId);
+        String error = validateRolesAndPermissions(request.roles,request.permissionLevels);
+        if(StringUtils.isNoneEmpty(error))
+            return error;
+
+        return StringUtils.EMPTY;
+    }
+
+    private String validateRolesAndPermissions(Set<Long> roles, Set<Long> permissions)
+    {
+        for (long roleID : roles) {
+            if (!isRoleIdValid(roleID)) {
+                return String.format(GroupErrorMessages.ROLE_ID_INVALID, roleID);
             }
         }
 
-        if(request.roles.size() < MINIMUM_AMOUNT_OF_ROLES)
+        if(permissions.size() < MINIMUM_AMOUNT_OF_PERMISSIONS)
         {
-            return GroupErrorMessages.GROUP_ROLES_REQUIRED;
+            return GroupErrorMessages.GROUP_PERMISSIONS_REQUIRED;
         }
 
-        for (long roleID : request.roles) {
-            if (!isRoleIdValid(roleID)) {
-                return String.format(GroupErrorMessages.ROLE_ID_INVALID, roleID);
+        for (long permissionID : permissions) {
+            if (!isPermissionValid(permissionID)) {
+                return String.format(GroupErrorMessages.PERMISSION_ID_INVALID, permissionID);
             }
         }
 
         return StringUtils.EMPTY;
     }
 
-    private Set<User> getUsers(Set<Long> rolesIDs)
+    private Set<User> getUsers(Set<Long> permissionIDs, Set<Long> rolesIDs)
     {
-        Set<User> users = new HashSet<>();
-        rolesIDs.forEach(id -> users.addAll(userRepository.findUsersWithRole(id)));
-        return users;
+        Set<User> userWithRole = new HashSet<>();
+        Set<User> userWithPermissionLevel = new HashSet<>();
+
+        permissionIDs.
+            forEach(id -> userWithPermissionLevel.addAll(userRepository.findUsersWithPermissionLevel(id)));
+        if(rolesIDs.isEmpty())
+            return userWithPermissionLevel;
+        else {
+            rolesIDs.forEach(id -> userWithRole.addAll(userRepository.findUsersWithRole(id)));
+            return Sets.intersection(userWithPermissionLevel,userWithRole);
+        }
     }
 
     private Set<Role> getRoles(Set<Long> rolesIDs)
@@ -101,6 +149,12 @@ public class GroupController {
         return roles;
     }
 
+    private Set<PermissionLevel> getPermissions(Set<Long> permissionID)
+    {
+        Set<PermissionLevel> permissions = new HashSet<>();
+        permissionID.forEach(id -> permissions.add(permissionsRepository.find(id).get()));
+        return permissions;
+    }
 
     private boolean isPermissionValid(long id)
     {
@@ -115,5 +169,10 @@ public class GroupController {
     private boolean isGroupNameValid(String name)
     {
         return groupRepository.findByName(name) == null;
+    }
+
+    private Optional<Group> getGroup(int id)
+    {
+        return groupRepository.find(id);
     }
 }

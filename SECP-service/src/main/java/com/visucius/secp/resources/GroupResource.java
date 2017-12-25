@@ -3,7 +3,7 @@ package com.visucius.secp.resources;
 
 import com.codahale.metrics.annotation.Timed;
 import com.visucius.secp.Controllers.GroupController;
-import com.visucius.secp.DTO.GroupCreationRequest;
+import com.visucius.secp.DTO.GroupRequest;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 
@@ -27,7 +27,18 @@ public class GroupResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Timed
     @UnitOfWork
-    public Response create(@Auth GroupCreationRequest request) {
+    public Response create(@Auth GroupRequest request) {
         return groupController.createGroup(request);
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Timed
+    @UnitOfWork
+    @Path("/modify/{id}")
+    public Response modify(@Auth GroupRequest request, @PathParam("id") int id)
+    {
+        return  groupController.modifyGroup(request,id);
     }
 }

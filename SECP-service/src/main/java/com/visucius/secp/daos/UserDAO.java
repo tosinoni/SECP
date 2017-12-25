@@ -97,4 +97,10 @@ public class UserDAO extends AbstractDAO<User> {
         return (List<User>) namedQuery("com.visucius.secp.models.User.findUsersWithRole").
             setParameter("roleID",roleID).list();
     }
+
+    public List<User> findUsersWithPermissionLevel(long permissionID)
+    {
+        return (List<User>) namedQuery("com.visucius.secp.models.User.findUsersWithPermissionLevel").
+            setParameter("permissionID",permissionID).list();
+    }
 }

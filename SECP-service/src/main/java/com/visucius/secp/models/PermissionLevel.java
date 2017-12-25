@@ -16,17 +16,20 @@ public class PermissionLevel {
 
 
     @Column(name = "level", nullable = false)
-    private int level;
+    private String level;
 
     @ManyToMany(mappedBy = "permissionLevels", fetch = FetchType.LAZY)
     private Set<Group> groups = new HashSet<>();
+
+    @ManyToMany(mappedBy = "permissionLevels", fetch = FetchType.LAZY)
+    private Set<User> users = new HashSet<>();
 
     public PermissionLevel()
     {
 
     }
 
-    public PermissionLevel(int level) {
+    public PermissionLevel(String level) {
         this.level = level;
     }
 
@@ -38,11 +41,11 @@ public class PermissionLevel {
         this.id = id;
     }
 
-    public int getLevel() {
+    public String getLevel() {
         return this.level;
     }
 
-    public void setLevel(int level) {
+    public void setLevel(String level) {
         this.level = level;
     }
 

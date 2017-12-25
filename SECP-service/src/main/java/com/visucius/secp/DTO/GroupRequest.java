@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Set;
 
-public class GroupCreationRequest {
+public class GroupRequest {
 
     @JsonProperty
     public String name;
@@ -13,12 +13,12 @@ public class GroupCreationRequest {
     @JsonProperty
     public Set<Long> roles;
 
-    public GroupCreationRequest()
+    public GroupRequest()
     {
 
     }
 
-    public GroupCreationRequest(String name, Set<Long> permissionLevels, Set<Long> roles)
+    public GroupRequest(String name, Set<Long> permissionLevels, Set<Long> roles)
     {
         this.name = name;
         this.permissionLevels = permissionLevels;

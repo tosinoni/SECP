@@ -1,6 +1,7 @@
 package com.visucius.secp.models;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -79,9 +80,26 @@ public class Group {
 
     public void setRoles(Set<Role> roles){this.roles = roles;}
 
+    public void setPermissionLevels(Set<PermissionLevel> permissions){this.permissionLevels = permissions;}
+
     public Set<Message> getMessages() {return this.messages;}
 
     public void setMessages(Set<Message> messages){this.messages = messages;}
+
+    public void addPermissionLevels(Collection<PermissionLevel> permissions)
+    {
+        this.permissionLevels.addAll(permissions);
+    }
+
+    public void addRoles(Collection<Role> roles)
+    {
+        this.roles.addAll(roles);
+    }
+
+    public void addUsers(Collection<User> users)
+    {
+        this.users.addAll(users);
+    }
 
     @Override
     public boolean equals(Object o) {

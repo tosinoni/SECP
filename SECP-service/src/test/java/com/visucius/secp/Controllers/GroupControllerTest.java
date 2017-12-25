@@ -1,7 +1,7 @@
 package com.visucius.secp.Controllers;
 
 import com.google.common.base.Optional;
-import com.visucius.secp.DTO.GroupCreationRequest;
+import com.visucius.secp.DTO.GroupRequest;
 import com.visucius.secp.daos.GroupDAO;
 import com.visucius.secp.daos.PermissionLevelDAO;
 import com.visucius.secp.daos.RolesDAO;
@@ -81,6 +81,8 @@ public class GroupControllerTest {
         Mockito.when(groupDAO.findByName(DUPLICATE_NAME)).thenReturn(new Group());
         Mockito.when(groupDAO.save(Matchers.any())).thenReturn(validGroup);
         Mockito.when(userDAO.findUsersWithRole(Matchers.anyInt())).thenReturn(validUsers);
+        Mockito.when(userDAO.findUsersWithPermissionLevel(Matchers.anyInt())).thenReturn(validUsers);
+
 
         Mockito.when(groupDAO.findByName(VALID_GROUP_NAME)).thenReturn(null);
 
@@ -91,7 +93,7 @@ public class GroupControllerTest {
     @Test
     public void GroupNameIsTooLongTest()
     {
-        GroupCreationRequest request = new GroupCreationRequest(
+        GroupRequest request = new GroupRequest(
             "verrylongfifdsfdsfsdffdsfssafastnameamefdsafdsafsdfddfdddddsssssssssfsdfsfsdfsfsdfsdfsdffdsfsfsfsf",
             validPermissions,
             validRoles
@@ -104,7 +106,7 @@ public class GroupControllerTest {
 
     @Test
     public void DuplicateNameTest() {
-        GroupCreationRequest request = new GroupCreationRequest(
+        GroupRequest request = new GroupRequest(
             DUPLICATE_NAME,
             validPermissions,
             validRoles
@@ -117,7 +119,7 @@ public class GroupControllerTest {
 
     @Test
     public void GroupNameIsTooShortTest() {
-        GroupCreationRequest request = new GroupCreationRequest(
+        GroupRequest request = new GroupRequest(
             "a",
             validPermissions,
             validRoles
@@ -133,7 +135,7 @@ public class GroupControllerTest {
     {
         Set<Long> roles = new HashSet<>();
         roles.add(INVALID_ROLE_ID);
-        GroupCreationRequest request = new GroupCreationRequest(
+        GroupRequest request = new GroupRequest(
             VALID_GROUP_NAME,
             validPermissions,
             roles
@@ -150,36 +152,36 @@ public class GroupControllerTest {
         Set<Long> permissions = new HashSet<>();
         permissions.add(INVALID_Permission_ID);
         permissions.add(20L);
-        GroupCreationRequest request = new GroupCreationRequest(
+        GroupRequest request = new GroupRequest(
             VALID_GROUP_NAME,
             permissions,
             validRoles
         );
 
         exception.expect(WebApplicationException.class);
-        exception.expectMessage(String.format(GroupErrorMessages.Permission_ID_INVALID, INVALID_Permission_ID));
+        exception.expectMessage(String.format(GroupErrorMessages.PERMISSION_ID_INVALID, INVALID_Permission_ID));
         controller.createGroup(request);
     }
 
     @Test
-    public void NotEnoughRolesTest()
+    public void NotEnoughPermissionsTest()
     {
-        Set<Long> roles = new HashSet<>();
-        GroupCreationRequest request = new GroupCreationRequest(
+        Set<Long> permissions = new HashSet<>();
+        GroupRequest request = new GroupRequest(
             VALID_GROUP_NAME,
-            validPermissions,
-            roles
+            permissions,
+            validPermissions
         );
 
         exception.expect(WebApplicationException.class);
-        exception.expectMessage(GroupErrorMessages.GROUP_ROLES_REQUIRED);
+        exception.expectMessage(GroupErrorMessages.GROUP_PERMISSIONS_REQUIRED);
         controller.createGroup(request);
     }
 
     @Test
     public void ValidGroupCreationTest()
     {
-        GroupCreationRequest request = new GroupCreationRequest(
+        GroupRequest request = new GroupRequest(
             VALID_GROUP_NAME,
             validPermissions,
             validRoles
