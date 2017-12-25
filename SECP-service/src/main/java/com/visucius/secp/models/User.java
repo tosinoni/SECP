@@ -20,6 +20,10 @@ import java.util.Set;
         @NamedQuery(
             name = "com.visucius.secp.models.User.findByEmail",
             query = "from User u where u.email = :email"
+        ),
+        @NamedQuery(
+            name = "com.visucius.secp.models.User.findUsersWithRole",
+            query = "select u from User u join u.roles r where r.id = :roleID"
         )
     }
 )
@@ -77,7 +81,6 @@ public class User implements Principal {
     public long getId() {
         return id;
     }
-
 
     public void setId(long id) {
         this.id = id;

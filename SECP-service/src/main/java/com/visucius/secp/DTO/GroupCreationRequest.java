@@ -9,7 +9,7 @@ public class GroupCreationRequest {
     @JsonProperty
     public String name;
     @JsonProperty
-    public Set<Long> users;
+    public Set<Long> permissionLevels;
     @JsonProperty
     public Set<Long> roles;
 
@@ -18,10 +18,10 @@ public class GroupCreationRequest {
 
     }
 
-    public GroupCreationRequest(String name, Set<Long> users, Set<Long> roles)
+    public GroupCreationRequest(String name, Set<Long> permissionLevels, Set<Long> roles)
     {
         this.name = name;
-        this.users = users;
+        this.permissionLevels = permissionLevels;
         this.roles = roles;
     }
 }

@@ -7,10 +7,12 @@ import com.visucius.secp.DTO.GroupCreationRequest;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-@Path("/")
+@Path("/groups")
+@RolesAllowed("ADMIN")
 public class GroupResource {
 
     private GroupController groupController;
@@ -25,8 +27,7 @@ public class GroupResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Timed
     @UnitOfWork
-    @Path("/groups")
-    public Response create(GroupCreationRequest request) {
+    public Response create(@Auth GroupCreationRequest request) {
         return groupController.createGroup(request);
     }
 }

@@ -3,9 +3,11 @@ package com.visucius.secp.Controllers;
 import com.google.common.base.Optional;
 import com.visucius.secp.DTO.GroupCreationRequest;
 import com.visucius.secp.daos.GroupDAO;
+import com.visucius.secp.daos.PermissionLevelDAO;
 import com.visucius.secp.daos.RolesDAO;
 import com.visucius.secp.daos.UserDAO;
 import com.visucius.secp.models.Group;
+import com.visucius.secp.models.PermissionLevel;
 import com.visucius.secp.models.Role;
 import com.visucius.secp.models.User;
 import org.junit.BeforeClass;
@@ -18,7 +20,9 @@ import org.mockito.Mockito;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import static org.junit.Assert.*;
 
@@ -29,30 +33,30 @@ public class GroupControllerTest {
     private static UserDAO userDAO;
     private static GroupDAO groupDAO;
     private static RolesDAO rolesDAO;
+    private static PermissionLevelDAO permissionsDAO;
 
     @Rule
     public final ExpectedException exception = ExpectedException.none();
 
-    private static final long INVALID_USER_ID = 1000;
+    private static final long INVALID_Permission_ID = 1000;
     private static final long INVALID_ROLE_ID = 1000;
     private static final String DUPLICATE_NAME = "duplicate";
     private static final String VALID_GROUP_NAME = "validName";
-    private static final Set<Long> validUsers = new HashSet<>();
+    private static final Set<Long> validPermissions = new HashSet<>();
     private static final Set<Long> validRoles = new HashSet<>();
-
-
 
     @BeforeClass
     public static void setUp() throws Exception {
         userDAO = Mockito.mock(UserDAO.class);
         groupDAO = Mockito.mock(GroupDAO.class);
         rolesDAO = Mockito.mock(RolesDAO.class);
+        permissionsDAO = Mockito.mock(PermissionLevelDAO.class);
 
-        validUsers.add(1L);
-        validUsers.add(2L);
-        validUsers.add(3L);
-        validUsers.add(4L);
-        validUsers.add(5L);
+        validPermissions.add(1L);
+        validPermissions.add(2L);
+        validPermissions.add(3L);
+        validPermissions.add(4L);
+        validPermissions.add(5L);
 
         validRoles.add(1L);
         validRoles.add(2L);
@@ -60,25 +64,28 @@ public class GroupControllerTest {
         validRoles.add(4L);
         validRoles.add(5L);
 
+        List<User> validUsers = new ArrayList<>();
+        validUsers.add(new User());
         Group validGroup = new Group(VALID_GROUP_NAME);
         validGroup.setId(1);
 
         Mockito.when(rolesDAO.find(
             AdditionalMatchers.not(Matchers.eq(INVALID_ROLE_ID)))).
             thenReturn(Optional.fromNullable(new Role("roleName")));
-        Mockito.when(userDAO.find(
-            AdditionalMatchers.not(Matchers.eq(INVALID_USER_ID)))).
-            thenReturn(Optional.fromNullable(new User()));
+        Mockito.when(permissionsDAO.find(
+            AdditionalMatchers.not(Matchers.eq(INVALID_Permission_ID)))).
+            thenReturn(Optional.fromNullable(new PermissionLevel()));
 
-        Mockito.when(userDAO.find(INVALID_USER_ID)).thenReturn(Optional.absent());
+        Mockito.when(permissionsDAO.find(INVALID_Permission_ID)).thenReturn(Optional.absent());
         Mockito.when(rolesDAO.find(INVALID_ROLE_ID)).thenReturn(Optional.absent());
         Mockito.when(groupDAO.findByName(DUPLICATE_NAME)).thenReturn(new Group());
         Mockito.when(groupDAO.save(Matchers.any())).thenReturn(validGroup);
+        Mockito.when(userDAO.findUsersWithRole(Matchers.anyInt())).thenReturn(validUsers);
 
         Mockito.when(groupDAO.findByName(VALID_GROUP_NAME)).thenReturn(null);
 
 
-        controller = new GroupController(groupDAO,userDAO,rolesDAO);
+        controller = new GroupController(groupDAO,userDAO,rolesDAO,permissionsDAO);
     }
 
     @Test
@@ -86,7 +93,7 @@ public class GroupControllerTest {
     {
         GroupCreationRequest request = new GroupCreationRequest(
             "verrylongfifdsfdsfsdffdsfssafastnameamefdsafdsafsdfddfdddddsssssssssfsdfsfsdfsfsdfsdfsdffdsfsfsfsf",
-            validUsers,
+            validPermissions,
             validRoles
         );
 
@@ -99,7 +106,7 @@ public class GroupControllerTest {
     public void DuplicateNameTest() {
         GroupCreationRequest request = new GroupCreationRequest(
             DUPLICATE_NAME,
-            validUsers,
+            validPermissions,
             validRoles
         );
 
@@ -112,7 +119,7 @@ public class GroupControllerTest {
     public void GroupNameIsTooShortTest() {
         GroupCreationRequest request = new GroupCreationRequest(
             "a",
-            validUsers,
+            validPermissions,
             validRoles
         );
 
@@ -128,7 +135,7 @@ public class GroupControllerTest {
         roles.add(INVALID_ROLE_ID);
         GroupCreationRequest request = new GroupCreationRequest(
             VALID_GROUP_NAME,
-            validUsers,
+            validPermissions,
             roles
         );
 
@@ -138,55 +145,34 @@ public class GroupControllerTest {
     }
 
     @Test
-    public void UserIDInvalidTest()
+    public void PermissionIDInvalidTest()
     {
-        Set<Long> users = new HashSet<>();
-        users.add(INVALID_USER_ID);
-        users.add(20L);
+        Set<Long> permissions = new HashSet<>();
+        permissions.add(INVALID_Permission_ID);
+        permissions.add(20L);
         GroupCreationRequest request = new GroupCreationRequest(
             VALID_GROUP_NAME,
-            users,
+            permissions,
             validRoles
         );
 
         exception.expect(WebApplicationException.class);
-        exception.expectMessage(String.format(GroupErrorMessages.USER_ID_INVALID, INVALID_USER_ID));
+        exception.expectMessage(String.format(GroupErrorMessages.Permission_ID_INVALID, INVALID_Permission_ID));
         controller.createGroup(request);
     }
 
     @Test
-    public void NotEnoughUsersTest()
+    public void NotEnoughRolesTest()
     {
-        Set<Long> users = new HashSet<>();
+        Set<Long> roles = new HashSet<>();
         GroupCreationRequest request = new GroupCreationRequest(
             VALID_GROUP_NAME,
-            users,
-            validRoles
+            validPermissions,
+            roles
         );
 
         exception.expect(WebApplicationException.class);
-        exception.expectMessage(GroupErrorMessages.GROUP_TOO_SMALL);
-        controller.createGroup(request);
-    }
-
-    @Test
-    public void ToManyUsersTest()
-    {
-        Set<Long> users = new HashSet<>();
-
-        for (long i = 1; i<= GroupController.MAXIMUM_AMOUNT_OF_USERS +2; i++)
-        {
-            users.add(i);
-        }
-
-        GroupCreationRequest request = new GroupCreationRequest(
-            VALID_GROUP_NAME,
-            users,
-            validRoles
-        );
-
-        exception.expect(WebApplicationException.class);
-        exception.expectMessage(GroupErrorMessages.GROUP_TOO_BIG);
+        exception.expectMessage(GroupErrorMessages.GROUP_ROLES_REQUIRED);
         controller.createGroup(request);
     }
 
@@ -195,7 +181,7 @@ public class GroupControllerTest {
     {
         GroupCreationRequest request = new GroupCreationRequest(
             VALID_GROUP_NAME,
-            validUsers,
+            validPermissions,
             validRoles
         );
 
