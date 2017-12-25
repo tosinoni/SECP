@@ -10,7 +10,7 @@ import io.dropwizard.hibernate.UnitOfWork;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
+@Path("/")
 public class GroupResource {
 
     private GroupController groupController;
@@ -26,7 +26,7 @@ public class GroupResource {
     @Timed
     @UnitOfWork
     @Path("/groups")
-    public Response create(@Auth GroupCreationRequest request) {
+    public Response create(GroupCreationRequest request) {
         return groupController.createGroup(request);
     }
 }

@@ -77,7 +77,7 @@ public class GroupController {
         }
 
 
-        for (int roleID: request.roles) {
+        for (long roleID: request.roles) {
             if(!isRoleIdValid(roleID))
             {
                 errors.add(String.format(GroupErrorMessages.ROLE_ID_INVALID,roleID));
@@ -94,7 +94,7 @@ public class GroupController {
             errors.add(GroupErrorMessages.GROUP_TOO_BIG);
         }
         else {
-            for (int userId : request.users) {
+            for (long userId : request.users) {
                 if (!isUserIDValid(userId)) {
                     errors.add(String.format(GroupErrorMessages.USER_ID_INVALID, userId));
                 }
@@ -104,14 +104,14 @@ public class GroupController {
         return errors;
     }
 
-    private Set<User> getUsers(Set<Integer> userIDs)
+    private Set<User> getUsers(Set<Long> userIDs)
     {
         Set<User> users = new HashSet<>();
         userIDs.forEach(id -> users.add(userRepository.find(id).get()));
         return users;
     }
 
-    private Set<Role> getRoles(Set<Integer> rolesIDs)
+    private Set<Role> getRoles(Set<Long> rolesIDs)
     {
         Set<Role> roles = new HashSet<>();
         rolesIDs.forEach(id -> roles.add(rolesRepository.find(id).get()));
@@ -119,14 +119,14 @@ public class GroupController {
     }
 
 
-    private boolean isUserIDValid(int id)
+    private boolean isUserIDValid(long id)
     {
         return userRepository.find(id).isPresent();
     }
 
-    private boolean isRoleIdValid(int id)
+    private boolean isRoleIdValid(long id)
     {
-        return rolesRepository.find(id).isPresent();
+        return rolesRepository.find((int)id).isPresent();
     }
 
     private boolean isGroupNameValid(String name)

@@ -17,8 +17,11 @@ import org.mockito.Matchers;
 import org.mockito.Mockito;
 
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import java.util.HashSet;
 import java.util.Set;
+import static org.junit.Assert.*;
+
 
 public class GroupControllerTest {
 
@@ -30,12 +33,12 @@ public class GroupControllerTest {
     @Rule
     public final ExpectedException exception = ExpectedException.none();
 
-    private static final int INVALID_USER_ID = 1000;
-    private static final int INVALID_ROLE_ID = 1000;
+    private static final long INVALID_USER_ID = 1000;
+    private static final long INVALID_ROLE_ID = 1000;
     private static final String DUPLICATE_NAME = "duplicate";
     private static final String VALID_GROUP_NAME = "validName";
-    private static final Set<Integer> validUsers = new HashSet<>();
-    private static final Set<Integer> validRoles = new HashSet<>();
+    private static final Set<Long> validUsers = new HashSet<>();
+    private static final Set<Long> validRoles = new HashSet<>();
 
 
 
@@ -45,21 +48,24 @@ public class GroupControllerTest {
         groupDAO = Mockito.mock(GroupDAO.class);
         rolesDAO = Mockito.mock(RolesDAO.class);
 
-        validUsers.add(1);
-        validUsers.add(2);
-        validUsers.add(3);
-        validUsers.add(4);
-        validUsers.add(5);
+        validUsers.add(1L);
+        validUsers.add(2L);
+        validUsers.add(3L);
+        validUsers.add(4L);
+        validUsers.add(5L);
 
-        validRoles.add(1);
-        validRoles.add(2);
-        validRoles.add(3);
-        validRoles.add(4);
-        validRoles.add(5);
+        validRoles.add(1L);
+        validRoles.add(2L);
+        validRoles.add(3L);
+        validRoles.add(4L);
+        validRoles.add(5L);
+
+        Group validGroup = new Group(VALID_GROUP_NAME);
+        validGroup.setId(1);
 
         Mockito.when(rolesDAO.find(
             AdditionalMatchers.not(Matchers.eq(INVALID_ROLE_ID)))).
-            thenReturn(Optional.fromNullable(new Role()));
+            thenReturn(Optional.fromNullable(new Role("roleName")));
         Mockito.when(userDAO.find(
             AdditionalMatchers.not(Matchers.eq(INVALID_USER_ID)))).
             thenReturn(Optional.fromNullable(new User()));
@@ -67,7 +73,7 @@ public class GroupControllerTest {
         Mockito.when(userDAO.find(INVALID_USER_ID)).thenReturn(Optional.absent());
         Mockito.when(rolesDAO.find(INVALID_ROLE_ID)).thenReturn(Optional.absent());
         Mockito.when(groupDAO.findByName(DUPLICATE_NAME)).thenReturn(new Group());
-
+        Mockito.when(groupDAO.save(Matchers.any())).thenReturn(validGroup);
 
         Mockito.when(groupDAO.findByName(VALID_GROUP_NAME)).thenReturn(null);
 
@@ -118,7 +124,7 @@ public class GroupControllerTest {
     @Test
     public void RolesIDInvalidTest()
     {
-        Set<Integer> roles = new HashSet<>();
+        Set<Long> roles = new HashSet<>();
         roles.add(INVALID_ROLE_ID);
         GroupCreationRequest request = new GroupCreationRequest(
             VALID_GROUP_NAME,
@@ -134,9 +140,9 @@ public class GroupControllerTest {
     @Test
     public void UserIDInvalidTest()
     {
-        Set<Integer> users = new HashSet<>();
+        Set<Long> users = new HashSet<>();
         users.add(INVALID_USER_ID);
-        users.add(20);
+        users.add(20L);
         GroupCreationRequest request = new GroupCreationRequest(
             VALID_GROUP_NAME,
             users,
@@ -151,7 +157,7 @@ public class GroupControllerTest {
     @Test
     public void NotEnoughUsersTest()
     {
-        Set<Integer> users = new HashSet<>();
+        Set<Long> users = new HashSet<>();
         GroupCreationRequest request = new GroupCreationRequest(
             VALID_GROUP_NAME,
             users,
@@ -166,9 +172,9 @@ public class GroupControllerTest {
     @Test
     public void ToManyUsersTest()
     {
-        Set<Integer> users = new HashSet<>();
+        Set<Long> users = new HashSet<>();
 
-        for (int i = 1; i<= GroupController.MAXIMUM_AMOUNT_OF_USERS +2; i++)
+        for (long i = 1; i<= GroupController.MAXIMUM_AMOUNT_OF_USERS +2; i++)
         {
             users.add(i);
         }
@@ -184,4 +190,18 @@ public class GroupControllerTest {
         controller.createGroup(request);
     }
 
+    @Test
+    public void ValidGroupCreationTest()
+    {
+        GroupCreationRequest request = new GroupCreationRequest(
+            VALID_GROUP_NAME,
+            validUsers,
+            validRoles
+        );
+
+        Response response = controller.createGroup(request);
+        Response validResponse = Response.status(Response.Status.CREATED).entity(1).build();
+        assertEquals(response.getStatus(), validResponse.getStatus());
+        assertEquals(response.getEntity(),  validResponse.getEntity());
+    }
 }
