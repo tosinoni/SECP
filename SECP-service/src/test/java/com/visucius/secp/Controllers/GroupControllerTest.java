@@ -186,7 +186,7 @@ public class GroupControllerTest {
         );
 
         Response response = controller.createGroup(request);
-        Response validResponse = Response.status(Response.Status.CREATED).entity(1).build();
+        Response validResponse = Response.status(Response.Status.CREATED).entity(1L).build();
         assertEquals(response.getStatus(), validResponse.getStatus());
         assertEquals(response.getEntity(),  validResponse.getEntity());
     }
