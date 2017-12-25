@@ -1,6 +1,7 @@
 package com.visucius.secp;
 
 import com.visucius.secp.Controllers.Admin.AdminController;
+import com.visucius.secp.Controllers.GroupController;
 import com.visucius.secp.Controllers.User.LoginRequestController;
 import com.visucius.secp.Controllers.TokenController;
 import com.visucius.secp.Controllers.User.UserController;
@@ -83,7 +84,8 @@ public class SECPService extends Application<SECPConfiguration> {
 
         //********************** Register DAO *************************************************
         final UserDAO userDAO =  new UserDAO(hibernateBundle.getSessionFactory());
-
+        final GroupDAO groupDAO = new GroupDAO(hibernateBundle.getSessionFactory());
+        final RolesDAO rolesDAO = new RolesDAO(hibernateBundle.getSessionFactory());
 
 
         //********************** Register Services/Controllers *********************************
@@ -92,6 +94,7 @@ public class SECPService extends Application<SECPConfiguration> {
         final LoginRequestController loginRequestController = new LoginRequestController(tokenController, userDAO);
         final UserController userController = new UserController(userDAO);
         final AdminController adminController = new AdminController(userDAO);
+        final GroupController groupController = new GroupController(groupDAO,userDAO,rolesDAO);
 
 
         //********************** Register authentication for User *****************************
@@ -110,6 +113,9 @@ public class SECPService extends Application<SECPConfiguration> {
         environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
 
 
+        //************************** Group Resources *************************************
+        environment.jersey().register(
+            new GroupResource(groupController));
 
 
         //************************** Registering Resources *************************************

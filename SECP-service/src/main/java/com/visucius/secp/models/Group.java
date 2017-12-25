@@ -7,6 +7,14 @@ import java.util.Set;
 
 @Entity
 @Table(name = "Groups")
+@NamedQueries(
+    {
+        @NamedQuery(
+            name = "com.visucius.secp.models.Group.findByName",
+            query = "from Group g where g.name = :name"
+        )
+    }
+)
 public class Group {
 
     @Id
@@ -31,6 +39,11 @@ public class Group {
 
     @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
     private Set<Message> messages = new HashSet<>();
+
+    public Group()
+    {
+
+    }
 
     public Group(String name) {
         this.name = name;

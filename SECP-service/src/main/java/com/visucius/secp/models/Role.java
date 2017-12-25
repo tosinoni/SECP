@@ -23,7 +23,10 @@ public class Role {
     @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
     private Set<Group> groups = new HashSet<>();
 
+    public Role()
+    {
 
+    }
 
     public Role(String role) {
         this.role = role;
