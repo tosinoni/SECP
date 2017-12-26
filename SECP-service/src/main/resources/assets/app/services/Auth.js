@@ -4,11 +4,11 @@ angular.module('SECP')
   .factory('Auth', function($http, jwtHelper) {
 
     var user;
-
     var config = {skipAuthorization: true};
 
 
     return {
+        ADMIN: 'ADMIN',
         login : function(user) {
             return $http.post("/SECP/login", user, config)
             .then(function(res) {
@@ -33,6 +33,21 @@ angular.module('SECP')
 
         logout : function(){
             localStorage.clear();
+        },
+
+        isUserAnAdmin: function() {
+            var userID = localStorage.getItem('user');
+
+            return $http.get("/SECP/user/verify/admin/id/" + userID)
+            .then(function(res) {
+                console.log(res);
+                if (res.status == 200) {
+                    return true;
+                }
+                return false
+            }, function(err) {
+               return false;
+            });
         }
     }
   });
