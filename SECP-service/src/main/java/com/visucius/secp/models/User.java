@@ -3,7 +3,6 @@ package com.visucius.secp.models;
 import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
 
 import java.security.Principal;
 import java.util.HashSet;
@@ -27,7 +26,7 @@ import java.util.Set;
         ),
         @NamedQuery(
             name = "com.visucius.secp.models.User.findUsersWithPermissionLevel",
-            query = "select u from User u join u.permissionLevels p where p.id = :permissionID"
+            query = "select u from User u join u.permissions p where p.id = :permissionID"
         )
     }
 )
@@ -64,10 +63,10 @@ public class User implements Principal {
     private Set<Group> groups = new HashSet<>();
 
     @ManyToMany()
-    @JoinTable(name = "user_permissionLevel",
+    @JoinTable(name = "user_permissions",
         joinColumns = { @JoinColumn(name = "user_id") },
-        inverseJoinColumns = { @JoinColumn(name = "permissionLevels_id") })
-    private Set<PermissionLevel> permissionLevels = new HashSet<>();
+        inverseJoinColumns = { @JoinColumn(name = "permission_id") })
+    private Set<Permission> permissions = new HashSet<>();
 
     @Enumerated(value = EnumType.STRING)
     @Column(name = "login_role", nullable = false)

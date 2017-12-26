@@ -3,16 +3,15 @@ package com.visucius.secp.resources;
 
 import com.codahale.metrics.annotation.Timed;
 import com.visucius.secp.Controllers.GroupController;
-import com.visucius.secp.DTO.GroupRequest;
-import io.dropwizard.auth.Auth;
+import com.visucius.secp.DTO.GroupCreateRequest;
+import com.visucius.secp.DTO.GroupModifyRequest;
 import io.dropwizard.hibernate.UnitOfWork;
 
-import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 @Path("/groups")
-@RolesAllowed("ADMIN")
+//@RolesAllowed("ADMIN")
 public class GroupResource {
 
     private GroupController groupController;
@@ -27,7 +26,7 @@ public class GroupResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Timed
     @UnitOfWork
-    public Response create(@Auth GroupRequest request) {
+    public Response create( GroupCreateRequest request) {
         return groupController.createGroup(request);
     }
 
@@ -37,8 +36,9 @@ public class GroupResource {
     @Timed
     @UnitOfWork
     @Path("/modify/{id}")
-    public Response modify(@Auth GroupRequest request, @PathParam("id") int id)
+    public Response modifyRoles(GroupModifyRequest request, @PathParam("id") int id)
     {
         return  groupController.modifyGroup(request,id);
     }
+
 }

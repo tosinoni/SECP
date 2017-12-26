@@ -33,10 +33,10 @@ public class Group {
     private Set<Role> roles = new HashSet<>();
 
     @ManyToMany()
-    @JoinTable(name = "group_permissionLevel",
+    @JoinTable(name = "group_permissions",
         joinColumns = { @JoinColumn(name = "group_id") },
-        inverseJoinColumns = { @JoinColumn(name = "permissionLevels_id") })
-    private Set<PermissionLevel> permissionLevels = new HashSet<>();
+        inverseJoinColumns = { @JoinColumn(name = "permission_id") })
+    private Set<Permission> permissions = new HashSet<>();
 
     @ManyToMany()
     @JoinTable(name = "group_user",
@@ -80,15 +80,19 @@ public class Group {
 
     public void setRoles(Set<Role> roles){this.roles = roles;}
 
-    public void setPermissionLevels(Set<PermissionLevel> permissions){this.permissionLevels = permissions;}
+    public void setPermissions(Set<Permission> permissions){this.permissions = permissions;}
 
     public Set<Message> getMessages() {return this.messages;}
 
+    public Set<Permission> getPermissions() {
+        return this.permissions;
+    }
+
     public void setMessages(Set<Message> messages){this.messages = messages;}
 
-    public void addPermissionLevels(Collection<PermissionLevel> permissions)
+    public void addPermissions(Collection<Permission> permissions)
     {
-        this.permissionLevels.addAll(permissions);
+        this.permissions.addAll(permissions);
     }
 
     public void addRoles(Collection<Role> roles)
@@ -96,9 +100,14 @@ public class Group {
         this.roles.addAll(roles);
     }
 
-    public void addUsers(Collection<User> users)
+    public void removeRoles(Collection<Role> roles)
     {
-        this.users.addAll(users);
+        this.roles.removeAll(roles);
+    }
+
+    public void removePermissions(Collection<Permission> permissions)
+    {
+        this.permissions.removeAll(permissions);
     }
 
     @Override

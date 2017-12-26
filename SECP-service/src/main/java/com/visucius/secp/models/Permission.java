@@ -6,8 +6,8 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "permissionLevel")
-public class PermissionLevel {
+@Table(name = "Permissions")
+public class Permission {
 
     @Id
     @GeneratedValue
@@ -15,21 +15,21 @@ public class PermissionLevel {
     private long id;
 
 
-    @Column(name = "level", nullable = false)
+    @Column(name = "level",unique = true, nullable = false)
     private String level;
 
-    @ManyToMany(mappedBy = "permissionLevels", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "permissions", fetch = FetchType.LAZY)
     private Set<Group> groups = new HashSet<>();
 
-    @ManyToMany(mappedBy = "permissionLevels", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "permissions", fetch = FetchType.LAZY)
     private Set<User> users = new HashSet<>();
 
-    public PermissionLevel()
+    public Permission()
     {
 
     }
 
-    public PermissionLevel(String level) {
+    public Permission(String level) {
         this.level = level;
     }
 
@@ -49,14 +49,17 @@ public class PermissionLevel {
         this.level = level;
     }
 
+    public Set<User> getUsers() {
+        return this.users;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PermissionLevel)) return false;
-        PermissionLevel permissionLevel = (PermissionLevel) o;
-        return id == permissionLevel.id
-            && permissionLevel.level.equals(this.level);
+        if (!(o instanceof Permission)) return false;
+        Permission permission = (Permission) o;
+        return id == permission.id
+            && permission.level.equals(this.level);
     }
 
     @Override

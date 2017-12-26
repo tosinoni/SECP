@@ -1,13 +1,13 @@
 package com.visucius.secp.Controllers;
 
 import com.google.common.base.Optional;
-import com.visucius.secp.DTO.GroupRequest;
+import com.visucius.secp.DTO.GroupCreateRequest;
 import com.visucius.secp.daos.GroupDAO;
-import com.visucius.secp.daos.PermissionLevelDAO;
+import com.visucius.secp.daos.PermissionDAO;
 import com.visucius.secp.daos.RolesDAO;
 import com.visucius.secp.daos.UserDAO;
 import com.visucius.secp.models.Group;
-import com.visucius.secp.models.PermissionLevel;
+import com.visucius.secp.models.Permission;
 import com.visucius.secp.models.Role;
 import com.visucius.secp.models.User;
 import org.junit.BeforeClass;
@@ -33,7 +33,7 @@ public class GroupControllerTest {
     private static UserDAO userDAO;
     private static GroupDAO groupDAO;
     private static RolesDAO rolesDAO;
-    private static PermissionLevelDAO permissionsDAO;
+    private static PermissionDAO permissionsDAO;
 
     @Rule
     public final ExpectedException exception = ExpectedException.none();
@@ -50,7 +50,7 @@ public class GroupControllerTest {
         userDAO = Mockito.mock(UserDAO.class);
         groupDAO = Mockito.mock(GroupDAO.class);
         rolesDAO = Mockito.mock(RolesDAO.class);
-        permissionsDAO = Mockito.mock(PermissionLevelDAO.class);
+        permissionsDAO = Mockito.mock(PermissionDAO.class);
 
         validPermissions.add(1L);
         validPermissions.add(2L);
@@ -74,7 +74,7 @@ public class GroupControllerTest {
             thenReturn(Optional.fromNullable(new Role("roleName")));
         Mockito.when(permissionsDAO.find(
             AdditionalMatchers.not(Matchers.eq(INVALID_Permission_ID)))).
-            thenReturn(Optional.fromNullable(new PermissionLevel()));
+            thenReturn(Optional.fromNullable(new Permission()));
 
         Mockito.when(permissionsDAO.find(INVALID_Permission_ID)).thenReturn(Optional.absent());
         Mockito.when(rolesDAO.find(INVALID_ROLE_ID)).thenReturn(Optional.absent());
@@ -93,7 +93,7 @@ public class GroupControllerTest {
     @Test
     public void GroupNameIsTooLongTest()
     {
-        GroupRequest request = new GroupRequest(
+        GroupCreateRequest request = new GroupCreateRequest(
             "verrylongfifdsfdsfsdffdsfssafastnameamefdsafdsafsdfddfdddddsssssssssfsdfsfsdfsfsdfsdfsdffdsfsfsfsf",
             validPermissions,
             validRoles
@@ -106,7 +106,7 @@ public class GroupControllerTest {
 
     @Test
     public void DuplicateNameTest() {
-        GroupRequest request = new GroupRequest(
+        GroupCreateRequest request = new GroupCreateRequest(
             DUPLICATE_NAME,
             validPermissions,
             validRoles
@@ -119,7 +119,7 @@ public class GroupControllerTest {
 
     @Test
     public void GroupNameIsTooShortTest() {
-        GroupRequest request = new GroupRequest(
+        GroupCreateRequest request = new GroupCreateRequest(
             "a",
             validPermissions,
             validRoles
@@ -135,7 +135,7 @@ public class GroupControllerTest {
     {
         Set<Long> roles = new HashSet<>();
         roles.add(INVALID_ROLE_ID);
-        GroupRequest request = new GroupRequest(
+        GroupCreateRequest request = new GroupCreateRequest(
             VALID_GROUP_NAME,
             validPermissions,
             roles
@@ -152,7 +152,7 @@ public class GroupControllerTest {
         Set<Long> permissions = new HashSet<>();
         permissions.add(INVALID_Permission_ID);
         permissions.add(20L);
-        GroupRequest request = new GroupRequest(
+        GroupCreateRequest request = new GroupCreateRequest(
             VALID_GROUP_NAME,
             permissions,
             validRoles
@@ -167,7 +167,7 @@ public class GroupControllerTest {
     public void NotEnoughPermissionsTest()
     {
         Set<Long> permissions = new HashSet<>();
-        GroupRequest request = new GroupRequest(
+        GroupCreateRequest request = new GroupCreateRequest(
             VALID_GROUP_NAME,
             permissions,
             validPermissions
@@ -181,7 +181,7 @@ public class GroupControllerTest {
     @Test
     public void ValidGroupCreationTest()
     {
-        GroupRequest request = new GroupRequest(
+        GroupCreateRequest request = new GroupCreateRequest(
             VALID_GROUP_NAME,
             validPermissions,
             validRoles
