@@ -13,6 +13,10 @@
     font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
     margin-top: 0;
 }
+#role-heading, #permission-heading, #permission-item .list-group-item, #role-items .list-group-item{
+    font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin-top: 0;
+}
 
 #profile img{
     margin: 0 auto;
@@ -60,4 +64,8 @@ a:hover {
 }
 .round {
     border-radius: 50%;
+}
+.fa-edit{
+    font-size: 24px;
+    color: #000;
 }
