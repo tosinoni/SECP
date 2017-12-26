@@ -2,6 +2,7 @@ package com.visucius.secp.Controllers;
 
 import com.google.common.base.Optional;
 import com.visucius.secp.DTO.GroupCreateRequest;
+import com.visucius.secp.DTO.GroupModifyRequest;
 import com.visucius.secp.daos.GroupDAO;
 import com.visucius.secp.daos.PermissionDAO;
 import com.visucius.secp.daos.RolesDAO;
@@ -10,6 +11,7 @@ import com.visucius.secp.models.Group;
 import com.visucius.secp.models.Permission;
 import com.visucius.secp.models.Role;
 import com.visucius.secp.models.User;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -19,6 +21,7 @@ import org.mockito.Matchers;
 import org.mockito.Mockito;
 
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -44,6 +47,23 @@ public class GroupControllerTest {
     private static final String VALID_GROUP_NAME = "validName";
     private static final Set<Long> validPermissions = new HashSet<>();
     private static final Set<Long> validRoles = new HashSet<>();
+    private static final int groupWithNoRolesID = 1;
+    private static final int groupWithRolesID = 2;
+
+    private static final long NUMBER_OF_ROLES = 5;
+    private static final long NUMBER_OF_PERMISSIONS = 5;
+    private static final String ROLE_NAME = "test";
+    private static final String PERMISSION_NAME = "test";
+
+
+    public static Group createGroup(int id, Set<Permission> permissions, Set<Role> roles)
+    {
+        Group group = new Group();
+        group.setId(id);
+        group.setPermissions(permissions);
+        group.setRoles(roles);
+        return group;
+    }
 
     @BeforeClass
     public static void setUp() throws Exception {
@@ -52,42 +72,72 @@ public class GroupControllerTest {
         rolesDAO = Mockito.mock(RolesDAO.class);
         permissionsDAO = Mockito.mock(PermissionDAO.class);
 
-        validPermissions.add(1L);
-        validPermissions.add(2L);
-        validPermissions.add(3L);
-        validPermissions.add(4L);
-        validPermissions.add(5L);
-
-        validRoles.add(1L);
-        validRoles.add(2L);
-        validRoles.add(3L);
-        validRoles.add(4L);
-        validRoles.add(5L);
 
         List<User> validUsers = new ArrayList<>();
         validUsers.add(new User());
+
         Group validGroup = new Group(VALID_GROUP_NAME);
         validGroup.setId(1);
 
         Mockito.when(rolesDAO.find(
             AdditionalMatchers.not(Matchers.eq(INVALID_ROLE_ID)))).
-            thenReturn(Optional.fromNullable(new Role("roleName")));
+            thenReturn(Optional.fromNullable(new Role(ROLE_NAME)));
         Mockito.when(permissionsDAO.find(
             AdditionalMatchers.not(Matchers.eq(INVALID_Permission_ID)))).
-            thenReturn(Optional.fromNullable(new Permission()));
+            thenReturn(Optional.fromNullable(new Permission(PERMISSION_NAME)));
 
         Mockito.when(permissionsDAO.find(INVALID_Permission_ID)).thenReturn(Optional.absent());
         Mockito.when(rolesDAO.find(INVALID_ROLE_ID)).thenReturn(Optional.absent());
+
         Mockito.when(groupDAO.findByName(DUPLICATE_NAME)).thenReturn(new Group());
+
+
         Mockito.when(groupDAO.save(Matchers.any())).thenReturn(validGroup);
+
         Mockito.when(userDAO.findUsersWithRole(Matchers.anyInt())).thenReturn(validUsers);
         Mockito.when(userDAO.findUsersWithPermissionLevel(Matchers.anyInt())).thenReturn(validUsers);
-
 
         Mockito.when(groupDAO.findByName(VALID_GROUP_NAME)).thenReturn(null);
 
 
         controller = new GroupController(groupDAO,userDAO,rolesDAO,permissionsDAO);
+    }
+
+
+    @Before
+    public void setUpTests()
+    {
+        for(long i = 0; i<NUMBER_OF_PERMISSIONS;i++)
+        {
+            validPermissions.add(i);
+        }
+
+        for(long i = 0; i<NUMBER_OF_ROLES;i++)
+        {
+            validRoles.add(i);
+        }
+
+        Set<Role> roles = new HashSet<>();
+        Set<Permission> permissions = new HashSet<>();
+
+        for(long id : validRoles)
+        {
+            Role role = new Role(ROLE_NAME);
+            role.setId((int)id);
+            roles.add(role);
+        }
+        for(long id : validPermissions)
+        {
+            Permission permission = new Permission(PERMISSION_NAME);
+            permission.setId((int)id);
+            permissions.add(permission);
+        }
+
+        Group groupWithRoles = createGroup(groupWithRolesID,permissions,roles);
+        Group groupWithNoRoles = createGroup(groupWithNoRolesID,permissions,new HashSet<>());
+        Mockito.when(groupDAO.find(groupWithRolesID)).thenReturn(Optional.fromNullable(groupWithRoles));
+        Mockito.when(groupDAO.find(groupWithNoRolesID)).thenReturn(Optional.fromNullable(groupWithNoRoles));
+
     }
 
     @Test
@@ -176,6 +226,244 @@ public class GroupControllerTest {
         exception.expect(WebApplicationException.class);
         exception.expectMessage(GroupErrorMessages.GROUP_PERMISSIONS_REQUIRED);
         controller.createGroup(request);
+    }
+
+    @Test
+    public void ModifyGroupWithOverlappingAddAndDeletePermissionsTest()
+    {
+        GroupModifyRequest request = new GroupModifyRequest(
+            validPermissions,
+            validPermissions,
+            new HashSet<>(),
+            new HashSet<>()
+        );
+
+        exception.expect(WebApplicationException.class);
+        exception.expectMessage(GroupErrorMessages.GROUP_MODIFY_OVERLAP_PERMISSIONS);
+        controller.modifyGroup(request, groupWithRolesID);
+    }
+
+    @Test
+    public void ModifyGroupWithOverlappingAddAndDeleteRolesTest()
+    {
+        GroupModifyRequest request = new GroupModifyRequest(
+            new HashSet<>(),
+            new HashSet<>(),
+            validRoles,
+            validRoles
+        );
+
+        exception.expect(WebApplicationException.class);
+        exception.expectMessage(GroupErrorMessages.GROUP_MODIFY_OVERLAP_ROLES);
+        controller.modifyGroup(request, groupWithRolesID);
+    }
+
+    @Test
+    public void ModifyGroupTooHaveNoPermissionsTest()
+    {
+        GroupModifyRequest request = new GroupModifyRequest(
+            new HashSet<>(),
+            validPermissions,
+            new HashSet<>(),
+            new HashSet<>()
+        );
+
+        exception.expect(WebApplicationException.class);
+        exception.expectMessage(GroupErrorMessages.GROUP_PERMISSIONS_REQUIRED);
+        controller.modifyGroup(request, groupWithRolesID);
+    }
+
+    @Test
+    public void RemovePermissionThatGroupDoesNotHaveTest()
+    {
+        HashSet<Long> removePermissions = new HashSet<>();
+        removePermissions.add(20L);
+        GroupModifyRequest request = new GroupModifyRequest(
+            new HashSet<>(),
+            removePermissions,
+            new HashSet<>(),
+            new HashSet<>()
+        );
+
+        exception.expect(WebApplicationException.class);
+        exception.expectMessage(String.format(GroupErrorMessages.PERMISSION_ID_INVALID, 20));
+        controller.modifyGroup(request, groupWithRolesID);
+    }
+
+    @Test
+    public void RemoveRoleThatGroupDoesNotHaveTest()
+    {
+        HashSet<Long> removeRoles = new HashSet<>();
+        removeRoles.add(20L);
+        GroupModifyRequest request = new GroupModifyRequest(
+            new HashSet<>(),
+            new HashSet<>(),
+            new HashSet<>(),
+            removeRoles
+        );
+
+        exception.expect(WebApplicationException.class);
+        exception.expectMessage(String.format(GroupErrorMessages.ROLE_ID_INVALID, 20));
+        controller.modifyGroup(request, groupWithRolesID);
+    }
+
+
+    @Test
+    public void AddInvalidRoleTest()
+    {
+        HashSet<Long> addRoles = new HashSet<>();
+        addRoles.add(INVALID_ROLE_ID);
+        GroupModifyRequest request = new GroupModifyRequest(
+            new HashSet<>(),
+            new HashSet<>(),
+            addRoles,
+            new HashSet<>()
+        );
+
+        exception.expect(WebApplicationException.class);
+        exception.expectMessage(String.format(GroupErrorMessages.ROLE_ID_INVALID, INVALID_ROLE_ID));
+        controller.modifyGroup(request, groupWithRolesID);
+    }
+
+    @Test
+    public void AddInvalidPermissionTest()
+    {
+        HashSet<Long> addPermissions = new HashSet<>();
+        addPermissions.add(INVALID_ROLE_ID);
+        GroupModifyRequest request = new GroupModifyRequest(
+            addPermissions,
+            new HashSet<>(),
+            new HashSet<>(),
+            new HashSet<>()
+        );
+
+        exception.expect(WebApplicationException.class);
+        exception.expectMessage(String.format(GroupErrorMessages.PERMISSION_ID_INVALID, INVALID_ROLE_ID));
+        controller.modifyGroup(request, groupWithRolesID);
+    }
+
+    @Test
+    public void AddValidRoleTest()
+    {
+        HashSet<Long> addRoles = new HashSet<>();
+        addRoles.add(6L);
+        GroupModifyRequest request = new GroupModifyRequest(
+            new HashSet<>(),
+            new HashSet<>(),
+            addRoles,
+            new HashSet<>()
+        );
+
+
+        controller.modifyGroup(request, groupWithRolesID);
+    }
+
+    @Test
+    public void AddValidPermissionTest()
+    {
+        HashSet<Long> addPermissions = new HashSet<>();
+        addPermissions.add(6L);
+        GroupModifyRequest request = new GroupModifyRequest(
+            addPermissions,
+            new HashSet<>(),
+            new HashSet<>(),
+            new HashSet<>()
+        );
+
+
+        Response response = controller.modifyGroup(request, groupWithRolesID);
+        Response validResponse = Response.status(Response.Status.CREATED).entity(1L).build();
+        assertEquals(response.getStatus(), validResponse.getStatus());
+        assertEquals(response.getEntity(),  validResponse.getEntity());
+    }
+
+
+    @Test
+    public void AddValidPermissionsAndRolesTest()
+    {
+        HashSet<Long> addPermissions = new HashSet<>();
+        for(long i = NUMBER_OF_PERMISSIONS; i<NUMBER_OF_PERMISSIONS*2;i++)
+        {
+            addPermissions.add(i);
+        }
+
+        HashSet<Long> addRoles = new HashSet<>();
+        for(long i = NUMBER_OF_ROLES; i<NUMBER_OF_ROLES*2;i++)
+        {
+            addRoles.add(i);
+        }
+
+        GroupModifyRequest request = new GroupModifyRequest(
+            addPermissions,
+            new HashSet<>(),
+            addRoles,
+            new HashSet<>()
+        );
+
+        Response response = controller.modifyGroup(request, groupWithRolesID);
+        Response validResponse = Response.status(Response.Status.CREATED).entity(1L).build();
+        assertEquals(response.getStatus(), validResponse.getStatus());
+        assertEquals(response.getEntity(),  validResponse.getEntity());
+    }
+
+    @Test
+    public void RemoveValidPermissionsAndRolesTest()
+    {
+        HashSet<Long> removePermissions = new HashSet<>();
+        for(long i = 0; i<NUMBER_OF_PERMISSIONS-1;i++)
+        {
+            removePermissions.add(i);
+        }
+
+        HashSet<Long> removeRoles = new HashSet<>();
+        for(long i = 0; i<NUMBER_OF_ROLES-1;i++)
+        {
+            removeRoles.add(i);
+        }
+
+        GroupModifyRequest request = new GroupModifyRequest(
+            new HashSet<>(),
+            removePermissions,
+            new HashSet<>(),
+            removeRoles
+        );
+
+        Response response = controller.modifyGroup(request, groupWithRolesID);
+        Response validResponse = Response.status(Response.Status.CREATED).entity(1L).build();
+        assertEquals(response.getStatus(), validResponse.getStatus());
+        assertEquals(response.getEntity(),  validResponse.getEntity());
+    }
+
+
+    @Test
+    public void AddValidPermissionAndRoleTest()
+    {
+        HashSet<Long> addRoles = new HashSet<>();
+        addRoles.add(6L);
+        HashSet<Long> addPermissions = new HashSet<>();
+        addPermissions.add(6L);
+        GroupModifyRequest request = new GroupModifyRequest(
+            addPermissions,
+            new HashSet<>(),
+            addRoles,
+            new HashSet<>()
+        );
+
+        Response response = controller.modifyGroup(request, groupWithRolesID);
+        Response validResponse = Response.status(Response.Status.CREATED).entity(1L).build();
+        assertEquals(response.getStatus(), validResponse.getStatus());
+        assertEquals(response.getEntity(),  validResponse.getEntity());
+    }
+
+    @Test
+    public void ModifyGroupWithEmptyRequestTest()
+    {
+        GroupModifyRequest request = new GroupModifyRequest();
+
+        Response response =  controller.modifyGroup(request, groupWithRolesID);
+        Response validResponse = Response.status(Response.Status.CREATED).entity(1L).build();
+        assertEquals(response.getStatus(), validResponse.getStatus());
+        assertEquals(response.getEntity(),  validResponse.getEntity());
     }
 
     @Test

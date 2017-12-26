@@ -2,18 +2,19 @@ package com.visucius.secp.DTO;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class GroupModifyRequest {
 
     @JsonProperty
-    public Set<Long> remove_roles;
+    public Set<Long> remove_roles = new HashSet<>();
     @JsonProperty
-    public Set<Long> add_roles;
+    public Set<Long> add_roles = new HashSet<>();
     @JsonProperty
-    public Set<Long> add_permissions;
+    public Set<Long> add_permissions = new HashSet<>();
     @JsonProperty
-    public Set<Long> remove_permissions;
+    public Set<Long> remove_permissions = new HashSet<>();
 
     public GroupModifyRequest()
     {
