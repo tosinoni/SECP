@@ -7,6 +7,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * A DAO for managing {@link User} objects.
@@ -89,5 +90,17 @@ public class UserDAO extends AbstractDAO<User> {
      */
     public void delete(User entity) throws HibernateException {
         currentSession().delete(entity);
+    }
+
+    public List<User> findUsersWithRole(long roleID)
+    {
+        return (List<User>) namedQuery("com.visucius.secp.models.User.findUsersWithRole").
+            setParameter("roleID",roleID).list();
+    }
+
+    public List<User> findUsersWithPermissionLevel(long permissionID)
+    {
+        return (List<User>) namedQuery("com.visucius.secp.models.User.findUsersWithPermissionLevel").
+            setParameter("permissionID",permissionID).list();
     }
 }
