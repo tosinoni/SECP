@@ -1,5 +1,6 @@
 package com.visucius.secp;
 
+import com.visucius.secp.Chat.ChatServlet;
 import com.visucius.secp.Controllers.Admin.AdminController;
 import com.visucius.secp.Controllers.GroupController;
 import com.visucius.secp.Controllers.User.LoginRequestController;
@@ -28,6 +29,8 @@ import org.eclipse.jetty.servlet.ErrorPageErrorHandler;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.servlet.ServletRegistration;
 
 
 public class SECPService extends Application<SECPConfiguration> {
@@ -119,7 +122,6 @@ public class SECPService extends Application<SECPConfiguration> {
         environment.jersey().register(
             new GroupResource(groupController));
 
-
         //************************** Registering Resources *************************************
         environment.jersey().register(
             new EntryResource(userRegistrationController, loginRequestController, userController));
@@ -129,5 +131,10 @@ public class SECPService extends Application<SECPConfiguration> {
         final ErrorPageErrorHandler epeh = new ErrorPageErrorHandler();
         epeh.addErrorPage(404, "/error/404");
         environment.getApplicationContext().setErrorHandler(epeh);
+
+        //************************** WebSocket Servlet *************************************
+        ServletRegistration.Dynamic webSocket = environment.servlets().addServlet("ws", new ChatServlet());
+        webSocket.setAsyncSupported(true);
+        webSocket.addMapping("/chat/*");
     }
 }
