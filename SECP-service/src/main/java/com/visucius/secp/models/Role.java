@@ -2,6 +2,7 @@ package com.visucius.secp.models;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -11,8 +12,7 @@ public class Role {
     @Id
     @GeneratedValue
     @Column(name = "id", unique = true, nullable = false)
-    private int id;
-
+    private long id;
 
     @Column(name = "role", unique = true, nullable = false)
     private String role;
@@ -23,13 +23,16 @@ public class Role {
     @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
     private Set<Group> groups = new HashSet<>();
 
+    public Role()
+    {
 
+    }
 
     public Role(String role) {
         this.role = role;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -63,10 +66,6 @@ public class Role {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + id;
-        result = prime * result + role.hashCode();
-        return result;
+        return Objects.hash(this.role, this.id);
     }
 }

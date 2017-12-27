@@ -112,7 +112,7 @@ public class UserTest {
 
         //testing the @JoinTable annotation
         NamedQueries namedQueries = ReflectTool.getClassAnnotation(User.class, NamedQueries.class);
-        assertEquals("NamedQueries:  size is not equal to 2", 2, namedQueries.value().length);
+        assertEquals("NamedQueries:  size is not equal to 4", 4, namedQueries.value().length);
 
         NamedQuery[] namedQueriesArray = namedQueries.value();
 
@@ -120,6 +120,10 @@ public class UserTest {
             "com.visucius.secp.models.User.findByUsername", namedQueriesArray[0].name());
         assertEquals("NamedQueries[1]: name is not equal",
             "com.visucius.secp.models.User.findByEmail", namedQueriesArray[1].name());
+        assertEquals("NamedQueries[2]: name is not equal",
+            "com.visucius.secp.models.User.findUsersWithRole", namedQueriesArray[2].name());
+        assertEquals("NamedQueries[3]: name is not equal",
+            "com.visucius.secp.models.User.findUsersWithPermissionLevel", namedQueriesArray[3].name());
     }
 
     @Test
