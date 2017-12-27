@@ -8,13 +8,10 @@ import java.util.Set;
 public class GroupModifyRequest {
 
     @JsonProperty
-    public Set<Long> remove_roles = new HashSet<>();
+    public Set<Long> roles = new HashSet<>();
+
     @JsonProperty
-    public Set<Long> add_roles = new HashSet<>();
-    @JsonProperty
-    public Set<Long> add_permissions = new HashSet<>();
-    @JsonProperty
-    public Set<Long> remove_permissions = new HashSet<>();
+    public Set<Long> permissions = new HashSet<>();
 
     public GroupModifyRequest()
     {
@@ -22,14 +19,10 @@ public class GroupModifyRequest {
     }
 
     public GroupModifyRequest(
-        Set<Long> add_permissions,
-        Set<Long> remove_permissions,
-        Set<Long> add_roles,
-        Set<Long> remove_roles)
+        Set<Long> permissions,
+        Set<Long> roles)
     {
-        this.add_permissions = add_permissions;
-        this.remove_permissions = remove_permissions;
-        this.add_roles = add_roles;
-        this.remove_roles = remove_roles;
+        this.permissions = permissions;
+        this.roles = roles;
     }
 }

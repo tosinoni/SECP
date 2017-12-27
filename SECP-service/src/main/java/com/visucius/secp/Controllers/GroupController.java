@@ -47,7 +47,6 @@ public class GroupController {
 
     public Response createGroup(GroupCreateRequest request)
     {
-
         String error = validateCreateRequest(request);
         if(StringUtils.isNoneEmpty(error))
         {
@@ -64,18 +63,51 @@ public class GroupController {
 
         return Response.status(Response.Status.CREATED).entity(createdGroup.getId()).build();
     }
-
-    public Response modifyGroup(GroupModifyRequest request, int id) {
-
-        Optional<Group> groupOptional = getGroup(id);
-        if (!groupOptional.isPresent()) {
+    public Response deletePermissions(GroupModifyRequest request, int groupID)
+    {
+        Group group = getGroup(groupID);
+        String error = validateDeletePermissionRequest(request, group);
+        if (StringUtils.isNoneEmpty(error)) {
             throw new WebApplicationException(
-                GroupErrorMessages.GROUP_DOES_NOT_EXIST,
+                error,
+                Response.Status.BAD_REQUEST);
+        }
+        group.removePermissions(getPermissions(request.permissions));
+        return updateGroup(group);
+
+    }
+    public Response deleteRoles(GroupModifyRequest request, int groupID)
+    {
+        Group group = getGroup(groupID);
+        String error = validateDeleteRolesRequest(request, group);
+        if (StringUtils.isNoneEmpty(error)) {
+            throw new WebApplicationException(
+                error,
                 Response.Status.BAD_REQUEST);
         }
 
-        Group group = groupOptional.get();
-        String error = validateModifyReqeuest(request, group);
+        group.removeRoles(getRoles(request.roles));
+        return updateGroup(group);
+    }
+
+    public Response addPermissionsToGroup(GroupModifyRequest request, int groupID)
+    {
+        Group group = getGroup(groupID);
+        String error = validateAddPermissionsRequest(request, group);
+        if (StringUtils.isNoneEmpty(error)) {
+            throw new WebApplicationException(
+                error,
+                Response.Status.BAD_REQUEST);
+        }
+
+        group.addPermissions(getPermissions(request.permissions));
+        return updateGroup(group);
+    }
+
+    public Response addRolesToGroup(GroupModifyRequest request, int groupID) {
+
+        Group group = getGroup(groupID);
+        String error = validateAddRolesRequest(request, group);
         if (StringUtils.isNoneEmpty(error)) {
             throw new WebApplicationException(
                 error,
@@ -83,18 +115,30 @@ public class GroupController {
         }
 
 
-        group.addPermissions(getPermissions(request.add_permissions));
-        group.addRoles(getRoles(request.add_roles));
+        group.addRoles(getRoles(request.roles));
+        return updateGroup(group);
+    }
 
-        group.removePermissions(getPermissions(request.remove_permissions));
-        group.removeRoles(getRoles(request.remove_roles));
-
+    public Response updateGroup(Group group)
+    {
         group.setUsers(this.findUsersWithRolesAndPermissions(group.getRoles(), group.getPermissions()));
         Group createdGroup = groupRepository.save(group);
         return Response.status(Response.Status.CREATED).entity(createdGroup.getId()).build();
-
-
     }
+
+    private Group getGroup(int groupID)
+    {
+        Optional<Group> groupOptional = groupRepository.find(groupID);
+        if (!groupOptional.isPresent()) {
+            throw new WebApplicationException(
+                GroupErrorMessages.GROUP_DOES_NOT_EXIST,
+                Response.Status.BAD_REQUEST);
+        }
+
+        return groupOptional.get();
+    }
+
+
 
     private String validateCreateRequest(GroupCreateRequest request) {
 
@@ -119,51 +163,60 @@ public class GroupController {
         return StringUtils.EMPTY;
     }
 
-    private String validateModifyReqeuest(GroupModifyRequest request, Group currentGroup) {
-        Set<Long> allPermissions = Sets.intersection(request.add_permissions, request.remove_permissions);
-        Set<Long> allRoles = Sets.intersection(request.add_roles, request.remove_roles);
 
-        if (!allPermissions.isEmpty())
-            return GroupErrorMessages.GROUP_MODIFY_OVERLAP_PERMISSIONS;
-        if (!allRoles.isEmpty())
-            return GroupErrorMessages.GROUP_MODIFY_OVERLAP_ROLES;
-
+    private String validateDeleteRolesRequest(GroupModifyRequest request, Group currentGroup)
+    {
         Set<Long> currentRolesIDs = currentGroup.getRoles().
             stream().
             map(Role::getId).
             collect(Collectors.toSet());
-        for (long roleId : request.remove_roles) {
+        for (long roleId : request.roles) {
 
             if (!currentRolesIDs.contains(roleId))
                 return String.format(GroupErrorMessages.ROLE_ID_INVALID, roleId);
-
         }
 
+        return StringUtils.EMPTY;
+    }
+
+    private String validateDeletePermissionRequest(GroupModifyRequest request, Group currentGroup)
+    {
         Set<Long> currentPermissionIDs = currentGroup.getPermissions().
             stream().
             map(Permission::getId).
             collect(Collectors.toSet());
 
-        for (long permissionId : request.remove_permissions) {
+        for (long permissionId : request.permissions) {
 
             if (!currentPermissionIDs.contains(permissionId))
                 return String.format(GroupErrorMessages.PERMISSION_ID_INVALID, permissionId);
 
         }
 
-        String roleError = validateRoles(request.add_roles);
-        if (StringUtils.isNoneEmpty(roleError))
-            return roleError;
-
-        String permissionError = validatePermissions(request.add_permissions);
-        if (StringUtils.isNoneEmpty(permissionError))
-            return permissionError;
-
-        if((request.add_permissions.size() + currentPermissionIDs.size() -  request.remove_permissions.size())
+        if((currentPermissionIDs.size() -  request.permissions.size())
             < MINIMUM_AMOUNT_OF_PERMISSIONS)
         {
             return GroupErrorMessages.GROUP_PERMISSIONS_REQUIRED;
         }
+
+        return StringUtils.EMPTY;
+    }
+
+    private String validateAddPermissionsRequest(GroupModifyRequest request, Group currentGroup)
+    {
+        String permissionError = validatePermissions(request.permissions);
+        if (StringUtils.isNoneEmpty(permissionError))
+            return permissionError;
+
+        return StringUtils.EMPTY;
+    }
+
+    private String validateAddRolesRequest(GroupModifyRequest request, Group currentGroup)
+    {
+
+        String roleError = validateRoles(request.roles);
+        if (StringUtils.isNoneEmpty(roleError))
+            return roleError;
 
         return StringUtils.EMPTY;
     }
@@ -247,10 +300,5 @@ public class GroupController {
     private boolean isGroupNameValid(String name)
     {
         return groupRepository.findByName(name) == null;
-    }
-
-    private Optional<Group> getGroup(int id)
-    {
-        return groupRepository.find(id);
     }
 }
