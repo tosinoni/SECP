@@ -17,7 +17,6 @@ angular.module('SECP')
                  localStorage.setItem('user', user.userID);
                  localStorage.setItem('loginRole', user.loginRole);
                  localStorage.setItem('username', user.username);
-                 localStorage.setItem('device', user.device);
                  return res;
             }, function(err) {
                 return err;

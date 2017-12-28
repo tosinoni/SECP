@@ -16,7 +16,7 @@ import java.util.Set;
             query = "from Device d where d.name = :name"
         ),
         @NamedQuery(
-            name = "com.visucius.secp.models.Device.getDevicesForUser",
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    name = "com.visucius.secp.models.Device.getDevicesForUser",
             query = "select d FROM Device d join d.users u where u.id= :id"
         )
     }

@@ -21,14 +21,13 @@ angular.module('SECP')
             var userID = localStorage.getItem('user');
 
             Auth.isDeviceRegisteredForUser(userID, deviceName).then(function(status) {
-                console.log("status of device registration is " + status);
                 if(!status) {
+
                     //creating the user's private and public key
                     $webCrypto.generate({name: username})
                     .success(function(userKey) {
-                        //Getting the user's puplic key.
+                        //Getting the user's public key.
                         publicKeyForUser = $webCrypto.export(userKey);
-                        console.log(publicKeyForUser);
                         var req = {
                             "deviceName" : deviceName,
                             "publicKey" : publicKeyForUser,

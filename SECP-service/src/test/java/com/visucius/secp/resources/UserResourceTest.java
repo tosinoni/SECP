@@ -3,9 +3,11 @@ package com.visucius.secp.resources;
 import com.google.common.base.Optional;
 import com.visucius.secp.Controllers.User.UserController;
 import com.visucius.secp.Controllers.User.UserRegistrationController;
+import com.visucius.secp.DTO.DeviceDTO;
 import com.visucius.secp.daos.DeviceDAO;
 import com.visucius.secp.daos.UserDAO;
 import com.visucius.secp.helpers.ResponseValidator;
+import com.visucius.secp.models.Device;
 import com.visucius.secp.models.LoginRole;
 import com.visucius.secp.models.User;
 import io.dropwizard.testing.junit.ResourceTestRule;
@@ -13,12 +15,16 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
+import java.util.Arrays;
 
 public class UserResourceTest {
     private static final String isUserAnAdminUrl = "/user/verify/admin/id/";
     private static final String verifyEmailUrl = "/user/verify/email";
     private static final String verifyUsernameUrl = "/user/verify/username";
+    private static final String addDeviceUrl = "/user/device/";
+    private static final String verifyDeviceUrl = "/user/id/";
 
 
     private UserDAO userDAO = Mockito.mock(UserDAO.class);
@@ -105,5 +111,120 @@ public class UserResourceTest {
     {
         Response response = resources.client().target(verifyUsernameUrl + "/invalid").request().get();
         ResponseValidator.validate(response, 204);
+    }
+
+    @Test
+    public void testIsDeviceRegisteredWithNoDeviceName()
+    {
+        String url = verifyDeviceUrl + 1 + "/device/name/ ";
+        Response response = resources.client().target(url).request().get();
+        ResponseValidator.validate(response, 204);
+    }
+
+    @Test
+    public void testIsDeviceRegisteredForUserWithNoDevice()
+    {
+        String url = verifyDeviceUrl + 1 + "/device/name/name";
+        Response response = resources.client().target(url).request().get();
+        ResponseValidator.validate(response, 204);
+
+        Mockito.when(deviceDAO.getDevicesForUser(1)).thenReturn(Arrays.asList());
+        response = resources.client().target(url).request().get();
+        ResponseValidator.validate(response, 204);
+    }
+
+    @Test
+    public void testIsDeviceRegisteredForUserWithDevice()
+    {
+        String url = verifyDeviceUrl + 1 + "/device/name/name";
+        DeviceDTO deviceDTO = getDefaultDevice();
+        Device device = new Device(deviceDTO.getDeviceName(), deviceDTO.getPublicKey());
+
+        Mockito.when(deviceDAO.getDevicesForUser(1)).thenReturn(Arrays.asList(device));
+        Mockito.when(deviceDAO.findByDeviceName("name")).thenReturn(device);
+
+        Response response = resources.client().target(url).request().get();
+        ResponseValidator.validate(response, 200);
+    }
+
+    @Test
+    public void testAddDeviceWithEmptyInformation()
+    {
+        Response response = resources.client().target(addDeviceUrl).request().post(null);
+        ResponseValidator.validate(response, 400);
+    }
+
+    @Test
+    public void testAddDeviceWithNoDeviceNameAndPublicKey()
+    {
+        DeviceDTO deviceDTO = new DeviceDTO();
+        Response response = resources.client().target(addDeviceUrl).request().post(Entity.json(deviceDTO));
+        ResponseValidator.validate(response, 400);
+    }
+
+    @Test
+    public void testAddDeviceWithNoDeviceName()
+    {
+        DeviceDTO deviceDTO = new DeviceDTO();
+        deviceDTO.setPublicKey("key1");
+        Response response = resources.client().target(addDeviceUrl).request().post(Entity.json(deviceDTO));
+        ResponseValidator.validate(response, 400);
+    }
+
+    @Test
+    public void testAddDeviceWithNoPublicKey()
+    {
+        DeviceDTO deviceDTO = new DeviceDTO();
+        deviceDTO.setDeviceName("name");
+        Response response = resources.client().target(addDeviceUrl).request().post(Entity.json(deviceDTO));
+        ResponseValidator.validate(response, 400);
+    }
+
+    @Test
+    public void testAddDeviceWithInvalidUserID()
+    {
+        DeviceDTO deviceDTO = getDefaultDevice();
+
+        Optional<User> user = Optional.absent();
+        Mockito.when(userDAO.find(1)).thenReturn(user);
+
+        Response response = resources.client().target(addDeviceUrl).request().post(Entity.json(deviceDTO));
+        ResponseValidator.validate(response, 400);
+    }
+
+    @Test
+    public void testAddExistingDevice()
+    {
+        DeviceDTO deviceDTO = getDefaultDevice();
+        Device device = new Device(deviceDTO.getDeviceName(), deviceDTO.getPublicKey());
+
+        Optional<User> user = Optional.of(new User());
+        Mockito.when(userDAO.find(1)).thenReturn(user);
+        Mockito.when(deviceDAO.findByDeviceName(deviceDTO.getDeviceName())).thenReturn(device);
+        Mockito.when(deviceDAO.getDevicesForUser(1)).thenReturn(Arrays.asList(device));
+
+        Response response = resources.client().target(addDeviceUrl).request().post(Entity.json(deviceDTO));
+        ResponseValidator.validate(response, 400);
+    }
+
+    @Test
+    public void testAddDeviceWithValidInputs()
+    {
+        DeviceDTO deviceDTO = getDefaultDevice();
+
+        Optional<User> user = Optional.of(new User());
+        Mockito.when(userDAO.find(1)).thenReturn(user);
+
+        Response response = resources.client().target(addDeviceUrl).request().post(Entity.json(deviceDTO));
+        ResponseValidator.validate(response, 201);
+    }
+
+    private DeviceDTO getDefaultDevice() {
+        DeviceDTO deviceDTO = new DeviceDTO();
+        deviceDTO.setDeviceName("name");
+        deviceDTO.setPublicKey("key");
+        deviceDTO.setUserID(1);
+
+        return deviceDTO;
     }
 }
