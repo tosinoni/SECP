@@ -11,7 +11,7 @@ public class GroupTest {
 
     @Test
     public void testGroupForEntityAndTableAttribute() {
-        AssertAnnotations.assertType(Group.class, Entity.class, Table.class);
+        AssertAnnotations.assertType(Group.class, Entity.class, Table.class, NamedQueries.class);
     }
 
     @Test

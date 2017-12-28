@@ -1,18 +1,27 @@
 package com.visucius.secp.models;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "Groups")
+@NamedQueries(
+    {
+        @NamedQuery(
+            name = "com.visucius.secp.models.Group.findByName",
+            query = "from Group g where g.name = :name"
+        )
+    }
+)
 public class Group {
 
     @Id
     @GeneratedValue
     @Column(name = "id", unique = true, nullable = false)
-    private int id;
+    private long id;
 
     @Column(name = "name", unique = true, nullable = false)
     private String name;
@@ -24,6 +33,12 @@ public class Group {
     private Set<Role> roles = new HashSet<>();
 
     @ManyToMany()
+    @JoinTable(name = "group_permissions",
+        joinColumns = { @JoinColumn(name = "group_id") },
+        inverseJoinColumns = { @JoinColumn(name = "permission_id") })
+    private Set<Permission> permissions = new HashSet<>();
+
+    @ManyToMany()
     @JoinTable(name = "group_user",
         joinColumns = { @JoinColumn(name = "group_id") },
         inverseJoinColumns = { @JoinColumn(name = "user_id") })
@@ -32,11 +47,16 @@ public class Group {
     @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
     private Set<Message> messages = new HashSet<>();
 
+    public Group()
+    {
+
+    }
+
     public Group(String name) {
         this.name = name;
     }
 
-    public int getId(){return id;}
+    public long getId(){return id;}
 
     public void setId(int id){this.id = id;}
 
@@ -60,9 +80,35 @@ public class Group {
 
     public void setRoles(Set<Role> roles){this.roles = roles;}
 
+    public void setPermissions(Set<Permission> permissions){this.permissions = permissions;}
+
     public Set<Message> getMessages() {return this.messages;}
 
+    public Set<Permission> getPermissions() {
+        return this.permissions;
+    }
+
     public void setMessages(Set<Message> messages){this.messages = messages;}
+
+    public void addPermissions(Collection<Permission> permissions)
+    {
+        this.permissions.addAll(permissions);
+    }
+
+    public void addRoles(Collection<Role> roles)
+    {
+        this.roles.addAll(roles);
+    }
+
+    public void removeRoles(Collection<Role> roles)
+    {
+        this.roles.removeAll(roles);
+    }
+
+    public void removePermissions(Collection<Permission> permissions)
+    {
+        this.permissions.removeAll(permissions);
+    }
 
     @Override
     public boolean equals(Object o) {

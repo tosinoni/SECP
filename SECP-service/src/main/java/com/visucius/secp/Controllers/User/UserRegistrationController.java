@@ -16,7 +16,7 @@ import java.util.List;
 
 public class UserRegistrationController{
 
-    private static final Logger LOG = LoggerFactory.getLogger(SECPService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(UserRegistrationController.class);
 
     private final UserDAO userDAO;
 
