@@ -25,8 +25,4 @@ public interface UserErrorMessage {
     String DEVICE_ADD_FAIL_NO_DEVICE_PUBLIC_KEY = "Device addition Failed. Please provide the device public key.";
     String DEVICE_ADD_FAIL_USER_NOT_FOUND = "Device addition Failed. User id does not exist.";
     String DEVICE_ADD_FAIL_DEVICE_EXISTS = "Device addition Failed. Device already exist for the user";
-
-
-
-
 }
