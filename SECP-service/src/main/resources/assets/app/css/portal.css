@@ -153,5 +153,6 @@ a:hover {
 .newfilterword{
     border: 1px solid #aaa;
     border-radius: 4px;
+    padding: 6px;
     width: 100%;
 }
