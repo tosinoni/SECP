@@ -151,7 +151,7 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
 
       $rootScope.$on("$locationChangeStart", function(event) {
         // handle route changes
-        if($rootScope.isAuthenticated) {
+        if(Auth.isTokenExpired()) {
             Auth.isUserAnAdmin().then(function(res){
                 $rootScope.isAdmin = res;
             });
