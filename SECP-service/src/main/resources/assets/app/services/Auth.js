@@ -17,6 +17,7 @@ angular.module('SECP')
                  localStorage.setItem('user', user.userID);
                  localStorage.setItem('loginRole', user.loginRole);
                  localStorage.setItem('username', user.username);
+                 localStorage.setItem('device', user.device);
                  return res;
             }, function(err) {
                 return err;
@@ -40,13 +41,33 @@ angular.module('SECP')
 
             return $http.get("/SECP/user/verify/admin/id/" + userID)
             .then(function(res) {
-                console.log(res);
                 if (res.status == 200) {
                     return true;
                 }
                 return false
             }, function(err) {
                return false;
+            });
+        },
+
+        isDeviceRegisteredForUser: function(userID, name) {
+            return $http.get("/SECP/user/id/" + userID + "/device/name/" + name)
+            .then(function(res) {
+                if (res.status == 200) {
+                    return true;
+                }
+                return false
+            }, function(err) {
+                return false;
+            });
+        },
+
+        addPublicKey : function(req) {
+            return $http.post("/SECP/user/device", req)
+            .then(function(res) {
+                return res;
+            }, function(err) {
+                return err;
             });
         }
     }

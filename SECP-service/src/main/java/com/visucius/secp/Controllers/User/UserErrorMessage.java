@@ -18,4 +18,15 @@ public interface UserErrorMessage {
     String USER_NOT_CREATED = "User not created";
     String DUPLICATE_USERNAME = "Username already exists";
     String DUPLICATE_EMAIL = "Email is in use";
+
+    //Device error messages
+    String DEVICE_ADD_FAIL_NO_DEVICE_INFO = "Device addition Failed. Please provide the device name and public key.";
+    String DEVICE_ADD_FAIL_NO_DEVICE_NAME = "Device addition Failed. Please provide the device name.";
+    String DEVICE_ADD_FAIL_NO_DEVICE_PUBLIC_KEY = "Device addition Failed. Please provide the device public key.";
+    String DEVICE_ADD_FAIL_USER_NOT_FOUND = "Device addition Failed. User id does not exist.";
+    String DEVICE_ADD_FAIL_DEVICE_EXISTS = "Device addition Failed. Device already exist for the user";
+
+
+
+
 }

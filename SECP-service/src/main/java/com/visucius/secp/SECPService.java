@@ -44,6 +44,7 @@ public class SECPService extends Application<SECPConfiguration> {
             Role.class,
             Group.class,
             Permission.class,
+            Device.class,
             Void.class
         ) {
         @Override
@@ -88,13 +89,15 @@ public class SECPService extends Application<SECPConfiguration> {
         final GroupDAO groupDAO = new GroupDAO(hibernateBundle.getSessionFactory());
         final RolesDAO rolesDAO = new RolesDAO(hibernateBundle.getSessionFactory());
         final PermissionDAO permissionDAO = new PermissionDAO(hibernateBundle.getSessionFactory());
+        final DeviceDAO deviceDAO =  new DeviceDAO(hibernateBundle.getSessionFactory());
+
 
 
         //********************** Register Services/Controllers *********************************
         final UserRegistrationController userRegistrationController = new UserRegistrationController(userDAO);
         final TokenController tokenController = new TokenController(configuration);
         final LoginRequestController loginRequestController = new LoginRequestController(tokenController, userDAO);
-        final UserController userController = new UserController(userDAO);
+        final UserController userController = new UserController(userDAO, deviceDAO);
         final AdminController adminController = new AdminController(userDAO);
         final GroupController groupController = new GroupController(groupDAO,userDAO,rolesDAO, permissionDAO);
 
@@ -122,8 +125,9 @@ public class SECPService extends Application<SECPConfiguration> {
 
         //************************** Registering Resources *************************************
         environment.jersey().register(
-            new EntryResource(userRegistrationController, loginRequestController, userController));
-        environment.jersey().register(new AdminResource(adminController));
+            new EntryResource(loginRequestController));
+        environment.jersey().register(new AdminResource(adminController, userRegistrationController));
+        environment.jersey().register(new UserResource(userController, userRegistrationController));
 
         //************************** Error Handling *************************************
         final ErrorPageErrorHandler epeh = new ErrorPageErrorHandler();
