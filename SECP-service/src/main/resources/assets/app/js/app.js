@@ -119,7 +119,10 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date', 'rou
           templateUrl: 'views/portal/filter.html',
           controller:'FilterController',
           css: 'css/portal.css',
-          requiresLogin: true
+          requiresLogin: true,
+          resolve: {
+              isAdmin: isAdmin
+          }
       })
       .when('/error/404', {
         templateUrl: 'views/error/404.html'

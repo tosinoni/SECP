@@ -1,4 +1,124 @@
 <body>
 <h1 class="portalheader"><i class="fa fa-filter" aria-hidden="true"></i> Filter</h1>
-<!--Include table here-->
+
+<table id="filtertable" class="display" cellspacing="0" width="100%">
+    <button class="tableaddbutton" data-toggle="modal" data-target="#myModal">New Word <i class="fa fa-plus" aria-hidden="true"></i></button>
+    <thead>
+    <tr>
+        <th>Keyword</th>
+        <th>Permission Level(s)</th>
+        <th>Role(s)</th>
+        <th style="text-align: right">Action(s)</th>
+    </tr>
+    </thead>
+    <tfoot>
+    <tr>
+        <th>Keyword</th>
+        <th>Permission Level(s)</th>
+        <th>Role(s)</th>
+        <th style="text-align: right">Action(s)</th>
+    </tr>
+    </tfoot>
+    <tbody>
+    <tr>
+        <td>SECP</td>
+        <td>
+            <select class="permission-level-select" style="width: 100%" name="permission[]" multiple="multiple">
+                <option value="">Select</option>
+                <option value="permission1">Top Secret</option>
+                <option value="permission2">Secret</option>
+                <option value="permission3">Basic</option>
+            </select>
+        </td>
+        <td>
+            <select class="role-select" style="width: 100%" name="roles[]" multiple="multiple">
+                <option value="">Select</option>
+                <option value="role1">General</option>
+                <option value="role2">Developer</option>
+                <option value="role3">Manager</option>
+            </select>
+        </td>
+        <td style="text-align: right"><button data-target="#delete"><i class="fa fa-trash red" aria-hidden="true"></i></button></td>
+    </tr>
+    <tr>
+        <td>Pheonix</td>
+        <td>
+            <select class="permission-level-select" style="width: 100%" name="permission[]" multiple="multiple">
+                <option value="">Select</option>
+                <option value="permission1">Top Secret</option>
+                <option value="permission2">Secret</option>
+                <option value="permission3">Basic</option>
+            </select>
+        </td>
+        <td>
+            <select class="role-select" style="width: 100%" name="roles[]" multiple="multiple">
+                <option value="">Select</option>
+                <option value="role1">General</option>
+                <option value="role2">Developer</option>
+                <option value="role3">Manager</option>
+            </select>
+        </td>
+        <td style="text-align: right"><button data-target="#delete"><i class="fa fa-trash red" aria-hidden="true"></i></button></td>
+    </tr>
+    <tr>
+        <td>Onyx</td>
+        <td>
+            <select class="permission-level-select" style="width: 100%" name="permission[]" multiple="multiple">
+                <option value="">Select</option>
+                <option value="permission1">Top Secret</option>
+                <option value="permission2">Secret</option>
+                <option value="permission3">Basic</option>
+            </select>
+        </td>
+        <td>
+            <select class="role-select" style="width: 100%" name="roles[]" multiple="multiple">
+                <option value="">Select</option>
+                <option value="role1">General</option>
+                <option value="role2">Developer</option>
+                <option value="role3">Manager</option>
+            </select>
+        </td>
+        <td style="text-align: right"><button data-target="#delete"><i class="fa fa-trash red" aria-hidden="true"></i></button></td>
+    </tr>
+    </tbody>
+</table>
 </body>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <form class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">New Filter Word</h4>
+            </div>
+            <div class="modal-body">
+                Word:<br>
+                <input class="newfilterword" type="text" name="word">
+                <br><br>Permission Level(s):
+                <select class="permission-level-select" style="width: 100%" name="permission[]" multiple="multiple">
+                    <option value="">Select</option>
+                    <option value="permission1">Top Secret</option>
+                    <option value="permission2">Secret</option>
+                    <option value="permission3">Basic</option>
+                </select>
+                <br><br>Role(s):
+                <select class="role-select" style="width: 100%" name="roles[]" multiple="multiple">
+                    <option value="">Select</option>
+                    <option value="role1">General</option>
+                    <option value="role2">Developer</option>
+                    <option value="role3">Manager</option>
+                </select>
+                <br>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </form>
+
+    </div>
+</div>

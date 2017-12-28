@@ -19,7 +19,10 @@
     "angular-jwt": "^0.1.9",
     "select2": "^4.0.5",
     "moment": "^2.19.3",
-    "angular-jwt": "^0.1.9"
+    "datatables.net": "^1.10.16",
+    "datatables.net-jqui": "^2.1.1",
+    "datatables.net-select": "^1.2.3",
+    "datatables.net-select-jqui": "^1.2.3"
   },
   "devDependencies": {
     "angular-mocks": "~1.6.7",

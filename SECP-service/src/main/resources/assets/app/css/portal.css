@@ -128,3 +128,30 @@ a:hover {
     background-color: white;
     color: #2196F3;
 }
+
+.tableaddbutton {
+    background-color: #33c600;
+    color:white;
+    border: 1px solid;
+    border-radius: 15px;
+    padding: 0.2em 2em;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 0.7em;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+    float: right;
+}
+
+.tableaddbutton:hover {
+    background-color: white;
+    color: #33c600;
+}
+
+.newfilterword{
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    width: 100%;
+}
