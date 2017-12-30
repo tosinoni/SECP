@@ -27,7 +27,11 @@ import java.util.Set;
         @NamedQuery(
             name = "com.visucius.secp.models.User.findUsersWithPermissionLevel",
             query = "select u from User u join u.permissions p where p.id = :permissionID"
-        )
+        ),
+        @NamedQuery(
+            name = "com.visucius.secp.models.User.findAdmins",
+            query = "from User u where u.loginRole = :loginRole"
+        ),
     }
 )
 public class User implements Principal {

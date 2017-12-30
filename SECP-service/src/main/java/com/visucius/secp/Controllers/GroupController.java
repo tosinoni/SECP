@@ -286,13 +286,20 @@ public class GroupController {
     private GroupDTO getGroupResponse (Group group) {
         GroupDTO groupDTO = new GroupDTO(group.getId());
 
-        Set<UserDTO> users = group.getUsers().stream()
+        Set<UserDTO> users = getUsersInGroup(group).stream()
             .map(user -> {
                 return new UserDTO(user.getId(), getDevicesForUser(user));
             }).collect(Collectors.toSet());
 
         groupDTO.setUsers(users);
         return groupDTO;
+    }
+
+    private Set<User> getUsersInGroup(Group group) {
+        Set<User> users = new HashSet<>();
+        users.addAll(group.getUsers());
+        users.addAll(userRepository.findAdmins());
+        return users;
     }
 
     private Set<DeviceDTO> getDevicesForUser(User user) {
