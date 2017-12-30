@@ -19,7 +19,9 @@
     "angular-jwt": "^0.1.9",
     "select2": "^4.0.5",
     "moment": "^2.19.3",
-    "angular-jwt": "^0.1.9"
+    "fingerprint": "^0.5.5",
+    "angular-web-crypto": "^0.0.12",
+    "angular-uuids": "^0.0.4"
   },
   "devDependencies": {
     "angular-mocks": "~1.6.7",

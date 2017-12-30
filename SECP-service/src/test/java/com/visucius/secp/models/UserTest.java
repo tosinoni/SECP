@@ -150,4 +150,23 @@ public class UserTest {
 
         assertEquals("Enumerated loginRole: enum value is not equal", EnumType.STRING, e.value());
     }
+
+    @Test
+    public void testDevices() {
+        AssertAnnotations.assertField( User.class, "devices", ManyToMany.class, JoinTable.class);
+
+        //testing the @JoinTable annotation
+        JoinTable j = ReflectTool.getFieldAnnotation(User.class, "devices", JoinTable.class);
+        assertEquals("JoinTable devices:  name is not equal", "user_devices", j.name());
+        assertEquals("JoinTable devices:  joinColumns size is not 1", 1, j.joinColumns().length);
+        assertEquals("JoinTable devices:  inverseJoinColumns size is not 1", 1, j.inverseJoinColumns().length);
+
+        //testing the joincolumn inside JoinColumns
+        JoinColumn joinColumn = j.joinColumns()[0];
+        assertEquals("JoinColumn devices: name is not equal", "user_id", joinColumn.name());
+
+        //testing the joincolumn inside inverseJoinColumns
+        joinColumn = j.inverseJoinColumns()[0];
+        assertEquals("JoinColumn devices: name is not equal", "device_id", joinColumn.name());
+    }
 }
