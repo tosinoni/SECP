@@ -85,14 +85,38 @@ public class UserController {
         return deviceDAO.findByDeviceName(deviceName) != null && deviceNamesForUser.contains(deviceName);
     }
 
+    public Response getUsersPublicKeys(long userID) {
+        Optional<User> dbUser = userDAO.find(userID);
+
+        if (!dbUser.isPresent()) {
+            throw new WebApplicationException(UserErrorMessage.USER_ID_INVALID, Response.Status.NO_CONTENT);
+        }
+
+        List<Device> devices = deviceDAO.getDevicesForUser(userID);
+        if(devices == null || devices.isEmpty()) {
+            throw new WebApplicationException(UserErrorMessage.DEVICE_GET_FAIL_NO_DEVICE_EXISTS, Response.Status.NO_CONTENT);
+        }
+
+        Set<DeviceDTO> responseEntity = devices.stream()
+            .filter(device -> !StringUtils.isEmpty(device.getPublicKey()))
+            .map(device -> {return new DeviceDTO(device.getId(), device.getPublicKey());})
+            .collect(Collectors.toSet());
+
+        if(responseEntity.isEmpty()) {
+            throw new WebApplicationException(UserErrorMessage.DEVICE_GET_FAIL_NO_PUBLIC_KEY_EXISTS, Response.Status.NO_CONTENT);
+        }
+
+        return Response.status(Response.Status.OK).entity(responseEntity).build();
+    }
+
     private void validate(DeviceDTO deviceDTO) {
         if (deviceDTO == null) {
             throw new WebApplicationException(UserErrorMessage.DEVICE_ADD_FAIL_NO_DEVICE_INFO, Response.Status.BAD_REQUEST);
         }
         if (StringUtils.isBlank(deviceDTO.getDeviceName())) {
             throw new WebApplicationException(UserErrorMessage.DEVICE_ADD_FAIL_NO_DEVICE_NAME, Response.Status.BAD_REQUEST);
-        } else if (StringUtils.isBlank(deviceDTO.getPublicKey())) {
-            throw new WebApplicationException(UserErrorMessage.DEVICE_ADD_FAIL_NO_DEVICE_PUBLIC_KEY, Response.Status.BAD_REQUEST);
+        } else if (StringUtils.isBlank(deviceDTO.getPublicKey()) || deviceDTO.getPublicKey().length() < 100) {
+            throw new WebApplicationException(UserErrorMessage.DEVICE_ADD_FAIL_INVALID_PUBLIC_KEY, Response.Status.BAD_REQUEST);
         }
     }
 }

@@ -3,6 +3,10 @@ package com.visucius.secp.DTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class DeviceDTO {
+
+    @JsonProperty
+    private long deviceID;
+
     @JsonProperty
     private String deviceName;
 
@@ -15,6 +19,12 @@ public class DeviceDTO {
     public DeviceDTO() {
 
     }
+
+    public DeviceDTO(long deviceID, String publicKey) {
+        this.deviceID = deviceID;
+        this.publicKey = publicKey;
+    }
+
     public DeviceDTO(long userID, String deviceName, String publicKey) {
         this.userID = userID;
         this.deviceName = deviceName;
@@ -43,5 +53,13 @@ public class DeviceDTO {
 
     public void setUserID(long userID) {
         this.userID = userID;
+    }
+
+    public long getDeviceID() {
+        return deviceID;
+    }
+
+    public void setDeviceID(long deviceID) {
+        this.deviceID = deviceID;
     }
 }

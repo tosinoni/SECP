@@ -24,13 +24,16 @@ public class UserResourceTest {
     private static final String verifyEmailUrl = "/user/verify/email";
     private static final String verifyUsernameUrl = "/user/verify/username";
     private static final String addDeviceUrl = "/user/device/";
-    private static final String verifyDeviceUrl = "/user/id/";
+    private static final String defaultUrl = "/user/id/";
 
 
     private UserDAO userDAO = Mockito.mock(UserDAO.class);
     private DeviceDAO deviceDAO = Mockito.mock(DeviceDAO.class);
     private UserController userController = new UserController(userDAO, deviceDAO);
     private UserRegistrationController userRegistrationController  = Mockito.mock((UserRegistrationController.class));
+
+    //test variables
+    private static final long userID = 1;
 
     @Rule
     public final ResourceTestRule resources = ResourceTestRule.builder()
@@ -116,7 +119,7 @@ public class UserResourceTest {
     @Test
     public void testIsDeviceRegisteredWithNoDeviceName()
     {
-        String url = verifyDeviceUrl + 1 + "/device/name/ ";
+        String url = defaultUrl + 1 + "/device/name/ ";
         Response response = resources.client().target(url).request().get();
         ResponseValidator.validate(response, 204);
     }
@@ -124,7 +127,7 @@ public class UserResourceTest {
     @Test
     public void testIsDeviceRegisteredForUserWithNoDevice()
     {
-        String url = verifyDeviceUrl + 1 + "/device/name/name";
+        String url = defaultUrl + 1 + "/device/name/name";
         Response response = resources.client().target(url).request().get();
         ResponseValidator.validate(response, 204);
 
@@ -136,7 +139,7 @@ public class UserResourceTest {
     @Test
     public void testIsDeviceRegisteredForUserWithDevice()
     {
-        String url = verifyDeviceUrl + 1 + "/device/name/name";
+        String url = defaultUrl + 1 + "/device/name/name";
         DeviceDTO deviceDTO = getDefaultDevice();
         Device device = new Device(deviceDTO.getDeviceName(), deviceDTO.getPublicKey());
 
@@ -217,6 +220,60 @@ public class UserResourceTest {
 
         Response response = resources.client().target(addDeviceUrl).request().post(Entity.json(deviceDTO));
         ResponseValidator.validate(response, 201);
+    }
+
+    @Test
+    public void testGetPublicKeysWithInvalidUserID()
+    {
+        String url = defaultUrl + 1 + "/publicKey";
+        Optional<User> user = Optional.absent();
+        Mockito.when(userDAO.find(1)).thenReturn(user);
+
+        Response response = resources.client().target(url).request().get();
+        ResponseValidator.validate(response, 204);
+    }
+
+    @Test
+    public void testGetPublicKeysForUserWithNoDevices()
+    {
+        String url = defaultUrl + userID + "/publicKey";
+        Optional<User> user = Optional.of(new User());
+        Mockito.when(userDAO.find(userID)).thenReturn(user);
+        Mockito.when(deviceDAO.getDevicesForUser(userID)).thenReturn(Arrays.asList());
+
+        Response response = resources.client().target(url).request().get();
+        ResponseValidator.validate(response, 204);
+    }
+
+    @Test
+    public void testGetPublicKeysForADeviceWithNoPublicKey()
+    {
+        String url = defaultUrl + userID + "/publicKey";
+        Device device = new Device();
+        device.setId(1);
+
+        Optional<User> user = Optional.of(new User());
+        Mockito.when(userDAO.find(userID)).thenReturn(user);
+        Mockito.when(deviceDAO.getDevicesForUser(userID)).thenReturn(Arrays.asList(device));
+
+        Response response = resources.client().target(url).request().get();
+        ResponseValidator.validate(response, 204);
+    }
+
+    @Test
+    public void testGetPublicKeysForUsersDevicesValidInput()
+    {
+        String url = defaultUrl + userID + "/publicKey";
+        Device device = new Device();
+        device.setId(1);
+        device.setPublicKey("key");
+
+        Optional<User> user = Optional.of(new User());
+        Mockito.when(userDAO.find(userID)).thenReturn(user);
+        Mockito.when(deviceDAO.getDevicesForUser(userID)).thenReturn(Arrays.asList(device));
+
+        Response response = resources.client().target(url).request().get();
+        ResponseValidator.validate(response, 200);
     }
 
     private DeviceDTO getDefaultDevice() {

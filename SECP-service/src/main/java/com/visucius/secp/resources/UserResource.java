@@ -89,4 +89,13 @@ public class UserResource {
 
         return Response.status(Response.Status.NO_CONTENT).build();
     }
+
+    @GET
+    @Path("/id/{id}/publicKey")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Timed
+    @UnitOfWork
+    public Response getUsersPublicKeys(@Auth @PathParam("id") long id) {
+        return userController.getUsersPublicKeys(id);
+    }
 }
