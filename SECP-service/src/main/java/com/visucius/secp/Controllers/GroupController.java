@@ -2,16 +2,12 @@ package com.visucius.secp.Controllers;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Sets;
-import com.visucius.secp.DTO.GroupCreateRequest;
-import com.visucius.secp.DTO.GroupModifyRequest;
+import com.visucius.secp.DTO.*;
 import com.visucius.secp.daos.GroupDAO;
 import com.visucius.secp.daos.PermissionDAO;
 import com.visucius.secp.daos.RolesDAO;
 import com.visucius.secp.daos.UserDAO;
-import com.visucius.secp.models.Group;
-import com.visucius.secp.models.Permission;
-import com.visucius.secp.models.Role;
-import com.visucius.secp.models.User;
+import com.visucius.secp.models.*;
 import com.visucius.secp.util.InputValidator;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -61,7 +57,7 @@ public class GroupController {
         group.setPermissions(getPermissions(request.permissions));
         Group createdGroup = groupRepository.save(group);
 
-        return Response.status(Response.Status.CREATED).entity(createdGroup.getId()).build();
+        return Response.status(Response.Status.CREATED).entity(getGroupResponse(createdGroup)).build();
     }
     public Response deletePermissions(GroupModifyRequest request, int groupID)
     {
@@ -123,7 +119,7 @@ public class GroupController {
     {
         group.setUsers(this.findUsersWithRolesAndPermissions(group.getRoles(), group.getPermissions()));
         Group createdGroup = groupRepository.save(group);
-        return Response.status(Response.Status.CREATED).entity(createdGroup.getId()).build();
+        return Response.status(Response.Status.CREATED).entity(getGroupResponse(createdGroup)).build();
     }
 
     private Group getGroup(int groupID)
@@ -285,6 +281,27 @@ public class GroupController {
         Set<Permission> permissions = new HashSet<>();
         permissionID.forEach(id -> permissions.add(permissionsRepository.find(id).get()));
         return permissions;
+    }
+
+    private GroupDTO getGroupResponse (Group group) {
+        GroupDTO groupDTO = new GroupDTO(group.getId());
+
+        Set<UserDTO> users = group.getUsers().stream()
+            .map(user -> {
+                return new UserDTO(user.getId(), getDevicesForUser(user));
+            }).collect(Collectors.toSet());
+
+        groupDTO.setUsers(users);
+        return groupDTO;
+    }
+
+    private Set<DeviceDTO> getDevicesForUser(User user) {
+        //return devices that have a public key
+        return user.getDevices().stream()
+            .filter(device -> !StringUtils.isEmpty(device.getPublicKey()))
+            .map(device -> {
+                return new DeviceDTO(device.getId(), device.getPublicKey());
+            }).collect(Collectors.toSet());
     }
 
     private boolean isPermissionValid(long id)
