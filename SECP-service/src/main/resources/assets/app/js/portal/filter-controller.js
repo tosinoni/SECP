@@ -8,26 +8,6 @@ angular.module('SECP')
             }
         });
 
-        $('#filtertable tbody').on('click', 'button[data-target="#delete"]', function () {
-            tablerow= this;
-            //Replace with SweetAlert
-            swal({
-              title: 'Are you sure?',
-              text: "You won't be able to revert this!",
-              type: 'warning',
-              showCancelButton: true,
-              confirmButtonColor: '#3085d6',
-              cancelButtonColor: '#d33',
-              confirmButtonText: 'Yes, delete it!'
-            })
-            .then((result) => {
-              if (result) {
-                filtertable.row($(tablerow).parents('tr')).remove().draw(false);
-                swal('Deleted!','The filtered keyword has been deleted.','success')
-              }
-            }).catch((result) => {});
-        });
-
         $scope.delete = function() {
             var self= this;
             swal({

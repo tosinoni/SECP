@@ -156,3 +156,14 @@ a:hover {
     padding: 6px;
     width: 100%;
 }
+
+.note
+{
+    color: black;
+    border: solid 1px #33c600;
+    background-color: #94f37c;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    padding: 14px 20px;
+}
