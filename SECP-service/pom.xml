@@ -76,6 +76,11 @@
             <artifactId>commons-validator</artifactId>
             <version>1.4.0</version>
         </dependency>
+        <dependency>
+            <groupId>io.dropwizard.modules</groupId>
+            <artifactId>dropwizard-flyway</artifactId>
+            <version>1.2.0-1</version>
+        </dependency>
     </dependencies>
 
     <build>

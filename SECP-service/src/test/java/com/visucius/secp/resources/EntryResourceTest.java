@@ -6,6 +6,7 @@ import com.visucius.secp.DTO.LoginRequestDTO;
 import com.visucius.secp.Controllers.User.LoginRequestController;
 import com.visucius.secp.Controllers.TokenController;
 import com.visucius.secp.Controllers.User.UserRegistrationController;
+import com.visucius.secp.daos.DeviceDAO;
 import com.visucius.secp.daos.UserDAO;
 import com.visucius.secp.helpers.ResponseValidator;
 import com.visucius.secp.models.LoginRole;
@@ -22,21 +23,15 @@ import javax.ws.rs.core.Response;
 public class EntryResourceTest {
 
     private static final String url = "/login";
-    private static final String verifyEmailUrl = "/user/verify/email";
-    private static final String verifyUsernameUrl = "/user/verify/username";
-    private static final String isUserAnAdminUrl = "/user/verify/admin/id/";
-
 
     private UserDAO userDAO = Mockito.mock(UserDAO.class);
     private TokenController tokenController = Mockito.mock((TokenController.class));
-    private UserRegistrationController userRegistrationController  = Mockito.mock((UserRegistrationController.class));
     private LoginRequestController loginRequestController = new LoginRequestController(tokenController, userDAO);
-    private UserController userController = new UserController(userDAO);
 
 
     @Rule
     public final ResourceTestRule resources = ResourceTestRule.builder()
-        .addResource(new EntryResource(userRegistrationController, loginRequestController, userController))
+        .addResource(new EntryResource(loginRequestController))
         .build();
 
     @Test
@@ -110,82 +105,6 @@ public class EntryResourceTest {
         ResponseValidator.validate(response, "loginRole", "NORMAL");
     }
 
-    @Test
-    public void testVerifyWithInValidEmail()
-    {
-        Response response = resources.client().target(verifyEmailUrl + "/invalid").request().get();
-        ResponseValidator.validate(response, 204);
-    }
-
-    @Test
-    public void testVerifyWithValidEmail()
-    {
-        String email = "joh@doe.com";
-        Mockito.when(userRegistrationController.isEmailValid(email)).thenReturn(true);
-        Response response = resources.client().target(verifyEmailUrl + "/" + email).request().get();
-        ResponseValidator.validate(response, 200);
-    }
-
-    @Test
-    public void testVerifyWithInValidUserName()
-    {
-        Response response = resources.client().target(verifyUsernameUrl + "/invalid").request().get();
-        ResponseValidator.validate(response, 204);
-    }
-
-    @Test
-    public void testVerifyWithValidUserName()
-    {
-        String username = "johnDoe";
-        Mockito.when(userRegistrationController.isUsernameValid(username)).thenReturn(true);
-        Response response = resources.client().target(verifyUsernameUrl + "/" + username).request().get();
-        ResponseValidator.validate(response, 200);
-    }
-
-    @Test
-    public void testIsUserAnAdminWithNullID()
-    {
-        Response response = resources.client().target(isUserAnAdminUrl + null).request().get();
-        ResponseValidator.validate(response, 204);
-    }
-
-    @Test
-    public void testIsUserAnAdminWithEmptyStringID()
-    {
-        Response response = resources.client().target(isUserAnAdminUrl + " ").request().get();
-        ResponseValidator.validate(response, 204);
-    }
-
-    @Test
-    public void testIsUserAnAdminWithLettersAsID()
-    {
-        Response response = resources.client().target(isUserAnAdminUrl + "abc").request().get();
-        ResponseValidator.validate(response, 204);
-    }
-
-    @Test
-    public void testIsUserAnAdminWithInvalidID()
-    {
-        long id = 12;
-        Optional<User> user = Optional.of(new User());
-        Mockito.when(userDAO.find(id)).thenReturn(user);
-        Response response = resources.client().target(isUserAnAdminUrl + id).request().get();
-        ResponseValidator.validate(response, 204);
-    }
-
-    @Test
-    public void testIsUserAnAdminWithValidID()
-    {
-        long id = 12;
-        User mockedUser = new User();
-        mockedUser.setLoginRole(LoginRole.ADMIN);
-
-        Optional<User> user = Optional.of(mockedUser);
-        Mockito.when(userDAO.find(id)).thenReturn(user);
-
-        Response response = resources.client().target(isUserAnAdminUrl + id).request().get();
-        ResponseValidator.validate(response, 200);
-    }
     private LoginRequestDTO createLoginInfo() {
         return new LoginRequestDTO("username", "password");
     }

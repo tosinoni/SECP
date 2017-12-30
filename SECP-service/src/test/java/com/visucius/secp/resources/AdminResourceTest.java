@@ -2,6 +2,7 @@ package com.visucius.secp.resources;
 
 import com.google.common.base.Optional;
 import com.visucius.secp.Controllers.Admin.AdminController;
+import com.visucius.secp.Controllers.User.UserRegistrationController;
 import com.visucius.secp.daos.UserDAO;
 import com.visucius.secp.helpers.ResponseValidator;
 import com.visucius.secp.models.LoginRole;
@@ -19,10 +20,12 @@ public class AdminResourceTest {
 
     private UserDAO userDAO = Mockito.mock(UserDAO.class);
     private AdminController adminController = new AdminController(userDAO);
+    private UserRegistrationController userRegistrationController = new UserRegistrationController(userDAO);
+
 
     @Rule
     public final ResourceTestRule resources = ResourceTestRule.builder()
-        .addResource(new AdminResource(adminController))
+        .addResource(new AdminResource(adminController, userRegistrationController))
         .build();
 
     @Test

@@ -1,5 +1,6 @@
 // Declare app level module which depends on filters, and services
-angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date', 'routeStyles', 'angular-jwt'])
+angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
+    'routeStyles', 'angular-jwt', 'ngWebCrypto', 'angular-uuid'])
   .config(function ($routeProvider, $locationProvider, jwtOptionsProvider, $httpProvider) {
 
     //add isAdmin function
@@ -149,7 +150,7 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date', 'rou
       authManager.redirectWhenUnauthenticated();
 
       $rootScope.getHomeUrl = function() {
-        if(!$rootScope.isAuthenticated) {
+        if(Auth.isTokenExpired()) {
             return '/';
         } else if(!$rootScope.isAdmin) {
             return '/chats'
@@ -158,11 +159,8 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date', 'rou
       }
 
       $rootScope.$on("$locationChangeStart", function(event) {
-
         // handle route changes
-        var loginRole = localStorage.getItem('loginRole');
-
-        if($rootScope.isAuthenticated && loginRole == Auth.ADMIN) {
+        if(!Auth.isTokenExpired()) {
             Auth.isUserAnAdmin().then(function(res){
                 $rootScope.isAdmin = res;
             });
