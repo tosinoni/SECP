@@ -9,6 +9,7 @@ import com.visucius.secp.daos.RolesDAO;
 import com.visucius.secp.daos.UserDAO;
 import com.visucius.secp.models.*;
 import com.visucius.secp.util.InputValidator;
+import com.visucius.secp.util.Util;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -297,8 +298,9 @@ public class GroupController {
 
     private Set<User> getUsersInGroup(Group group) {
         Set<User> users = new HashSet<>();
-        users.addAll(group.getUsers());
-        users.addAll(userRepository.findAdmins());
+        Util.addAllIfNotNull(users, group.getUsers());
+        Util.addAllIfNotNull(users, userRepository.findAdmins());
+
         return users;
     }
 
