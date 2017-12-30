@@ -1,6 +1,7 @@
 package com.visucius.secp.daos;
 
 import com.google.common.base.Optional;
+import com.visucius.secp.models.Device;
 import com.visucius.secp.models.User;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.HibernateException;
@@ -89,5 +90,17 @@ public class UserDAO extends AbstractDAO<User> {
      */
     public void delete(User entity) throws HibernateException {
         currentSession().delete(entity);
+    }
+
+    public List<User> findUsersWithRole(long roleID)
+    {
+        return (List<User>) namedQuery("com.visucius.secp.models.User.findUsersWithRole").
+            setParameter("roleID",roleID).list();
+    }
+
+    public List<User> findUsersWithPermissionLevel(long permissionID)
+    {
+        return (List<User>) namedQuery("com.visucius.secp.models.User.findUsersWithPermissionLevel").
+            setParameter("permissionID",permissionID).list();
     }
 }

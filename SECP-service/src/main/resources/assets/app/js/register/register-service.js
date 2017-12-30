@@ -5,7 +5,7 @@ angular.module('SECP')
 
     return {
         register : function(user) {
-            return $http.post("/SECP/register", user)
+            return $http.post("/SECP/admin/register", user)
             .then(function(res) {
                    return res;
             }, function(err) {

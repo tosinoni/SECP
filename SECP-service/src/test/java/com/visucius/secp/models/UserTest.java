@@ -112,7 +112,7 @@ public class UserTest {
 
         //testing the @JoinTable annotation
         NamedQueries namedQueries = ReflectTool.getClassAnnotation(User.class, NamedQueries.class);
-        assertEquals("NamedQueries:  size is not equal to 2", 2, namedQueries.value().length);
+        assertEquals("NamedQueries:  size is not equal to 4", 4, namedQueries.value().length);
 
         NamedQuery[] namedQueriesArray = namedQueries.value();
 
@@ -120,6 +120,10 @@ public class UserTest {
             "com.visucius.secp.models.User.findByUsername", namedQueriesArray[0].name());
         assertEquals("NamedQueries[1]: name is not equal",
             "com.visucius.secp.models.User.findByEmail", namedQueriesArray[1].name());
+        assertEquals("NamedQueries[2]: name is not equal",
+            "com.visucius.secp.models.User.findUsersWithRole", namedQueriesArray[2].name());
+        assertEquals("NamedQueries[3]: name is not equal",
+            "com.visucius.secp.models.User.findUsersWithPermissionLevel", namedQueriesArray[3].name());
     }
 
     @Test
@@ -145,5 +149,24 @@ public class UserTest {
         Enumerated e = ReflectTool.getFieldAnnotation(User.class, "loginRole", Enumerated.class);
 
         assertEquals("Enumerated loginRole: enum value is not equal", EnumType.STRING, e.value());
+    }
+
+    @Test
+    public void testDevices() {
+        AssertAnnotations.assertField( User.class, "devices", ManyToMany.class, JoinTable.class);
+
+        //testing the @JoinTable annotation
+        JoinTable j = ReflectTool.getFieldAnnotation(User.class, "devices", JoinTable.class);
+        assertEquals("JoinTable devices:  name is not equal", "user_devices", j.name());
+        assertEquals("JoinTable devices:  joinColumns size is not 1", 1, j.joinColumns().length);
+        assertEquals("JoinTable devices:  inverseJoinColumns size is not 1", 1, j.inverseJoinColumns().length);
+
+        //testing the joincolumn inside JoinColumns
+        JoinColumn joinColumn = j.joinColumns()[0];
+        assertEquals("JoinColumn devices: name is not equal", "user_id", joinColumn.name());
+
+        //testing the joincolumn inside inverseJoinColumns
+        joinColumn = j.inverseJoinColumns()[0];
+        assertEquals("JoinColumn devices: name is not equal", "device_id", joinColumn.name());
     }
 }

@@ -28,7 +28,7 @@ angular.module('SECP')
             if(token) {
                 return  jwtHelper.isTokenExpired(token);
             }
-            return false;
+            return true;
         },
 
         logout : function(){
@@ -40,13 +40,33 @@ angular.module('SECP')
 
             return $http.get("/SECP/user/verify/admin/id/" + userID)
             .then(function(res) {
-                console.log(res);
                 if (res.status == 200) {
                     return true;
                 }
                 return false
             }, function(err) {
                return false;
+            });
+        },
+
+        isDeviceRegisteredForUser: function(userID, name) {
+            return $http.get("/SECP/user/id/" + userID + "/device/name/" + name)
+            .then(function(res) {
+                if (res.status == 200) {
+                    return true;
+                }
+                return false
+            }, function(err) {
+                return false;
+            });
+        },
+
+        addPublicKey : function(req) {
+            return $http.post("/SECP/user/device", req)
+            .then(function(res) {
+                return res;
+            }, function(err) {
+                return err;
             });
         }
     }
