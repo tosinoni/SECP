@@ -141,7 +141,7 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
       authManager.redirectWhenUnauthenticated();
 
       $rootScope.getHomeUrl = function() {
-        if(!$rootScope.isAuthenticated) {
+        if(Auth.isTokenExpired()) {
             return '/';
         } else if(!$rootScope.isAdmin) {
             return '/chats'
@@ -151,7 +151,7 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
 
       $rootScope.$on("$locationChangeStart", function(event) {
         // handle route changes
-        if(Auth.isTokenExpired()) {
+        if(!Auth.isTokenExpired()) {
             Auth.isUserAnAdmin().then(function(res){
                 $rootScope.isAdmin = res;
             });

@@ -28,7 +28,7 @@ angular.module('SECP')
             if(token) {
                 return  jwtHelper.isTokenExpired(token);
             }
-            return false;
+            return true;
         },
 
         logout : function(){
