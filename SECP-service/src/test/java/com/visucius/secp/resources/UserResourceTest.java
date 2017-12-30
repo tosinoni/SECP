@@ -11,6 +11,7 @@ import com.visucius.secp.models.Device;
 import com.visucius.secp.models.LoginRole;
 import com.visucius.secp.models.User;
 import io.dropwizard.testing.junit.ResourceTestRule;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -175,10 +176,11 @@ public class UserResourceTest {
     }
 
     @Test
-    public void testAddDeviceWithNoPublicKey()
+    public void testAddDeviceWithInvalidPublicKey()
     {
         DeviceDTO deviceDTO = new DeviceDTO();
         deviceDTO.setDeviceName("name");
+        deviceDTO.setPublicKey("pubkey");
         Response response = resources.client().target(addDeviceUrl).request().post(Entity.json(deviceDTO));
         ResponseValidator.validate(response, 400);
     }
@@ -279,7 +281,7 @@ public class UserResourceTest {
     private DeviceDTO getDefaultDevice() {
         DeviceDTO deviceDTO = new DeviceDTO();
         deviceDTO.setDeviceName("name");
-        deviceDTO.setPublicKey("key");
+        deviceDTO.setPublicKey(StringUtils.leftPad("key", 100, '1'));
         deviceDTO.setUserID(1);
 
         return deviceDTO;
