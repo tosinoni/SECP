@@ -25,6 +25,7 @@ import io.dropwizard.setup.Environment;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import org.eclipse.jetty.servlet.ErrorPageErrorHandler;
+import org.flywaydb.core.Flyway;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,6 +84,11 @@ public class SECPService extends Application<SECPConfiguration> {
                     Environment environment) throws Exception {
         environment.jersey().setUrlPattern("/SECP/*");
 
+        Flyway flyway = new Flyway();
+        flyway.setDataSource(configuration.getDataSourceFactory().getUrl(),
+            configuration.getDataSourceFactory().getUser(), configuration.getDataSourceFactory().getPassword());
+        flyway.repair();
+        flyway.migrate();
 
         //********************** Register DAO *************************************************
         final UserDAO userDAO =  new UserDAO(hibernateBundle.getSessionFactory());
