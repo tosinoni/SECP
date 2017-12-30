@@ -1,19 +1,21 @@
 @import url("https://fonts.googleapis.com/css?family=Raleway:400,700");
-#profile {
+#editbutton {
+    text-align: left;
+    margin-top: 50px;
+}
+#photo-input {
+    width: 500px;
+}
+#display-name {
+    font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;    
+    text-align: center;
+    font-size: 30px;
+}
+#profile{
     margin-bottom: 50px;
     text-align: center;
 }
-#profile h4{
-    margin-top: 25px;
-    margin-bottom: 0;
-    text-transform: none;
-    font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-#profile p{
-    font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    margin-top: 0;
-}
-#role-heading, #permission-heading, #permission-item .list-group-item, #role-items .list-group-item{
+#role-heading, .list-heading, .list-group-item, #profile p{
     font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
     margin-top: 0;
 }
@@ -69,3 +71,24 @@ a:hover {
     font-size: 24px;
     color: #000;
 }
+input[type="text"]:disabled {
+    border: none;
+    background-color: #fff;
+    font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+#savebutton {
+    background: rgb(9, 228, 9);
+    color: #bce0fb;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 3px;
+    letter-spacing: 0.06em;
+    text-decoration: aliceblue;
+    outline: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+  #savebutton:hover {
+    background: rgb(32, 150, 21);
+    color: #bce0fb;
+  }

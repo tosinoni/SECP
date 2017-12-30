@@ -1,30 +1,35 @@
 <div>
     <div>
-        <div>
-            <a href="/" class="fa fa-edit"></a>
+        <div id="editbutton" ng-show="EditProfileAvailable()">
+            <input type="button" ng-click="EditProfile()" value="Edit Profile" />
         </div>
     </div>
     <div id="profile">
-        <img src="https://scontent.fxds1-1.fna.fbcdn.net/v/t1.0-9/19510125_10213767937303246_5095195573619394298_n.jpg?oh=755ee6580431b0ddd730bc20ce66a720&oe=5AC742E2"
-            class="img-responsive img-circle">
-        <h4>Lava Tahir</h4>
-        <p>lavatahir@gmail.com</p>
+        <div>
+            <img src="https://scontent.fykz1-1.fna.fbcdn.net/v/t1.0-1/c90.210.540.540/s160x160/19510125_10213767937303246_5095195573619394298_n.jpg?oh=7768b901dcef45df1ccfa57878be3e89&oe=5AC0FE69"
+                class="img-responsive img-circle">
+        </div>
+        <input type="file" id="photo-input" ng-show="IsImageFileVisible" />
+        <input type="text" name="display-name" id="display-name" ng-disabled="IsDisplayNameReadOnly" value="Lava Tahir" />
+        <p id="work-email">lavatahir@gmail.com</p>
+        <p id="username">ltahir</p>
 
         <div id="user-security-settings">
-            <h3 class="list-heading" id="permission-heading">Permission Level</h3>
-            <ul class="list-group" id="permission-item">
-                <li class="list-group-item" id="permission-heading">Top Secret</li>
+            <h3 class="list-heading " id="permission-heading ">Permission Level</h3>
+            <ul class="list-group " id="permission-item ">
+                <li class="list-group-item " id="permission-heading ">Top Secret</li>
             </ul>
-            <h3 class="list-heading" id="role-heading">Role(s)</h3>
-            <ul class="list-group" id="role-items">
-                <li class="list-group-item">Security</li>
-                <li class="list-group-item">Front End</li>
-                <li class="list-group-item">Developer</li>
-                <li class="list-group-item">Mob Boss</li>
+            <h3 class="list-heading " id="role-heading ">Role(s)</h3>
+            <ul class="list-group " id="role-items ">
+                <li class="list-group-item ">Security</li>
+                <li class="list-group-item ">Front End</li>
+                <li class="list-group-item ">Developer</li>
+                <li class="list-group-item ">Mob Boss</li>
             </ul>
         </div>
         <div class="btn-box">
-            <button type="submit" class="btn btn-submit">Log out</button>
+            <button type="submit " id="savebutton" ng-show="IsSaveVisible" ng-click="SaveChanges()">Save</button>
+            <button type="submit " class="btn btn-submit">Log out</button>
         </div>
     </div>
 </div>

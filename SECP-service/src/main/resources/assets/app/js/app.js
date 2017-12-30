@@ -57,6 +57,11 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date', 'rou
         controller: 'UserProfileController',
         css: 'css/user-profile.css',
       })
+      .when('/group-profile', {
+        templateUrl: 'views/profile/group-profile.html',
+        controller: 'GroupProfileController',
+        css: 'css/group-profile.css',
+      })
       .when('/portal', {
         templateUrl: 'views/portal/portal.html',
         controller: 'PortalController',
