@@ -38,11 +38,10 @@ public class UserDAO extends AbstractDAO<User> {
 
     public Optional<User> getUserWithGroups(long id)
     {
-        Optional<User> optionalUser = find(id);
-        if(optionalUser.isPresent())
-            Hibernate.initialize(optionalUser.get().getGroups());
-
-        return optionalUser;
+        Optional<User> userOptional = find(id);
+        if(userOptional.isPresent())
+            Hibernate.initialize(userOptional.get().getGroups());
+        return userOptional;
     }
 
     /**
