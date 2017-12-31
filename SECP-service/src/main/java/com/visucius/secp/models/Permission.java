@@ -7,6 +7,14 @@ import java.util.Set;
 
 @Entity
 @Table(name = "Permissions")
+@NamedQueries(
+    {
+        @NamedQuery(
+            name = "com.visucius.secp.models.Permission.findByName",
+            query = "from Permission p where p.level = :name"
+        )
+    }
+)
 public class Permission {
 
     @Id
@@ -51,6 +59,14 @@ public class Permission {
 
     public Set<User> getUsers() {
         return this.users;
+    }
+
+    public Set<Group> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(Set<Group> groups) {
+        this.groups = groups;
     }
 
     @Override
