@@ -2,7 +2,7 @@ package com.visucius.secp.Controllers.Admin;
 
 import com.google.common.base.Optional;
 import com.visucius.secp.DTO.AppCreateDTO;
-import com.visucius.secp.DTO.RolesOrPermissionResponseDTO;
+import com.visucius.secp.DTO.RolesOrPermissionDTO;
 import com.visucius.secp.daos.PermissionDAO;
 import com.visucius.secp.daos.RolesDAO;
 import com.visucius.secp.daos.UserDAO;
@@ -75,10 +75,10 @@ public class AdminController {
             throw new WebApplicationException(error, Response.Status.BAD_REQUEST);
         }
 
-        Set<RolesOrPermissionResponseDTO> response = new HashSet<>();
+        Set<RolesOrPermissionDTO> response = new HashSet<>();
         for (String name : request.getRoles()) {
             Role role = rolesDAO.save(new Role(name));
-            response.add(new RolesOrPermissionResponseDTO(role.getId(), role.getRole()));
+            response.add(new RolesOrPermissionDTO(role.getId(), role.getRole()));
         }
 
         return Response.status(Response.Status.CREATED).entity(response).build();
@@ -91,10 +91,10 @@ public class AdminController {
             throw new WebApplicationException(error, Response.Status.BAD_REQUEST);
         }
 
-        Set<RolesOrPermissionResponseDTO> response = new HashSet<>();
+        Set<RolesOrPermissionDTO> response = new HashSet<>();
         for (String name : request.getPermissions()) {
             Permission permission = permissionDAO.save(new Permission(name));
-            response.add(new RolesOrPermissionResponseDTO(permission.getId(), permission.getLevel()));
+            response.add(new RolesOrPermissionDTO(permission.getId(), permission.getLevel()));
         }
 
         return Response.status(Response.Status.CREATED).entity(response).build();
@@ -133,8 +133,8 @@ public class AdminController {
             return Response.status(Response.Status.NO_CONTENT).build();
         }
 
-        Set<RolesOrPermissionResponseDTO> response = roles.stream()
-            .map(role -> {return new RolesOrPermissionResponseDTO(role.getId(), role.getRole());})
+        Set<RolesOrPermissionDTO> response = roles.stream()
+            .map(role -> {return new RolesOrPermissionDTO(role.getId(), role.getRole());})
             .collect(Collectors.toSet());
 
         return Response.status(Response.Status.OK).entity(response).build();
@@ -147,8 +147,8 @@ public class AdminController {
             return Response.status(Response.Status.NO_CONTENT).build();
         }
 
-        Set<RolesOrPermissionResponseDTO> response = permissions.stream()
-            .map(permission -> {return new RolesOrPermissionResponseDTO(permission.getId(), permission.getLevel());})
+        Set<RolesOrPermissionDTO> response = permissions.stream()
+            .map(permission -> {return new RolesOrPermissionDTO(permission.getId(), permission.getLevel());})
             .collect(Collectors.toSet());
 
         return Response.status(Response.Status.OK).entity(response).build();
