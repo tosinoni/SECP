@@ -1,8 +1,7 @@
 package com.visucius.secp.Controllers;
 
 import com.google.common.base.Optional;
-import com.visucius.secp.DTO.GroupCreateRequest;
-import com.visucius.secp.DTO.GroupModifyRequest;
+import com.visucius.secp.DTO.*;
 import com.visucius.secp.daos.GroupDAO;
 import com.visucius.secp.daos.PermissionDAO;
 import com.visucius.secp.daos.RolesDAO;
@@ -313,7 +312,7 @@ public class GroupControllerTest {
 
 
         Response response = controller.addRolesToGroup(request, groupWithRolesID);
-        Response validResponse = Response.status(Response.Status.CREATED).entity(1L).build();
+        Response validResponse = Response.status(Response.Status.CREATED).entity(getGroupResponse()).build();
         assertEquals(response.getStatus(), validResponse.getStatus());
         assertEquals(response.getEntity(),  validResponse.getEntity());
     }
@@ -329,7 +328,7 @@ public class GroupControllerTest {
         );
 
         Response response = controller.addPermissionsToGroup(request, groupWithRolesID);
-        Response validResponse = Response.status(Response.Status.CREATED).entity(1L).build();
+        Response validResponse = Response.status(Response.Status.CREATED).entity(getGroupResponse()).build();
         assertEquals(response.getStatus(), validResponse.getStatus());
         assertEquals(response.getEntity(),  validResponse.getEntity());
     }
@@ -349,7 +348,7 @@ public class GroupControllerTest {
         );
 
         Response response = controller.addPermissionsToGroup(request, groupWithRolesID);
-        Response validResponse = Response.status(Response.Status.CREATED).entity(1L).build();
+        Response validResponse = Response.status(Response.Status.CREATED).entity(getGroupResponse()).build();
         assertEquals(response.getStatus(), validResponse.getStatus());
         assertEquals(response.getEntity(),  validResponse.getEntity());
     }
@@ -369,7 +368,7 @@ public class GroupControllerTest {
         );
 
         Response response = controller.addRolesToGroup(request, groupWithRolesID);
-        Response validResponse = Response.status(Response.Status.CREATED).entity(1L).build();
+        Response validResponse = Response.status(Response.Status.CREATED).entity(getGroupResponse()).build();
         assertEquals(response.getStatus(), validResponse.getStatus());
         assertEquals(response.getEntity(),  validResponse.getEntity());
     }
@@ -389,7 +388,7 @@ public class GroupControllerTest {
         );
 
         Response response = controller.deletePermissions(request, groupWithRolesID);
-        Response validResponse = Response.status(Response.Status.CREATED).entity(1L).build();
+        Response validResponse = Response.status(Response.Status.CREATED).entity(getGroupResponse()).build();
         assertEquals(response.getStatus(), validResponse.getStatus());
         assertEquals(response.getEntity(),  validResponse.getEntity());
     }
@@ -409,9 +408,10 @@ public class GroupControllerTest {
         );
 
         Response response = controller.deleteRoles(request, groupWithRolesID);
-        Response validResponse = Response.status(Response.Status.CREATED).entity(1L).build();
+        Response validResponse = Response.status(Response.Status.CREATED).entity(getGroupResponse()).build();
         assertEquals(response.getStatus(), validResponse.getStatus());
         assertEquals(response.getEntity(),  validResponse.getEntity());
+
     }
 
     @Test
@@ -420,7 +420,7 @@ public class GroupControllerTest {
         GroupModifyRequest request = new GroupModifyRequest();
 
         Response response =  controller.addRolesToGroup(request, groupWithRolesID);
-        Response validResponse = Response.status(Response.Status.CREATED).entity(1L).build();
+        Response validResponse = Response.status(Response.Status.CREATED).entity(getGroupResponse()).build();
         assertEquals(response.getStatus(), validResponse.getStatus());
         assertEquals(response.getEntity(),  validResponse.getEntity());
     }
@@ -435,8 +435,13 @@ public class GroupControllerTest {
         );
 
         Response response = controller.createGroup(request);
-        Response validResponse = Response.status(Response.Status.CREATED).entity(1L).build();
+        Response validResponse = Response.status(Response.Status.CREATED).entity(getGroupResponse()).build();
         assertEquals(response.getStatus(), validResponse.getStatus());
         assertEquals(response.getEntity(),  validResponse.getEntity());
+    }
+
+    private GroupDTO getGroupResponse () {
+        GroupDTO groupDTO = new GroupDTO(1L);
+        return groupDTO;
     }
 }
