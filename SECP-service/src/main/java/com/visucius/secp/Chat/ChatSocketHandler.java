@@ -54,6 +54,8 @@ public class ChatSocketHandler implements IMessageHandler {
     @Override
     @UnitOfWork
     public void notifySession(Message message) {
+
+        messageRepository.save(message);
         Group group = message.getGroup();
         User sender = message.getUser();
         for(IMessageReceiver messageReceiver: activeGroups.get(group))
