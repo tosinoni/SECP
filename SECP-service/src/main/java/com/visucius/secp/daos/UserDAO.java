@@ -1,6 +1,8 @@
 package com.visucius.secp.daos;
 
 import com.google.common.base.Optional;
+import com.visucius.secp.models.Device;
+import com.visucius.secp.models.LoginRole;
 import com.visucius.secp.models.User;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Hibernate;
@@ -110,5 +112,11 @@ public class UserDAO extends AbstractDAO<User> {
     {
         return (List<User>) namedQuery("com.visucius.secp.models.User.findUsersWithPermissionLevel").
             setParameter("permissionID",permissionID).list();
+    }
+
+    public List<User> findAdmins()
+    {
+        return (List<User>) namedQuery("com.visucius.secp.models.User.findAdmins").
+            setParameter("loginRole", LoginRole.ADMIN).list();
     }
 }
