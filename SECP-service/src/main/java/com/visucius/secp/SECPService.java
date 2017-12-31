@@ -1,6 +1,7 @@
 package com.visucius.secp;
 
 import com.visucius.secp.Chat.ChatServlet;
+import com.visucius.secp.Chat.ChatSocketCreator;
 import com.visucius.secp.Controllers.Admin.AdminController;
 import com.visucius.secp.Controllers.GroupController;
 import com.visucius.secp.Controllers.User.LoginRequestController;
@@ -133,7 +134,11 @@ public class SECPService extends Application<SECPConfiguration> {
         environment.getApplicationContext().setErrorHandler(epeh);
 
         //************************** WebSocket Servlet *************************************
-        ServletRegistration.Dynamic webSocket = environment.servlets().addServlet("ws", new ChatServlet());
+        ChatSocketCreator chatSocketCreator = new UnitOfWorkAwareProxyFactory(hibernateBundle)
+            .create(ChatSocketCreator.class,
+                new Class<?>[]  { UserDAO.class},
+                new Object[]    { userDAO});
+        ServletRegistration.Dynamic webSocket = environment.servlets().addServlet("ws", new ChatServlet(chatSocketCreator));
         webSocket.setAsyncSupported(true);
         webSocket.addMapping("/chat/*");
     }
