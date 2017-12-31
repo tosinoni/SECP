@@ -88,6 +88,7 @@ public class SECPService extends Application<SECPConfiguration> {
         Flyway flyway = new Flyway();
         flyway.setDataSource(configuration.getDataSourceFactory().getUrl(),
             configuration.getDataSourceFactory().getUser(), configuration.getDataSourceFactory().getPassword());
+        flyway.baseline();
         flyway.repair();
         flyway.migrate();
 
