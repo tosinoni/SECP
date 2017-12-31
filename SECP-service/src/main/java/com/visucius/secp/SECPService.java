@@ -2,6 +2,8 @@ package com.visucius.secp;
 
 import com.visucius.secp.Chat.ChatServlet;
 import com.visucius.secp.Chat.ChatSocketCreator;
+import com.visucius.secp.Chat.ChatSocketHandler;
+import com.visucius.secp.Chat.IMessageHandler;
 import com.visucius.secp.Controllers.Admin.AdminController;
 import com.visucius.secp.Controllers.GroupController;
 import com.visucius.secp.Controllers.User.LoginRequestController;
@@ -91,6 +93,7 @@ public class SECPService extends Application<SECPConfiguration> {
         final UserDAO userDAO =  new UserDAO(hibernateBundle.getSessionFactory());
         final GroupDAO groupDAO = new GroupDAO(hibernateBundle.getSessionFactory());
         final RolesDAO rolesDAO = new RolesDAO(hibernateBundle.getSessionFactory());
+        final MessageDAO messageDAO = new MessageDAO(hibernateBundle.getSessionFactory());
         final PermissionDAO permissionDAO = new PermissionDAO(hibernateBundle.getSessionFactory());
 
 
@@ -134,10 +137,16 @@ public class SECPService extends Application<SECPConfiguration> {
         environment.getApplicationContext().setErrorHandler(epeh);
 
         //************************** WebSocket Servlet *************************************
+        ChatSocketHandler chatSocketHandler = new UnitOfWorkAwareProxyFactory(hibernateBundle)
+            .create(ChatSocketHandler.class,
+                new Class<?>[]  { MessageDAO.class},
+                new Object[]    { messageDAO});
+
         ChatSocketCreator chatSocketCreator = new UnitOfWorkAwareProxyFactory(hibernateBundle)
             .create(ChatSocketCreator.class,
-                new Class<?>[]  { UserDAO.class},
-                new Object[]    { userDAO});
+                new Class<?>[]  { UserDAO.class, IMessageHandler.class},
+                new Object[]    { userDAO, chatSocketHandler});
+
         ServletRegistration.Dynamic webSocket = environment.servlets().addServlet("ws", new ChatServlet(chatSocketCreator));
         webSocket.setAsyncSupported(true);
         webSocket.addMapping("/chat/*");

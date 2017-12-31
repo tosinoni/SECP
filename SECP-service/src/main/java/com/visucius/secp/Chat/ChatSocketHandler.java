@@ -1,8 +1,11 @@
 package com.visucius.secp.Chat;
 
+import com.visucius.secp.daos.MessageDAO;
 import com.visucius.secp.models.Group;
 import com.visucius.secp.models.Message;
 import com.visucius.secp.models.User;
+import io.dropwizard.hibernate.UnitOfWork;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -10,10 +13,12 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ChatSocketHandler implements IMessageHandler {
 
     private ConcurrentHashMap<Group,Set<IMessageReceiver>> activeGroups;
+    private final MessageDAO messageRepository;
 
-    public ChatSocketHandler()
+    public ChatSocketHandler(MessageDAO messageRepository)
     {
         this.activeGroups = new ConcurrentHashMap<>();
+        this.messageRepository = messageRepository;
     }
 
     @Override
@@ -47,6 +52,7 @@ public class ChatSocketHandler implements IMessageHandler {
     }
 
     @Override
+    @UnitOfWork
     public void notifySession(Message message) {
         Group group = message.getGroup();
         User sender = message.getUser();

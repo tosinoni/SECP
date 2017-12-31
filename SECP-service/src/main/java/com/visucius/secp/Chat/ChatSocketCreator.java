@@ -14,10 +14,12 @@ public class ChatSocketCreator implements WebSocketCreator {
     private static final Logger log = Logger.getLogger(ChatSocketCreator.class);
 
     private final UserDAO userRepository;
+    private final IMessageHandler messageHandler;
 
-    public ChatSocketCreator(UserDAO userRepository)
+    public ChatSocketCreator(UserDAO userRepository, IMessageHandler messageHandler)
     {
         this.userRepository = userRepository;
+        this.messageHandler = messageHandler;
     }
 
     @Override
@@ -33,7 +35,7 @@ public class ChatSocketCreator implements WebSocketCreator {
             long id = Long.parseLong(userID);
             Optional<User> optionalUser = userRepository.getUserWithGroups(id);
             if(optionalUser.isPresent())
-                return new ChatSocketListener(optionalUser.get(), new ChatSocketHandler());
+                return new ChatSocketListener(optionalUser.get(), this.messageHandler);
             log.error("Invalid user id was passed in");
         }
         catch (NumberFormatException exception)
