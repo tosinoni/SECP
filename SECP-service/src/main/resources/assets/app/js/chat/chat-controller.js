@@ -4,6 +4,7 @@ angular.module('SECP')
   .controller('ChatController', ['$scope', '$modal', 'Chat',
     function ($scope, $modal, Chat) {
 
+
       //declaring variables
       $scope.contacts = [];
       $scope.currentUser = Chat.getCurrentUser();
@@ -37,19 +38,5 @@ angular.module('SECP')
          Chat.getMessages(contact).then(function(data) {
             $scope.messages = data;
          });
-      };
-    }])
-  .controller('ChatSaveController', ['$scope', '$modalInstance', 'chat',
-    function ($scope, $modalInstance, chat) {
-      $scope.chat = chat;
-
-
-
-      $scope.ok = function () {
-        $modalInstance.close($scope.chat);
-      };
-
-      $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
       };
     }]);

@@ -17,6 +17,8 @@
         <link href="css/app.css" rel="stylesheet">
         <link href="lib/sweetalert2/dist/sweetalert2.css" rel="stylesheet">
         <link href="lib/select2/dist/css/select2.css" rel="stylesheet">
+        <link href="lib/datatables.net-jqui/css/dataTables.jqueryui.min.css" rel="stylesheet">
+        <link href="lib/datatables.net-select-jqui/css/select.jqueryui.css" rel="stylesheet">
     </head>
     <body>
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -36,6 +38,7 @@
                     <li ng-cloak ng-show="isAdmin"><a href="/chats">Chat</a></li>
                     <li ng-cloak ng-show="isAdmin"><a href="/portal/manage">Manage</a></li>
                     <li ng-cloak ng-show="isAdmin"><a href="/portal/audit">Audit</a></li>
+                    <li ng-cloak ng-show="isAdmin"><a href="/portal/filter">Filter</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li ng-cloak ng-show="!isAuthenticated">
@@ -65,7 +68,12 @@
         <script src="lib/select2/dist/js/select2.js"></script>
         <script src="lib/moment/moment.js"></script>
         <script src="lib/bootstrap-css/js/bootstrap.min.js"></script>
+        <script src="lib/fingerprint/fingerprint.js"></script>
+        <script src="lib/angular-web-crypto/dist/ng-web-crypto.es5.js"></script>
+        <script src="lib/angular-uuids/angular-uuid.js"></script>
 
+        <script src="lib/datatables.net/js/jquery.dataTables.js"></script>
+        <script src="lib/datatables.net-select/js/dataTables.select.js"></script>
 
         <script src="js/app.js"></script>
         <script src="js/home/home-controller.js"></script>
@@ -73,6 +81,7 @@
         <script src="js/register/register-controller.js"></script>
         <script src="js/register/register-service.js"></script>
         <script src="js/portal/portal-controller.js"></script>
+        <script src="js/portal/filter-controller.js"></script>
 
 
         <script src="js/chat/chat-controller.js"></script>

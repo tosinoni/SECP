@@ -29,6 +29,7 @@ import io.dropwizard.setup.Environment;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import org.eclipse.jetty.servlet.ErrorPageErrorHandler;
+import org.flywaydb.core.Flyway;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +51,7 @@ public class SECPService extends Application<SECPConfiguration> {
             Role.class,
             Group.class,
             Permission.class,
+            Device.class,
             Void.class
         ) {
         @Override
@@ -76,6 +78,7 @@ public class SECPService extends Application<SECPConfiguration> {
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/manage", "index.html", "manage"));
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/manage/user", "index.html", "manage-user"));
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/manage/group", "index.html", "manage-group"));
+        bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/filter", "index.html", "filter"));
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/error/404", "index.html", "404"));
 
         bootstrap.addBundle(hibernateBundle);
@@ -88,6 +91,12 @@ public class SECPService extends Application<SECPConfiguration> {
                     Environment environment) throws Exception {
         environment.jersey().setUrlPattern("/SECP/*");
 
+        Flyway flyway = new Flyway();
+        flyway.setDataSource(configuration.getDataSourceFactory().getUrl(),
+            configuration.getDataSourceFactory().getUser(), configuration.getDataSourceFactory().getPassword());
+        flyway.baseline();
+        flyway.repair();
+        flyway.migrate();
 
         //********************** Register DAO *************************************************
         final UserDAO userDAO =  new UserDAO(hibernateBundle.getSessionFactory());
@@ -95,13 +104,15 @@ public class SECPService extends Application<SECPConfiguration> {
         final RolesDAO rolesDAO = new RolesDAO(hibernateBundle.getSessionFactory());
         final MessageDAO messageDAO = new MessageDAO(hibernateBundle.getSessionFactory());
         final PermissionDAO permissionDAO = new PermissionDAO(hibernateBundle.getSessionFactory());
+        final DeviceDAO deviceDAO =  new DeviceDAO(hibernateBundle.getSessionFactory());
+
 
 
         //********************** Register Services/Controllers *********************************
         final UserRegistrationController userRegistrationController = new UserRegistrationController(userDAO);
         final TokenController tokenController = new TokenController(configuration);
         final LoginRequestController loginRequestController = new LoginRequestController(tokenController, userDAO);
-        final UserController userController = new UserController(userDAO);
+        final UserController userController = new UserController(userDAO, deviceDAO);
         final AdminController adminController = new AdminController(userDAO);
         final GroupController groupController = new GroupController(groupDAO,userDAO,rolesDAO, permissionDAO);
 
@@ -128,8 +139,9 @@ public class SECPService extends Application<SECPConfiguration> {
 
         //************************** Registering Resources *************************************
         environment.jersey().register(
-            new EntryResource(userRegistrationController, loginRequestController, userController));
-        environment.jersey().register(new AdminResource(adminController));
+            new EntryResource(loginRequestController));
+        environment.jersey().register(new AdminResource(adminController, userRegistrationController));
+        environment.jersey().register(new UserResource(userController, userRegistrationController));
 
         //************************** Error Handling *************************************
         final ErrorPageErrorHandler epeh = new ErrorPageErrorHandler();

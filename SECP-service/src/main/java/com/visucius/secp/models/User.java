@@ -68,6 +68,12 @@ public class User implements Principal {
         inverseJoinColumns = { @JoinColumn(name = "permission_id") })
     private Set<Permission> permissions = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(name = "user_devices",
+        joinColumns = { @JoinColumn(name = "user_id") },
+        inverseJoinColumns = { @JoinColumn(name = "device_id") })
+    private Set<Device> devices = new HashSet<>();
+
     @Enumerated(value = EnumType.STRING)
     @Column(name = "login_role", nullable = false)
     private LoginRole loginRole = LoginRole.NORMAL;
@@ -161,6 +167,18 @@ public class User implements Principal {
 
     public void setLoginRole(LoginRole loginRole) {
         this.loginRole = loginRole;
+    }
+
+    public Set<Device> getDevices() {
+        return devices;
+    }
+
+    public void setDevices(Set<Device> devices) {
+        this.devices = devices;
+    }
+
+    public void addDevice (Device device) {
+        devices.add(device);
     }
 
     @Override
