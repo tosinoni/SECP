@@ -3,6 +3,11 @@ angular.module('SECP')
       //Beautifies select field to searchable dropdowns
       $('.audit-user-select').select2();
       $('.audit-group-select').select2();
+
+      //Used in filter as well as audit views
+      $('.permission-level-select').select2();
+      $('.role-select').select2();
+
       //Ensures the admin is not able to audit without specifying a user
       $scope.validateUserAudit = function() {
           if (!$scope.auditUser) {
@@ -28,7 +33,7 @@ angular.module('SECP')
           }
       }
       //Populates the advanced search time for user auditing
-      $('input[name=todate]').val(moment().format('YYYY-MM-DDTHH:mm'))
+      $('input[name=todate]').val(moment().format('YYYY-MM-DDTHH:mm'));
   }]);
 //Collapsible for User Audit Advanced Search
 angular.module('SECP').controller('UserAuditAdvancedSearch', function ($scope) {
