@@ -38,7 +38,7 @@ public class RolesOrPermissionDTO {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof UserDTO)) return false;
+        if (!(o instanceof RolesOrPermissionDTO)) return false;
         RolesOrPermissionDTO rp = (RolesOrPermissionDTO) o;
         return id == rp.id && name.equals(rp.name);
     }
