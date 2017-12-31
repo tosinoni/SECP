@@ -1,7 +1,6 @@
 package com.visucius.secp.daos;
 
 import com.google.common.base.Optional;
-import com.visucius.secp.models.Device;
 import com.visucius.secp.models.User;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Hibernate;
@@ -9,7 +8,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * A DAO for managing {@link User} objects.
@@ -33,6 +31,14 @@ public class UserDAO extends AbstractDAO<User> {
      */
     public Optional<User> find(long id) {
         return Optional.fromNullable(get(id));
+    }
+
+    public Optional<User> getUserWithGroups(long id)
+    {
+        Optional<User> userOptional = find(id);
+        if(userOptional.isPresent())
+            Hibernate.initialize(userOptional.get().getGroups());
+        return userOptional;
     }
 
     /**
