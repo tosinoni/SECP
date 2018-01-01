@@ -1,5 +1,6 @@
 package com.visucius.secp.Chat;
 
+import com.visucius.secp.DTO.MessageDTO;
 import com.visucius.secp.daos.MessageDAO;
 import com.visucius.secp.models.Group;
 import com.visucius.secp.models.Message;
@@ -7,12 +8,13 @@ import com.visucius.secp.models.User;
 import io.dropwizard.hibernate.UnitOfWork;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ChatSocketHandler implements IMessageHandler {
 
-    private ConcurrentHashMap<Group,Set<IMessageReceiver>> activeGroups;
+    private ConcurrentHashMap<Long,Set<IMessageReceiver>> activeGroups;
     private final MessageDAO messageRepository;
 
     public ChatSocketHandler(MessageDAO messageRepository)
@@ -26,14 +28,15 @@ public class ChatSocketHandler implements IMessageHandler {
         Set<Group> groups = messageReceiver.getUser().getGroups();
         for(Group group: groups)
         {
-            if(activeGroups.contains(group)) {
-                activeGroups.get(group).add(messageReceiver);
+            long groupID = group.getId();
+            if(activeGroups.contains(groupID)) {
+                activeGroups.get(groupID).add(messageReceiver);
             }
             else
             {
                 Set<IMessageReceiver> receivers = new HashSet<>();
                 receivers.add(messageReceiver);
-                activeGroups.put(group,receivers);
+                activeGroups.put(groupID,receivers);
             }
         }
     }
@@ -42,27 +45,64 @@ public class ChatSocketHandler implements IMessageHandler {
     public void detachSession(IMessageReceiver messageReceiver) {
         Set<Group> groups = messageReceiver.getUser().getGroups();
         for (Group group : groups) {
-            if(activeGroups.contains(group)) {
-                Set<IMessageReceiver> receivers = activeGroups.get(group);
-                receivers.remove(group);
+            long groupID = group.getId();
+            if(activeGroups.contains(groupID)) {
+                Set<IMessageReceiver> receivers = activeGroups.get(groupID);
+                receivers.remove(groupID);
                 if(receivers.isEmpty())
-                    activeGroups.remove(messageReceiver);
+                    activeGroups.remove(groupID);
             }
         }
     }
 
     @Override
     @UnitOfWork
-    public void notifySession(Message message) {
-
-        messageRepository.save(message);
-        Group group = message.getGroup();
-        User sender = message.getUser();
-        for(IMessageReceiver messageReceiver: activeGroups.get(group))
-        {
-            User receiver = messageReceiver.getUser();
-            if(!receiver.equals(sender))
-                messageReceiver.updateUser(message);
+    public void notifySession(MessageDTO message) {
+        long groupID = message.groupId;
+        long senderID = message.userId;
+        MessageDTO savedMessage = saveMessage(message);
+        for(IMessageReceiver messageReceiver: activeGroups.get(groupID)) {
+            long receiverID = messageReceiver.getUser().getId();
+            if (receiverID != senderID)
+                messageReceiver.updateUser(savedMessage);
         }
     }
+
+    private MessageDTO saveMessage(MessageDTO messageDTO)
+    {
+        long groupID = messageDTO.groupId;
+        User user = getUser(messageDTO.userId, groupID);
+        Group group = getGroup(groupID, user);
+        Message message = new Message(messageDTO.body,user,group, messageDTO.timestamp);
+        Message createdMessage = messageRepository.save(message);
+        messageDTO.messageId = createdMessage.getId();
+        return messageDTO;
+    }
+
+    private User getUser(long userID, long groupID) {
+        if (activeGroups.contains(groupID)) {
+            Set<IMessageReceiver> receivers = activeGroups.get(groupID);
+            Optional<IMessageReceiver> optionalReceiver = receivers.
+                stream().
+                filter((receiver) -> receiver.getUser().getId() == userID).findFirst();
+            if (optionalReceiver.isPresent())
+                return optionalReceiver.get().getUser();
+            else
+                throw new IllegalArgumentException("User id is not valid.");
+        }
+
+        throw new IllegalArgumentException("Group id is not valid.");
+    }
+
+    private Group getGroup(long groupID, User user)
+    {
+        Optional<Group> optionalGroup = user.getGroups().
+            stream().
+            filter(group -> group.getId() == groupID).findFirst();
+        if(optionalGroup.isPresent())
+            return optionalGroup.get();
+
+        throw new IllegalArgumentException("Group id is not valid.");
+    }
+
 }
