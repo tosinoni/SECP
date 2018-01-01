@@ -19,6 +19,7 @@
 #user-security-settings, #user-list {
     text-align: left;
 }
-.round {
-    border-radius: 50%;
+.list-group{
+    height: 200px;
+    overflow: auto;
 }
