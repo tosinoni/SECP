@@ -7,7 +7,8 @@ import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 
 public class ChatServlet extends WebSocketServlet {
 
-    private ChatSocketCreator chatSocketCreator;
+    private static final long serialVersionUID = 0L;
+    private transient ChatSocketCreator chatSocketCreator;
 
     public ChatServlet(ChatSocketCreator chatSocketCreator)
     {
@@ -16,6 +17,6 @@ public class ChatServlet extends WebSocketServlet {
 
     @Override
     public void configure(WebSocketServletFactory factory) {
-        factory.setCreator(chatSocketCreator);
+        factory.setCreator(this.chatSocketCreator);
     }
 }

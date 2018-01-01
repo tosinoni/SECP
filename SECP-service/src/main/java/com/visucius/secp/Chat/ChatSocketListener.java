@@ -40,11 +40,15 @@ public class ChatSocketListener implements WebSocketListener, IMessageReceiver {
         try
         {
             MessageDTO message = JsonUtil.convertStringToJson(value,MessageDTO.class);
-            this.messageHandler.notifySession(message);
+            this.messageHandler.notifySession(message, this);
         }
         catch (IOException ioException)
         {
-            log.error("Message received is not in correct format");
+            log.error("Message received is not in correct format",ioException);
+        }
+        catch (IllegalArgumentException argumentException)
+        {
+            log.error(argumentException.getMessage(),argumentException);
         }
     }
 

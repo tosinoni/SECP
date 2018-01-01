@@ -36,7 +36,16 @@ public class MessageController {
         List<Message> messages = messageRepository.findMessageWithGroupID(groupID,offset,limit);
         List<MessageDTO> messageDTOS = messages.stream().map(
             (message) ->
-            new MessageDTO(message.getId(),groupID,message.getUser().getId(),message.getTimestamp(), message.getBody()))
+            {
+                MessageDTO messageDTO = new MessageDTO(
+                    message.getId(),
+                    groupID,
+                    message.getUser().getId(),
+                    message.getBody());
+
+                messageDTO.setTimestamp(message.getTimestamp());
+                return messageDTO;
+            })
             .collect(Collectors.toList());
 
         return Response.status(Response.Status.OK).
