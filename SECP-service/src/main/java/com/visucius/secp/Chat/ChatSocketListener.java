@@ -1,7 +1,7 @@
 package com.visucius.secp.Chat;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.visucius.secp.models.Message;
+import com.visucius.secp.DTO.MessageDTO;
 import com.visucius.secp.models.User;
 import com.visucius.secp.util.JsonUtil;
 import org.apache.log4j.Logger;
@@ -39,7 +39,7 @@ public class ChatSocketListener implements WebSocketListener, IMessageReceiver {
         log.info("Message was sent from" + user.getUsername());
         try
         {
-            Message message = JsonUtil.convertStringToJson(value,Message.class);
+            MessageDTO message = JsonUtil.convertStringToJson(value,MessageDTO.class);
             this.messageHandler.notifySession(message);
         }
         catch (IOException ioException)
@@ -76,10 +76,9 @@ public class ChatSocketListener implements WebSocketListener, IMessageReceiver {
     }
 
     @Override
-    public boolean updateUser(Message message) {
+    public boolean updateUser(MessageDTO message) {
 
         try {
-            log.info("Message was received from" + message.getUser().getUsername());
             String messageString = JsonUtil.convertToJsonString(message);
             this.outbound.getRemote().sendString(messageString);
         }

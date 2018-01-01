@@ -6,6 +6,7 @@ import com.visucius.secp.Chat.ChatSocketHandler;
 import com.visucius.secp.Chat.IMessageHandler;
 import com.visucius.secp.Controllers.Admin.AdminController;
 import com.visucius.secp.Controllers.GroupController;
+import com.visucius.secp.Controllers.MessageController;
 import com.visucius.secp.Controllers.User.LoginRequestController;
 import com.visucius.secp.Controllers.TokenController;
 import com.visucius.secp.Controllers.User.UserController;
@@ -115,6 +116,7 @@ public class SECPService extends Application<SECPConfiguration> {
         final UserController userController = new UserController(userDAO, deviceDAO);
         final AdminController adminController = new AdminController(userDAO);
         final GroupController groupController = new GroupController(groupDAO,userDAO,rolesDAO, permissionDAO);
+        final MessageController messageController = new MessageController(messageDAO);
 
 
         //********************** Register authentication for User *****************************
@@ -136,6 +138,9 @@ public class SECPService extends Application<SECPConfiguration> {
         //************************** Group Resources *************************************
         environment.jersey().register(
             new GroupResource(groupController));
+
+        environment.jersey().register(
+            new MessageResource(messageController));
 
         //************************** Registering Resources *************************************
         environment.jersey().register(
