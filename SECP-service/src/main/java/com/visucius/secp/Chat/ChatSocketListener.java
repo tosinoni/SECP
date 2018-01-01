@@ -7,13 +7,10 @@ import com.visucius.secp.util.JsonUtil;
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketListener;
-import org.eclipse.jetty.websocket.api.annotations.*;
 
 import java.io.IOException;
 import java.util.Objects;
 
-
-@WebSocket
 public class ChatSocketListener implements WebSocketListener, IMessageReceiver {
 
     private static final Logger log = Logger.getLogger(ChatSocketListener.class);
