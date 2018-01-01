@@ -72,6 +72,7 @@ public class SECPService extends Application<SECPConfiguration> {
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/manage", "index.html", "manage"));
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/manage/user", "index.html", "manage-user"));
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/manage/group", "index.html", "manage-group"));
+        bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/filter", "index.html", "filter"));
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/error/404", "index.html", "404"));
 
         bootstrap.addBundle(hibernateBundle);
@@ -87,6 +88,7 @@ public class SECPService extends Application<SECPConfiguration> {
         Flyway flyway = new Flyway();
         flyway.setDataSource(configuration.getDataSourceFactory().getUrl(),
             configuration.getDataSourceFactory().getUser(), configuration.getDataSourceFactory().getPassword());
+        flyway.baseline();
         flyway.repair();
         flyway.migrate();
 

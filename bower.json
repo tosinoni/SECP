@@ -21,7 +21,11 @@
     "moment": "^2.19.3",
     "fingerprint": "^0.5.5",
     "angular-web-crypto": "^0.0.12",
-    "angular-uuids": "^0.0.4"
+    "angular-uuids": "^0.0.4",
+    "datatables.net": "^1.10.16",
+    "datatables.net-jqui": "^2.1.1",
+    "datatables.net-select": "^1.2.3",
+    "datatables.net-select-jqui": "^1.2.3"
   },
   "devDependencies": {
     "angular-mocks": "~1.6.7",

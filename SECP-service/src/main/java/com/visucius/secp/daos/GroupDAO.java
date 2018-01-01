@@ -2,6 +2,7 @@ package com.visucius.secp.daos;
 
 import com.google.common.base.Optional;
 import com.visucius.secp.models.Group;
+import com.visucius.secp.models.User;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
