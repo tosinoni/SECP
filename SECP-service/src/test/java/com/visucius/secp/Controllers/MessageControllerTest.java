@@ -45,8 +45,8 @@ public class MessageControllerTest {
                 MESSAGE_ID,
                 GROUP_ID,
                 USER_ID,
-                TIME,
                 body + i);
+            messageDTO.setTimestamp(TIME);
             messages.add(messageDTO);
         }
         return messages;
@@ -64,8 +64,9 @@ public class MessageControllerTest {
             Message message = new Message(
                 body + i,
                 user,
-                group,
-                TIME);
+                group);
+
+            message.setTimestamp(TIME);
             message.setId(MESSAGE_ID);
             messages.add(message);
         }

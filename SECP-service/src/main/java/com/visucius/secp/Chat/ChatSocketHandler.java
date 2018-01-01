@@ -7,6 +7,7 @@ import com.visucius.secp.models.Message;
 import com.visucius.secp.models.User;
 import io.dropwizard.hibernate.UnitOfWork;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -29,7 +30,7 @@ public class ChatSocketHandler implements IMessageHandler {
         for(Group group: groups)
         {
             long groupID = group.getId();
-            if(activeGroups.contains(groupID)) {
+            if(activeGroups.containsKey(groupID)) {
                 activeGroups.get(groupID).add(messageReceiver);
             }
             else
@@ -46,9 +47,9 @@ public class ChatSocketHandler implements IMessageHandler {
         Set<Group> groups = messageReceiver.getUser().getGroups();
         for (Group group : groups) {
             long groupID = group.getId();
-            if(activeGroups.contains(groupID)) {
+            if(activeGroups.containsKey(groupID)) {
                 Set<IMessageReceiver> receivers = activeGroups.get(groupID);
-                receivers.remove(groupID);
+                receivers.remove(messageReceiver);
                 if(receivers.isEmpty())
                     activeGroups.remove(groupID);
             }
@@ -57,10 +58,10 @@ public class ChatSocketHandler implements IMessageHandler {
 
     @Override
     @UnitOfWork
-    public void notifySession(MessageDTO message) {
-        long groupID = message.groupId;
-        long senderID = message.userId;
-        MessageDTO savedMessage = saveMessage(message);
+    public void notifySession(MessageDTO message, IMessageReceiver receiver) {
+        long groupID = message.getGroupId();
+        long senderID = receiver.getUser().getId();
+        MessageDTO savedMessage = saveMessage(message, receiver);
         for(IMessageReceiver messageReceiver: activeGroups.get(groupID)) {
             long receiverID = messageReceiver.getUser().getId();
             if (receiverID != senderID)
@@ -68,30 +69,22 @@ public class ChatSocketHandler implements IMessageHandler {
         }
     }
 
-    private MessageDTO saveMessage(MessageDTO messageDTO)
+    private MessageDTO saveMessage(MessageDTO messageDTO, IMessageReceiver receiver)
     {
-        long groupID = messageDTO.groupId;
-        User user = getUser(messageDTO.userId, groupID);
+        long groupID = messageDTO.getGroupId();
+        long senderID = receiver.getUser().getId();
+        User user = receiver.getUser();
         Group group = getGroup(groupID, user);
-        Message message = new Message(messageDTO.body,user,group, messageDTO.timestamp);
+        Message message = new Message(messageDTO.getBody(),user,group);
+        message.setTimestamp(new Date());
         Message createdMessage = messageRepository.save(message);
-        messageDTO.messageId = createdMessage.getId();
-        return messageDTO;
-    }
-
-    private User getUser(long userID, long groupID) {
-        if (activeGroups.contains(groupID)) {
-            Set<IMessageReceiver> receivers = activeGroups.get(groupID);
-            Optional<IMessageReceiver> optionalReceiver = receivers.
-                stream().
-                filter((receiver) -> receiver.getUser().getId() == userID).findFirst();
-            if (optionalReceiver.isPresent())
-                return optionalReceiver.get().getUser();
-            else
-                throw new IllegalArgumentException("User id is not valid.");
-        }
-
-        throw new IllegalArgumentException("Group id is not valid.");
+        MessageDTO savedMessage = new MessageDTO(
+            createdMessage.getId(),
+            createdMessage.getGroup().getId(),
+            senderID,
+            createdMessage.getBody());
+        savedMessage.setTimestamp(createdMessage.getTimestamp());
+        return savedMessage;
     }
 
     private Group getGroup(long groupID, User user)
@@ -102,7 +95,7 @@ public class ChatSocketHandler implements IMessageHandler {
         if(optionalGroup.isPresent())
             return optionalGroup.get();
 
-        throw new IllegalArgumentException("Group id is not valid.");
+        throw new IllegalArgumentException(String.format("Group id %d is not valid.",groupID));
     }
 
 }

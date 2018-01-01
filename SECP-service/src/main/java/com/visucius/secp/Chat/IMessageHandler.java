@@ -6,5 +6,5 @@ public interface IMessageHandler {
 
     void attachSession(IMessageReceiver messageReceiver);
     void detachSession(IMessageReceiver messageReceiver);
-    void notifySession(MessageDTO message);
+    void notifySession(MessageDTO message, IMessageReceiver receiver);
 }

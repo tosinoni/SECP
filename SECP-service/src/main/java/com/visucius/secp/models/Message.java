@@ -45,11 +45,10 @@ public class Message {
 
     }
 
-    public Message(String body, User user, Group group, Date timestamp) {
+    public Message(String body, User user, Group group) {
         this.body = body;
         this.user = user;
         this.group = group;
-        this.timestamp = timestamp;
     }
 
     public long getId(){return id;}
