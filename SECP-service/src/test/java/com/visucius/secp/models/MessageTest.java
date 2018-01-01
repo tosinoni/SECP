@@ -75,7 +75,7 @@ public class MessageTest {
     public void test_setAndGetId(){
         User user = new User();
         Group group = new Group("Group 1");
-        Message message = new Message("Body", user, group, new Date());
+        Message message = new Message("Body", user, group);
 
         message.setId(1);
         assertEquals("ID does not match",message.getId(),1);
@@ -84,13 +84,16 @@ public class MessageTest {
     @Test
     public void test_setAndGetTimestamp() throws ParseException {
 
+
+        User user = new User();
+        Group group = new Group("Group 1");
+        Message message = new Message("Body", user, group);
+
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         Date date = dateFormat.parse("01/01/2017");
         long time = date.getTime();
         Timestamp timestamp = new Timestamp(time);
-        User user = new User();
-        Group group = new Group("Group 1");
-        Message message = new Message("Body", user, group,timestamp);
+        message.setTimestamp(timestamp);
 
         assertEquals("timestamp not equal", message.getTimestamp(),date);
     }
@@ -99,7 +102,7 @@ public class MessageTest {
     public void test_setAndGetBody(){
         User user = new User();
         Group group = new Group("Group 1");
-        Message message = new Message("Body", user, group, new Date());
+        Message message = new Message("Body", user, group);
 
         message.setBody("TestBody");
         assertEquals("Body not equal", message.getBody(), "TestBody");
@@ -109,7 +112,7 @@ public class MessageTest {
     public void test_getGroup(){
         User user = new User();
         Group group = new Group("Group 1");
-        Message message = new Message("Body", user, group, new Date());
+        Message message = new Message("Body", user, group);
 
         assertEquals("Group not equal", message.getGroup(), group);
     }
