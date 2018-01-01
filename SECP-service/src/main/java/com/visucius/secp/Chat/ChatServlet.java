@@ -3,8 +3,6 @@ package com.visucius.secp.Chat;
 import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 
-
-
 public class ChatServlet extends WebSocketServlet {
 
     private static final long serialVersionUID = 0L;
