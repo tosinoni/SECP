@@ -64,6 +64,24 @@ public class UserRegistrationControllerTest {
     }
 
     @Test
+    public void DisplayNameIsTooLongTest()
+    {
+        UserRegistrationRequest request = new UserRegistrationRequest(
+            "verrylongfirstnameamefdsafdsafsdfddfdddddsssssssssfsdfsfsdfsfsdfsdfsdffdsfsfsfsf",
+            "farah",
+            "alifarah",
+            "verylongdisplaynameaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "test@gmail.com",
+            "Password1");
+        UserRegistrationResponse response = controller.registerUser(request);
+
+        assertFalse(response.success);
+        assertEquals(response.status, Response.Status.BAD_REQUEST);
+        assertTrue(response.errors.contains(UserErrorMessage.DISPLAY_NAME_INVALID));
+        assertEquals(response.getMessage(), UserErrorMessage.USER_NOT_CREATED);
+    }
+
+    @Test
     public void FirstNameIsEmptyTest()
     {
         UserRegistrationRequest request = new UserRegistrationRequest(
@@ -96,6 +114,24 @@ public class UserRegistrationControllerTest {
         assertFalse(response.success);
         assertEquals(response.status, Response.Status.BAD_REQUEST);
         assertTrue(response.errors.contains(UserErrorMessage.LAST_NAME_INVALID));
+        assertEquals(response.getMessage(), UserErrorMessage.USER_NOT_CREATED);
+    }
+
+    @Test
+    public void DisplayNameIsEmptyTest()
+    {
+        UserRegistrationRequest request = new UserRegistrationRequest(
+            "verrylongfirstnameamefdsafdsafsdfddfdddddsssssssssfsdfsfsdfsfsdfsdfsdffdsfsfsfsf",
+            "farah",
+            "alifarah",
+            "",
+            "test@gmail.com",
+            "Password1");
+        UserRegistrationResponse response = controller.registerUser(request);
+
+        assertFalse(response.success);
+        assertEquals(response.status, Response.Status.BAD_REQUEST);
+        assertTrue(response.errors.contains(UserErrorMessage.DISPLAY_NAME_INVALID));
         assertEquals(response.getMessage(), UserErrorMessage.USER_NOT_CREATED);
     }
 
