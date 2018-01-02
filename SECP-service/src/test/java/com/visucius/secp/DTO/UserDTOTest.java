@@ -10,12 +10,25 @@ import static org.junit.Assert.assertEquals;
 public class UserDTOTest {
     private final long userID = 1;
 
-
     @Test
     public void testUserID() {
         UserDTO userDTO = new UserDTO(userID);
         userDTO.setUserID(userID);
         assertEquals("user id is not equal", userID, userDTO.getUserID());
+    }
+
+    @Test
+    public void testDisplayName(){
+        UserDTO userDTO = new UserDTO(userID);
+        userDTO.setDisplayName("user1");
+        assertEquals("Display Name is not equal", "user1", userDTO.getDisplayName());
+    }
+
+    @Test
+    public void testAvatarURL(){
+        UserDTO userDTO = new UserDTO(userID);
+        userDTO.setAvatar_url("mxc://matrix.org/wefh34uihSDRGhw34");
+        assertEquals("Avatar URL is not equal", "mxc://matrix.org/wefh34uihSDRGhw34", userDTO.getAvatar_url());
     }
 
     @Test

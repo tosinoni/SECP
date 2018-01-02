@@ -35,6 +35,7 @@ public class UserRegistrationControllerTest {
             "verrylongfirstnameamefdsafdsafsdfddfdddddsssssssssfsdfsfsdfsfsdfsdfsdffdsfsfsfsf",
             "farah",
             "alifarah",
+            "afarah",
             "test@gmail.com",
             "Password1");
         UserRegistrationResponse response = controller.registerUser(request);
@@ -51,6 +52,7 @@ public class UserRegistrationControllerTest {
             "ali",
             "verrylonglastnameamefdsafdsafsdfddfdddddsssssssssfsdfsfsdfsfsdfsdfsdffdsfsfsfsf",
             "alifarah",
+            "afarah",
             "test@gmail.com",
             "Password1");
         UserRegistrationResponse response = controller.registerUser(request);
@@ -68,6 +70,7 @@ public class UserRegistrationControllerTest {
             "",
             "farah",
             "alifarah",
+            "afarah",
             "test@gmail.com",
             "Password1");
         UserRegistrationResponse response = controller.registerUser(request);
@@ -85,6 +88,7 @@ public class UserRegistrationControllerTest {
             "ali",
             "",
             "alifarah",
+            "afarah",
             "test@gmail.com",
             "Password1");
         UserRegistrationResponse response = controller.registerUser(request);
@@ -101,6 +105,7 @@ public class UserRegistrationControllerTest {
             "ali",
             "farah",
             "alifarah",
+            "afarah",
             "test@gmail.com",
             "");
         UserRegistrationResponse response = controller.registerUser(request);
@@ -117,6 +122,7 @@ public class UserRegistrationControllerTest {
             "ali",
             "farah",
             "alifarah",
+            "afarah",
             "test@gmail.com",
             "pass");
         UserRegistrationResponse response = controller.registerUser(request);
@@ -133,6 +139,7 @@ public class UserRegistrationControllerTest {
             "ali",
             "farah",
             "alifarah",
+            "afarah",
             "test@gmail.com",
             "Verylongpassword12342343243242324323");
         UserRegistrationResponse response = controller.registerUser(request);
@@ -149,6 +156,7 @@ public class UserRegistrationControllerTest {
             "ali",
             "farah",
             "alifarah",
+            "afarah",
             "test@gmail.com",
             "password1");
         UserRegistrationResponse response = controller.registerUser(request);
@@ -166,6 +174,7 @@ public class UserRegistrationControllerTest {
             "ali",
             "farah",
             "alifarah",
+            "afarah",
             "testgmail.com",
             "Password1");
         UserRegistrationResponse response = controller.registerUser(request);
@@ -183,6 +192,7 @@ public class UserRegistrationControllerTest {
             "ali",
             "farah",
             "alifarah",
+            "afarah",
             "",
             "Password!");
         UserRegistrationResponse response = controller.registerUser(request);
@@ -200,6 +210,7 @@ public class UserRegistrationControllerTest {
             "ali",
             "farah",
             "alifarah",
+            "afarah",
             "test@gmail.com",
             "Password1");
         UserRegistrationResponse response = controller.registerUser(request);
@@ -216,6 +227,7 @@ public class UserRegistrationControllerTest {
             "ali",
             "farah",
             "duplicateUsername",
+            "afarah",
             "alifarah",
             "Password!");
         UserRegistrationResponse response = controller.registerUser(request);
@@ -233,6 +245,7 @@ public class UserRegistrationControllerTest {
             "ali",
             "farah",
             "alifarah",
+            "afarah",
             "duplicate@email.com",
             "Password!");
         UserRegistrationResponse response = controller.registerUser(request);

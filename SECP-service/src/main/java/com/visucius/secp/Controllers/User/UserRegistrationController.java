@@ -43,7 +43,7 @@ public class UserRegistrationController{
         {
             try {
                 String hashPassword = PasswordUtil.createHash(request.password);
-                User user = new User(request.firstName, request.lastName, request.userName, request.email, hashPassword);
+                User user = new User(request.firstName, request.lastName, request.userName, request.displayName, request.email, hashPassword);
                 User createdUser = userDAO.save(user);
                 return new UserRegistrationResponse(true, UserErrorMessage.USER_CREATED, Response.Status.CREATED, errors, createdUser.getId());
 
@@ -76,9 +76,11 @@ public class UserRegistrationController{
 
         if(!InputValidator.isNameValid(request.userName))
         {
-            errors.add(UserErrorMessage.User_NAME_INVALID);
+            errors.add(UserErrorMessage.USER_NAME_INVALID);
         }
-
+        if(!InputValidator.isNameValid(request.displayName)){
+            errors.add(UserErrorMessage.DISPLAY_NAME_INVALID);
+        }
         if(!InputValidator.isEmailValid(request.email))
         {
             errors.add(UserErrorMessage.EMAIL_INVALID);

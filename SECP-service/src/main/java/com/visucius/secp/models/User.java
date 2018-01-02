@@ -1,6 +1,7 @@
 package com.visucius.secp.models;
 
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.URL;
 
 import javax.persistence.*;
 
@@ -57,6 +58,13 @@ public class User implements Principal {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "displayname", nullable = false)
+    private String displayname;
+
+    @URL
+    @Column(name = "avatar_url", nullable = false)
+    private String avatar_url;
+
     @ManyToMany
     @JoinTable(name = "user_roles",
         joinColumns = { @JoinColumn(name = "user_id") },
@@ -85,7 +93,7 @@ public class User implements Principal {
     public  User () {
 
     }
-    public User(String firstname, String lastname, String userName, String email, String password) {
+    public User(String firstname, String lastname, String userName, String displayname, String email, String password) {
         this.firstname = firstname;
         this.username = userName;
         this.lastname = lastname;
@@ -94,7 +102,7 @@ public class User implements Principal {
     }
 
     public User(String userName, String email) {
-        this(null, null, userName, email, null);
+        this(null, null, userName,null, email, null);
     }
 
     public long getId() {
@@ -156,6 +164,14 @@ public class User implements Principal {
     public Set<Group> getGroups() {
         return groups;
     }
+
+    public String getDisplayName(){ return displayname; }
+
+    public void setDisplayName(String displayname){ this.displayname = displayname; }
+
+    public String getAvatar_url(){ return avatar_url; }
+
+    public void setAvatar_url(String avatar_url){ this.avatar_url = avatar_url; }
 
     /*
      * The below three methods are needed for authentication and authorization

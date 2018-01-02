@@ -14,7 +14,8 @@ public interface UserErrorMessage {
     //Register error messages
     String FIRST_NAME_INVALID = "First name is not valid.";
     String LAST_NAME_INVALID = "Last name is not valid.";
-    String User_NAME_INVALID = "Username is not valid.";
+    String USER_NAME_INVALID = "Username is not valid.";
+    String DISPLAY_NAME_INVALID = "Display name is not valid.";
     String EMAIL_INVALID = "Email is not valid.";
     String PASSWORD_INVALID = "Password is not valid";
     String USER_CREATED = "User Created";
@@ -33,5 +34,11 @@ public interface UserErrorMessage {
     String DEVICE_GET_FAIL_NO_DEVICE_EXISTS = "No device exists for user.";
     String DEVICE_GET_FAIL_NO_PUBLIC_KEY_EXISTS = "No public key exist for all user's devices.";
 
-
+    //UserProfile error messages
+    String DISPLAY_NAME_FAILED = "Failed to set the display name.";
+    String DISPLAY_NAME_FAILED_NO_DISPLAY_NAME = "Failed to set the display name. No display name chosen.";
+    String DISPLAY_NAME_FAILED_USER_NOT_FOUND = "Failed to set the display name. User not found.";
+    String AVATAR_URL_FAILED = "Failed to set the Avatar URL.";
+    String AVATAR_URL_FAILED_NO_AVATAR_URL = "Failed to set the Avatar URL. No Avatar chosen.";
+    String AVATAR_URL_FAILED_AVATAR_URL_NOT_FOUND = "Failed to set the Avatar URL. Avatar not found.";
 }

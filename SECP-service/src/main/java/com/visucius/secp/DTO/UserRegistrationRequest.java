@@ -14,6 +14,9 @@ public class UserRegistrationRequest {
     public String userName;
 
     @JsonProperty
+    public String displayName;
+
+    @JsonProperty
     public String email;
 
     @JsonProperty
@@ -24,11 +27,12 @@ public class UserRegistrationRequest {
 
     }
 
-    public UserRegistrationRequest(String firstName, String lastName, String userName ,String email, String password)
+    public UserRegistrationRequest(String firstName, String lastName, String userName , String displayName, String email, String password)
     {
         this.firstName = firstName;
         this.lastName =lastName;
         this.userName = userName;
+        this.displayName = displayName;
         this.email = email;
         this.password = password;
     }
