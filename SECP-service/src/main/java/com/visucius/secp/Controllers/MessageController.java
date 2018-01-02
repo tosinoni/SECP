@@ -21,10 +21,7 @@ public class MessageController {
     }
 
 
-    public Response getMessagesForGroup(
-        long groupID,
-        int offset,
-        int limit)
+    public Response getMessagesForGroup(long groupID, int offset, int limit)
     {
         if(offset < 0)
             offset = 0;
@@ -41,7 +38,8 @@ public class MessageController {
                     message.getId(),
                     groupID,
                     message.getUser().getId(),
-                    message.getBody());
+                    message.getBody(),
+                    MessageDTO.MessageType.MESSAGE);
 
                 messageDTO.setTimestamp(message.getTimestamp());
                 return messageDTO;

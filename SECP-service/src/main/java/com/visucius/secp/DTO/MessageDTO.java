@@ -14,7 +14,7 @@ public class MessageDTO {
     private long groupId;
 
     @JsonProperty
-    private long userId;
+    private long senderId;
 
     @JsonProperty
     private Date timestamp;
@@ -22,25 +22,37 @@ public class MessageDTO {
     @JsonProperty
     private String body;
 
+    @JsonProperty
+    private MessageType reason;
+
     public MessageDTO()
     {
 
     }
 
-    public MessageDTO(long messageId, long groupId, long userId, String body)
+    public MessageDTO(long messageId, long groupId, long senderId, String body, MessageType reason)
     {
         this.messageId = messageId;
         this.groupId = groupId;
-        this.userId = userId;
+        this.senderId = senderId;
         this.body = body;
+        this.reason = reason;
     }
 
     public long getGroupId() {
         return this.groupId;
     }
 
+    public MessageType getReason() {
+        return this.reason;
+    }
+
     public void setTimestamp(Date timestamp) {
         this.timestamp = new Date(timestamp.getTime());
+    }
+
+    public Date getTimestamp() {
+        return this.timestamp;
     }
 
     public String getBody() {
@@ -57,11 +69,18 @@ public class MessageDTO {
 
         return messageDTO.messageId == this.messageId
             && this.body.equals(messageDTO.body) && this.groupId == messageDTO.groupId
-            && this.timestamp.equals(messageDTO.timestamp) && this.userId == messageDTO.userId;
+            && this.timestamp.equals(messageDTO.timestamp) && this.senderId == messageDTO.senderId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.body,this.messageId,this.userId,this.groupId,this.timestamp);
+        return Objects.hash(this.body,this.messageId,this.senderId,this.groupId,this.timestamp);
+    }
+
+    public enum MessageType
+    {
+        @JsonProperty("message")
+        MESSAGE,
+
     }
 }

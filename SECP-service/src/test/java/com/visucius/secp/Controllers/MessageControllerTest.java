@@ -45,7 +45,8 @@ public class MessageControllerTest {
                 MESSAGE_ID,
                 GROUP_ID,
                 USER_ID,
-                body + i);
+                body + i,
+                MessageDTO.MessageType.MESSAGE);
             messageDTO.setTimestamp(TIME);
             messages.add(messageDTO);
         }
