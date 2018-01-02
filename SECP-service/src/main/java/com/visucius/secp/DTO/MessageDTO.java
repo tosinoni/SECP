@@ -52,7 +52,7 @@ public class MessageDTO {
     }
 
     public Date getTimestamp() {
-        return this.timestamp;
+        return new Date(this.timestamp.getTime());
     }
 
     public String getBody() {
