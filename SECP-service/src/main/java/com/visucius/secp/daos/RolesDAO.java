@@ -35,4 +35,10 @@ public class RolesDAO extends AbstractDAO<Role> {
     public void delete(Role entity) throws HibernateException {
         currentSession().delete(entity);
     }
+
+    public Role findByName(String name) {
+        return (Role)
+            namedQuery("com.visucius.secp.models.Role.findByName").
+                setParameter("name",name).uniqueResult();
+    }
 }

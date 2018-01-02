@@ -8,4 +8,8 @@ public class Util {
             list.addAll(c);
         }
     }
+
+    public static<E> boolean isCollectionEmpty(Collection<E> list) {
+        return list == null || list.isEmpty();
+    }
 }

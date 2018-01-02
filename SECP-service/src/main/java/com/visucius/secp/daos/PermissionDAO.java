@@ -34,4 +34,10 @@ public class PermissionDAO extends AbstractDAO<Permission> {
     public void delete(Permission entity) throws HibernateException {
         currentSession().delete(entity);
     }
+
+    public Permission findByName(String name) {
+        return (Permission)
+            namedQuery("com.visucius.secp.models.Permission.findByName").
+                setParameter("name",name).uniqueResult();
+    }
 }
