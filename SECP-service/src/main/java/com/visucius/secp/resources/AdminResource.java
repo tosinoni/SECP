@@ -3,6 +3,7 @@ package com.visucius.secp.resources;
 import com.codahale.metrics.annotation.Timed;
 import com.visucius.secp.Controllers.Admin.AdminController;
 import com.visucius.secp.Controllers.User.UserRegistrationController;
+import com.visucius.secp.DTO.AppCreateDTO;
 import com.visucius.secp.DTO.UserRegistrationRequest;
 import com.visucius.secp.DTO.UserRegistrationResponse;
 import io.dropwizard.auth.Auth;
@@ -58,5 +59,49 @@ public class AdminResource {
         }
 
         throw new WebApplicationException(response.getErrors(), response.status);
+    }
+
+    @POST
+    @Timed
+    @UnitOfWork
+    @Path("/roles")
+    public Response createRoles(@Auth AppCreateDTO request) {
+        return adminController.registerRoles(request);
+    }
+
+    @POST
+    @Timed
+    @UnitOfWork
+    @Path("/permissions")
+    public Response createPermissions(@Auth AppCreateDTO request) {
+        return adminController.registerPermissions(request);
+    }
+
+    @DELETE
+    @Path("/role/id/{id}")
+    @UnitOfWork
+    public Response deleteRole(@Auth @PathParam("id") String id) {
+        return adminController.deleteRole(id);
+    }
+
+    @DELETE
+    @Path("/permission/id/{id}")
+    @UnitOfWork
+    public Response deletePermission(@Auth @PathParam("id") String id) {
+        return adminController.deletePermission(id);
+    }
+
+    @GET
+    @Path("/roles")
+    @UnitOfWork
+    public Response getAllRoles() {
+        return adminController.getAllRoles();
+    }
+
+    @GET
+    @Path("/permissions")
+    @UnitOfWork
+    public Response getAllPermissions() {
+        return adminController.getAllPermissions();
     }
 }

@@ -7,6 +7,14 @@ import java.util.Set;
 
 @Entity
 @Table(name = "Roles")
+@NamedQueries(
+    {
+        @NamedQuery(
+            name = "com.visucius.secp.models.Role.findByName",
+            query = "from Role r where r.role = :name"
+        )
+    }
+)
 public class Role {
 
     @Id
@@ -54,6 +62,14 @@ public class Role {
 
     public void setUsers(Set<User> users) {
         this.users = users;
+    }
+
+    public Set<Group> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(Set<Group> groups) {
+        this.groups = groups;
     }
 
     @Override

@@ -6,20 +6,20 @@ import javax.persistence.*;
 
 import static org.junit.Assert.assertEquals;
 
-public class RoleTest {
+public class PermissionTest {
 
     @Test
     public void testRoleForEntityAndTable() {
-        AssertAnnotations.assertType(Role.class, Entity.class, Table.class, NamedQueries.class);
+        AssertAnnotations.assertType(Permission.class, Entity.class, Table.class, NamedQueries.class);
     }
 
     @Test
     public void testId() {
         //testing all the annotations on the id field
-        AssertAnnotations.assertField( Role.class, "id", Id.class, GeneratedValue.class, Column.class);
+        AssertAnnotations.assertField( Permission.class, "id", Id.class, GeneratedValue.class, Column.class);
 
         //testing the @column annotation
-        Column c = ReflectTool.getFieldAnnotation(Role.class, "id", Column.class);
+        Column c = ReflectTool.getFieldAnnotation(Permission.class, "id", Column.class);
 
         assertEquals("column id:  name is not equal", "id", c.name());
         assertEquals("column id: unique is false", true, c.unique());
@@ -27,14 +27,14 @@ public class RoleTest {
     }
 
     @Test
-    public void testRole() {
+    public void testLevel() {
         //testing all the annotations on the id field
-        AssertAnnotations.assertField( Role.class, "role", Column.class);
+        AssertAnnotations.assertField( Permission.class, "level", Column.class);
 
         //testing the @column annotation
-        Column c = ReflectTool.getFieldAnnotation(Role.class, "role", Column.class);
+        Column c = ReflectTool.getFieldAnnotation(Permission.class, "level", Column.class);
 
-        assertEquals("column id:  name is not equal", "role", c.name());
+        assertEquals("column id:  name is not equal", "level", c.name());
         assertEquals("column id: unique is false", true, c.unique());
         assertEquals("column id: nullable is true", false, c.nullable());
     }
@@ -42,36 +42,36 @@ public class RoleTest {
     @Test
     public void testUsers() {
         //testing all the annotations on the id field
-        AssertAnnotations.assertField( Role.class, "users", ManyToMany.class);
+        AssertAnnotations.assertField( Permission.class, "users", ManyToMany.class);
 
         //testing the @column annotation
-        ManyToMany m = ReflectTool.getFieldAnnotation(Role.class, "users", ManyToMany.class);
+        ManyToMany m = ReflectTool.getFieldAnnotation(Permission.class, "users", ManyToMany.class);
 
-        assertEquals("ManyToMany:  mappedBy is not equal", "roles", m.mappedBy());
+        assertEquals("ManyToMany:  mappedBy is not equal", "permissions", m.mappedBy());
     }
 
 
     @Test
     public void testGroups() {
         //testing all the annotations on the id field
-        AssertAnnotations.assertField( Role.class, "groups", ManyToMany.class);
+        AssertAnnotations.assertField( Permission.class, "groups", ManyToMany.class);
 
         //testing the @column annotation
-        ManyToMany m = ReflectTool.getFieldAnnotation(Role.class, "groups", ManyToMany.class);
+        ManyToMany m = ReflectTool.getFieldAnnotation(Permission.class, "groups", ManyToMany.class);
 
-        assertEquals("ManyToMany:  mappedBy is not equal", "roles", m.mappedBy());
+        assertEquals("ManyToMany:  mappedBy is not equal", "permissions", m.mappedBy());
     }
 
     @Test
     public void testNamedQueries() {
 
         //testing the @JoinTable annotation
-        NamedQueries namedQueries = ReflectTool.getClassAnnotation(Role.class, NamedQueries.class);
+        NamedQueries namedQueries = ReflectTool.getClassAnnotation(Permission.class, NamedQueries.class);
         assertEquals("NamedQueries:  size is not equal to 1", 1, namedQueries.value().length);
 
         NamedQuery[] namedQueriesArray = namedQueries.value();
 
         assertEquals("NamedQueries[0]: name is not equal",
-            "com.visucius.secp.models.Role.findByName", namedQueriesArray[0].name());
+            "com.visucius.secp.models.Permission.findByName", namedQueriesArray[0].name());
     }
 }
