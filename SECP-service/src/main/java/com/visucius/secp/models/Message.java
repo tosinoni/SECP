@@ -1,17 +1,28 @@
 package com.visucius.secp.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 
 @Entity
 @Table(name = "message")
+@NamedQueries(
+    {
+        @NamedQuery(
+            name = "com.visucius.secp.models.Message.findMessageWithGroupID",
+            query = "select m from Message m join m.group g where g.id = :groupID order by m.timestamp DESC"
+        )
+    }
+)
 public class Message {
 
     @Id
     @GeneratedValue
     @Column(name = "id", unique = true, nullable = false)
-    private int id;
+    private long id;
 
     @Column(name = "timestamp")
     @Temporal(TemporalType.TIMESTAMP)
@@ -29,6 +40,11 @@ public class Message {
     @JoinColumn(name = "group_id", nullable = false)
     private Group group;
 
+    public Message()
+    {
+
+    }
+
     public Message(String body, User user, Group group) {
         this.body = body;
         this.user = user;
@@ -37,7 +53,7 @@ public class Message {
 
     public long getId(){return id;}
 
-    public void setId(int id){this.id = id;}
+    public void setId(long id){this.id = id;}
 
     public Date getTimestamp(){return new Date(timestamp.getTime());}
 
@@ -63,10 +79,6 @@ public class Message {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + id;
-        result = prime * result + user.hashCode();
-        return result;
+        return Objects.hash(this.id,this.body,this.timestamp,this.group,this.user);
     }
 }

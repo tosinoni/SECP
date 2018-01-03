@@ -2,7 +2,6 @@ package com.visucius.secp.Controllers.User;
 
 import com.visucius.secp.DTO.UserRegistrationRequest;
 import com.visucius.secp.DTO.UserRegistrationResponse;
-import com.visucius.secp.SECPService;
 import com.visucius.secp.daos.UserDAO;
 import com.visucius.secp.models.User;
 import com.visucius.secp.util.InputValidator;

@@ -1,7 +1,12 @@
 package com.visucius.secp;
 
+import com.visucius.secp.Chat.ChatServlet;
+import com.visucius.secp.Chat.ChatSocketCreator;
+import com.visucius.secp.Chat.ChatSocketHandler;
+import com.visucius.secp.Chat.IMessageHandler;
 import com.visucius.secp.Controllers.Admin.AdminController;
 import com.visucius.secp.Controllers.GroupController;
+import com.visucius.secp.Controllers.MessageController;
 import com.visucius.secp.Controllers.User.LoginRequestController;
 import com.visucius.secp.Controllers.TokenController;
 import com.visucius.secp.Controllers.User.UserController;
@@ -29,6 +34,8 @@ import org.flywaydb.core.Flyway;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.servlet.ServletRegistration;
 
 
 public class SECPService extends Application<SECPConfiguration> {
@@ -96,6 +103,7 @@ public class SECPService extends Application<SECPConfiguration> {
         final UserDAO userDAO =  new UserDAO(hibernateBundle.getSessionFactory());
         final GroupDAO groupDAO = new GroupDAO(hibernateBundle.getSessionFactory());
         final RolesDAO rolesDAO = new RolesDAO(hibernateBundle.getSessionFactory());
+        final MessageDAO messageDAO = new MessageDAO(hibernateBundle.getSessionFactory());
         final PermissionDAO permissionDAO = new PermissionDAO(hibernateBundle.getSessionFactory());
         final DeviceDAO deviceDAO =  new DeviceDAO(hibernateBundle.getSessionFactory());
 
@@ -108,6 +116,7 @@ public class SECPService extends Application<SECPConfiguration> {
         final UserController userController = new UserController(userDAO, deviceDAO);
         final AdminController adminController = new AdminController(userDAO, rolesDAO, permissionDAO);
         final GroupController groupController = new GroupController(groupDAO,userDAO,rolesDAO, permissionDAO);
+        final MessageController messageController = new MessageController(messageDAO);
 
 
         //********************** Register authentication for User *****************************
@@ -130,6 +139,8 @@ public class SECPService extends Application<SECPConfiguration> {
         environment.jersey().register(
             new GroupResource(groupController));
 
+        environment.jersey().register(
+            new MessageResource(messageController));
 
         //************************** Registering Resources *************************************
         environment.jersey().register(
@@ -141,5 +152,20 @@ public class SECPService extends Application<SECPConfiguration> {
         final ErrorPageErrorHandler epeh = new ErrorPageErrorHandler();
         epeh.addErrorPage(404, "/error/404");
         environment.getApplicationContext().setErrorHandler(epeh);
+
+        //************************** WebSocket Servlet *************************************
+        ChatSocketHandler chatSocketHandler = new UnitOfWorkAwareProxyFactory(hibernateBundle)
+            .create(ChatSocketHandler.class,
+                new Class<?>[]  { MessageDAO.class},
+                new Object[]    { messageDAO});
+
+        ChatSocketCreator chatSocketCreator = new UnitOfWorkAwareProxyFactory(hibernateBundle)
+            .create(ChatSocketCreator.class,
+                new Class<?>[]  { UserDAO.class, IMessageHandler.class},
+                new Object[]    { userDAO, chatSocketHandler});
+
+        ServletRegistration.Dynamic webSocket = environment.servlets().addServlet("ws", new ChatServlet(chatSocketCreator));
+        webSocket.setAsyncSupported(true);
+        webSocket.addMapping("/chat/*");
     }
 }

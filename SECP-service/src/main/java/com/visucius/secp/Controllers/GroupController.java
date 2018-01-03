@@ -136,7 +136,6 @@ public class GroupController {
     }
 
 
-
     private String validateCreateRequest(GroupCreateRequest request) {
 
         if (!isGroupNameValid(request.name)
