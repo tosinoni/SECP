@@ -75,7 +75,7 @@ public class UserRegistrationController{
 
         if(!InputValidator.isNameValid(request.userName))
         {
-            errors.add(UserErrorMessage.USER_NAME_INVALID);
+            errors.add(UserErrorMessage.User_NAME_INVALID);
         }
         if(!InputValidator.isNameValid(request.displayName)){
             errors.add(UserErrorMessage.DISPLAY_NAME_INVALID);

@@ -121,7 +121,7 @@ public class UserRegistrationControllerTest {
     public void DisplayNameIsEmptyTest()
     {
         UserRegistrationRequest request = new UserRegistrationRequest(
-            "verrylongfirstnameamefdsafdsafsdfddfdddddsssssssssfsdfsfsdfsfsdfsdfsdffdsfsfsfsf",
+            "ali",
             "farah",
             "alifarah",
             "",

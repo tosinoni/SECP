@@ -14,7 +14,7 @@ public interface UserErrorMessage {
     //Register error messages
     String FIRST_NAME_INVALID = "First name is not valid.";
     String LAST_NAME_INVALID = "Last name is not valid.";
-    String USER_NAME_INVALID = "Username is not valid.";
+    String User_NAME_INVALID = "Username is not valid.";
     String DISPLAY_NAME_INVALID = "Display name is not valid.";
     String EMAIL_INVALID = "Email is not valid.";
     String PASSWORD_INVALID = "Password is not valid";
