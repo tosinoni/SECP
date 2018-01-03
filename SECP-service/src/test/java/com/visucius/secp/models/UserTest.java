@@ -3,6 +3,7 @@ package com.visucius.secp.models;
 import static org.junit.Assert.*;
 
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.URL;
 import org.junit.Test;
 
 import javax.persistence.*;
@@ -56,6 +57,24 @@ public class UserTest {
 
         assertEquals("column lastname:  name is not equal", "lastname", c.name());
         assertEquals("column lastname: nullable is true", false, c.nullable());
+    }
+
+    @Test
+    public void testDisplayName(){
+        AssertAnnotations.assertField(User.class,"displayname", URL.class, Column.class);
+
+        Column c = ReflectTool.getFieldAnnotation(User.class, "displayname", Column.class);
+        assertEquals("column displayname: displayname is not equal", "displayname", c.name());
+        assertEquals("column displayname: nullable is true", false, c.nullable());
+    }
+
+    @Test
+    public void testAvatarURL(){
+        AssertAnnotations.assertField(User.class,"avatar_url", Column.class);
+
+        Column c = ReflectTool.getFieldAnnotation(User.class, "avatar_url", Column.class);
+        assertEquals("column avatar_url: avatar_url is not equal", "avatar_url", c.name());
+        assertEquals("column avatar_url: nullable is true", false, c.nullable());
     }
 
     @Test

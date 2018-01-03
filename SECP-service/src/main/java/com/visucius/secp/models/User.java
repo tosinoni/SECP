@@ -97,6 +97,7 @@ public class User implements Principal {
         this.firstname = firstname;
         this.username = userName;
         this.lastname = lastname;
+        this.displayname = displayname;
         this.password = password;
         this.email = email;
     }
