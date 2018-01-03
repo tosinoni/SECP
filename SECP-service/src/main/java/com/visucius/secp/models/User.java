@@ -93,17 +93,18 @@ public class User implements Principal {
     public  User () {
 
     }
-    public User(String firstname, String lastname, String userName, String displayname, String email, String password) {
+    public User(String firstname, String lastname, String userName, String displayname, String email, String password, String avatar_url) {
         this.firstname = firstname;
         this.username = userName;
         this.lastname = lastname;
         this.displayname = displayname;
         this.password = password;
         this.email = email;
+        this.avatar_url = avatar_url;
     }
 
     public User(String userName, String email) {
-        this(null, null, userName,null, email, null);
+        this(null, null, userName,null, email, null, null);
     }
 
     public long getId() {

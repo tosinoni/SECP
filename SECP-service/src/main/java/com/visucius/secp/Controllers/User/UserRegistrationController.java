@@ -42,7 +42,7 @@ public class UserRegistrationController{
         {
             try {
                 String hashPassword = PasswordUtil.createHash(request.password);
-                User user = new User(request.firstName, request.lastName, request.userName, request.displayName, request.email, hashPassword);
+                User user = new User(request.firstName, request.lastName, request.userName, request.displayName, request.email, hashPassword, request.avatar_url);
                 User createdUser = userDAO.save(user);
                 return new UserRegistrationResponse(true, UserErrorMessage.USER_CREATED, Response.Status.CREATED, errors, createdUser.getId());
 

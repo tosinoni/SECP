@@ -22,6 +22,9 @@ public class UserRegistrationRequest {
     @JsonProperty
     public String password;
 
+    @JsonProperty
+    public String avatar_url;
+
     public UserRegistrationRequest()
     {
 
