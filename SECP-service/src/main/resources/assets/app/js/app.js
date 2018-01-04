@@ -177,3 +177,4 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
         }
       });
   });
+  
