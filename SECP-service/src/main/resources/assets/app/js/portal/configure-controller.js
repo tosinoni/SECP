@@ -92,6 +92,7 @@ angular.module('SECP')
                         swal('Oops!', res.data, "error");
                     }
                     $('#permissionModal').modal('toggle');
+                    $scope.permissionInput = '';
                 })
             }
         };
@@ -108,6 +109,7 @@ angular.module('SECP')
                         swal('Oops!', res.data, "error");
                     }
                     $('#roleModal').modal('toggle');
+                    $scope.roleInput = '';
                 });
             }
         };
