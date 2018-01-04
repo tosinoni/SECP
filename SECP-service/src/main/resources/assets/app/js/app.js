@@ -177,14 +177,3 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
         }
       });
   });
-
-    $rootScope.$on("$locationChangeStart", function (event) {
-      // handle route changes
-      if (!Auth.isTokenExpired()) {
-        Auth.isUserAnAdmin().then(function (res) {
-          $rootScope.isAdmin = res;
-        });
-      }
-    });
-  });
-
