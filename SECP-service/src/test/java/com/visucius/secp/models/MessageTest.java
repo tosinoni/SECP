@@ -13,7 +13,7 @@ public class MessageTest {
 
     @Test
     public void testMessageForEntityAndTableAttribute() {
-        AssertAnnotations.assertType(Message.class, Entity.class, Table.class);
+        AssertAnnotations.assertType(Message.class, Entity.class, Table.class, NamedQueries.class);
     }
 
     @Test
@@ -83,6 +83,8 @@ public class MessageTest {
 
     @Test
     public void test_setAndGetTimestamp() throws ParseException {
+
+
         User user = new User();
         Group group = new Group("Group 1");
         Message message = new Message("Body", user, group);
@@ -91,8 +93,8 @@ public class MessageTest {
         Date date = dateFormat.parse("01/01/2017");
         long time = date.getTime();
         Timestamp timestamp = new Timestamp(time);
-
         message.setTimestamp(timestamp);
+
         assertEquals("timestamp not equal", message.getTimestamp(),date);
     }
 

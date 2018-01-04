@@ -1,9 +1,10 @@
 package com.visucius.secp.daos;
 
 import com.google.common.base.Optional;
-import com.visucius.secp.models.Device;
+import com.visucius.secp.models.LoginRole;
 import com.visucius.secp.models.User;
 import io.dropwizard.hibernate.AbstractDAO;
+import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 
@@ -31,6 +32,15 @@ public class UserDAO extends AbstractDAO<User> {
      */
     public Optional<User> find(long id) {
         return Optional.fromNullable(get(id));
+    }
+
+    public Optional<User> getUserWithGroups(long id)
+    {
+        Optional<User> optionalUser = find(id);
+        if(optionalUser.isPresent())
+            Hibernate.initialize(optionalUser.get().getGroups());
+
+        return optionalUser;
     }
 
     /**
@@ -102,5 +112,11 @@ public class UserDAO extends AbstractDAO<User> {
     {
         return (List<User>) namedQuery("com.visucius.secp.models.User.findUsersWithPermissionLevel").
             setParameter("permissionID",permissionID).list();
+    }
+
+    public List<User> findAdmins()
+    {
+        return (List<User>) namedQuery("com.visucius.secp.models.User.findAdmins").
+            setParameter("loginRole", LoginRole.ADMIN).list();
     }
 }
