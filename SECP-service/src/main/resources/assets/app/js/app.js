@@ -41,7 +41,7 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
       .when('/authenticate', {
         templateUrl: 'views/login/authenticate.html',
         controller: 'AuthenticateController',
-        css: 'css/login.css',
+        css: 'css/login.css'
       })
       .when('/register', {
         templateUrl: 'views/register/register.html',
