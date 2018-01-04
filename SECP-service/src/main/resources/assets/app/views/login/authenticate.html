@@ -1,0 +1,19 @@
+<div class="container-fluid">
+
+    <div class="form-group">
+        <form autocomplete="on" novalidate ng-submit="authenticate()" name="authForm">
+            <h1 id="formHeader">Authenticate</h1>
+            <p>Enter the verification code sent to your email address</p>
+            <div class="group">
+                <input type="text" required ng-model="code" name="code" />
+                <span class="highlight"></span>
+                <span class="bar"></span>
+                <label>Enter Code</label>
+            </div>
+            <div class="btn-box">
+                <button type="submit" class="btn btn-submit" ng-disabled="authForm.$invalid">Verify</button>
+            </div>
+
+        </form>
+    </div>
+</div>
