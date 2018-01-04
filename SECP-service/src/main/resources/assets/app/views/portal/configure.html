@@ -1,113 +1,59 @@
 <body>
-<h1 class="portalheader"><i class="fa fa-wrench" aria-hidden="true"></i> Configure</h1>
-<p class="note"><strong>Note:</strong> Add and delete permission levels and user roles by clicking below.</p>
-<div>
-    <br>
-    <a class="configureoption" ng-click="permissionClick()"><span class="optionicon" id="optionicon1">+</span><i class="fa fa-low-vision" aria-hidden="true"></i> Permission Levels</a>
-    <hr id="optionline1">
-    <br>
-    <br>
-    <a class="configureoption" ng-click="rolesClick()"><span class="optionicon" id="optionicon2">+</span><i class="fa fa-id-card-o" aria-hidden="true"></i> Roles</a>
-    <hr id="optionline2">
-</div>
-<div id="permissionTableDiv" style="display: none;">
-    <table id="permissionTable" class="display" cellspacing="0" width="100%">
-    <button class="tableaddbutton" data-toggle="modal" data-target="#permissionModal">New Permission Level <i class="fa fa-plus" aria-hidden="true"></i></button>
-    <thead>
-    <tr>
-        <th>Permission Level</th>
-        <th style="text-align: right">Action(s)</th>
-    </tr>
-    </thead>
-    <tfoot>
-    <tr>
-        <th>Permission Level</th>
-        <th style="text-align: right">Action(s)</th>
-    </tr>
-    </tfoot>
-    <tbody>
-    <tr>
-        <td>Top Secret</td>
-        <td style="text-align: right"><button ng-click="deletePermission()"><i class="fa fa-trash red" aria-hidden="true"></i></button></td>
-    </tr>
-    <tr>
-        <td>Secret</td>
-        <td style="text-align: right"><button ng-click="deletePermission()"><i class="fa fa-trash red" aria-hidden="true"></i></button></td>
-    </tr>
-    </tbody>
-    </table>
-</div>
-
-<div id="rolesTableDiv" style="display: none;">
-    <table id="rolesTable" class="display" cellspacing="0" width="100%">
-        <button class="tableaddbutton" data-toggle="modal" data-target="#roleModal">New Role <i class="fa fa-plus" aria-hidden="true"></i></button>
+    <h1 class="portalheader"><i class="fa fa-wrench" aria-hidden="true"></i> Configure</h1>
+    <p class="note"><strong>Note:</strong> Add and delete permission levels and user roles by clicking below.</p>
+    <div>
+        <br>
+        <a class="configureoption" ng-click="permissionClick()"><span class="optionicon" id="optionicon1">+</span><i class="fa fa-low-vision" aria-hidden="true"></i> Permission Levels</a>
+        <hr id="optionline1">
+        <br>
+        <br>
+        <a class="configureoption" ng-click="rolesClick()"><span class="optionicon" id="optionicon2">+</span><i class="fa fa-id-card-o" aria-hidden="true"></i> Roles</a>
+        <hr id="optionline2">
+    </div>
+    <div id="permissionTableDiv" style="display: none;">
+        <table id="permissionTable" datatable="ng" class="display" cellspacing="0" width="100%">
+        <button class="tableaddbutton" data-toggle="modal" data-target="#permissionModal">New Permission Level <i class="fa fa-plus" aria-hidden="true"></i></button>
         <thead>
         <tr>
-            <th>Role</th>
+            <th>Permission Level</th>
             <th style="text-align: right">Action(s)</th>
         </tr>
         </thead>
-        <tfoot>
-        <tr>
-            <th>Role</th>
-            <th style="text-align: right">Action(s)</th>
-        </tr>
-        </tfoot>
         <tbody>
-        <tr>
-            <td>Developer</td>
-            <td style="text-align: right"><button ng-click="deleteRole()"><i class="fa fa-trash red" aria-hidden="true"></i></button></td>
-        </tr>
-        <tr>
-            <td>Secret</td>
-            <td style="text-align: right"><button ng-click="deleteRole()"><i class="fa fa-trash red" aria-hidden="true"></i></button></td>
-        </tr>
+            <tr ng-repeat="permission in permissions">
+                <td>{{permission.name}}</td>
+                <td style="text-align: right"><button ng-click="deletePermission(permission)">
+                    <i class="fa fa-trash red" aria-hidden="true"></i></button>
+                </td>
+            </tr>
         </tbody>
-    </table>
-</div>
-
-<!-- Permission Level Modal -->
-<div class="modal fade" id="permissionModal" role="dialog">
-    <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <form name="newpermissionform" class="modal-content" autocomplete="off">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">New Permission Level</h4>
-            </div>
-            <div class="modal-body">
-                Permssion Level:<br>
-                <input class="newfilterword" type="text" name="newpermission" required="required" ng-pattern="/^[a-zA-Z0-9]{2,}$/">
-            </div>
-            <div class="modal-footer">
-                <input type="submit" class="btn btn-default" value="Save">
-            </div>
-        </form>
-
+        </table>
     </div>
-</div>
 
-<!-- Role Modal -->
-<div class="modal fade" id="roleModal" role="dialog">
-    <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <form name="newroleform" class="modal-content" autocomplete="off">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">New Role</h4>
-            </div>
-            <div class="modal-body">
-                Role:<br>
-                <input class="newfilterword" type="text" name="newrole" required="required" ng-pattern="/^[a-zA-Z0-9]{2,}$/">
-            </div>
-            <div class="modal-footer">
-                <input type="submit" class="btn btn-default" value="Save">
-            </div>
-        </form>
-
+    <div id="rolesTableDiv" style="display: none;">
+        <table id="rolesTable" datatable="ng" class="display" cellspacing="0" width="100%">
+            <button class="tableaddbutton" data-toggle="modal" data-target="#roleModal">New Role <i class="fa fa-plus" aria-hidden="true"></i></button>
+            <thead>
+            <tr>
+                <th>Role</th>
+                <th style="text-align: right">Action(s)</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="role in roles">
+                    <td>{{role.name}}</td>
+                    <td style="text-align: right"><button ng-click="deleteRole(role)">
+                        <i class="fa fa-trash red" aria-hidden="true"></i></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-</div>
 
+    <!-- Permission Level Modal -->
+    <secp-modal ng-model="permissionInput" name="permissionModal" frmName="newpermissionform" title="New Permission"
+                body="Permssion Level" save-fn="savePermission()"></secp-modal>
+    <!-- Role Modal -->
+    <secp-modal ng-model="roleInput" name="roleModal" frmName="newroleform" title="New Role"
+                body="Role" save-fn="saveRole()"></secp-modal>
 </body>

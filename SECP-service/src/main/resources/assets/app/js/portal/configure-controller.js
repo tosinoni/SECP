@@ -1,11 +1,26 @@
 angular.module('SECP')
-    .controller('ConfigureController', ['$scope', function ($scope) {
-        var permissiontable =$('#permissionTable').DataTable();
-        var roletable =$('#rolesTable').DataTable();
+    .controller('ConfigureController', function ($scope, Admin, SwalService) {
+        $scope.roles = [];
+        $scope.permissions = [];
+
         var permissions = document.getElementById("permissionTableDiv");
         var roles = document.getElementById("rolesTableDiv");
         var optionline1 = document.getElementById("optionline1");
         var optionline2 = document.getElementById("optionline2");
+
+        //getting the adminRoles
+        Admin.getRoles().then(function(res) {
+            if (res) {
+                $scope.roles = res;
+            }
+        })
+
+        //getting the permissions
+        Admin.getPermissions().then(function(res) {
+            if (res) {
+                $scope.permissions = res;
+            }
+        })
 
         $scope.permissionClick = function() {
             if (permissions.style.display === "none") {
@@ -35,42 +50,65 @@ angular.module('SECP')
             }
         };
 
-        $scope.deletePermission = function() {
-            var self= this;
-            swal({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            })
-                .then((result) => {
-                    if (result) {
-                        permissiontable.row($(self).parents('tr')).remove().draw(false);
-                        swal('Deleted!','Permission level deleted.','success')
+        $scope.deletePermission = function(permission) {
+            var deletePermissionFunction = function () {
+                Admin.deletePermission(permission.id).then(function(res){
+                    if (res.status == 200) {
+                        var index = $scope.permissions.indexOf(permission);
+                        $scope.permissions.splice(index, 1);
+                        swal('Deleted!','Permission level deleted.','success');
+                    } else {
+                        swal('Oops!', res.data, "error");
                     }
-                }).catch((result) => {});
+                });
+            };
+            SwalService.delete(deletePermissionFunction);
         };
 
-        $scope.deleteRole = function() {
-            var self= this;
-            swal({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            })
-                .then((result) => {
-                    if (result) {
-                        permissiontable.row($(self).parents('tr')).remove().draw(false);
-                        swal('Deleted!','Role deleted.','success')
+        $scope.deleteRole = function(role) {
+            var deleteRoleFunction = function () {
+                Admin.deleteRole(role.id).then(function(res){
+                    if (res.status == 200) {
+                        var index = $scope.roles.indexOf(role);
+                        $scope.roles.splice(index, 1);
+                        swal('Deleted!','Role deleted.','success');
+                    } else {
+                        swal('Oops!', res.data, "error");
                     }
-                }).catch((result) => {});
+                });
+            };
+            SwalService.delete(deleteRoleFunction);
         };
 
-    }]);
+        $scope.savePermission = function() {
+            console.log($scope.permissionInput);
+            if ($scope.permissionInput) {
+                var permissions = $scope.permissionInput.split(/[ ,]+/);
+                Admin.addPermissions(permissions).then(function(res){
+                    if (res.status == 201) {
+                        $scope.permissions = $scope.permissions.concat(res.data);
+                        swal('Added!', 'permission was successfully added', "success");
+                    } else {
+                        swal('Oops!', res.data, "error");
+                    }
+                    $('#permissionModal').modal('toggle');
+                })
+            }
+        };
+
+        $scope.saveRole = function() {
+            console.log($scope.roleInput);
+            if ($scope.roleInput) {
+                var roles = $scope.roleInput.split(/[ ,]+/);
+                Admin.addRoles(roles).then(function(res){
+                    if (res.status == 201) {
+                        $scope.roles = $scope.roles.concat(res.data);
+                        swal('Added!', 'roles was successfully added', "success");
+                    } else {
+                        swal('Oops!', res.data, "error");
+                    }
+                    $('#roleModal').modal('toggle');
+                });
+            }
+        };
+    });
