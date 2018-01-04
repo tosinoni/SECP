@@ -167,3 +167,28 @@ a:hover {
     border-radius: 6px;
     padding: 14px 20px;
 }
+
+.configureoption{
+    text-decoration: none;
+    cursor: pointer;
+    font-family:"Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 1.2em;
+    color: #2196F3;
+    vertical-align: middle;
+}
+.configureoption:hover {
+    color: #2196F3;
+    font-weight: bold;
+}
+
+.optionicon{
+    padding-right: 10px;
+    font-size: 1.5em;
+    vertical-align: middle;
+}
+
+#optionline1, #optionline2{
+    margin-top: 5px;
+    color: #2196F3;
+    display: none;
+}

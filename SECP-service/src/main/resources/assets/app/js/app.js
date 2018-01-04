@@ -125,6 +125,15 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
               isAdmin: isAdmin
           }
       })
+      .when('/portal/configure', {
+          templateUrl: 'views/portal/configure.html',
+          controller:'ConfigureController',
+          css: 'css/portal.css',
+          requiresLogin: true,
+          resolve: {
+              isAdmin: isAdmin
+          }
+      })
       .when('/error/404', {
         templateUrl: 'views/error/404.html'
       })
