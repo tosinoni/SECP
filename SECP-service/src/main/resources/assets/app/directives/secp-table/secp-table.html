@@ -1,0 +1,19 @@
+<table id="{{name}}" datatable="ng" class="display" cellspacing="0" width="100%">
+    <button class="tableaddbutton" data-toggle="modal" data-target="#{{modalname}}">
+        {{buttonname}} <i class="fa fa-plus" aria-hidden="true"></i>
+    </button>
+    <thead>
+    <tr>
+        <th ng-repeat="header in headers">{{header}}</th>
+        <th style="text-align: right">Action(s)</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="row in data">
+        <td>{{row.name}}</td>
+        <td style="text-align: right"><button ng-click="change(row)">
+            <i class="fa fa-trash red" aria-hidden="true"></i></button>
+        </td>
+    </tr>
+    </tbody>
+</table>
