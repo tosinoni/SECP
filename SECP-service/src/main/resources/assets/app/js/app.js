@@ -1,6 +1,6 @@
 // Declare app level module which depends on filters, and services
 angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
-    'routeStyles', 'angular-jwt', 'ngWebCrypto', 'angular-uuid'])
+    'routeStyles', 'angular-jwt', 'ngWebCrypto', 'angular-uuid', 'datatables'])
   .config(function ($routeProvider, $locationProvider, jwtOptionsProvider, $httpProvider) {
 
     //add isAdmin function
@@ -119,6 +119,15 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
       .when('/portal/filter', {
           templateUrl: 'views/portal/filter.html',
           controller:'FilterController',
+          css: 'css/portal.css',
+          requiresLogin: true,
+          resolve: {
+              isAdmin: isAdmin
+          }
+      })
+      .when('/portal/configure', {
+          templateUrl: 'views/portal/configure.html',
+          controller:'ConfigureController',
           css: 'css/portal.css',
           requiresLogin: true,
           resolve: {
