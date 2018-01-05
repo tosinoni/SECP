@@ -11,43 +11,13 @@
         <hr id="optionline2">
     </div>
     <div id="permissionTableDiv" style="display: none;">
-        <table id="permissionTable" datatable="ng" class="display" cellspacing="0" width="100%">
-        <button class="tableaddbutton" data-toggle="modal" data-target="#permissionModal">New Permission Level <i class="fa fa-plus" aria-hidden="true"></i></button>
-        <thead>
-        <tr>
-            <th>Permission Level</th>
-            <th style="text-align: right">Action(s)</th>
-        </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="permission in permissions">
-                <td>{{permission.name}}</td>
-                <td style="text-align: right"><button ng-click="deletePermission(permission)">
-                    <i class="fa fa-trash red" aria-hidden="true"></i></button>
-                </td>
-            </tr>
-        </tbody>
-        </table>
+        <secp-table name="permissionTable" modalname="permissionModal" buttonname="New Permission Level"
+                    data="permissions" headers="permissionHeaders" delete-fn="deletePermission(row)"></secp-table>
     </div>
 
     <div id="rolesTableDiv" style="display: none;">
-        <table id="rolesTable" datatable="ng" class="display" cellspacing="0" width="100%">
-            <button class="tableaddbutton" data-toggle="modal" data-target="#roleModal">New Role <i class="fa fa-plus" aria-hidden="true"></i></button>
-            <thead>
-            <tr>
-                <th>Role</th>
-                <th style="text-align: right">Action(s)</th>
-            </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="role in roles">
-                    <td>{{role.name}}</td>
-                    <td style="text-align: right"><button ng-click="deleteRole(role)">
-                        <i class="fa fa-trash red" aria-hidden="true"></i></button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <secp-table name="rolesTable" modalname="roleModal" buttonname="New Role"
+                    data="roles" headers="roleHeaders" delete-fn="deleteRole(row)"></secp-table>
     </div>
 
     <!-- Permission Level Modal -->

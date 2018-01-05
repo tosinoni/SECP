@@ -2,6 +2,8 @@ angular.module('SECP')
     .controller('ConfigureController', function ($scope, Admin, SwalService) {
         $scope.roles = [];
         $scope.permissions = [];
+        $scope.roleHeaders = ['Role'];
+        $scope.permissionHeaders = ['Permission Level'];
 
         var permissions = document.getElementById("permissionTableDiv");
         var roles = document.getElementById("rolesTableDiv");
@@ -50,11 +52,11 @@ angular.module('SECP')
             }
         };
 
-        $scope.deletePermission = function(permission) {
+        $scope.deletePermission = function(row) {
             var deletePermissionFunction = function () {
-                Admin.deletePermission(permission.id).then(function(res){
+                Admin.deletePermission(row.id).then(function(res){
                     if (res.status == 200) {
-                        var index = $scope.permissions.indexOf(permission);
+                        var index = $scope.permissions.indexOf(row);
                         $scope.permissions.splice(index, 1);
                         swal('Deleted!','Permission level deleted.','success');
                     } else {
@@ -65,11 +67,11 @@ angular.module('SECP')
             SwalService.delete(deletePermissionFunction);
         };
 
-        $scope.deleteRole = function(role) {
+        $scope.deleteRole = function(row) {
             var deleteRoleFunction = function () {
-                Admin.deleteRole(role.id).then(function(res){
+                Admin.deleteRole(row.id).then(function(res){
                     if (res.status == 200) {
-                        var index = $scope.roles.indexOf(role);
+                        var index = $scope.roles.indexOf(row);
                         $scope.roles.splice(index, 1);
                         swal('Deleted!','Role deleted.','success');
                     } else {
@@ -98,7 +100,6 @@ angular.module('SECP')
         };
 
         $scope.saveRole = function() {
-            console.log($scope.roleInput);
             if ($scope.roleInput) {
                 var roles = $scope.roleInput.split(/[ ,]+/);
                 Admin.addRoles(roles).then(function(res){
