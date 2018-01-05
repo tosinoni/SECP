@@ -83,7 +83,6 @@ angular.module('SECP')
         };
 
         $scope.savePermission = function() {
-            console.log($scope.permissionInput);
             if ($scope.permissionInput) {
                 var permissions = $scope.permissionInput.split(/[ ,]+/);
                 Admin.addPermissions(permissions).then(function(res){
