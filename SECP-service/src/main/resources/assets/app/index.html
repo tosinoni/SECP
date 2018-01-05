@@ -18,7 +18,6 @@
         <link href="lib/sweetalert2/dist/sweetalert2.css" rel="stylesheet">
         <link href="lib/select2/dist/css/select2.css" rel="stylesheet">
         <link href="lib/datatables.net-jqui/css/dataTables.jqueryui.min.css" rel="stylesheet">
-        <link href="lib/datatables.net-select-jqui/css/select.jqueryui.css" rel="stylesheet">
     </head>
     <body>
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -74,6 +73,8 @@
 
         <script src="lib/datatables.net/js/jquery.dataTables.js"></script>
         <script src="lib/datatables.net-select/js/dataTables.select.js"></script>
+        <script src="js/angular-datatables.js"></script>
+
 
         <script src="js/app.js"></script>
         <script src="js/home/home-controller.js"></script>
@@ -82,6 +83,7 @@
         <script src="js/register/register-service.js"></script>
         <script src="js/portal/portal-controller.js"></script>
         <script src="js/portal/filter-controller.js"></script>
+        <script src="js/portal/configure-controller.js"></script>
 
         <script src="js/profiles/user-profile-controller.js"></script>
         <script src="js/profiles/group-profile-controller.js"></script>
@@ -93,8 +95,12 @@
         <script src="directives/chat-list/chat-list.js"></script>
         <script src="directives/input-field-validation/unique-field-validation.js"></script>
         <script src="directives/input-field-validation/password-confirmation.js"></script>
+        <script src="directives/secp-modal/secp-modal.js"></script>
+        <script src="directives/secp-table/secp-table.js"></script>
 
         <script src="services/Auth.js"></script>
+        <script src="services/Admin.js"></script>
+        <script src="services/SwalService.js"></script>
 
         <!-- switching between css -->
         <script src="lib/angular-route/angular-route.min.js"></script>
