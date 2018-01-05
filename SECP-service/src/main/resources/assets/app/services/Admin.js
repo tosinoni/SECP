@@ -45,6 +45,17 @@ angular.module('SECP')
             });
         },
 
+        getGroups : function() {
+            return $http.get("/SECP/admin/groups")
+                .then(function(res) {
+                    if (res.status == 200) {
+                        return res.data;
+                    }
+                }, function(err) {
+                    return err;
+                });
+        },
+
         deleteRole : function(id) {
             return $http.delete("/SECP/admin/role/id/" + id)
             .then(function(res) {
@@ -61,6 +72,24 @@ angular.module('SECP')
             }, function(err) {
                 return err;
             });
+        },
+
+        deleteGroup : function(id) {
+            return $http.delete("/SECP/admin/group/id/" + id)
+                .then(function(res) {
+                    return res;
+                }, function(err) {
+                    return err;
+                });
+        },
+
+        editGroup : function(id) {
+            return $http.delete("/SECP/admin/group/id/" + id)
+                .then(function(res) {
+                    return res;
+                }, function(err) {
+                    return err;
+                });
         },
     }
   });

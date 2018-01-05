@@ -109,7 +109,7 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
       })
       .when('/portal/manage/group', {
           templateUrl: 'views/portal/manage-group.html',
-          controller:'PortalController',
+          controller:'GroupController',
           css: 'css/portal.css',
           requiresLogin: true,
           resolve: {
