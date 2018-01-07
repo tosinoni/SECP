@@ -200,6 +200,9 @@ a:hover {
     font-size: 1.5em;
     vertical-align: middle;
 }
+#permissionTableDiv, #rolesTableDiv{
+    display: none;
+}
 
 #optionline1, #optionline2{
     margin-top: 5px;
