@@ -16,7 +16,6 @@ angular.module('SECP')
          },
         templateUrl: 'directives/secp-table/secp-table.html',
         link: function ($scope, element, attrs) {
-            console.log($scope);
             if(attrs.editFn){
                 $scope.isEditable = true;
             }

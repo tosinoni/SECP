@@ -9,7 +9,7 @@ angular.module('SECP')
             title: '@',
             inputname: '@',
             name: '@',
-            modalData: '=',
+            modalData: '=', //this is the data to be used to populate the modal
             save: '&saveFn'
          },
         templateUrl: 'directives/secp-manage-modal/secp-manage-modal.html',

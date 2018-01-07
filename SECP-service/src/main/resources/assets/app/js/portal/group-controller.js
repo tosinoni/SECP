@@ -2,16 +2,17 @@ angular.module('SECP')
     .controller('GroupController', function ($scope, Admin, SwalService) {
         $scope.groups = [];
         $scope.groupHeaders = ['Name', 'Permission Level(s)', 'Role(s)', 'Participants'];
-        $scope.createGroupData = {};
-        $scope.editGroupData = {};
+        $scope.createGroupData = {}; //the data sent to the modal for create group
+        $scope.editGroupData = {};   //the data sent to the modal for edit group
 
-        // //getting the groups
+        //getting all the groups to populate the table
         Admin.getAllGroups().then(function(res) {
             if (res) {
                  $scope.groups = res;
             }
         });
 
+        //this function handles the information provided by the create modal
         $scope.addGroup = function(row) {
             Admin.addGroup(row).then(function(res){
                 if (res.status == 201) {
@@ -25,9 +26,9 @@ angular.module('SECP')
             });
         };
 
+         //this function gets the data to populate the modal and open the modal
          $scope.editGroupModalFn = function(row) {
              if (row) {
-                console.log(row);
                  Admin.getGroup(row.groupID).then(function(res){
                      if (res) {
                         $scope.editGroupData = res;
@@ -37,6 +38,7 @@ angular.module('SECP')
              }
          };
 
+        //this function handles the information provided by the edit modal
         $scope.submitModifyGroup = function(row) {
             if (row) {
                 Admin.editGroup(row).then(function(res){
