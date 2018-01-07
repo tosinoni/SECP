@@ -168,6 +168,20 @@ a:hover {
     padding: 14px 20px;
 }
 
+.tag-option{
+    color: black;
+    border: solid 1px #2196F3;
+    background-color: white;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    padding: 14px 20px;
+}
+
+.tag-option:hover{
+    background-color: #8fcaf3;
+}
+
 .configureoption{
     text-decoration: none;
     cursor: pointer;
@@ -175,17 +189,20 @@ a:hover {
     font-size: 1.2em;
     color: #2196F3;
     vertical-align: middle;
+    font-weight: bold;
 }
 
-.configureoption:hover {
+.configureoption:hover{
     color: #2196F3;
-    font-weight: bold;
 }
 
 .optionicon{
     padding-right: 10px;
     font-size: 1.5em;
     vertical-align: middle;
+}
+#permissionTableDiv, #rolesTableDiv{
+    display: none;
 }
 
 #optionline1, #optionline2{

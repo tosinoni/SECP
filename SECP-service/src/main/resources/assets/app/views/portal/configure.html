@@ -1,29 +1,10 @@
 <body>
-    <h1 class="portalheader"><i class="fa fa-wrench" aria-hidden="true"></i> Configure</h1>
-    <p class="note"><strong>Note:</strong> Add and delete permission levels and user roles by clicking below.</p>
-    <div>
-        <br>
-        <a class="configureoption" ng-click="permissionClick()"><span class="optionicon" id="optionicon1">+</span><i class="fa fa-low-vision" aria-hidden="true"></i> Permission Levels</a>
-        <hr id="optionline1">
-        <br>
-        <br>
-        <a class="configureoption" ng-click="rolesClick()"><span class="optionicon" id="optionicon2">+</span><i class="fa fa-id-card-o" aria-hidden="true"></i> Roles</a>
-        <hr id="optionline2">
-    </div>
-    <div id="permissionTableDiv" style="display: none;">
-        <secp-table name="permissionTable" modalname="permissionModal" buttonname="New Permission Level"
-                    data="permissions" headers="permissionHeaders" delete-fn="deletePermission(row)"></secp-table>
-    </div>
-
-    <div id="rolesTableDiv" style="display: none;">
-        <secp-table name="rolesTable" modalname="roleModal" buttonname="New Role"
-                    data="roles" headers="roleHeaders" delete-fn="deleteRole(row)"></secp-table>
-    </div>
-
-    <!-- Permission Level Modal -->
-    <secp-modal ng-model="permissionInput" name="permissionModal" frmName="newpermissionform" title="New Permission"
-                body="Permssion Level" save-fn="savePermission()"></secp-modal>
-    <!-- Role Modal -->
-    <secp-modal ng-model="roleInput" name="roleModal" frmName="newroleform" title="New Role"
-                body="Role" save-fn="saveRole()"></secp-modal>
+<h1 class="portalheader">
+    <i class="fa fa-wrench" aria-hidden="true"></i>
+    Configure
+</h1>
+<div>
+    <a href="/portal/configure/filter"><p class="adminoption"><i class="fa fa-filter" aria-hidden="true"></i> Filter</p></a>
+    <a href="/portal/configure/tags"><p class="adminoption"><i class="fa fa-tags" aria-hidden="true"></i> Tags</p></a>
+</div>
 </body>
