@@ -10,13 +10,15 @@ angular.module('SECP')
             buttonname: '@',
             data: '=',
             headers: '=',
+            ismanage: '@',
             delete: '&deleteFn',
             edit: '&editFn'
          },
         templateUrl: 'directives/secp-table/secp-table.html',
         link: function ($scope, element, attrs) {
-            if(attrs.edit){
-                $scope.isEditable=true;
+            console.log($scope);
+            if(attrs.editFn){
+                $scope.isEditable = true;
             }
             $scope.change = function(row) {
                 $scope.delete({row: row});

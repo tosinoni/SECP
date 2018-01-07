@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -123,7 +124,7 @@ public class GroupController {
         return Response.status(Response.Status.CREATED).entity(getGroupResponse(createdGroup)).build();
     }
 
-    private Group getGroup(int groupID)
+    private Group getGroup(long groupID)
     {
         Optional<Group> groupOptional = groupRepository.find(groupID);
         if (!groupOptional.isPresent()) {
@@ -133,6 +134,33 @@ public class GroupController {
         }
 
         return groupOptional.get();
+    }
+
+    public Response getAllGroups() {
+        List<Group> groups = groupRepository.findAll();
+
+        if(Util.isCollectionEmpty(groups)) {
+            return Response.status(Response.Status.NO_CONTENT).build();
+        }
+
+        Set<GroupDTO> response = groups.stream()
+            .map(group -> {
+                return getGroupResponse(group);
+            })
+            .collect(Collectors.toSet());
+
+        return Response.status(Response.Status.OK).entity(response).build();
+    }
+
+    public Response getGroupGivenId(String id) {
+        if(StringUtils.isEmpty(id) ) {
+            return Response.status(Response.Status.NO_CONTENT).build();
+        }
+
+        long groupID = Long.parseLong(id);
+        Group group = getGroup(groupID);
+
+        return Response.status(Response.Status.OK).entity(getGroupResponse(group)).build();
     }
 
 
@@ -285,13 +313,30 @@ public class GroupController {
 
     private GroupDTO getGroupResponse (Group group) {
         GroupDTO groupDTO = new GroupDTO(group.getId());
+        groupDTO.setName(group.getName());
+        groupDTO.setNumOfPermissions(group.getPermissions().size());
+        groupDTO.setNumOfRoles(group.getRoles().size());
+        groupDTO.setNumOfUsers(group.getUsers().size());
 
         Set<UserDTO> users = getUsersInGroup(group).stream()
             .map(user -> {
                 return new UserDTO(user.getId(), getDevicesForUser(user));
             }).collect(Collectors.toSet());
 
+        Set<RolesOrPermissionDTO> roles = group.getRoles().stream()
+            .map(role -> {
+                return new RolesOrPermissionDTO(role.getId(), role.getRole());
+            }).collect(Collectors.toSet());
+
+        Set<RolesOrPermissionDTO> permissions = group.getPermissions().stream()
+            .map(permission -> {
+                return new RolesOrPermissionDTO(permission.getId(), permission.getLevel());
+            }).collect(Collectors.toSet());
+
         groupDTO.setUsers(users);
+        groupDTO.setRoles(roles);
+        groupDTO.setPermissions(permissions);
+
         return groupDTO;
     }
 

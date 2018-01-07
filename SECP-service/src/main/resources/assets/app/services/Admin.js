@@ -2,6 +2,16 @@
 
 angular.module('SECP')
   .factory('Admin', function($http) {
+    //below needs to be changed. This is just a hack to conform to what the server expects
+    var convertData = function(data) {
+        var newData = angular.copy(data);
+        if(data) {
+            newData = angular.copy(data);
+            newData.roles = newData.roles.map(role => {return role.id});
+            newData.permissions = newData.permissions.map(permission => {return permission.id});
+        }
+        return newData;
+    }
     return {
         addRoles : function(setOfRoles) {
             var req = {roles: setOfRoles}
@@ -45,8 +55,8 @@ angular.module('SECP')
             });
         },
 
-        getGroups : function() {
-            return $http.get("/SECP/admin/groups")
+        getAllGroups : function() {
+            return $http.get("/SECP/groups")
                 .then(function(res) {
                     if (res.status == 200) {
                         return res.data;
@@ -76,20 +86,44 @@ angular.module('SECP')
 
         deleteGroup : function(id) {
             return $http.delete("/SECP/admin/group/id/" + id)
-                .then(function(res) {
-                    return res;
-                }, function(err) {
-                    return err;
-                });
+            .then(function(res) {
+                return res;
+            }, function(err) {
+                return err;
+            });
         },
 
-        editGroup : function(id) {
-            return $http.delete("/SECP/admin/group/id/" + id)
-                .then(function(res) {
+        editGroup : function(data) {
+            //this needs to be changed on the server side.
+            return $http.post("/SECP/admin/group/id/" + data.groupID, convertData(data))
+            .then(function(res) {
+                if(res.status == 200) {
                     return res;
-                }, function(err) {
-                    return err;
-                });
+                }
+            }, function(err) {
+                return err;
+            });
         },
+
+        addGroup : function(data) {
+            //this needs to be changed on the server side
+            return $http.post("/SECP/groups/", convertData(data))
+            .then(function(res) {
+                return res;
+            }, function(err) {
+                return err;
+            });
+        },
+
+        getGroup : function(id) {
+            return $http.get("/SECP/groups/id/" + id)
+            .then(function(res) {
+                if (res.status == 200) {
+                    return res.data;
+                }
+            }, function(err) {
+                return err;
+            });
+        }
     }
   });

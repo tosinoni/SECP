@@ -75,4 +75,17 @@ public class GroupResource {
     {
         return  groupController.deletePermissions(request,id);
     }
+
+    @GET
+    @UnitOfWork
+    public Response getAllGroups() {
+        return groupController.getAllGroups();
+    }
+
+    @GET
+    @Path("/id/{id}")
+    @UnitOfWork
+    public Response getGroup(@Auth @PathParam("id") String id) {
+        return groupController.getGroupGivenId(id);
+    }
 }
