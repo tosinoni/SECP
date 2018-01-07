@@ -121,8 +121,8 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
             isAdmin: isAdmin
           }
       })
-      .when('/portal/filter', {
-          templateUrl: 'views/portal/filter.html',
+      .when('/portal/configure/filter', {
+          templateUrl: 'views/portal/configure-filter.html',
           controller:'FilterController',
           css: 'css/portal.css',
           requiresLogin: true,
@@ -132,6 +132,15 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
       })
       .when('/portal/configure', {
           templateUrl: 'views/portal/configure.html',
+          controller:'ConfigureController',
+          css: 'css/portal.css',
+          requiresLogin: true,
+          resolve: {
+              isAdmin: isAdmin
+          }
+      })
+      .when('/portal/configure/tags', {
+          templateUrl: 'views/portal/configure-tags.html',
           controller:'ConfigureController',
           css: 'css/portal.css',
           requiresLogin: true,
