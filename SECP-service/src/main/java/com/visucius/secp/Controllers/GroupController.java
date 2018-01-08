@@ -153,7 +153,7 @@ public class GroupController {
     }
 
     public Response getGroupGivenId(String id) {
-        if(StringUtils.isEmpty(id) ) {
+        if(StringUtils.isEmpty(id) || !StringUtils.isNumeric(id)) {
             return Response.status(Response.Status.NO_CONTENT).build();
         }
 
