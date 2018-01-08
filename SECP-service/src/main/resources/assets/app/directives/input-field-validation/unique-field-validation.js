@@ -15,7 +15,7 @@ angular.module('SECP')
                 var deferred = $q.defer();
 
                 // ask the server if this username exists
-                $http.get(url + inputParamValue)
+                $http.get(attr.uniqueFieldValidation + inputParamValue)
                 .then(function(response) {
                      // simulate a server response delay of half a second
                         $timeout(function() {
