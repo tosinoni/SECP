@@ -19,6 +19,84 @@ public class UserDTOTest {
     }
 
     @Test
+    public void testUserName() {
+        UserDTO userDTO = new UserDTO(userID);
+        userDTO.setUsername("jsmith");
+        assertEquals("username is not equal", "jsmith", userDTO.getUsername());
+    }
+
+    @Test
+    public void testFirstname() {
+        UserDTO userDTO = new UserDTO(userID);
+        userDTO.setFirstName("John");
+        assertEquals("first name is not equal", "John", userDTO.getFirstName());
+    }
+
+    @Test
+    public void testLastname() {
+        UserDTO userDTO = new UserDTO(userID);
+        userDTO.setLastName("Smith");
+        assertEquals("last name is not equal", "Smith", userDTO.getLastName());
+    }
+
+    @Test
+    public void testNumberOfRoles() {
+        UserDTO userDTO = new UserDTO(userID);
+        userDTO.setNumOfRoles(3);
+        assertEquals("number of roles is not equal", 3, userDTO.getNumOfRoles());
+    }
+
+    @Test
+    public void testNumberOfPermissions() {
+        UserDTO userDTO = new UserDTO(userID);
+        userDTO.setNumOfPermissions(3);
+        assertEquals("number of permissions is not equal", 3, userDTO.getNumOfPermissions());
+    }
+
+    @Test
+    public void testNumberOfGroups() {
+        UserDTO userDTO = new UserDTO(userID);
+        userDTO.setNumOfGroups(3);
+        assertEquals("number of groups is not equal", 3, userDTO.getNumOfGroups());
+    }
+
+    @Test
+    public void testRoles() {
+        UserDTO userDTO = new UserDTO(userID);
+
+        RolesOrPermissionDTO role = new RolesOrPermissionDTO(1, "tester");
+        Set<RolesOrPermissionDTO> roles = new HashSet<>();
+        roles.add(role);
+
+        userDTO.setRoles(roles);
+        assertEquals("roles are not equal", roles, userDTO.getRoles());
+    }
+
+    @Test
+    public void testPermissions() {
+        UserDTO userDTO = new UserDTO(userID);
+
+        RolesOrPermissionDTO permission = new RolesOrPermissionDTO(1, "secret");
+        Set<RolesOrPermissionDTO> permissions = new HashSet<>();
+        permissions.add(permission);
+
+        userDTO.setPermissions(permissions);
+        assertEquals("permissions are not equal", permissions, userDTO.getPermissions());
+    }
+
+    @Test
+    public void testGroups() {
+        UserDTO userDTO = new UserDTO(userID);
+        GroupDTO groupDTO = new GroupDTO(1);
+
+        Set<GroupDTO> groups = new HashSet<>();
+        groups.add(groupDTO);
+
+        userDTO.setGroups(groups);
+        assertEquals("groups are not equal", groups, userDTO.getGroups());
+    }
+
+    @Test
     public void testDevices() {
         UserDTO userDTO = new UserDTO(userID);
 

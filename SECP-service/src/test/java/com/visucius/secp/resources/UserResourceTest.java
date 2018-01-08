@@ -26,6 +26,7 @@ public class UserResourceTest {
     private static final String verifyUsernameUrl = "/user/verify/username";
     private static final String addDeviceUrl = "/user/device/";
     private static final String defaultUrl = "/user/id/";
+    private static final String usersUrl = "/user";
 
 
     private UserDAO userDAO = Mockito.mock(UserDAO.class);
@@ -285,5 +286,52 @@ public class UserResourceTest {
         deviceDTO.setUserID(1);
 
         return deviceDTO;
+    }
+
+    @Test
+    public void testGetAllUsers() {
+        //testing empty groups in db
+        Response response = resources.client().target(usersUrl).request().get();
+        ResponseValidator.validate(response, 204);
+
+        //testing with users in db
+        User user = new User();
+        Mockito.when(userDAO.findAll()).thenReturn(Arrays.asList(user));
+        response = resources.client().target(usersUrl).request().get();
+        ResponseValidator.validate(response, 200);
+    }
+
+    @Test
+    public void testGetUserWithInvalidUserId() {
+        //testing get groups with no user id
+        Response response = resources.client().target(defaultUrl + null).request().get();
+        ResponseValidator.validate(response, 204);
+
+        //testing get groups with empty user id
+        response = resources.client().target(defaultUrl + " ").request().get();
+        ResponseValidator.validate(response, 204);
+
+        //testing get users with letters as id
+        response = resources.client().target(defaultUrl + "abc").request().get();
+        ResponseValidator.validate(response, 204);
+
+        //testing get users with invalid id
+        long id = 1;
+        Optional<User> user = Optional.absent();
+        Mockito.when(userDAO.find(id)).thenReturn(user);
+        response = resources.client().target(defaultUrl + id).request().get();
+        ResponseValidator.validate(response, 400);
+    }
+
+    @Test
+    public void testGetUserWithValidUserId() {
+        long id = 12;
+        User mockedUser = new User();
+
+        Optional<User> user = Optional.of(mockedUser);
+        Mockito.when(userDAO.find(id)).thenReturn(user);
+
+        Response response = resources.client().target(defaultUrl + id).request().get();
+        ResponseValidator.validate(response, 200);
     }
 }
