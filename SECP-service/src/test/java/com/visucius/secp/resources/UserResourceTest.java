@@ -320,7 +320,7 @@ public class UserResourceTest {
         Optional<User> user = Optional.absent();
         Mockito.when(userDAO.find(id)).thenReturn(user);
         response = resources.client().target(defaultUrl + id).request().get();
-        ResponseValidator.validate(response, 400);
+        ResponseValidator.validate(response, 204);
     }
 
     @Test
