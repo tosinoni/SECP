@@ -11,6 +11,9 @@ angular.module('SECP')
         link: function ($scope, element, attrs) {
             $scope.verifyUsernameUrl = "/SECP/user/verify/username/";
             $scope.verifyEmailUrl = "/SECP/user/verify/email/";
+            $('#registerModal').on('shown.bs.modal', function(){
+                $('.modal-body').niceScroll();
+            })
             $scope.registerUser = function() {
                 $scope.save({user:$scope.user});
                 $scope.frm.$setPristine();

@@ -96,3 +96,8 @@ form input:-webkit-autofill {
     font-size: 12px;
     color: #fe0000;
 }
+
+form .modal-body{
+    height: 400px;
+    overflow-y: scroll;
+}
