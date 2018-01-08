@@ -5,13 +5,13 @@
             <h1 id="formHeader">Log in</h1>
 
             <div class="group">
-                <input type="text" required  ng-model="user.username" name="username" />
+                <input type="text" required ng-model="user.username" name="username" />
                 <span class="highlight"></span>
                 <span class="bar"></span>
                 <label>Username</label>
             </div>
             <div class="group">
-                <input type="password" required ng-model="user.password" name="password"/>
+                <input type="password" required ng-model="user.password" name="password" />
                 <span class="highlight"></span>
                 <span class="bar"></span>
                 <label>Password</label>
@@ -19,7 +19,9 @@
 
             <div class="btn-box">
                 <button type="submit" class="btn btn-submit" ng-disabled="frm.$invalid">Log in</button>
+                <a href="/forgot-password">Forgot Password?</a>
             </div>
+
 
         </form>
     </div>
