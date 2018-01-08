@@ -1,8 +1,26 @@
 'use strict';
 
 angular.module('SECP')
-  .controller('ChatController', ['$scope', '$modal', 'Chat',
-    function ($scope, $modal, Chat) {
+  .controller('ChatController',
+    function ($scope, $modal, Chat, Socket) {
+      Socket.onopen(function () {
+        var message = {
+            groupId: 24,
+            reason: 'message',
+            body: 'hi I am user' + localStorage.getItem('user')
+        }
+        Socket.send(message);
+        $scope.websocketConnected = true;
+      });
+
+      Socket.onerror(function (error) {
+        $scope.websocketConnected = false;
+        swal('Oops', "The chat service is not available right now", "error");
+      });
+
+      Socket.onmessage(function (message) {
+        console.log(message);
+      });
 
 
       //declaring variables
@@ -39,4 +57,4 @@ angular.module('SECP')
             $scope.messages = data;
          });
       };
-    }]);
+    });
