@@ -100,7 +100,7 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
       })
       .when('/portal/manage/user', {
           templateUrl: 'views/portal/manage-user.html',
-          controller:'PortalController',
+          controller:'UserController',
           css: 'css/portal.css',
           requiresLogin: true,
           resolve: {
