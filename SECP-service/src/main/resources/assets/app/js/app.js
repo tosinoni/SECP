@@ -38,15 +38,6 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
         controller: 'LoginController',
         css: 'css/login.css',
       })
-      .when('/register', {
-        templateUrl: 'views/register/register.html',
-        controller: 'RegisterController',
-        css: 'css/register.css',
-        requiresLogin: true,
-        resolve: {
-            isAdmin: isAdmin
-        }
-      })
       .when('/chats', {
         templateUrl: 'views/chat/chats.html',
         controller: 'ChatController',
