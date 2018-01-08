@@ -98,4 +98,17 @@ public class UserResource {
     public Response getUsersPublicKeys(@Auth @PathParam("id") long id) {
         return userController.getUsersPublicKeys(id);
     }
+
+    @GET
+    @UnitOfWork
+    public Response getAllUsers() {
+        return userController.getAllUsers();
+    }
+
+    @GET
+    @Path("/id/{id}")
+    @UnitOfWork
+    public Response getUser(@Auth @PathParam("id") String id) {
+        return userController.getUserGivenId(id);
+    }
 }
