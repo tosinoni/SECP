@@ -36,7 +36,7 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
       .when('/login', {
         templateUrl: 'views/login/login.html',
         controller: 'LoginController',
-        css: 'css/login.css',
+        css: 'css/form.css',
       })
       .when('/register', {
         templateUrl: 'views/register/register.html',
@@ -51,6 +51,18 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
         templateUrl: 'views/chat/chats.html',
         controller: 'ChatController',
         css: 'css/chat.css',
+        requiresLogin: true
+      })
+      .when('/user-profile', {
+        templateUrl: 'views/profile/user-profile.html',
+        controller: 'UserProfileController',
+        css: 'css/user-profile.css',
+        requiresLogin: true
+      })
+      .when('/group-profile', {
+        templateUrl: 'views/profile/group-profile.html',
+        controller: 'GroupProfileController',
+        css: 'css/group-profile.css',
         requiresLogin: true
       })
       .when('/portal', {
@@ -125,6 +137,17 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
               isAdmin: isAdmin
           }
       })
+      .when('/change-password', {
+        templateUrl: 'views/password/change-password.html',
+        controller: 'PasswordController',
+        css: 'css/form.css',
+        requiresLogin: true
+      })
+      .when('/forgot-password', {
+        templateUrl: 'views/password/forgot-password.html',
+        controller: 'PasswordController',
+        css: 'css/form.css'
+      })
       .when('/portal/configure', {
           templateUrl: 'views/portal/configure.html',
           controller:'ConfigureController',
@@ -185,4 +208,4 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
         }
       });
   });
-
+  
