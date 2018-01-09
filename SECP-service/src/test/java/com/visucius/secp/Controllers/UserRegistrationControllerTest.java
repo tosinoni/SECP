@@ -65,11 +65,12 @@ public class UserRegistrationControllerTest {
     public void DisplayNameIsTooLongTest()
     {
         UserRegistrationRequest request = new UserRegistrationRequest(
-            "verrylongfirstnameamefdsafdsafsdfddfdddddsssssssssfsdfsfsdfsfsdfsdfsdffdsfsfsfsf",
+            "ali",
             "farah",
             "alifarah",
             "test@gmail.com",
             "Password1");
+        request.setDisplayName("verrylongdisplaynameamefdsafdsafsdfddfdddddsssssssssfsdfsfsdfsfsdfsdfsdffdsfsfsfsf");
         UserRegistrationResponse response = controller.registerUser(request);
 
         assertFalse(response.success);
@@ -121,6 +122,7 @@ public class UserRegistrationControllerTest {
             "alifarah",
             "test@gmail.com",
             "Password1");
+        request.setDisplayName("");
         UserRegistrationResponse response = controller.registerUser(request);
 
         assertFalse(response.success);
