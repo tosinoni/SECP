@@ -35,10 +35,7 @@ public interface UserErrorMessage {
     String DEVICE_GET_FAIL_NO_PUBLIC_KEY_EXISTS = "No public key exist for all user's devices.";
 
     //UserProfile error messages
-    String DISPLAY_NAME_FAILED = "Failed to set the display name.";
     String DISPLAY_NAME_FAILED_NO_DISPLAY_NAME = "Failed to set the display name. No display name chosen.";
     String DISPLAY_NAME_FAILED_USER_NOT_FOUND = "Failed to set the display name. User not found.";
-    String AVATAR_URL_FAILED = "Failed to set the Avatar URL.";
     String AVATAR_URL_FAILED_NO_AVATAR_URL = "Failed to set the Avatar URL. No Avatar chosen.";
-    String AVATAR_URL_FAILED_AVATAR_URL_NOT_FOUND = "Failed to set the Avatar URL. Avatar not found.";
 }

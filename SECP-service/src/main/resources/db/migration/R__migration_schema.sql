@@ -87,3 +87,5 @@ create table IF NOT EXISTS user_roles (
 
 
 #********************** Column changes for table should be added here ************************
+ALTER TABLE Users ADD display_name varchar(255);
+ALTER TABLE Users ADD avatar_url varchar(255);

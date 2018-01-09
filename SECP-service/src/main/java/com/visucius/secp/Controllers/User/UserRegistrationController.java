@@ -9,6 +9,7 @@ import com.visucius.secp.util.PasswordUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +43,7 @@ public class UserRegistrationController{
         {
             try {
                 String hashPassword = PasswordUtil.createHash(request.password);
-                User user = new User(request.firstName, request.lastName, request.userName, request.displayName, request.email, hashPassword, request.avatar_url);
+                User user = new User(request.firstName, request.lastName, request.userName, request.email, hashPassword);
                 User createdUser = userDAO.save(user);
                 return new UserRegistrationResponse(true, UserErrorMessage.USER_CREATED, Response.Status.CREATED, errors, createdUser.getId());
 
@@ -85,6 +86,9 @@ public class UserRegistrationController{
             errors.add(UserErrorMessage.EMAIL_INVALID);
 
         }
+        if(!InputValidator.isAvatarURLValid(request.avatar_url)){
+            errors.add(UserErrorMessage.AVATAR_URL_FAILED_NO_AVATAR_URL);
+        }
 
         if(!InputValidator.isPasswordValid(request.password))
         {
@@ -104,6 +108,7 @@ public class UserRegistrationController{
         return userDAO.findByUserName(userName);
     }
 
+    public boolean isAvatarURLValid(String avatarURL){return userDAO.findByAvatarURL(avatarURL) != null; }
 
     public boolean isEmailValid(String email)
     {

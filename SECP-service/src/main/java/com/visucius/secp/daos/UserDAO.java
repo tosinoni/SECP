@@ -63,6 +63,15 @@ public class UserDAO extends AbstractDAO<User> {
         return (User) namedQuery("com.visucius.secp.models.User.findByEmail").setParameter("email",email).uniqueResult();
     }
 
+    /**
+     * Returns the {@link User} with the given avatarURL.
+     *
+     * @param avatarURL the entity avatarURL
+     * @return the entity with the given avatarURL
+     */
+    public User findByAvatarURL(String avatarURL){
+        return (User) namedQuery("com.visucius.secp.models.User.findByAvatarURL").setParameter("avatar_url",avatarURL).uniqueResult();
+    }
 
     /**
      * Returns all {@link User} entities.

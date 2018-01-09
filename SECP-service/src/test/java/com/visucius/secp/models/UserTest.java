@@ -61,10 +61,10 @@ public class UserTest {
 
     @Test
     public void testDisplayName(){
-        AssertAnnotations.assertField(User.class,"displayname", Column.class);
+        AssertAnnotations.assertField(User.class,"display_name", Column.class);
 
-        Column c = ReflectTool.getFieldAnnotation(User.class, "displayname", Column.class);
-        assertEquals("column displayname: displayname is not equal", "displayname", c.name());
+        Column c = ReflectTool.getFieldAnnotation(User.class, "display_name", Column.class);
+        assertEquals("column displayname: displayname is not equal", "display_name", c.name());
         assertEquals("column displayname: nullable is true", false, c.nullable());
     }
 

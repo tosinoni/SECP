@@ -58,8 +58,8 @@ public class User implements Principal {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "displayname", nullable = false)
-    private String displayname;
+    @Column(name = "display_name", nullable = false)
+    private String display_name;
 
     @URL
     @Column(name = "avatar_url", nullable = false)
@@ -93,18 +93,16 @@ public class User implements Principal {
     public  User () {
 
     }
-    public User(String firstname, String lastname, String userName, String displayname, String email, String password, String avatar_url) {
+    public User(String firstname, String lastname, String userName, String email, String password) {
         this.firstname = firstname;
         this.username = userName;
         this.lastname = lastname;
-        this.displayname = displayname;
         this.password = password;
         this.email = email;
-        this.avatar_url = avatar_url;
     }
 
     public User(String userName, String email) {
-        this(null, null, userName,null, email, null, null);
+        this(null, null, userName, email, null);
     }
 
     public long getId() {
@@ -167,9 +165,9 @@ public class User implements Principal {
         return groups;
     }
 
-    public String getDisplayName(){ return displayname; }
+    public String getDisplayName(){ return display_name; }
 
-    public void setDisplayName(String displayname){ this.displayname = displayname; }
+    public void setDisplayName(String displayname){ this.display_name = displayname; }
 
     public String getAvatar_url(){ return avatar_url; }
 

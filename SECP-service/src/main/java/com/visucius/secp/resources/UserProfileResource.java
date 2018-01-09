@@ -22,24 +22,21 @@ public class UserProfileResource {
     @Path("/profile/{id}")
     @UnitOfWork
     public Response getProfile(@PathParam("id") String id){
-        userProfileController.getProfile(id);
-        return Response.status(Response.Status.OK).build();
+        return userProfileController.getProfile(id);
     }
 
     @POST
     @Path("/profile/{id}/displayname")
     @UnitOfWork
     public Response addDisplayName(@Auth UserDTO userDTO, @PathParam("id") long id){
-        userProfileController.setDisplayName(userDTO, id);
-        return Response.status(Response.Status.OK).build();
+        return userProfileController.setDisplayName(userDTO,id);
     }
 
     @GET
     @Path("/profile/{id}/displayname")
     @UnitOfWork
     public Response getDisplayName(@PathParam("id") long id) {
-        userProfileController.getDisplayName(id);
-        return Response.status(Response.Status.OK).build();
+        return userProfileController.getDisplayName(id);
     }
 
     @GET
@@ -47,8 +44,7 @@ public class UserProfileResource {
     @UnitOfWork
     @URL
     public Response getAvatarURL(@PathParam("id") long id){
-        userProfileController.getAvatarURL(id);
-        return Response.status(Response.Status.OK).build();
+        return userProfileController.getAvatarURL(id);
     }
 
     @POST
@@ -56,16 +52,6 @@ public class UserProfileResource {
     @UnitOfWork
     @URL
     public Response addAvatarURL(@Auth UserDTO userDTO, @PathParam("id") long id){
-        userProfileController.setAvatarURL(userDTO, id);
-        return Response.status(Response.Status.OK).build();
+        return userProfileController.setAvatarURL(userDTO, id);
     }
-
-    /*
-    @GET
-    @Path("/{id}/groups")
-    @UnitOfWork
-    public Response getUserMessages(@PathParam("id") long id){
-        userProfileController.getUserMessages(id);
-        return Response.status(Response.Status.OK).build();
-    }*/
 }
