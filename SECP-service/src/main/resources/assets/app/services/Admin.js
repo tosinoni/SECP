@@ -57,13 +57,13 @@ angular.module('SECP')
 
         getAllGroups : function() {
             return $http.get("/SECP/groups")
-                .then(function(res) {
-                    if (res.status == 200) {
-                        return res.data;
-                    }
-                }, function(err) {
-                    return err;
-                });
+            .then(function(res) {
+                if (res.status == 200) {
+                    return res.data;
+                }
+            }, function(err) {
+                return err;
+            });
         },
 
         deleteRole : function(id) {
@@ -124,6 +124,50 @@ angular.module('SECP')
             }, function(err) {
                 return err;
             });
-        }
+        },
+
+        register : function(user) {
+            return $http.post("/SECP/admin/register", user)
+            .then(function(res) {
+                return res;
+            }, function(err) {
+                return err;
+            });
+        },
+
+        getUser : function(id) {
+            return $http.get("/SECP/user/id/" + id)
+                .then(function(res) {
+                    if (res.status == 200) {
+                        return res.data;
+                    }
+                }, function(err) {
+                    return err;
+                });
+        },
+
+        getAllUsers : function() {
+            return $http.get("/SECP/user")
+                .then(function(res) {
+                    if (res.status == 200) {
+                        return res.data;
+                    }
+                }, function(err) {
+                    return err;
+                });
+        },
+
+        editUser : function(data) {
+            //this needs to be changed on the server side.
+            return $http.post("/SECP/admin/user/id/" + data.userID, convertData(data))
+                .then(function(res) {
+                    if(res.status == 200) {
+                        return res;
+                    }
+                }, function(err) {
+                    return err;
+                });
+        },
+
     }
   });
