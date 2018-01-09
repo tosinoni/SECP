@@ -1,0 +1,103 @@
+.form-group {
+    text-align: center;
+}
+
+form {
+    width: 70%;
+    margin: 45px auto;
+    font-family:"Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+form h1 {
+    font-family:"Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 3em;
+    font-weight: 300;
+    text-align: center;
+    color: #2196F3;
+}
+
+.group {
+    position: relative;
+    margin: 45px 0;
+}
+
+form input{
+    color: #a5a3a3;
+    font-size: 18px;
+    padding: 10px 10px 10px 5px;
+    display: block;
+    width: 320px;
+    border: none;
+    border-bottom: 1px solid #a5a3a3;
+    outline: none;
+    resize: none;
+}
+
+form input.ng-dirty.ng-invalid ~ label {
+    top: -14px;
+    font-size: 12px;
+    color: #fe0000;
+}
+form input.ng-dirty.ng-valid ~ label {
+    top: -14px;
+    font-size: 12px;
+    color: #2196F3;
+}
+
+form input:focus:invalid ~ label {
+    top: -14px;
+    font-size: 12px;
+    color: #fe0000;
+}
+form input:focus:valid ~ label {
+    top: -14px;
+    font-size: 12px;
+    color: #2196F3;
+}
+
+form input[type="password"] {
+    letter-spacing: 0.4em;
+}
+
+form label {
+    color: #c6c6c6;
+    font-size: 16px;
+    font-weight: normal;
+    position: absolute;
+    pointer-events: none;
+    left: 5px;
+    top: 10px;
+    transition: 300ms ease all;
+}
+
+.btn {
+    background: #2196F3;
+    color: #bce0fb;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 3px;
+    letter-spacing: 0.06em;
+    text-decoration: aliceblue;
+    outline: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.btn:hover {
+    background: rgb(25, 107, 170);
+    color: #bce0fb;
+}
+
+form input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px white inset;
+    -webkit-text-fill-color: #a5a3a3 !important;
+    -webkit-text-size-adjust: auto;
+}
+
+.error {
+    font-size: 12px;
+    color: #fe0000;
+}
+
+form .modal-body{
+    height: 400px;
+    overflow-y: scroll;
+}

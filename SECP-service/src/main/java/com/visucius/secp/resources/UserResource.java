@@ -14,6 +14,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Path("/user")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 @RolesAllowed({"NORMAL", "ADMIN"})
 public class UserResource {
     private final UserController userController;
@@ -97,5 +99,18 @@ public class UserResource {
     @UnitOfWork
     public Response getUsersPublicKeys(@Auth @PathParam("id") long id) {
         return userController.getUsersPublicKeys(id);
+    }
+
+    @GET
+    @UnitOfWork
+    public Response getAllUsers() {
+        return userController.getAllUsers();
+    }
+
+    @GET
+    @Path("/id/{id}")
+    @UnitOfWork
+    public Response getUser(@Auth @PathParam("id") String id) {
+        return userController.getUserGivenId(id);
     }
 }

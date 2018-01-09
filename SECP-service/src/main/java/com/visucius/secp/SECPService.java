@@ -71,7 +71,6 @@ public class SECPService extends Application<SECPConfiguration> {
         bootstrap.addBundle(new AssetsBundle("/assets/app/", "/", "index.html"));
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/login", "index.html", "login"));
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/login/forgot-password", "index.html", "forgot-password"));
-        bootstrap.addBundle(new AssetsBundle("/assets/app", "/register", "index.html", "register"));
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/chats", "index.html", "chats"));
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal", "index.html", "portal"));
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/user-profile", "index.html", "user-profile"));
