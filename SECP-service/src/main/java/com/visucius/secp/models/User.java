@@ -137,6 +137,18 @@ public class User implements Principal {
         this.email = email;
     }
 
+    public void setGroups(Set<Group> groups) {
+        this.groups = groups;
+    }
+
+    public Set<Permission> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(Set<Permission> permissions) {
+        this.permissions = permissions;
+    }
+
     public String getPassword() {
         return password;
     }
