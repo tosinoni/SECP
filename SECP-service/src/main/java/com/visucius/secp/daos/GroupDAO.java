@@ -42,18 +42,6 @@ public class GroupDAO extends AbstractDAO<Group> {
                 setParameter("name",name).uniqueResult();
     }
 
-    public List<Group> findGroupsWithRole(long roleID)
-    {
-        return (List<Group>) namedQuery("com.visucius.secp.models.Group.findGroupsWithRole").
-            setParameter("roleID",roleID).list();
-    }
-
-    public List<Group> findGroupsWithPermissionLevel(long permissionID)
-    {
-        return (List<Group>) namedQuery("com.visucius.secp.models.Group.findGroupsWithPermissionLevel").
-            setParameter("permissionID",permissionID).list();
-    }
-
     public List<Group> findGroupsForUser(long permissionID, List<Long> roleIDS)
     {
         return (List<Group>) namedQuery("com.visucius.secp.models.Group.findGroupsForUser").
