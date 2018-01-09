@@ -2,12 +2,16 @@
 <h1 class="portalheader">
     <i class="fa fa-group" aria-hidden="true"></i>
     Manage Group
-    <div class="registergroupdiv">
-        <a href="">
-            <button class="registergroup">
-                <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                Create Group
-            </button>
-        </a>
-    </div>
 </h1>
+
+<secp-table name="groupTable" modalname="groupModal" buttonname="Create Group" ismanage=true
+            data="groups" headers="groupHeaders" delete-fn="deleteGroup(row)" edit-fn="editGroupModalFn(row)"></secp-table>
+
+</body>
+<!-- Create Group Modal -->
+<secp-manage-modal name="groupModal" frmname="createGroupForm" title="New Group"
+                   modal-data="createGroupData" inputname="Name" save-fn="addGroup(row)"></secp-manage-modal>
+
+<!--Edit Group modal-->
+<secp-manage-modal name="editGroupModal" frmname="editGroupForm" title="Edit Group"
+                   modal-data="editGroupData" save-fn="submitModifyGroup(row)"></secp-manage-modal>

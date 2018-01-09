@@ -167,3 +167,46 @@ a:hover {
     border-radius: 6px;
     padding: 14px 20px;
 }
+
+.tag-option{
+    color: black;
+    border: solid 1px #2196F3;
+    background-color: white;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    padding: 14px 20px;
+}
+
+.tag-option:hover{
+    background-color: #8fcaf3;
+}
+
+.configureoption{
+    text-decoration: none;
+    cursor: pointer;
+    font-family:"Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 1.2em;
+    color: #2196F3;
+    vertical-align: middle;
+    font-weight: bold;
+}
+
+.configureoption:hover{
+    color: #2196F3;
+}
+
+.optionicon{
+    padding-right: 10px;
+    font-size: 1.5em;
+    vertical-align: middle;
+}
+#permissionTableDiv, #rolesTableDiv{
+    display: none;
+}
+
+#optionline1, #optionline2{
+    margin-top: 5px;
+    color: #2196F3;
+    display: none;
+}
