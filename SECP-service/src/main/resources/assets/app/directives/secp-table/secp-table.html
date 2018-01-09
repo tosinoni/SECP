@@ -9,11 +9,28 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="row in data">
-        <td>{{row.name}}</td>
-        <td style="text-align: right"><button ng-click="change(row)">
-            <i class="fa fa-trash red" aria-hidden="true"></i></button>
-        </td>
-    </tr>
+        <tr ng-cloak ng-if="!ismanage" ng-repeat="row in data">
+            <td>{{row.name}}</td>
+            <td style="text-align: right">
+                <button ng-click="change(row)"><i class="fa fa-trash red" aria-hidden="true"></i></button>
+                <button ng-cloak ng-show="isEditable" ng-click="modify(row)"><i class="fa fa-eye" aria-hidden="true"></i></button>
+            </td>
+        </tr>
+        <tr ng-cloak ng-if="ismanage" ng-repeat="row in data">
+            <td>{{row.name}}</td>
+            <td>{{row.numOfPermissions}}</td>
+            <td>{{row.numOfRoles}}</td>
+            <td>{{row.numOfUsers}}</td>
+            <td style="text-align: right">
+                <button ng-cloak ng-show="isEditable" ng-click="modify(row)">
+                    <i class="fa fa-eye" aria-hidden="true"></i>
+                </button>
+                <button ng-click="change(row)">
+                    <i class="fa fa-trash red" aria-hidden="true"></i>
+                </button>
+            </td>
+        </tr>
     </tbody>
 </table>
+
+<link type="text/css" rel="stylesheet" href="directives/secp-table/secp-table.css"/>

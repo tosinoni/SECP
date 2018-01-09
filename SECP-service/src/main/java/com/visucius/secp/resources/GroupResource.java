@@ -13,6 +13,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 @Path("/groups")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 @RolesAllowed("ADMIN")
 public class GroupResource {
 
@@ -74,5 +76,18 @@ public class GroupResource {
     public Response deletePermissions(@Auth GroupModifyRequest request, @PathParam("id") int id)
     {
         return  groupController.deletePermissions(request,id);
+    }
+
+    @GET
+    @UnitOfWork
+    public Response getAllGroups() {
+        return groupController.getAllGroups();
+    }
+
+    @GET
+    @Path("/id/{id}")
+    @UnitOfWork
+    public Response getGroup(@Auth @PathParam("id") String id) {
+        return groupController.getGroupGivenId(id);
     }
 }
