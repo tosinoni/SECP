@@ -37,8 +37,17 @@ public class UserRegistrationRequest {
         this.userName = userName;
         this.email = email;
         this.password = password;
-        this.setAvatar_url(avatar_url);
-        this.setDisplayName(displayName);
+    }
+
+    public UserRegistrationRequest(String firstName, String lastName, String userName , String displayName, String email, String password, String avatar_url)
+    {
+        this.firstName = firstName;
+        this.lastName =lastName;
+        this.userName = userName;
+        this.email = email;
+        this.password = password;
+        this.displayName = displayName;
+        this.avatar_url = avatar_url;
     }
 
     public String getDisplayName(){ return this.displayName; }
