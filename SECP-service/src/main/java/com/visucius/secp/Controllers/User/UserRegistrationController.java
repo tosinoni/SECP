@@ -109,8 +109,6 @@ public class UserRegistrationController{
         return userDAO.findByUserName(userName);
     }
 
-    public boolean isAvatarURLValid(String avatarURL){return userDAO.findByAvatarURL(avatarURL) != null; }
-
     public boolean isEmailValid(String email)
     {
         return userDAO.findByEmail(email) != null;
