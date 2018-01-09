@@ -37,6 +37,8 @@ public class UserRegistrationRequest {
         this.userName = userName;
         this.email = email;
         this.password = password;
+        this.setAvatar_url(avatar_url);
+        this.setDisplayName(displayName);
     }
 
     public String getDisplayName(){ return this.displayName; }
