@@ -114,10 +114,6 @@ public class Group {
         this.permissions.removeAll(permissions);
     }
 
-    public void addUser(User user) {
-        users.add(user);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

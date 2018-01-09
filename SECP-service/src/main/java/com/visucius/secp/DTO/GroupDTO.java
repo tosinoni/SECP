@@ -31,6 +31,10 @@ public class GroupDTO {
     @JsonProperty
     private Set<UserDTO> users = new HashSet<>();
 
+    public GroupDTO() {
+
+    }
+
     public GroupDTO(long groupID) {
         this.groupID = groupID;
     }

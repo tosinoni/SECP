@@ -66,7 +66,7 @@ public class UserDTOTest {
     }
 
     @Test
-    public void testPermissions() {
+    public void testPermission() {
         UserDTO userDTO = new UserDTO(userID);
 
         RolesOrPermissionDTO permission = new RolesOrPermissionDTO(1, "secret");

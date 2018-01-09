@@ -29,9 +29,6 @@ public class UserController {
     private PermissionDAO permissionDAO;
     private RolesDAO rolesDAO;
 
-    private static final int MAXIMUM_AMOUNT_OF_PERMISSIONS = 1;
-
-
     public UserController(UserDAO userDAO, DeviceDAO deviceDAO, PermissionDAO permissionDAO,
                           RolesDAO rolesDAO, GroupDAO groupDAO) {
         this.userDAO = userDAO;
@@ -183,10 +180,10 @@ public class UserController {
     }
 
     private Set<Group> getUserGroups(User user) {
-        //get user new group
+        //get user's new group
         Set<Group> groupsForUser = findGroupsForUser(user.getPermission(), user.getRoles()).stream()
             .map(group -> {
-                group.addUser(user);
+                group.getUsers().add(user);
                 groupDAO.save(group);
                 return group;
             }).collect(Collectors.toSet());
@@ -217,7 +214,7 @@ public class UserController {
 
     private void validatePermission(RolesOrPermissionDTO permission)
     {
-        if (permission == null || StringUtils.isEmpty(permission.getName())) {
+        if (permission == null) {
             throw new WebApplicationException(UserErrorMessage.MODIFY_USER_FAIL_PERMISSIONS_REQUIRED,
                 Response.Status.BAD_REQUEST);
         }
@@ -274,6 +271,11 @@ public class UserController {
         userDTO.setNumOfRoles(user.getRoles().size());
         userDTO.setNumOfGroups(user.getGroups().size());
 
+        Set<GroupDTO> groups = getGroupsForUser(user).stream()
+            .map(group -> {
+                return new GroupDTO(group.getId());
+            }).collect(Collectors.toSet());
+
         Set<RolesOrPermissionDTO> roles = user.getRoles().stream()
             .map(role -> {
                 return new RolesOrPermissionDTO(role.getId(), role.getRole());
@@ -290,6 +292,7 @@ public class UserController {
 
         userDTO.setPermission(permissionForUser);
         userDTO.setRoles(roles);
+        userDTO.setGroups(groups);
 
         return userDTO;
     }
