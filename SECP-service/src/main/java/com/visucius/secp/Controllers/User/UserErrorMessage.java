@@ -33,5 +33,10 @@ public interface UserErrorMessage {
     String DEVICE_GET_FAIL_NO_DEVICE_EXISTS = "No device exists for user.";
     String DEVICE_GET_FAIL_NO_PUBLIC_KEY_EXISTS = "No public key exist for all user's devices.";
 
+    //modify user error messages
+    String MODIFY_USER_FAIL_NO_USER_INFO = "modify user failed. Please provide the information for the user.";
+    String MODIFY_USER_FAIL_PERMISSIONS_REQUIRED = "modify user failed. A user must have only one permission";
+    String MODIFY_USER_FAIL_PERMISSIONS_INVALID = "modify user failed. Permission %s does not exist";
+    String MODIFY_USER_FAIL_ROLES_INVALID = "modify user failed. role %s does not exist";
 
 }

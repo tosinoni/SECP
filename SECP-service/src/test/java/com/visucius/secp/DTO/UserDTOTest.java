@@ -47,13 +47,6 @@ public class UserDTOTest {
     }
 
     @Test
-    public void testNumberOfPermissions() {
-        UserDTO userDTO = new UserDTO(userID);
-        userDTO.setNumOfPermissions(3);
-        assertEquals("number of permissions is not equal", 3, userDTO.getNumOfPermissions());
-    }
-
-    @Test
     public void testNumberOfGroups() {
         UserDTO userDTO = new UserDTO(userID);
         userDTO.setNumOfGroups(3);
@@ -77,11 +70,10 @@ public class UserDTOTest {
         UserDTO userDTO = new UserDTO(userID);
 
         RolesOrPermissionDTO permission = new RolesOrPermissionDTO(1, "secret");
-        Set<RolesOrPermissionDTO> permissions = new HashSet<>();
-        permissions.add(permission);
 
-        userDTO.setPermissions(permissions);
-        assertEquals("permissions are not equal", permissions, userDTO.getPermissions());
+        userDTO.setPermission(permission);
+        assertEquals("permission id are not equal", 1, userDTO.getPermission().getId());
+        assertEquals("permission name are not equal", "secret", userDTO.getPermission().getName());
     }
 
     @Test

@@ -21,7 +21,8 @@
             <td ng-if="row.username">{{row.username}}</td>
             <td ng-if="row.firstName">{{row.firstName}}</td>
             <td ng-if="row.lastName">{{row.lastName}}</td>
-            <td>{{row.numOfPermissions}}</td>
+            <td ng-if="row.numOfPermissions">{{row.numOfPermissions}}</td>
+            <td ng-if="row.permission">{{row.permission.name}}</td>
             <td>{{row.numOfRoles}}</td>
             <td ng-if="row.numOfUsers>-1">{{row.numOfUsers}}</td>
             <td ng-if="row.numOfGroups>-1">{{row.numOfGroups}}</td>

@@ -13,6 +13,18 @@ import java.util.Set;
         @NamedQuery(
             name = "com.visucius.secp.models.Group.findByName",
             query = "from Group g where g.name = :name"
+        ),
+        @NamedQuery(
+            name = "com.visucius.secp.models.Group.findGroupsWithRole",
+            query = "select g from Group g join g.roles r where r.id = :roleID"
+        ),
+        @NamedQuery(
+            name = "com.visucius.secp.models.Group.findGroupsWithPermissionLevel",
+            query = "select g from Group g join g.permissions p where p.id = :permissionID"
+        ),
+        @NamedQuery(
+            name = "com.visucius.secp.models.Group.findGroupsForUser",
+            query = "select g from Group g join g.permissions p join g.roles r where p.id = :permissionID and r.id in (:roleIDS)"
         )
     }
 )
@@ -108,6 +120,10 @@ public class Group {
     public void removePermissions(Collection<Permission> permissions)
     {
         this.permissions.removeAll(permissions);
+    }
+
+    public void addUser(User user) {
+        users.add(user);
     }
 
     @Override

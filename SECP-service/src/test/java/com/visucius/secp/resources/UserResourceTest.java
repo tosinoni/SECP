@@ -4,8 +4,7 @@ import com.google.common.base.Optional;
 import com.visucius.secp.Controllers.User.UserController;
 import com.visucius.secp.Controllers.User.UserRegistrationController;
 import com.visucius.secp.DTO.DeviceDTO;
-import com.visucius.secp.daos.DeviceDAO;
-import com.visucius.secp.daos.UserDAO;
+import com.visucius.secp.daos.*;
 import com.visucius.secp.helpers.ResponseValidator;
 import com.visucius.secp.models.Device;
 import com.visucius.secp.models.LoginRole;
@@ -31,7 +30,11 @@ public class UserResourceTest {
 
     private UserDAO userDAO = Mockito.mock(UserDAO.class);
     private DeviceDAO deviceDAO = Mockito.mock(DeviceDAO.class);
-    private UserController userController = new UserController(userDAO, deviceDAO);
+    private PermissionDAO permissionDAO = Mockito.mock(PermissionDAO.class);
+    private RolesDAO rolesDAO = Mockito.mock(RolesDAO.class);
+    private GroupDAO groupDAO = Mockito.mock(GroupDAO.class);
+
+    private UserController userController = new UserController(userDAO, deviceDAO, permissionDAO, rolesDAO, groupDAO);
     private UserRegistrationController userRegistrationController  = Mockito.mock((UserRegistrationController.class));
 
     //test variables
