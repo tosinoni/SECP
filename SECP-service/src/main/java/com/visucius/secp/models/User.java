@@ -99,8 +99,6 @@ public class User implements Principal {
         this.lastname = lastname;
         this.password = password;
         this.email = email;
-        this.setAvatar_url(avatar_url);
-        this.setDisplayName(display_name);
     }
 
     public User(String userName, String email) {
