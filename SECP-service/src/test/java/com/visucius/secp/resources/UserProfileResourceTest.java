@@ -15,10 +15,7 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 
 public class UserProfileResourceTest {
-    private static final String userProfileUrl = "/user/";
     private static final String getUserProfileUrl = "/user/profile/id/";
-    private static final String displaynameUrl = "/user/profile/id/displayname";
-    private static final String avatarUrl = "/user/profile/id/avatar_url";
 
     private UserDAO userDAO = Mockito.mock(UserDAO.class);
     private UserProfileController userProfileController = new UserProfileController(userDAO);
@@ -111,7 +108,7 @@ public class UserProfileResourceTest {
         response = resources.client().target(getUserProfileUrl + " " + "/displayname").request().post(Entity.json(userDTO));
         ResponseValidator.validate(response, 400);
 
-        userDTO.setDisplayName("testdisplayname");
+        //userDTO.setDisplayName("testdisplayname");
         response = resources.client().target(getUserProfileUrl + 1 + "/displayname").request().post(Entity.json(userDTO));
         ResponseValidator.validate(response, 400);
     }
@@ -151,7 +148,7 @@ public class UserProfileResourceTest {
         response = resources.client().target(getUserProfileUrl + " " + "/avatar_url").request().post(Entity.json(userDTO));
         ResponseValidator.validate(response, 400);
 
-        userDTO.setAvatar_url("https://test.com");
+        //userDTO.setAvatar_url("https://test.com");
         response = resources.client().target(getUserProfileUrl + 1 + "/avatar_url").request().post(Entity.json(userDTO));
         ResponseValidator.validate(response, 400);
     }
