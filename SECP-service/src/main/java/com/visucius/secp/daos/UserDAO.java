@@ -54,6 +54,16 @@ public class UserDAO extends AbstractDAO<User> {
     }
 
     /**
+     * Returns the {@link User} with the given name (first or last).
+     *
+     * @param name the entity name
+     * @return the entity with the given name
+     */
+    public User findByName(String name) {
+        return (User) namedQuery("com.visucius.secp.models.User.findByName").setParameter("name",name).uniqueResult();
+    }
+
+    /**
      * Returns the {@link User} with the given email.
      *
      * @param email the entity email

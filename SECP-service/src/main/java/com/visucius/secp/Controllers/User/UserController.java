@@ -61,6 +61,17 @@ public class UserController {
         return Response.status(Response.Status.OK).entity(getUserResponse(user)).build();
     }
 
+    public Response getUserGivenSearchInput(String input) {
+        if(StringUtils.isEmpty(input) || StringUtils.isNumeric(input)) {
+            return Response.status(Response.Status.NO_CONTENT).build();
+        }
+
+        long userID = Long.parseLong(id);
+        User user = getUser(userID);
+
+        return Response.status(Response.Status.OK).entity(getUserResponse(user)).build();
+    }
+
     public boolean isUserAnAdmin(String userID) {
         if(StringUtils.isBlank(userID) || !StringUtils.isNumeric(userID)) {
             LOG.warn("Empty user id provided.");
@@ -160,6 +171,18 @@ public class UserController {
         if (!userOptional.isPresent()) {
             throw new WebApplicationException(
                 UserErrorMessage.USER_ID_INVALID,
+                Response.Status.NO_CONTENT);
+        }
+
+        return userOptional.get();
+    }
+
+    private User getUser(String input)
+    {
+        Optional<User> userOptional = userDAO.findByName(input);
+        if (!userOptional.isPresent()) {
+            throw new WebApplicationException(
+                UserErrorMessage.USER_ID_INVALID,   //need to add new usererrormessage
                 Response.Status.NO_CONTENT);
         }
 

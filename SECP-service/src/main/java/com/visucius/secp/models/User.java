@@ -17,6 +17,10 @@ import java.util.Set;
             query = "from User u where u.username = :username"
         ),
         @NamedQuery(
+            name = "com.visucius.secp.models.User.findByName",
+            query = "from User u where u.firstname like :name and where u.lastnight like :name"
+        ),
+        @NamedQuery(
             name = "com.visucius.secp.models.User.findByEmail",
             query = "from User u where u.email = :email"
         ),

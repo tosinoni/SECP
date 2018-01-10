@@ -113,4 +113,11 @@ public class UserResource {
     public Response getUser(@Auth @PathParam("id") String id) {
         return userController.getUserGivenId(id);
     }
+
+    @GET
+    @Path("/chats/{input}")
+    @UnitOfWork
+    public Response getUser(@Auth @PathParam("input") String input) {
+        return userController.getUserGivenSearchInput(input);
+    }
 }

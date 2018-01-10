@@ -38,7 +38,15 @@ angular.module('SECP')
                 console.log(err);
                 console.log("error getting chat list!!")
             });
-        }
+        },
 
+        search: function(input){
+            return $http.get("/SECP/admin/roles")
+            .then(function(res) {
+                //display the results
+            }, function(err) {
+                //display no results
+            });
+        }
     }
 });
