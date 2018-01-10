@@ -13,6 +13,10 @@ import java.util.Set;
         @NamedQuery(
             name = "com.visucius.secp.models.Group.findByName",
             query = "from Group g where g.name = :name"
+        ),
+        @NamedQuery(
+            name = "com.visucius.secp.models.Group.findGroupsForUser",
+            query = "select g from Group g join g.permissions p join g.roles r where p.id = :permissionID and r.id in (:roleIDS)"
         )
     }
 )

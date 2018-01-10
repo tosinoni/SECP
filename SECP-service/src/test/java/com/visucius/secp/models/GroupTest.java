@@ -117,4 +117,19 @@ public class GroupTest {
         group.setMessages(messages);
         assertEquals("Messages not equal", group.getMessages(),messages);
     }
+
+    @Test
+    public void testNamedQueries() {
+
+        //testing the @JoinTable annotation
+        NamedQueries namedQueries = ReflectTool.getClassAnnotation(Group.class, NamedQueries.class);
+        assertEquals("NamedQueries:  size is not equal to 5", 2, namedQueries.value().length);
+
+        NamedQuery[] namedQueriesArray = namedQueries.value();
+
+        assertEquals("NamedQueries[0]: name is not equal",
+            "com.visucius.secp.models.Group.findByName", namedQueriesArray[0].name());
+        assertEquals("NamedQueries[1]: name is not equal",
+            "com.visucius.secp.models.Group.findGroupsForUser", namedQueriesArray[1].name());
+    }
 }

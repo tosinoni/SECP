@@ -8,7 +8,8 @@ angular.module('SECP')
         if(data) {
             newData = angular.copy(data);
             newData.roles = newData.roles.map(role => {return role.id});
-            newData.permissions = newData.permissions.map(permission => {return permission.id});
+            if(newData.permissions)
+                newData.permissions = newData.permissions.map(permission => {return permission.id});
         }
         return newData;
     }
@@ -159,11 +160,9 @@ angular.module('SECP')
 
         editUser : function(data) {
             //this needs to be changed on the server side.
-            return $http.post("/SECP/admin/user/id/" + data.userID, convertData(data))
+            return $http.post("/SECP/user/modify/", data)
                 .then(function(res) {
-                    if(res.status == 200) {
-                        return res;
-                    }
+                    return res;
                 }, function(err) {
                     return err;
                 });

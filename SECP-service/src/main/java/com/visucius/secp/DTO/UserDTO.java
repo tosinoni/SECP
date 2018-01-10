@@ -24,9 +24,6 @@ public class UserDTO {
     private long numOfRoles;
 
     @JsonProperty
-    private long numOfPermissions;
-
-    @JsonProperty
     private Set<GroupDTO> groups;
 
     @JsonProperty
@@ -36,12 +33,15 @@ public class UserDTO {
     private Set<RolesOrPermissionDTO> roles;
 
     @JsonProperty
-    private Set<RolesOrPermissionDTO> permissions;
+    private RolesOrPermissionDTO permission;
 
 
     @JsonProperty
     private Set<DeviceDTO> devices = new HashSet<>();
 
+    public UserDTO() {
+
+    }
     public UserDTO(long userID) {
         this.userID = userID;
     }
@@ -91,14 +91,6 @@ public class UserDTO {
         this.numOfRoles = numOfRoles;
     }
 
-    public long getNumOfPermissions() {
-        return numOfPermissions;
-    }
-
-    public void setNumOfPermissions(long numOfPermissions) {
-        this.numOfPermissions = numOfPermissions;
-    }
-
     public Set<GroupDTO> getGroups() {
         return groups;
     }
@@ -123,12 +115,12 @@ public class UserDTO {
         this.roles = roles;
     }
 
-    public Set<RolesOrPermissionDTO> getPermissions() {
-        return permissions;
+    public RolesOrPermissionDTO getPermission() {
+        return permission;
     }
 
-    public void setPermissions(Set<RolesOrPermissionDTO> permissions) {
-        this.permissions = permissions;
+    public void setPermission(RolesOrPermissionDTO permission) {
+        this.permission = permission;
     }
 
     public Set<DeviceDTO> getDevices() {
