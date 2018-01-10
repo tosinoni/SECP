@@ -81,6 +81,7 @@ create table IF NOT EXISTS user_roles (
 
 
 #********************** Column changes for table should be added here ************************
+
 ALTER TABLE Users ADD display_name varchar(255);
 ALTER TABLE Users ADD avatar_url varchar(255);
 Alter TABLE Users ADD COLUMN isActive BOOLEAN DEFAULT TRUE ;
@@ -88,3 +89,4 @@ Alter TABLE Groups ADD COLUMN isActive BOOLEAN;
 ALTER TABLE Groups ADD COLUMN group_type VARCHAR(255);
 DROP TABLE IF EXISTS user_permissions;
 ALTER TABLE USERS ADD COLUMN permission_id bigint;
+
