@@ -53,7 +53,13 @@ public class UserProfileController {
         return Response.status(Response.Status.OK).entity(newuser.getDisplayName()).build();
     }
 
-    public Response getDisplayName(long id) {
+    public Response getDisplayName(String userID) {
+        if(StringUtils.isBlank(userID) || !StringUtils.isNumeric(userID)) {
+            LOG.warn("Empty user id provided.");
+            throw new WebApplicationException(UserErrorMessage.USER_ID_INVALID, Response.Status.NO_CONTENT);
+        }
+
+        long id = Long.parseLong(userID);
         Optional<User> user = userDAO.find(id);
 
         if(!user.isPresent()){
@@ -67,7 +73,13 @@ public class UserProfileController {
 
     }
 
-    public Response getAvatarURL(long id) {
+    public Response getAvatarURL(String userID) {
+        if(StringUtils.isBlank(userID) || !StringUtils.isNumeric(userID)) {
+            LOG.warn("Empty user id provided.");
+            throw new WebApplicationException(UserErrorMessage.USER_ID_INVALID, Response.Status.NO_CONTENT);
+        }
+
+        long id = Long.parseLong(userID);
         Optional<User> user = userDAO.find(id);
 
         if(!user.isPresent()){

@@ -10,7 +10,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("/user")
+@Path("/user/profile")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class UserProfileResource {
@@ -19,36 +19,36 @@ public class UserProfileResource {
     public UserProfileResource(UserProfileController userProfileController) {this.userProfileController = userProfileController;}
 
     @GET
-    @Path("/profile/{id}")
+    @Path("/id/{id}")
     @UnitOfWork
     public Response getProfile(@PathParam("id") String id){
         return userProfileController.getProfile(id);
     }
 
     @POST
-    @Path("/profile/{id}/displayname")
+    @Path("/id/{id}/displayname")
     @UnitOfWork
     public Response addDisplayName(@Auth UserDTO userDTO, @PathParam("id") long id){
         return userProfileController.setDisplayName(userDTO,id);
     }
 
     @GET
-    @Path("/profile/{id}/displayname")
+    @Path("/id/{id}/displayname")
     @UnitOfWork
-    public Response getDisplayName(@PathParam("id") long id) {
+    public Response getDisplayName(@PathParam("id") String id) {
         return userProfileController.getDisplayName(id);
     }
 
     @GET
-    @Path("/profile/{id}/avatar_url")
+    @Path("/id/{id}/avatar_url")
     @UnitOfWork
     @URL
-    public Response getAvatarURL(@PathParam("id") long id){
+    public Response getAvatarURL(@PathParam("id") String id){
         return userProfileController.getAvatarURL(id);
     }
 
     @POST
-    @Path("/profile/{id}/avatar_url")
+    @Path("/id/{id}/avatar_url")
     @UnitOfWork
     @URL
     public Response addAvatarURL(@Auth UserDTO userDTO, @PathParam("id") long id){
