@@ -29,7 +29,7 @@ public class Permission {
     @ManyToMany(mappedBy = "permissions", fetch = FetchType.LAZY)
     private Set<Group> groups = new HashSet<>();
 
-    @ManyToMany(mappedBy = "permissions", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "permission", fetch = FetchType.LAZY)
     private Set<User> users = new HashSet<>();
 
     public Permission()

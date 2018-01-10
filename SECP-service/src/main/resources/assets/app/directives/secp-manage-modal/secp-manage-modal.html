@@ -15,13 +15,22 @@
                            required="required"><br><br>
                 </div>
 
-                Permissions:<br>
-                <select select2 required class="permission-level-select" style="width: 100%" ng-model="modalData.permissions"
-                        ng-options="permission.name for permission in permissions track by permission.id" multiple>
-                </select>
+                <div ng-if="!isuser">
+                    Permissions:<br>
+                    <select select2 class="permission-level-select" style="width: 100%" ng-model="modalData.permissions"
+                            ng-options="permission.name for permission in permissions track by permission.id" multiple>
+                    </select>
+                </div>
+
+                <div ng-if="isuser">
+                    Permission:<br>
+                    <select select2 required class="permission-level-select" style="width: 100%" ng-model="modalData.permission"
+                            ng-options="permission.name for permission in permissions track by permission.id">
+                    </select>
+                </div>
 
                 <br><br>Roles:<br>
-                <select select2="" required class="role-select" style="width: 100%" ng-model="modalData.roles"
+                <select select2="" class="role-select" style="width: 100%" ng-model="modalData.roles"
                         ng-options="role.name for role in roles track by role.id" multiple>
                 </select>
             </div>

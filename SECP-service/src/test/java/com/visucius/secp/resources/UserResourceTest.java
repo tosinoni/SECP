@@ -4,12 +4,11 @@ import com.google.common.base.Optional;
 import com.visucius.secp.Controllers.User.UserController;
 import com.visucius.secp.Controllers.User.UserRegistrationController;
 import com.visucius.secp.DTO.DeviceDTO;
-import com.visucius.secp.daos.DeviceDAO;
-import com.visucius.secp.daos.UserDAO;
+import com.visucius.secp.DTO.RolesOrPermissionDTO;
+import com.visucius.secp.DTO.UserDTO;
+import com.visucius.secp.daos.*;
 import com.visucius.secp.helpers.ResponseValidator;
-import com.visucius.secp.models.Device;
-import com.visucius.secp.models.LoginRole;
-import com.visucius.secp.models.User;
+import com.visucius.secp.models.*;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Rule;
@@ -19,6 +18,8 @@ import org.mockito.Mockito;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public class UserResourceTest {
     private static final String isUserAnAdminUrl = "/user/verify/admin/id/";
@@ -27,15 +28,22 @@ public class UserResourceTest {
     private static final String addDeviceUrl = "/user/device/";
     private static final String defaultUrl = "/user/id/";
     private static final String usersUrl = "/user";
+    private static final String modifyUrl = "/user/modify";
 
 
     private UserDAO userDAO = Mockito.mock(UserDAO.class);
     private DeviceDAO deviceDAO = Mockito.mock(DeviceDAO.class);
-    private UserController userController = new UserController(userDAO, deviceDAO);
+    private PermissionDAO permissionDAO = Mockito.mock(PermissionDAO.class);
+    private RolesDAO rolesDAO = Mockito.mock(RolesDAO.class);
+    private GroupDAO groupDAO = Mockito.mock(GroupDAO.class);
+
+    private UserController userController = new UserController(userDAO, deviceDAO, permissionDAO, rolesDAO, groupDAO);
     private UserRegistrationController userRegistrationController  = Mockito.mock((UserRegistrationController.class));
 
     //test variables
     private static final long userID = 1;
+    private static final String permission = "TOP_SECRET";
+    private static final String role = "tester";
 
     @Rule
     public final ResourceTestRule resources = ResourceTestRule.builder()
@@ -324,6 +332,17 @@ public class UserResourceTest {
     }
 
     @Test
+    public void testDeleteUser() {
+
+        long id = 12;
+        User user = new User();
+
+        Mockito.when(userDAO.find(id)).thenReturn(Optional.fromNullable(user));
+        Response response = resources.client().target(defaultUrl  + 12).request().delete();
+        ResponseValidator.validate(response, 200);
+    }
+
+    @Test
     public void testGetUserWithValidUserId() {
         long id = 12;
         User mockedUser = new User();
@@ -333,5 +352,99 @@ public class UserResourceTest {
 
         Response response = resources.client().target(defaultUrl + id).request().get();
         ResponseValidator.validate(response, 200);
+    }
+
+    @Test
+    public void testModifyUserWithInvalidPermission()
+    {
+        //test user modify with no userDTO
+        Response response = resources.client().target(modifyUrl).request().post(null);
+        ResponseValidator.validate(response, 400);
+
+        //test user modify with no permission
+        UserDTO userDTO = new UserDTO();
+        response = resources.client().target(modifyUrl).request().post(Entity.json(userDTO));
+        ResponseValidator.validate(response, 400);
+
+        //test user modify with invalid Permission
+        userDTO.setPermission(new RolesOrPermissionDTO(1, permission));
+        Optional<Permission> permissionFromDB = Optional.absent();
+        Mockito.when(permissionDAO.find(1)).thenReturn(permissionFromDB);
+        response = resources.client().target(modifyUrl).request().post(Entity.json(userDTO));
+        ResponseValidator.validate(response, 400);
+    }
+
+    @Test
+    public void testModifyUserWithInvalidRole()
+    {
+        //test user modify with invalid roles
+        UserDTO userDTO = createUser();
+        Permission permission = new Permission(userDTO.getPermission().getName());
+        permission.setId(1);
+
+        Optional<Permission> permissionFromDB = Optional.of(permission);
+        Mockito.when(permissionDAO.find(1)).thenReturn(permissionFromDB);
+        Optional<Role> roleFromDB = Optional.absent();
+        Mockito.when(rolesDAO.find(1)).thenReturn(roleFromDB);
+        Response response = resources.client().target(modifyUrl).request().post(Entity.json(userDTO));
+        ResponseValidator.validate(response, 400);
+    }
+
+    @Test
+    public void testModifyUserWithInvalidUserID()
+    {
+        //test user modify with invalid id
+        UserDTO userDTO = createUser();
+        Permission permission = new Permission(userDTO.getPermission().getName());
+        permission.setId(1);
+
+        Role roleObj = new Role(role);
+        roleObj.setId(1);
+
+        Optional<Permission> permissionFromDB = Optional.of(permission);
+        Mockito.when(permissionDAO.find(1)).thenReturn(permissionFromDB);
+        Optional<Role> roleFromDB = Optional.of(roleObj);
+        Mockito.when(rolesDAO.find(1)).thenReturn(roleFromDB);
+
+        Optional<User> userFromDB = Optional.absent();
+        Mockito.when(userDAO.find(userID)).thenReturn(userFromDB);
+        Response response = resources.client().target(modifyUrl).request().post(Entity.json(userDTO));
+        ResponseValidator.validate(response, 204);
+    }
+
+    @Test
+    public void testModifyUserWithValidParameters()
+    {
+        //test user modify with invalid id
+        UserDTO userDTO = createUser();
+        Permission permission = new Permission(userDTO.getPermission().getName());
+        permission.setId(1);
+
+        Role roleObj = new Role(role);
+        roleObj.setId(1);
+
+        User user = new User();
+        user.setId(1);
+
+        Optional<Permission> permissionFromDB = Optional.of(permission);
+        Mockito.when(permissionDAO.find(1)).thenReturn(permissionFromDB);
+        Optional<Role> roleFromDB = Optional.of(roleObj);
+        Mockito.when(rolesDAO.find(1)).thenReturn(roleFromDB);
+        Optional<User> userFromDB = Optional.of(user);
+        Mockito.when(userDAO.find(userID)).thenReturn(userFromDB);
+
+        Response response = resources.client().target(modifyUrl).request().post(Entity.json(userDTO));
+        ResponseValidator.validate(response, 200);
+    }
+
+    public UserDTO createUser() {
+        UserDTO userDTO = new UserDTO(userID);
+        userDTO.setPermission(new RolesOrPermissionDTO(1, permission));
+
+        Set<RolesOrPermissionDTO> roles = new HashSet<>();
+        roles.add(new RolesOrPermissionDTO(1, role));
+        userDTO.setRoles(roles);
+
+        return userDTO;
     }
 }

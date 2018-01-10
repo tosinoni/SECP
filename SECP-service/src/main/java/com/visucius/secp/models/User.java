@@ -27,12 +27,16 @@ import java.util.Set;
         ),
         @NamedQuery(
             name = "com.visucius.secp.models.User.findUsersWithPermissionLevel",
-            query = "select u from User u join u.permissions p where p.id = :permissionID"
+            query = "select u from User u join u.permission p where p.id = :permissionID"
         ),
         @NamedQuery(
             name = "com.visucius.secp.models.User.findAdmins",
             query = "from User u where u.loginRole = :loginRole"
         ),
+        @NamedQuery(
+            name = "com.visucius.secp.models.User.findAllActiveUsers",
+            query = "select u from User u where u.isActive = true"
+        )
     }
 )
 public class User implements Principal {
@@ -74,11 +78,9 @@ public class User implements Principal {
     @ManyToMany(mappedBy = "users")
     private Set<Group> groups = new HashSet<>();
 
-    @ManyToMany()
-    @JoinTable(name = "user_permissions",
-        joinColumns = { @JoinColumn(name = "user_id") },
-        inverseJoinColumns = { @JoinColumn(name = "permission_id") })
-    private Set<Permission> permissions = new HashSet<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "permission_id", nullable = false)
+    private Permission permission;
 
     @ManyToMany
     @JoinTable(name = "user_devices",
@@ -90,15 +92,19 @@ public class User implements Principal {
     @Column(name = "login_role", nullable = false)
     private LoginRole loginRole = LoginRole.NORMAL;
 
-    public  User () {
+    @Column(name = "isActive", nullable = false)
+    private boolean isActive = true;
 
+    public  User () {
     }
+
     public User(String firstname, String lastname, String userName, String email, String password) {
         this.firstname = firstname;
         this.username = userName;
         this.lastname = lastname;
         this.password = password;
         this.email = email;
+        this.isActive = true;
     }
 
     public User(String userName, String email) {
@@ -149,12 +155,12 @@ public class User implements Principal {
         this.groups = groups;
     }
 
-    public Set<Permission> getPermissions() {
-        return permissions;
+    public Permission getPermission() {
+        return permission;
     }
 
-    public void setPermissions(Set<Permission> permissions) {
-        this.permissions = permissions;
+    public void setPermission(Permission permission) {
+        this.permission = permission;
     }
 
     public String getPassword() {
@@ -175,6 +181,14 @@ public class User implements Principal {
 
     public Set<Group> getGroups() {
         return groups;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
     }
 
     public String getDisplayName(){ return display_name; }
