@@ -190,4 +190,17 @@ public class UserTest {
         joinColumn = j.inverseJoinColumns()[0];
         assertEquals("JoinColumn devices: name is not equal", "device_id", joinColumn.name());
     }
+
+    @Test
+    public void testPermission(){
+        AssertAnnotations.assertField(User.class, "permission", ManyToOne.class, JoinColumn.class);
+
+        ManyToOne m = ReflectTool.getFieldAnnotation(User.class, "permission", ManyToOne.class);
+        assertEquals("ManyToOne: Fetch is not equal", FetchType.LAZY, m.fetch());
+
+        JoinColumn joinColumn = ReflectTool.getFieldAnnotation(User.class, "permission", JoinColumn.class);
+        assertEquals("JoinColumn permission: name is not equal", "permission_id", joinColumn.name());
+        assertEquals("JoinColumn permission: nullable is true", false, joinColumn.nullable());
+    }
+
 }

@@ -1,7 +1,7 @@
 angular.module('SECP')
     .controller('UserController', function ($scope, Admin, SwalService) {
         $scope.users = [];
-        $scope.userHeaders = ['Username', 'First Name', 'Last Name', 'Permission Level(s)', 'Role(s)', 'Groups'];
+        $scope.userHeaders = ['Username', 'First Name', 'Last Name', 'Permission Level', 'Role(s)', 'Groups'];
         $scope.createUserData = {}; //the data sent to the modal for create user
         $scope.editUserData = {};   //the data sent to the modal for edit user
 
@@ -42,9 +42,9 @@ angular.module('SECP')
         $scope.submitModifyUser = function(row) {
             if (row) {
                 Admin.editUser(row).then(function(res){
-                    if (res) {
-                        var index = $scope.users.indexOf(row);
-                        $scope.users[index] = res;
+                    if (res.status == 200) {
+                        var index = _.findIndex($scope.users, function(o) { return o.username == row.username; });
+                        $scope.users[index] = res.data;
                         swal('Modified!','User modified.','success');
                     } else {
                         swal('Oops!', res.data.message, "error");

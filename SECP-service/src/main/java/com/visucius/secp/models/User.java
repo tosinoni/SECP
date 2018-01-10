@@ -27,7 +27,7 @@ import java.util.Set;
         ),
         @NamedQuery(
             name = "com.visucius.secp.models.User.findUsersWithPermissionLevel",
-            query = "select u from User u join u.permissions p where p.id = :permissionID"
+            query = "select u from User u join u.permission p where p.id = :permissionID"
         ),
         @NamedQuery(
             name = "com.visucius.secp.models.User.findAdmins",
@@ -74,11 +74,9 @@ public class User implements Principal {
     @ManyToMany(mappedBy = "users")
     private Set<Group> groups = new HashSet<>();
 
-    @ManyToMany()
-    @JoinTable(name = "user_permissions",
-        joinColumns = { @JoinColumn(name = "user_id") },
-        inverseJoinColumns = { @JoinColumn(name = "permission_id") })
-    private Set<Permission> permissions = new HashSet<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "permission_id", nullable = false)
+    private Permission permission;
 
     @ManyToMany
     @JoinTable(name = "user_devices",
@@ -149,12 +147,12 @@ public class User implements Principal {
         this.groups = groups;
     }
 
-    public Set<Permission> getPermissions() {
-        return permissions;
+    public Permission getPermission() {
+        return permission;
     }
 
-    public void setPermissions(Set<Permission> permissions) {
-        this.permissions = permissions;
+    public void setPermission(Permission permission) {
+        this.permission = permission;
     }
 
     public String getPassword() {

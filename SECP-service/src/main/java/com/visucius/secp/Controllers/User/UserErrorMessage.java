@@ -38,4 +38,10 @@ public interface UserErrorMessage {
     String DISPLAY_NAME_FAILED_NO_DISPLAY_NAME = "Failed to set the display name. No display name chosen.";
     String DISPLAY_NAME_FAILED_USER_NOT_FOUND = "Failed to set the display name. User not found.";
     String AVATAR_URL_FAILED_NO_AVATAR_URL = "Failed to set the Avatar URL. No Avatar chosen.";
+  
+    //modify user error messages
+    String MODIFY_USER_FAIL_NO_USER_INFO = "modify user failed. Please provide the information for the user.";
+    String MODIFY_USER_FAIL_PERMISSIONS_REQUIRED = "modify user failed. A user must have only one permission";
+    String MODIFY_USER_FAIL_PERMISSIONS_INVALID = "modify user failed. Permission %s does not exist";
+    String MODIFY_USER_FAIL_ROLES_INVALID = "modify user failed. role %s does not exist";
 }

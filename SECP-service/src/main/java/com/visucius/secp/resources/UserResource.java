@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.visucius.secp.Controllers.User.UserController;
 import com.visucius.secp.Controllers.User.UserRegistrationController;
 import com.visucius.secp.DTO.DeviceDTO;
+import com.visucius.secp.DTO.UserDTO;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 import org.apache.commons.lang3.StringUtils;
@@ -112,5 +113,14 @@ public class UserResource {
     @UnitOfWork
     public Response getUser(@Auth @PathParam("id") String id) {
         return userController.getUserGivenId(id);
+    }
+
+    @POST
+    @Path("/modify")
+    @UnitOfWork
+    @RolesAllowed("ADMIN")
+    public Response modifyUser(@Auth UserDTO userDTO) {
+        return userController.modifyUser(userDTO);
+
     }
 }

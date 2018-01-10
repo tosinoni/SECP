@@ -62,6 +62,7 @@ create table IF NOT EXISTS Users(
         login_role varchar(255) not null,
         password varchar(255) not null,
         username varchar(255) not null,
+        permission_id bigint not null,
         primary key (id)
 ) engine=MyISAM;
 
@@ -69,12 +70,6 @@ create table IF NOT EXISTS user_devices (
        user_id bigint not null,
         device_id bigint not null,
         primary key (user_id, device_id)
-) engine=MyISAM;
-
-create table IF NOT EXISTS user_permissions (
-       user_id bigint not null,
-        permission_id bigint not null,
-        primary key (user_id, permission_id)
 ) engine=MyISAM;
 
 create table IF NOT EXISTS user_roles (
@@ -87,5 +82,9 @@ create table IF NOT EXISTS user_roles (
 
 
 #********************** Column changes for table should be added here ************************
+
 ALTER TABLE Users ADD display_name varchar(255);
 ALTER TABLE Users ADD avatar_url varchar(255);
+DROP TABLE IF EXISTS user_permissions;
+ALTER TABLE USERS ADD COLUMN permission_id bigint;
+
