@@ -2,6 +2,7 @@ package com.visucius.secp.resources;
 
 import com.google.common.base.Optional;
 import com.visucius.secp.Controllers.User.UserProfileController;
+import com.visucius.secp.DTO.UserDTO;
 import com.visucius.secp.daos.UserDAO;
 import com.visucius.secp.helpers.ResponseValidator;
 import com.visucius.secp.models.User;
@@ -10,6 +11,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 
 public class UserProfileResourceTest {
@@ -20,6 +22,7 @@ public class UserProfileResourceTest {
 
     private UserDAO userDAO = Mockito.mock(UserDAO.class);
     private UserProfileController userProfileController = new UserProfileController(userDAO);
+
 
     private static final long userID = 1;
 
@@ -63,21 +66,21 @@ public class UserProfileResourceTest {
     }
 
     @Test
-    public void testGetDisplaynameWithInvalidID(){
+    public void testGetDisplayNameWithInvalidID(){
 
-        //Testing getDisplayname with null ID
+        //Testing getDisplayName with null ID
         Response response = resources.client().target(getUserProfileUrl + null + "/displayname").request().get();
         ResponseValidator.validate(response, 204);
 
-        //Testing getDisplayname with empty ID
+        //Testing getDisplayName with empty ID
         response = resources.client().target(getUserProfileUrl + " " + "/displayname").request().get();
         ResponseValidator.validate(response, 204);
 
-        //Testing getDisplayname with letters ID
+        //Testing getDisplayName with letters ID
         response = resources.client().target(getUserProfileUrl + "abc" + "/displayname").request().get();
         ResponseValidator.validate(response, 204);
 
-        //test getDisplayname with invalid id
+        //test getDisplayName with invalid id
         long id = 1;
         Optional<User> user = Optional.absent();
         Mockito.when(userDAO.find(id)).thenReturn(user);
@@ -86,7 +89,7 @@ public class UserProfileResourceTest {
     }
 
     @Test
-    public void testGetDisplaynameWithValidID(){
+    public void testGetDisplayNameWithValidID(){
         long id = 12;
         User mockedUser = new User();
         Optional<User> user = Optional.of(mockedUser);
@@ -94,6 +97,23 @@ public class UserProfileResourceTest {
 
         Response response = resources.client().target(getUserProfileUrl + id + "/displayname").request().get();
         ResponseValidator.validate(response, 200);
+    }
+
+    @Test
+    public void testSetDisplayNameWithInvalidInputs(){
+
+        //Testing with null
+        Response response = resources.client().target(getUserProfileUrl + 1 + "/displayname").request().post(null);
+        ResponseValidator.validate(response, 400);
+
+        //Testing with no display name
+        UserDTO userDTO = new UserDTO(userID);
+        response = resources.client().target(getUserProfileUrl + " " + "/displayname").request().post(Entity.json(userDTO));
+        ResponseValidator.validate(response, 400);
+
+        userDTO.setDisplayName("testdisplayname");
+        response = resources.client().target(getUserProfileUrl + 1 + "/displayname").request().post(Entity.json(userDTO));
+        ResponseValidator.validate(response, 400);
     }
 
     @Test
@@ -118,6 +138,24 @@ public class UserProfileResourceTest {
         response = resources.client().target(getUserProfileUrl + id + "/avatar_url").request().get();
         ResponseValidator.validate(response,204);
     }
+
+    @Test
+    public void testSetAvatarURLWithInvalidInputs(){
+
+        //Testing with null
+        Response response = resources.client().target(getUserProfileUrl + 1 + "/avatar_url").request().post(null);
+        ResponseValidator.validate(response, 400);
+
+        //Testing with no display name
+        UserDTO userDTO = new UserDTO(userID);
+        response = resources.client().target(getUserProfileUrl + " " + "/avatar_url").request().post(Entity.json(userDTO));
+        ResponseValidator.validate(response, 400);
+
+        userDTO.setAvatar_url("https://test.com");
+        response = resources.client().target(getUserProfileUrl + 1 + "/avatar_url").request().post(Entity.json(userDTO));
+        ResponseValidator.validate(response, 400);
+    }
+
 
     /*Some problems with this currently
     @Test
