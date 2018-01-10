@@ -104,3 +104,7 @@ input:-webkit-autofill {
     font-size: 12px;
     color: #fe0000;
 }
+
+.forgot{
+    font-size: 0.8em;
+}
