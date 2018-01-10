@@ -65,6 +65,19 @@ public class UserController {
         return Response.status(Response.Status.OK).entity(getUserResponse(user)).build();
     }
 
+    public Response deleteUser(String id)
+    {
+        if(StringUtils.isEmpty(id) || !StringUtils.isNumeric(id)) {
+            return Response.status(Response.Status.NO_CONTENT).build();
+        }
+
+        long userID = Long.parseLong(id);
+        User user = getUser(userID);
+        user.setIsActive(false);
+        userDAO.save(user);
+        return Response.status(Response.Status.OK).build();
+    }
+
     public boolean isUserAnAdmin(String userID) {
         if(StringUtils.isBlank(userID) || !StringUtils.isNumeric(userID)) {
             LOG.warn("Empty user id provided.");
@@ -269,9 +282,9 @@ public class UserController {
         userDTO.setFirstName(user.getFirstname());
         userDTO.setLastName(user.getLastname());
         userDTO.setNumOfRoles(user.getRoles().size());
-        userDTO.setNumOfGroups(user.getGroups().size());
+        userDTO.setActive(user.isActive());
 
-        Set<GroupDTO> groups = getGroupsForUser(user).stream()
+        Set<GroupDTO> groups = getGroupsForUser(user).stream().filter(group -> group.isActive())
             .map(group -> {
                 return new GroupDTO(group.getId());
             }).collect(Collectors.toSet());
@@ -292,6 +305,7 @@ public class UserController {
 
         userDTO.setPermission(permissionForUser);
         userDTO.setRoles(roles);
+        userDTO.setNumOfGroups(groups.size());
         userDTO.setGroups(groups);
 
         return userDTO;

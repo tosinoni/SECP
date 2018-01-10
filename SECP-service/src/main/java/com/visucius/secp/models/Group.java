@@ -15,6 +15,10 @@ import java.util.Set;
             query = "from Group g where g.name = :name"
         ),
         @NamedQuery(
+            name = "com.visucius.secp.models.Group.findAllActiveGroups",
+            query = "select g from Group g where g.isActive = true"
+        ),
+        @NamedQuery(
             name = "com.visucius.secp.models.Group.findGroupsForUser",
             query = "select g from Group g join g.permissions p join g.roles r where p.id = :permissionID and r.id in (:roleIDS)"
         )
@@ -51,12 +55,20 @@ public class Group {
     @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
     private Set<Message> messages = new HashSet<>();
 
+    @Column(name = "isActive", nullable = false)
+    private boolean isActive = true;
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "group_type", nullable = false)
+    private GroupType groupType = GroupType.PUBLIC;
+
+
     public Group()
     {
-
     }
 
     public Group(String name) {
+
         this.name = name;
     }
 
@@ -109,9 +121,22 @@ public class Group {
         this.roles.removeAll(roles);
     }
 
+    public void setIsActive(boolean isActive)
+    {
+        this.isActive = isActive;
+    }
+
     public void removePermissions(Collection<Permission> permissions)
     {
         this.permissions.removeAll(permissions);
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public GroupType getGroupType() {
+        return groupType;
     }
 
     @Override

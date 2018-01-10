@@ -1,5 +1,6 @@
 package com.visucius.secp.DTO;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.visucius.secp.models.Group;
 
@@ -30,18 +31,22 @@ public class UserDTO {
     private long numOfGroups;
 
     @JsonProperty
+    private boolean isActive;
+
+    @JsonProperty
     private Set<RolesOrPermissionDTO> roles;
 
     @JsonProperty
     private RolesOrPermissionDTO permission;
 
-
     @JsonProperty
     private Set<DeviceDTO> devices = new HashSet<>();
 
-    public UserDTO() {
+    public UserDTO()
+    {
 
     }
+
     public UserDTO(long userID) {
         this.userID = userID;
     }
@@ -133,6 +138,15 @@ public class UserDTO {
 
     public void addDevice(DeviceDTO device) {
         devices.add(device);
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    @JsonIgnore
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
     @Override

@@ -332,6 +332,17 @@ public class UserResourceTest {
     }
 
     @Test
+    public void testDeleteUser() {
+
+        long id = 12;
+        User user = new User();
+
+        Mockito.when(userDAO.find(id)).thenReturn(Optional.fromNullable(user));
+        Response response = resources.client().target(defaultUrl  + 12).request().delete();
+        ResponseValidator.validate(response, 200);
+    }
+
+    @Test
     public void testGetUserWithValidUserId() {
         long id = 12;
         User mockedUser = new User();

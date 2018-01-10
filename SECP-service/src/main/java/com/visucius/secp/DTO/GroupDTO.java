@@ -1,5 +1,6 @@
 package com.visucius.secp.DTO;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.HashSet;
@@ -23,16 +24,19 @@ public class GroupDTO {
     private long numOfUsers;
 
     @JsonProperty
-    private Set<RolesOrPermissionDTO> roles;
+    private boolean isActive;
 
     @JsonProperty
-    private Set<RolesOrPermissionDTO> permissions;
+    private Set<RolesOrPermissionDTO> roles = new HashSet<>();
+
+    @JsonProperty
+    private Set<RolesOrPermissionDTO> permissions = new HashSet<>();
 
     @JsonProperty
     private Set<UserDTO> users = new HashSet<>();
 
-    public GroupDTO() {
-
+    public GroupDTO()
+    {
     }
 
     public GroupDTO(long groupID) {
@@ -105,6 +109,15 @@ public class GroupDTO {
 
     public void setNumOfUsers(long numOfUsers) {
         this.numOfUsers = numOfUsers;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    @JsonIgnore
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
     @Override

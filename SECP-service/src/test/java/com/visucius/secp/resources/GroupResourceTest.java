@@ -45,6 +45,17 @@ public class GroupResourceTest {
     }
 
     @Test
+    public void testDeleteGroups() {
+
+        long id = 12;
+        Group mockedGroup = new Group("developer");
+
+        Mockito.when(groupDAO.find(id)).thenReturn(Optional.fromNullable(mockedGroup));
+        Response response = resources.client().target(groupsUrl + "/" + 12).request().delete();
+        ResponseValidator.validate(response, 200);
+    }
+
+    @Test
     public void testGetGroupWithInvalidGroupId() {
         //testing get groups with no group id
         Response response = resources.client().target(getGroupUrl + null).request().get();
