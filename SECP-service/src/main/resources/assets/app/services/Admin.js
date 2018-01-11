@@ -95,7 +95,7 @@ angular.module('SECP')
 
         addGroup : function(data) {
             //this needs to be changed on the server side
-            return $http.post("/SECP/groups/", convertData(data))
+            return $http.post("/SECP/groups/", data)
             .then(function(res) {
                 return res;
             }, function(err) {

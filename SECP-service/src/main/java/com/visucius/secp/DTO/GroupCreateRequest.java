@@ -9,16 +9,16 @@ public class GroupCreateRequest {
     @JsonProperty
     public String name;
     @JsonProperty
-    public Set<Long> permissions;
+    public Set<RolesOrPermissionDTO> permissions;
     @JsonProperty
-    public Set<Long> roles;
+    public Set<RolesOrPermissionDTO> roles;
 
     public GroupCreateRequest()
     {
 
     }
 
-    public GroupCreateRequest(String name, Set<Long> permissions, Set<Long> roles)
+    public GroupCreateRequest(String name, Set<RolesOrPermissionDTO> permissions, Set<RolesOrPermissionDTO> roles)
     {
         this.name = name;
         this.permissions = permissions;
