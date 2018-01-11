@@ -60,7 +60,7 @@ angular.module('SECP')
                         $scope.permissions.splice(index, 1);
                         swal('Deleted!','Permission level deleted.','success');
                     } else {
-                        swal('Oops!', res.data, "error");
+                        swal('Oops!', res.data.message, "error");
                     }
                 });
             };
@@ -75,7 +75,7 @@ angular.module('SECP')
                         $scope.roles.splice(index, 1);
                         swal('Deleted!','Role deleted.','success');
                     } else {
-                        swal('Oops!', res.data, "error");
+                        swal('Oops!', res.data.message, "error");
                     }
                 });
             };
@@ -83,7 +83,6 @@ angular.module('SECP')
         };
 
         $scope.savePermission = function() {
-            console.log($scope.permissionInput);
             if ($scope.permissionInput) {
                 var permissions = $scope.permissionInput.split(/[ ,]+/);
                 Admin.addPermissions(permissions).then(function(res){
@@ -91,7 +90,7 @@ angular.module('SECP')
                         $scope.permissions = $scope.permissions.concat(res.data);
                         swal('Added!', 'permission was successfully added', "success");
                     } else {
-                        swal('Oops!', res.data, "error");
+                        swal('Oops!', res.data.message, "error");
                     }
                     $('#permissionModal').modal('toggle');
                     $scope.permissionInput = '';
@@ -107,7 +106,7 @@ angular.module('SECP')
                         $scope.roles = $scope.roles.concat(res.data);
                         swal('Added!', 'roles was successfully added', "success");
                     } else {
-                        swal('Oops!', res.data, "error");
+                        swal('Oops!', res.data.message, "error");
                     }
                     $('#roleModal').modal('toggle');
                     $scope.roleInput = '';

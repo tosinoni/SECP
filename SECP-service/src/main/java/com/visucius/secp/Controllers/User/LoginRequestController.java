@@ -36,6 +36,12 @@ public class LoginRequestController {
             throw new WebApplicationException(UserErrorMessage.LOGIN_FAIL_USER_NOT_FOUND, Response.Status.UNAUTHORIZED);
         }
 
+        if(!user.isActive())
+        {
+            LOG.warn("User is not active.");
+            throw new WebApplicationException(UserErrorMessage.LOGIN_USER_IS_NOT_ACTIVE, Response.Status.UNAUTHORIZED);
+        }
+
         boolean isValidPassword = isPasswordValid(loginRequestDTO, user);
 
         if (isValidPassword) {

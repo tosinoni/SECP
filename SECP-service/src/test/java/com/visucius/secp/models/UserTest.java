@@ -112,7 +112,7 @@ public class UserTest {
 
         //testing the @JoinTable annotation
         NamedQueries namedQueries = ReflectTool.getClassAnnotation(User.class, NamedQueries.class);
-        assertEquals("NamedQueries:  size is not equal to 5", 5, namedQueries.value().length);
+        assertEquals("NamedQueries:  size is not equal to 6", 6, namedQueries.value().length);
 
         NamedQuery[] namedQueriesArray = namedQueries.value();
 
@@ -126,6 +126,8 @@ public class UserTest {
             "com.visucius.secp.models.User.findUsersWithPermissionLevel", namedQueriesArray[3].name());
         assertEquals("NamedQueries[4]: name is not equal",
             "com.visucius.secp.models.User.findAdmins", namedQueriesArray[4].name());
+        assertEquals("NamedQueries[5]: name is not equal",
+            "com.visucius.secp.models.User.findAllActiveUsers", namedQueriesArray[5].name());
     }
 
     @Test
@@ -171,4 +173,17 @@ public class UserTest {
         joinColumn = j.inverseJoinColumns()[0];
         assertEquals("JoinColumn devices: name is not equal", "device_id", joinColumn.name());
     }
+
+    @Test
+    public void testPermission(){
+        AssertAnnotations.assertField(User.class, "permission", ManyToOne.class, JoinColumn.class);
+
+        ManyToOne m = ReflectTool.getFieldAnnotation(User.class, "permission", ManyToOne.class);
+        assertEquals("ManyToOne: Fetch is not equal", FetchType.LAZY, m.fetch());
+
+        JoinColumn joinColumn = ReflectTool.getFieldAnnotation(User.class, "permission", JoinColumn.class);
+        assertEquals("JoinColumn permission: name is not equal", "permission_id", joinColumn.name());
+        assertEquals("JoinColumn permission: nullable is true", false, joinColumn.nullable());
+    }
+
 }

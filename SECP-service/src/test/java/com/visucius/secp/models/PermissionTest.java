@@ -42,12 +42,12 @@ public class PermissionTest {
     @Test
     public void testUsers() {
         //testing all the annotations on the id field
-        AssertAnnotations.assertField( Permission.class, "users", ManyToMany.class);
+        AssertAnnotations.assertField( Permission.class, "users", OneToMany.class);
 
         //testing the @column annotation
-        ManyToMany m = ReflectTool.getFieldAnnotation(Permission.class, "users", ManyToMany.class);
+        OneToMany m = ReflectTool.getFieldAnnotation(Permission.class, "users", OneToMany.class);
 
-        assertEquals("ManyToMany:  mappedBy is not equal", "permissions", m.mappedBy());
+        assertEquals("ManyToMany:  mappedBy is not equal", "permission", m.mappedBy());
     }
 
 

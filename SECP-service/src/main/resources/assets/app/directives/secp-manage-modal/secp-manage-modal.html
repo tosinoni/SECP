@@ -1,0 +1,45 @@
+<!-- SECP Manage Modal -->
+<div class="modal fade" id="{{name}}" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <form name="{{frmName}}" class="modal-content" autocomplete="off" ng-submit="submit()">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">{{title}}</h4>
+            </div>
+            <div class="modal-body">
+                <div ng-cloak ng-if="inputname">
+                    {{inputname}}:<br>
+                    <input required class="input" type="text" ng-model="modalData.name" name="{{inputname}}"
+                           required="required"><br><br>
+                </div>
+
+                <div ng-if="!isuser">
+                    Permissions:<br>
+                    <select select2 class="permission-level-select" style="width: 100%" ng-model="modalData.permissions"
+                            ng-options="permission.name for permission in permissions track by permission.id" multiple>
+                    </select>
+                </div>
+
+                <div ng-if="isuser">
+                    Permission:<br>
+                    <select select2 required class="permission-level-select" style="width: 100%" ng-model="modalData.permission"
+                            ng-options="permission.name for permission in permissions track by permission.id">
+                    </select>
+                </div>
+
+                <br><br>Roles:<br>
+                <select select2="" class="role-select" style="width: 100%" ng-model="modalData.roles"
+                        ng-options="role.name for role in roles track by role.id" multiple>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-default">Submit</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<link type="text/css" rel="stylesheet" href="directives/secp-manage-modal/secp-manage-modal.css"/>

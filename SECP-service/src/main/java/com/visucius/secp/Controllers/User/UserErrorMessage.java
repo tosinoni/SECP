@@ -10,6 +10,7 @@ public interface UserErrorMessage {
     String LOGIN_FAIL_NO_PASSWORD = "Login Failed. Please provide your password.";
     String LOGIN_FAIL_USER_NOT_FOUND = "Login Failed. username does not exist.";
     String LOGIN_FAIL_WRONG_PASSWORD = "Login Failed. Incorrect password.";
+    String LOGIN_USER_IS_NOT_ACTIVE = "Login Failed. User has been deleted";
 
     //Register error messages
     String FIRST_NAME_INVALID = "First name is not valid.";
@@ -33,5 +34,10 @@ public interface UserErrorMessage {
     String DEVICE_GET_FAIL_NO_DEVICE_EXISTS = "No device exists for user.";
     String DEVICE_GET_FAIL_NO_PUBLIC_KEY_EXISTS = "No public key exist for all user's devices.";
 
+    //modify user error messages
+    String MODIFY_USER_FAIL_NO_USER_INFO = "modify user failed. Please provide the information for the user.";
+    String MODIFY_USER_FAIL_PERMISSIONS_REQUIRED = "modify user failed. A user must have only one permission";
+    String MODIFY_USER_FAIL_PERMISSIONS_INVALID = "modify user failed. Permission %s does not exist";
+    String MODIFY_USER_FAIL_ROLES_INVALID = "modify user failed. role %s does not exist";
 
 }
