@@ -1,0 +1,19 @@
+<div class="container-fluid">
+    <h1 class="portalheader"><i class="fa fa-envelope" aria-hidden="true"></i> Authenticate</h1>
+    <div class="form-group">
+        <form ng-submit="authenticate()" name="authForm">
+            <div>
+                <p>Enter the verification code sent to your email address</p>
+            </div>
+            <div class="group">
+                <input type="text" required ng-model="code" name="code" />
+                <span class="highlight"></span>
+                <span class="bar"></span>
+                <label>Enter Code</label>
+            </div>
+            <div class="btn-box">
+                <button type="submit" class="btn btn-submit" ng-disabled="authForm.$invalid">Verify</button>
+            </div>
+        </form>
+    </div>
+</div>
