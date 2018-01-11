@@ -10,7 +10,7 @@ public interface UserErrorMessage {
     String LOGIN_FAIL_NO_PASSWORD = "Login Failed. Please provide your password.";
     String LOGIN_FAIL_USER_NOT_FOUND = "Login Failed. username does not exist.";
     String LOGIN_FAIL_WRONG_PASSWORD = "Login Failed. Incorrect password.";
-    String LOGIN_USER_IS_NOT_ACTIVE = "Login Failed. User has been deleted";
+    String LOGIN_USER_IS_NOT_ACTIVE = "Login Failed. Please contact admin.";
 
     //Register error messages
     String FIRST_NAME_INVALID = "First name is not valid.";
