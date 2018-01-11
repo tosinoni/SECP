@@ -25,7 +25,8 @@
     "datatables.net": "^1.10.16",
     "datatables.net-jqui": "^2.1.1",
     "datatables.net-select": "^1.2.3",
-    "datatables.net-select-jqui": "^1.2.3"
+    "datatables.net-select-jqui": "^1.2.3",
+    "emoji-picker": "^1.1.5"
   },
   "devDependencies": {
     "angular-mocks": "~1.6.7",
