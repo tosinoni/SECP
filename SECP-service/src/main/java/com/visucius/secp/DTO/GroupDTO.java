@@ -24,7 +24,7 @@ public class GroupDTO {
     private long numOfUsers;
 
     @JsonProperty
-    private boolean isActive;
+    private boolean isActive = true;
 
     @JsonProperty
     private Set<RolesOrPermissionDTO> roles = new HashSet<>();

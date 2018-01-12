@@ -171,6 +171,7 @@ public class UserController {
         User user = getUser(userDTO.getUserID());
         user.setPermission(getPermission(userDTO.getPermission()));
         user.setRoles(getRoles(userDTO.getRoles()));
+        user.setIsActive(userDTO.isActive());
 
         //adding user to groups
         user.setGroups(getUserGroups(user));
