@@ -2,12 +2,15 @@
 <h1 class="portalheader">
     <i class="fa fa-user" aria-hidden="true"></i>
     Manage User
-    <div class="registeruserdiv">
-        <a href="/register">
-            <button class="registeruser">
-                <i class="fa fa-user-plus" aria-hidden="true"></i>
-                Register User
-            </button>
-        </a>
-    </div>
 </h1>
+
+<secp-table name="userTable" modalname="registerModal" ismanage=true buttonname="Register User"
+            data="users" headers="userHeaders" delete-fn="deleteUser(row)" edit-fn="editUserModalFn(row)"></secp-table>
+</body>
+
+<!-- Create User Modal -->
+<secp-register-modal save-fn="register(user)"></secp-register-modal>
+
+<!--Edit User modal-->
+<secp-manage-modal name="editUserModal" frmname="editUserForm" title="Edit User" isuser=true
+                   modal-data="editUserData" save-fn="submitModifyUser(row)"></secp-manage-modal>

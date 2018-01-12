@@ -1,9 +1,11 @@
 package com.visucius.secp.resources;
 
 import com.codahale.metrics.annotation.Timed;
+import com.visucius.secp.Controllers.Admin.AdminController;
 import com.visucius.secp.Controllers.User.UserController;
 import com.visucius.secp.Controllers.User.UserRegistrationController;
 import com.visucius.secp.DTO.DeviceDTO;
+import com.visucius.secp.DTO.UserDTO;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 import org.apache.commons.lang3.StringUtils;
@@ -14,11 +16,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Path("/user")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 @RolesAllowed({"NORMAL", "ADMIN"})
 public class UserResource {
     private final UserController userController;
     private final UserRegistrationController userRegistrationController;
-
 
     public UserResource(UserController userController, UserRegistrationController userRegistrationController) {
         this.userController = userController;
@@ -97,5 +100,34 @@ public class UserResource {
     @UnitOfWork
     public Response getUsersPublicKeys(@Auth @PathParam("id") long id) {
         return userController.getUsersPublicKeys(id);
+    }
+
+    @GET
+    @UnitOfWork
+    public Response getAllUsers() {
+        return userController.getAllUsers();
+    }
+
+    @GET
+    @Path("/id/{id}")
+    @UnitOfWork
+    public Response getUser(@Auth @PathParam("id") String id) {
+        return userController.getUserGivenId(id);
+    }
+
+    @DELETE
+    @Path("/id/{id}")
+    @UnitOfWork
+    @RolesAllowed({ "ADMIN"})
+    public Response deleteUser(@Auth @PathParam("id") String id) {
+        return userController.deleteUser(id);
+    }
+
+    @POST
+    @Path("/modify")
+    @UnitOfWork
+    @RolesAllowed("ADMIN")
+    public Response modifyUser(@Auth UserDTO userDTO) {
+        return userController.modifyUser(userDTO);
     }
 }

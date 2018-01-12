@@ -42,9 +42,9 @@ angular.module('SECP')
         $scope.submitModifyGroup = function(row) {
             if (row) {
                 Admin.editGroup(row).then(function(res){
-                    if (res) {
-                        var index = $scope.groups.indexOf(row);
-                        $scope.groups[index] = res;
+                    if (res.status == 201) {
+                        var index = _.findIndex($scope.groups, function(o) { return o.groupID == row.groupID; });
+                        $scope.groups[index] = res.data;
                         swal('Modified!','Group modified.','success');
                     } else {
                         swal('Oops!', res.data.message, "error");
@@ -52,5 +52,23 @@ angular.module('SECP')
                     $('#editGroupModal').modal('toggle');
                 })
             }
+        };
+
+        //delete group
+        $scope.deleteGroup = function(row) {
+            var deleteGroupFunction = function () {
+                console.log(row.groupID);
+                Admin.deleteGroup(row.groupID).then(function(res){
+                    if (res.status == 200) {
+                        //TODO need a way to show that the group is deactivated
+                        swal('Deleted!','Group deactivated.','success');
+                    } else {
+                        swal('Oops!', res.data.message, "error");
+                    }
+                });
+            };
+
+            var deleteStatement = 'Enter the name of the group to delete';
+            SwalService.deleteImportantInformation(row.name, deleteStatement, deleteGroupFunction);
         };
     });

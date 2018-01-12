@@ -36,9 +36,22 @@ public class GroupDAO extends AbstractDAO<Group> {
         currentSession().delete(entity);
     }
 
+    public List<Group> findActiveGroups()
+    {
+        return (List<Group>)
+            namedQuery("com.visucius.secp.models.Group.findAllActiveGroups").list();
+    }
+
     public Group findByName(String name) {
         return (Group)
             namedQuery("com.visucius.secp.models.Group.findByName").
                 setParameter("name",name).uniqueResult();
+    }
+
+    public List<Group> findGroupsForUser(long permissionID, List<Long> roleIDS)
+    {
+        return (List<Group>) namedQuery("com.visucius.secp.models.Group.findGroupsForUser").
+            setParameter("permissionID",permissionID)
+            .setParameterList("roleIDS",roleIDS).list();
     }
 }

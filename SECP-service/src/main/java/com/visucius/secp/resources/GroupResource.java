@@ -4,7 +4,7 @@ package com.visucius.secp.resources;
 import com.codahale.metrics.annotation.Timed;
 import com.visucius.secp.Controllers.GroupController;
 import com.visucius.secp.DTO.GroupCreateRequest;
-import com.visucius.secp.DTO.GroupModifyRequest;
+import com.visucius.secp.DTO.GroupDTO;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 
@@ -39,43 +39,18 @@ public class GroupResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Timed
     @UnitOfWork
-    @Path("/modify/{id}/roles")
-    public Response addRoles(@Auth GroupModifyRequest request, @PathParam("id") int id)
+    @Path("/modify")
+    public Response modifyGroup(@Auth GroupDTO request)
     {
-        return  groupController.addRolesToGroup(request,id);
-    }
-
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @Timed
-    @UnitOfWork
-    @Path("/modify/{id}/permissions")
-    public Response addPermissions(@Auth GroupModifyRequest request, @PathParam("id") int id)
-    {
-        return  groupController.addPermissionsToGroup(request,id);
+        return  groupController.modifyGroup(request);
     }
 
     @DELETE
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @Timed
     @UnitOfWork
-    @Path("/modify/{id}/roles")
-    public Response deleteRoles(@Auth GroupModifyRequest request, @PathParam("id") int id)
+    @Path("/{id}")
+    public Response deleteGroup(@Auth @PathParam("id") int id)
     {
-        return  groupController.deleteRoles(request,id);
-    }
-
-    @DELETE
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @Timed
-    @UnitOfWork
-    @Path("/modify/{id}/permissions")
-    public Response deletePermissions(@Auth GroupModifyRequest request, @PathParam("id") int id)
-    {
-        return  groupController.deletePermissions(request,id);
+        return  groupController.deleteGroup(id);
     }
 
     @GET

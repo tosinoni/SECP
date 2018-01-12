@@ -2,16 +2,6 @@
 
 angular.module('SECP')
   .factory('Admin', function($http) {
-    //below needs to be changed. This is just a hack to conform to what the server expects
-    var convertData = function(data) {
-        var newData = angular.copy(data);
-        if(data) {
-            newData = angular.copy(data);
-            newData.roles = newData.roles.map(role => {return role.id});
-            newData.permissions = newData.permissions.map(permission => {return permission.id});
-        }
-        return newData;
-    }
     return {
         addRoles : function(setOfRoles) {
             var req = {roles: setOfRoles}
@@ -57,13 +47,13 @@ angular.module('SECP')
 
         getAllGroups : function() {
             return $http.get("/SECP/groups")
-                .then(function(res) {
-                    if (res.status == 200) {
-                        return res.data;
-                    }
-                }, function(err) {
-                    return err;
-                });
+            .then(function(res) {
+                if (res.status == 200) {
+                    return res.data;
+                }
+            }, function(err) {
+                return err;
+            });
         },
 
         deleteRole : function(id) {
@@ -95,11 +85,9 @@ angular.module('SECP')
 
         editGroup : function(data) {
             //this needs to be changed on the server side.
-            return $http.post("/SECP/admin/group/id/" + data.groupID, convertData(data))
+            return $http.post("/SECP/groups/modify",data)
             .then(function(res) {
-                if(res.status == 200) {
-                    return res;
-                }
+                return res;
             }, function(err) {
                 return err;
             });
@@ -107,7 +95,7 @@ angular.module('SECP')
 
         addGroup : function(data) {
             //this needs to be changed on the server side
-            return $http.post("/SECP/groups/", convertData(data))
+            return $http.post("/SECP/groups/", data)
             .then(function(res) {
                 return res;
             }, function(err) {
@@ -124,6 +112,65 @@ angular.module('SECP')
             }, function(err) {
                 return err;
             });
-        }
+        },
+
+        register : function(user) {
+            return $http.post("/SECP/admin/register", user)
+            .then(function(res) {
+                return res;
+            }, function(err) {
+                return err;
+            });
+        },
+
+        getUser : function(id) {
+            return $http.get("/SECP/user/id/" + id)
+                .then(function(res) {
+                    if (res.status == 200) {
+                        return res.data;
+                    }
+                }, function(err) {
+                    return err;
+                });
+        },
+
+        getAllUsers : function() {
+            return $http.get("/SECP/user")
+                .then(function(res) {
+                    if (res.status == 200) {
+                        return res.data;
+                    }
+                }, function(err) {
+                    return err;
+                });
+        },
+
+        editUser : function(data) {
+            return $http.post("/SECP/user/modify/", data)
+            .then(function(res) {
+                return res;
+            }, function(err) {
+                return err;
+            });
+        },
+
+        deleteGroup : function(id) {
+            return $http.delete("/SECP/groups/" + id)
+            .then(function(res) {
+                return res;
+            }, function(err) {
+                return err;
+            });
+        },
+
+        deleteUser : function(id) {
+            return $http.delete("/SECP/user/id/" + id)
+            .then(function(res) {
+                return res;
+            }, function(err) {
+                return err;
+            });
+        },
+
     }
   });

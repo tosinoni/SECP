@@ -70,9 +70,13 @@ public class SECPService extends Application<SECPConfiguration> {
     public void initialize(Bootstrap<SECPConfiguration> bootstrap) {
         bootstrap.addBundle(new AssetsBundle("/assets/app/", "/", "index.html"));
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/login", "index.html", "login"));
-        bootstrap.addBundle(new AssetsBundle("/assets/app", "/register", "index.html", "register"));
+        bootstrap.addBundle(new AssetsBundle("/assets/app", "/login/authenticate", "index.html", "authenticate"));
+        bootstrap.addBundle(new AssetsBundle("/assets/app", "/login/forgot-password", "index.html", "forgot-password"));
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/chats", "index.html", "chats"));
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal", "index.html", "portal"));
+        bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/user-profile", "index.html", "user-profile"));
+        bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/user-profile/change-password", "index.html", "change-password"));
+        bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/group-profile", "index.html", "group-profile"));
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/audit", "index.html", "audit"));
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/audit/user", "index.html", "audit-user"));
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/portal/audit/group", "index.html", "audit-group"));
@@ -115,7 +119,7 @@ public class SECPService extends Application<SECPConfiguration> {
         final UserRegistrationController userRegistrationController = new UserRegistrationController(userDAO);
         final TokenController tokenController = new TokenController(configuration);
         final LoginRequestController loginRequestController = new LoginRequestController(tokenController, userDAO);
-        final UserController userController = new UserController(userDAO, deviceDAO);
+        final UserController userController = new UserController(userDAO, deviceDAO, permissionDAO, rolesDAO, groupDAO);
         final AdminController adminController = new AdminController(userDAO, rolesDAO, permissionDAO);
         final GroupController groupController = new GroupController(groupDAO,userDAO,rolesDAO, permissionDAO);
         final MessageController messageController = new MessageController(messageDAO);

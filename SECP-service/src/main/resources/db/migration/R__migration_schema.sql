@@ -6,8 +6,9 @@ create table IF NOT EXISTS Devices (
 ) engine=MyISAM;
 
 create table IF NOT EXISTS Groups (
-       id bigint not null,
+        id bigint not null,
         name varchar(255) not null,
+        isActive BOOLEAN not null DEFAULT TRUE,
         primary key (id)
 ) engine=MyISAM;
 
@@ -62,6 +63,8 @@ create table IF NOT EXISTS Users(
         login_role varchar(255) not null,
         password varchar(255) not null,
         username varchar(255) not null,
+        permission_id bigint not null,
+        isActive BOOLEAN not null DEFAULT TRUE,
         primary key (id)
 ) engine=MyISAM;
 
@@ -69,12 +72,6 @@ create table IF NOT EXISTS user_devices (
        user_id bigint not null,
         device_id bigint not null,
         primary key (user_id, device_id)
-) engine=MyISAM;
-
-create table IF NOT EXISTS user_permissions (
-       user_id bigint not null,
-        permission_id bigint not null,
-        primary key (user_id, permission_id)
 ) engine=MyISAM;
 
 create table IF NOT EXISTS user_roles (
@@ -87,3 +84,8 @@ create table IF NOT EXISTS user_roles (
 
 
 #********************** Column changes for table should be added here ************************
+Alter TABLE Users ADD COLUMN if not exists isActive BOOLEAN DEFAULT TRUE;
+Alter TABLE Groups ADD COLUMN if not exists isActive BOOLEAN DEFAULT TRUE;
+ALTER TABLE Groups ADD COLUMN if not exists group_type VARCHAR(255);
+DROP TABLE IF EXISTS user_permissions;
+ALTER TABLE USERS ADD COLUMN if not exists permission_id bigint;

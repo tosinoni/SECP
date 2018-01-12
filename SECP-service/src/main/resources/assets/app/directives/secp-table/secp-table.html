@@ -17,10 +17,15 @@
             </td>
         </tr>
         <tr ng-cloak ng-if="ismanage" ng-repeat="row in data">
-            <td>{{row.name}}</td>
-            <td>{{row.numOfPermissions}}</td>
+            <td ng-if="row.name">{{row.name}}</td>
+            <td ng-if="row.username">{{row.username}}</td>
+            <td ng-if="row.firstName">{{row.firstName}}</td>
+            <td ng-if="row.lastName">{{row.lastName}}</td>
+            <td ng-if="row.numOfPermissions">{{row.numOfPermissions}}</td>
+            <td ng-if="row.permission">{{row.permission.name}}</td>
             <td>{{row.numOfRoles}}</td>
-            <td>{{row.numOfUsers}}</td>
+            <td ng-if="row.numOfUsers>-1">{{row.numOfUsers}}</td>
+            <td ng-if="row.numOfGroups>-1">{{row.numOfGroups}}</td>
             <td style="text-align: right">
                 <button ng-cloak ng-show="isEditable" ng-click="modify(row)">
                     <i class="fa fa-eye" aria-hidden="true"></i>
