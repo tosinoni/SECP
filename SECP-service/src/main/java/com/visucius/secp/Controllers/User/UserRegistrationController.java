@@ -44,7 +44,7 @@ public class UserRegistrationController{
             try {
                 String hashPassword = PasswordUtil.createHash(request.password);
                 User user = new User(request.firstName, request.lastName, request.userName, request.email, hashPassword);
-                user.setAvatar_url(request.avatar_url);
+                user.setAvatarUrl(request.avatar_url);
                 user.setDisplayName(request.displayName);
                 User createdUser = userDAO.save(user);
                 return new UserRegistrationResponse(true, UserErrorMessage.USER_CREATED, Response.Status.CREATED, errors, createdUser.getId());
