@@ -61,18 +61,18 @@ public class UserTest {
 
     @Test
     public void testDisplayName(){
-        AssertAnnotations.assertField(User.class,"display_name", Column.class);
+        AssertAnnotations.assertField(User.class,"displayname", Column.class);
 
-        Column c = ReflectTool.getFieldAnnotation(User.class, "display_name", Column.class);
+        Column c = ReflectTool.getFieldAnnotation(User.class, "displayname", Column.class);
         assertEquals("column displayname: displayname is not equal", "display_name", c.name());
         assertEquals("column displayname: nullable is true", false, c.nullable());
     }
 
     @Test
     public void testAvatarURL(){
-        AssertAnnotations.assertField(User.class,"avatar_url", URL.class, Column.class);
+        AssertAnnotations.assertField(User.class,"avatarurl", URL.class, Column.class);
 
-        Column c = ReflectTool.getFieldAnnotation(User.class, "avatar_url", Column.class);
+        Column c = ReflectTool.getFieldAnnotation(User.class, "avatarurl", Column.class);
         assertEquals("column avatar_url: avatar_url is not equal", "avatar_url", c.name());
         assertEquals("column avatar_url: nullable is true", false, c.nullable());
     }
