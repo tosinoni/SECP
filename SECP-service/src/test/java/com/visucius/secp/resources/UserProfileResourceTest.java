@@ -61,7 +61,7 @@ public class UserProfileResourceTest {
         Response response = resources.client().target(getUserProfileUrl + id).request().get();
         ResponseValidator.validate(response, 200);
     }
-
+/*
     @Test
     public void testGetDisplayNameWithInvalidID(){
 
@@ -152,18 +152,6 @@ public class UserProfileResourceTest {
         response = resources.client().target(getUserProfileUrl + 1 + "/avatar_url").request().post(Entity.json(userDTO));
         ResponseValidator.validate(response, 400);
     }
-
-
-    /*Some problems with this currently
-    @Test
-    public void testGetAvatarURLWithValidID(){
-        long id = 12;
-        User mockedUser = new User();
-        Optional<User> user = Optional.of(mockedUser);
-        Mockito.when(userDAO.find(id)).thenReturn(user);
-
-        Response response = resources.client().target(getUserProfileUrl + id + "/avatar_url").request().get();
-        ResponseValidator.validate(response, 200);
-    }*/
+*/
 
 }
