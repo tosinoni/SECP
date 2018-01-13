@@ -53,4 +53,21 @@ angular.module('SECP')
                 })
             }
         };
+
+        //delete group
+        $scope.deleteUser = function(row) {
+            var deleteUserFunction = function () {
+                Admin.deleteUser(row.userID).then(function(res){
+                    if (res.status == 200) {
+                        //TODO need a way to show that the user is deactivated
+                        swal('Deleted!','User deactivated.','success');
+                    } else {
+                        swal('Oops!', res.data.message, "error");
+                    }
+                });
+            };
+
+            var deleteStatement = 'Enter the username of the user to delete';
+            SwalService.deleteImportantInformation(row.username, deleteStatement, deleteUserFunction);
+        };
     });

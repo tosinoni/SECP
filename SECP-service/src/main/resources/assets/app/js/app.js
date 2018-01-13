@@ -38,6 +38,11 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
         controller: 'LoginController',
         css: 'css/form.css',
       })
+      .when('/authenticate', {
+        templateUrl: 'views/login/authenticate.html',
+        controller: 'AuthenticateController',
+        css: 'css/form.css'
+      })
       .when('/chats', {
         templateUrl: 'views/chat/chats.html',
         controller: 'ChatController',

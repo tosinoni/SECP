@@ -33,6 +33,9 @@
                 <select select2="" class="role-select" style="width: 100%" ng-model="modalData.roles"
                         ng-options="role.name for role in roles track by role.id" multiple>
                 </select>
+
+                <br><br><input type="checkbox" ng-model="modalData.isActive">
+                 Active status<br>
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-default">Submit</button>

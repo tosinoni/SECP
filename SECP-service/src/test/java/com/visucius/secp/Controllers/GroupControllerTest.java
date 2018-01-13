@@ -47,8 +47,8 @@ public class GroupControllerTest {
     private static final String VALID_PERMISSION_NAME = "permission";
 
 
-    private static final Set<Long> validPermissions = new HashSet<>();
-    private static final Set<Long> validRoles = new HashSet<>();
+    private static final Set<RolesOrPermissionDTO> validPermissions = new HashSet<>();
+    private static final Set<RolesOrPermissionDTO> validRoles = new HashSet<>();
     private static final int groupWithNoRolesID = 1;
     private static final int groupWithRolesID = 2;
 
@@ -112,27 +112,27 @@ public class GroupControllerTest {
     {
         for(long i = 0; i<NUMBER_OF_PERMISSIONS;i++)
         {
-            validPermissions.add(i);
+            validPermissions.add(new RolesOrPermissionDTO(i,"permission"));
         }
 
         for(long i = 0; i<NUMBER_OF_ROLES;i++)
         {
-            validRoles.add(i);
+            validRoles.add(new RolesOrPermissionDTO(i, "role"));
         }
 
         Set<Role> roles = new HashSet<>();
         Set<Permission> permissions = new HashSet<>();
 
-        for(long id : validRoles)
+        for(RolesOrPermissionDTO id : validRoles)
         {
             Role role = new Role(ROLE_NAME);
-            role.setId((int)id);
+            role.setId((int)id.getId());
             roles.add(role);
         }
-        for(long id : validPermissions)
+        for(RolesOrPermissionDTO id : validPermissions)
         {
             Permission permission = new Permission(PERMISSION_NAME);
-            permission.setId((int)id);
+            permission.setId((int)id.getId());
             permissions.add(permission);
         }
 
@@ -186,8 +186,8 @@ public class GroupControllerTest {
     @Test
     public void RolesIDInvalidTest()
     {
-        Set<Long> roles = new HashSet<>();
-        roles.add(INVALID_ROLE_ID);
+        Set<RolesOrPermissionDTO> roles = new HashSet<>();
+        roles.add(new RolesOrPermissionDTO(INVALID_ROLE_ID, ""));
         GroupCreateRequest request = new GroupCreateRequest(
             VALID_GROUP_NAME,
             validPermissions,
@@ -202,9 +202,8 @@ public class GroupControllerTest {
     @Test
     public void PermissionIDInvalidTest()
     {
-        Set<Long> permissions = new HashSet<>();
-        permissions.add(INVALID_Permission_ID);
-        permissions.add(20L);
+        Set<RolesOrPermissionDTO> permissions = new HashSet<>();
+        permissions.add(new RolesOrPermissionDTO(INVALID_Permission_ID, ""));
         GroupCreateRequest request = new GroupCreateRequest(
             VALID_GROUP_NAME,
             permissions,

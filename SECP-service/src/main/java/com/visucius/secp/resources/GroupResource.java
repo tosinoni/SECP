@@ -46,9 +46,6 @@ public class GroupResource {
     }
 
     @DELETE
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @Timed
     @UnitOfWork
     @Path("/{id}")
     public Response deleteGroup(@Auth @PathParam("id") int id)

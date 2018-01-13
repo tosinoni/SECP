@@ -3,22 +3,52 @@
 angular.module('SECP')
   .factory('SwalService', function() {
 
+    var deleteSwal = function(callback) {
+        swal({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result) {
+                callback();
+            }
+        }).catch((result) => {});
+    };
 
     return {
-        delete : function(callback) {
-            swal({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result) {
+        delete : deleteSwal,
+        deleteImportantInformation : function(infoName, deleteTitle, callback) {
+            var deleteImportantInformationFunction = function () {
+                swal({
+                  title: deleteTitle,
+                  input: 'text',
+                  showCancelButton: true,
+                  confirmButtonText: 'Submit',
+                  showLoaderOnConfirm: true,
+                  preConfirm: (inputValue) => {
+                    return new Promise((resolve, reject) => {
+                        setTimeout(() => {
+                            if (inputValue !== infoName) {
+                                swal.showValidationError('input value does not match the selected element.');
+                                reject();
+                            }
+                            resolve();
+                        }, 100)
+                    });
+                  },
+                  allowOutsideClick: () => !swal.isLoading()
+                }).then((result) => {
+                  if (result) {
                     callback();
-                }
-            }).catch((result) => {});
+                  }
+                }).catch((result) => {});
+            };
+
+            deleteSwal(deleteImportantInformationFunction);
         }
     }
   });

@@ -52,7 +52,11 @@ public class GroupController {
 
     public Response createGroup(GroupCreateRequest request)
     {
-        String error = validateCreateRequest(request);
+        Set<Long> permissions = request.permissions.stream().
+            map(permission -> permission.getId()).collect(Collectors.toSet());
+        Set<Long> roles = request.roles.stream().
+            map(role -> role.getId()).collect(Collectors.toSet());
+        String error = validateCreateRequest(request.name,permissions,roles);
         if(StringUtils.isNoneEmpty(error))
         {
                 throw new WebApplicationException(
@@ -61,7 +65,7 @@ public class GroupController {
         }
 
         Group group = new Group(request.name);
-        return updateOrCreateGroup(group,request.permissions,request.roles);
+        return updateOrCreateGroup(group,permissions,roles);
     }
 
     public Response modifyGroup(GroupDTO request) {
@@ -71,7 +75,7 @@ public class GroupController {
         Set<Long> roles = request.getRoles().stream().
             map(role -> role.getId()).collect(Collectors.toSet());
 
-        String error = validateModifyRequest(permissions, roles);
+        String error = validateRolesAndPermissions(permissions, roles);
         if (StringUtils.isNoneEmpty(error)) {
             throw new WebApplicationException(
                 error,
@@ -133,25 +137,17 @@ public class GroupController {
     }
 
 
-    private String validateCreateRequest(GroupCreateRequest request) {
+    private String validateCreateRequest(String name,Set<Long> permissions, Set<Long> roles) {
 
-        if (!isGroupNameValid(request.name)
-            || !InputValidator.isNameValid(request.name)) {
+        if (!isGroupNameValid(name)
+            || !InputValidator.isNameValid(name)) {
             return GroupErrorMessages.GROUP_NAME_INVALID;
         }
 
-        String roleError = validateRoles(request.roles);
-        if(StringUtils.isNoneEmpty(roleError))
-            return roleError;
-
-        String permissionsError = validatePermissions(request.permissions);
-        if(StringUtils.isNoneEmpty(permissionsError))
-            return permissionsError;
-
-        return StringUtils.EMPTY;
+        return validateRolesAndPermissions(permissions,roles);
     }
 
-    private String validateModifyRequest(Set<Long> permissions, Set<Long> roles) {
+    private String validateRolesAndPermissions(Set<Long> permissions, Set<Long> roles) {
 
         String roleError = validateRoles(roles);
         if (StringUtils.isNoneEmpty(roleError))
@@ -205,6 +201,9 @@ public class GroupController {
     {
         Set<User> userWithRole = new HashSet<>();
         Set<User> userWithPermissionLevel = new HashSet<>();
+
+        if(permissions.isEmpty() && roles.isEmpty())
+            return new HashSet<>(userRepository.findAll());
 
         permissions.
             forEach(permission -> userWithPermissionLevel.addAll(permission.getUsers()));

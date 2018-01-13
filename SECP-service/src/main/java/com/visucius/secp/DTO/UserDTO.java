@@ -33,7 +33,7 @@ public class UserDTO {
     private long numOfGroups;
 
     @JsonProperty
-    private boolean isActive;
+    private boolean isActive = true;
 
     @JsonProperty
     private Set<RolesOrPermissionDTO> roles;
