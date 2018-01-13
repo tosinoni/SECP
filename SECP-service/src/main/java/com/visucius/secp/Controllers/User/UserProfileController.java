@@ -24,6 +24,24 @@ public class UserProfileController {
         this.userDAO = userDAO;
     }
 
+    public Response modifyProfile(UserDTO userDTO){
+        if (userDTO == null){
+            throw new WebApplicationException(UserErrorMessage.MODIFY_USER_FAIL_NO_USER_INFO, Response.Status.BAD_REQUEST);
+        }
+
+        User user = getUser(userDTO.getUserID());
+        user.setFirstname(user.getFirstname());
+        user.setLastname(user.getLastname());
+        user.setDisplayName(user.getDisplayName());
+        user.setAvatar_url(user.getDisplayName());
+        user.setUsername(user.getUsername());
+        user.setEmail(user.getEmail());
+
+        userDAO.save(user);
+
+        return Response.status(Response.Status.OK).entity(getUserProfileResponse(user)).build();
+    }
+
     public Response getProfile(String userID){
         if(StringUtils.isBlank(userID) || !StringUtils.isNumeric(userID)) {
             LOG.warn("Empty user id provided.");
@@ -33,9 +51,9 @@ public class UserProfileController {
         long id = Long.parseLong(userID);
         User user = getUser(id);
 
-        return Response.status(Response.Status.OK).entity(getUserResponse(user)).build();
+        return Response.status(Response.Status.OK).entity(getUserProfileResponse(user)).build();
     }
-
+/*
     public Response setDisplayName(UserDTO userDTO, long userID) {
         validateDisplayName(userDTO);
 
@@ -69,7 +87,7 @@ public class UserProfileController {
         User newuser = new User();
         newuser.setDisplayName(userDAO.find(id).get().getDisplayName());
         newuser.setId(userDAO.find(id).get().getId());
-        return Response.status(Response.Status.OK).entity(getUserResponse(newuser)).build();
+        return Response.status(Response.Status.OK).entity(getUserProfileResponse(newuser)).build();
 
     }
 
@@ -89,7 +107,7 @@ public class UserProfileController {
         User newuser = new User();
         newuser.setAvatar_url(userDAO.find(id).get().getAvatar_url());
         newuser.setId(userDAO.find(id).get().getId());
-        return Response.status(Response.Status.OK).entity(getUserResponse(newuser)).build();
+        return Response.status(Response.Status.OK).entity(getUserProfileResponse(newuser)).build();
     }
 
     public Response setAvatarURL(UserDTO userDTO, long userID) {
@@ -127,7 +145,7 @@ public class UserProfileController {
             throw new WebApplicationException(UserErrorMessage.AVATAR_URL_FAILED_NO_AVATAR_URL, Response.Status.BAD_REQUEST);
         }
     }
-
+*/
     private User getUser(long userID){
         Optional<User> userOptional = userDAO.find(userID);
         if (!userOptional.isPresent()){
@@ -137,11 +155,13 @@ public class UserProfileController {
         return userOptional.get();
     }
 
-    private UserDTO getUserResponse(User user){
+    private UserDTO getUserProfileResponse(User user){
         UserDTO userDTO = new UserDTO(user.getId());
+        userDTO.setUsername(user.getUsername());
+        userDTO.setFirstName(user.getFirstname());
+        userDTO.setLastName(user.getLastname());
         userDTO.setAvatar_url(user.getAvatar_url());
         userDTO.setDisplayName(user.getDisplayName());
-        userDTO.setUserID(user.getId());
 
         return userDTO;
     }

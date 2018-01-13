@@ -2,7 +2,9 @@ package com.visucius.secp.DTO;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.visucius.secp.models.Group;
+import org.hibernate.validator.constraints.URL;
 
 import java.util.HashSet;
 import java.util.Objects;

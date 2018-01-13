@@ -26,6 +26,14 @@ public class UserProfileResource {
     }
 
     @POST
+    @Path("/modify")
+    @UnitOfWork
+    public Response modifyProfile(@Auth UserDTO userDTO){
+        return userProfileController.modifyProfile(userDTO);
+    }
+
+    /*
+    @POST
     @Path("/id/{id}/displayname")
     @UnitOfWork
     public Response addDisplayName(@Auth UserDTO userDTO, @PathParam("id") long id){
@@ -54,4 +62,6 @@ public class UserProfileResource {
     public Response addAvatarURL(@Auth UserDTO userDTO, @PathParam("id") long id){
         return userProfileController.setAvatarURL(userDTO, id);
     }
+*/
+
 }
