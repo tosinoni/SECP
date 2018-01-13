@@ -46,12 +46,14 @@ create table IF NOT EXISTS message (
 create table IF NOT EXISTS Permissions (
        id bigint not null,
         level varchar(255) not null,
+        color varchar(255) not null,
         primary key (id)
 ) engine=MyISAM;
 
 create table IF NOT EXISTS Roles (
        id bigint not null,
         role varchar(255) not null,
+        color varchar(255) not null,
         primary key (id)
 ) engine=MyISAM;
 
@@ -89,3 +91,5 @@ Alter TABLE Groups ADD COLUMN if not exists isActive BOOLEAN DEFAULT TRUE;
 ALTER TABLE Groups ADD COLUMN if not exists group_type VARCHAR(255);
 DROP TABLE IF EXISTS user_permissions;
 ALTER TABLE USERS ADD COLUMN if not exists permission_id bigint;
+ALTER TABLE Roles ADD COLUMN if not exists color VARCHAR(255);
+ALTER TABLE Permissions ADD COLUMN if not exists color VARCHAR(255);

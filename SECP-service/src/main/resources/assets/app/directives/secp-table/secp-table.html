@@ -5,12 +5,15 @@
     <thead>
     <tr>
         <th ng-repeat="header in headers">{{header}}</th>
-        <th style="text-align: right">Action(s)</th>
+        <th style="text-align: right; width: 10%">Action(s)</th>
     </tr>
     </thead>
     <tbody>
         <tr ng-cloak ng-if="!ismanage" ng-repeat="row in data">
             <td>{{row.name}}</td>
+            <td>
+                <button class="colorbox" style="background-color: {{row.color}};" ng-disabled="true"></button>
+            </td>
             <td style="text-align: right">
                 <button ng-click="change(row)"><i class="fa fa-trash red" aria-hidden="true"></i></button>
                 <button ng-cloak ng-show="isEditable" ng-click="modify(row)"><i class="fa fa-eye" aria-hidden="true"></i></button>

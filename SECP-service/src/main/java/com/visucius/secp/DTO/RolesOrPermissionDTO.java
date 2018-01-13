@@ -11,12 +11,20 @@ public class RolesOrPermissionDTO {
     @JsonProperty
     private String name;
 
+    @JsonProperty
+    private String color;
+
     public RolesOrPermissionDTO() {
 
     }
     public RolesOrPermissionDTO(long id, String name) {
         this.id = id;
         this.name = name;
+    }
+    public RolesOrPermissionDTO(long id, String name, String color) {
+        this.id = id;
+        this.name = name;
+        this.color = color;
     }
 
     public long getId() {
@@ -46,5 +54,13 @@ public class RolesOrPermissionDTO {
     @Override
     public int hashCode() {
         return Objects.hash(this.id, this.name);
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }

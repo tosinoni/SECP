@@ -11,10 +11,10 @@
             <div class="modal-body">
                 <p class="note"><strong>Note:</strong> Multiple values may be specified using commas or spaces.</p>
                 {{body}}:<br>
-                <input class="input" type="text" ng-model="ngModel" name="{{body}}"
+                <input class="input" type="text" ng-model="data.value" name="{{body}}"
                        required="required">
                 <br><br>Color:<br>
-                <input class="input" type="color" ng-model="ngModel" name="Color"
+                <input class="input" type="color" ng-model="data.color" name="Color"
                        required="required">
             </div>
             <div class="modal-footer">

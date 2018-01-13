@@ -25,6 +25,9 @@ public class Role {
     @Column(name = "role", unique = true, nullable = false)
     private String role;
 
+    @Column(name = "color", nullable = false)
+    private String color;
+
     @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
     private Set<User> users = new HashSet<>();
 
@@ -38,6 +41,11 @@ public class Role {
 
     public Role(String role) {
         this.role = role;
+    }
+
+    public Role(String role, String color) {
+        this.role = role;
+        this.color = color;
     }
 
     public long getId() {
@@ -83,5 +91,13 @@ public class Role {
     @Override
     public int hashCode() {
         return Objects.hash(this.role, this.id);
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }
