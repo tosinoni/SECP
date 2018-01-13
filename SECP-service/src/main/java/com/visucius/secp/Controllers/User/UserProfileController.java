@@ -2,7 +2,9 @@ package com.visucius.secp.Controllers.User;
 
 
 import com.google.common.base.Optional;
+import com.visucius.secp.DTO.RolesOrPermissionDTO;
 import com.visucius.secp.DTO.UserDTO;
+import com.visucius.secp.models.Permission;
 import com.visucius.secp.models.User;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -13,6 +15,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class UserProfileController {
 
@@ -28,14 +31,11 @@ public class UserProfileController {
         if (userDTO == null){
             throw new WebApplicationException(UserErrorMessage.MODIFY_USER_FAIL_NO_USER_INFO, Response.Status.BAD_REQUEST);
         }
+        validateDisplayNameAndAvatarUrl(userDTO);
 
         User user = getUser(userDTO.getUserID());
-        user.setFirstname(user.getFirstname());
-        user.setLastname(user.getLastname());
         user.setDisplayName(user.getDisplayName());
-        user.setAvatar_url(user.getDisplayName());
-        user.setUsername(user.getUsername());
-        user.setEmail(user.getEmail());
+        user.setAvatarUrl(user.getAvatarUrl());
 
         userDAO.save(user);
 
@@ -53,99 +53,21 @@ public class UserProfileController {
 
         return Response.status(Response.Status.OK).entity(getUserProfileResponse(user)).build();
     }
-/*
-    public Response setDisplayName(UserDTO userDTO, long userID) {
-        validateDisplayName(userDTO);
 
-        String displayname = userDTO.getDisplayName();
-
-        Optional<User> user = userDAO.find(userID);
-        if(!user.isPresent()){
-            throw new WebApplicationException(UserErrorMessage.DISPLAY_NAME_FAILED_USER_NOT_FOUND, Response.Status.BAD_REQUEST);
-        }
-        User newuser = user.get();
-        newuser.setDisplayName(displayname);
-        userDAO.save(newuser);
-        LOG.info("Display name set.");
-
-        return Response.status(Response.Status.OK).entity(newuser.getDisplayName()).build();
-    }
-
-    public Response getDisplayName(String userID) {
-        if(StringUtils.isBlank(userID) || !StringUtils.isNumeric(userID)) {
-            LOG.warn("Empty user id provided.");
-            throw new WebApplicationException(UserErrorMessage.USER_ID_INVALID, Response.Status.NO_CONTENT);
-        }
-
-        long id = Long.parseLong(userID);
-        Optional<User> user = userDAO.find(id);
-
-        if(!user.isPresent()){
-            throw new WebApplicationException(UserErrorMessage.USER_ID_INVALID, Response.Status.NO_CONTENT);
-        }
-
-        User newuser = new User();
-        newuser.setDisplayName(userDAO.find(id).get().getDisplayName());
-        newuser.setId(userDAO.find(id).get().getId());
-        return Response.status(Response.Status.OK).entity(getUserProfileResponse(newuser)).build();
-
-    }
-
-    public Response getAvatarURL(String userID) {
-        if(StringUtils.isBlank(userID) || !StringUtils.isNumeric(userID)) {
-            LOG.warn("Empty user id provided.");
-            throw new WebApplicationException(UserErrorMessage.USER_ID_INVALID, Response.Status.NO_CONTENT);
-        }
-
-        long id = Long.parseLong(userID);
-        Optional<User> user = userDAO.find(id);
-
-        if(!user.isPresent()){
-            throw new WebApplicationException(UserErrorMessage.USER_ID_INVALID, Response.Status.NO_CONTENT);
-        }
-
-        User newuser = new User();
-        newuser.setAvatar_url(userDAO.find(id).get().getAvatar_url());
-        newuser.setId(userDAO.find(id).get().getId());
-        return Response.status(Response.Status.OK).entity(getUserProfileResponse(newuser)).build();
-    }
-
-    public Response setAvatarURL(UserDTO userDTO, long userID) {
-        validateAvatarURL(userDTO);
-
-        String AvatarURL = userDTO.getAvatar_url();
-
-        Optional<User> user = userDAO.find(userID);
-        if(!user.isPresent()){
-            throw new WebApplicationException(UserErrorMessage.USER_ID_INVALID, Response.Status.NO_CONTENT);
-        }
-        User newuser = user.get();
-        newuser.setAvatar_url(AvatarURL);
-        userDAO.save(newuser);
-        LOG.info("Avatar URL set.");
-
-        return Response.status(Response.Status.OK).entity(newuser.getAvatar_url()).build();
-    }
-
-
-    private void validateDisplayName(UserDTO userDTO) {
+    private void validateDisplayNameAndAvatarUrl(UserDTO userDTO){
         if (userDTO == null) {
-            throw new WebApplicationException(UserErrorMessage.DISPLAY_NAME_FAILED_NO_DISPLAY_NAME, Response.Status.BAD_REQUEST);
+            throw new WebApplicationException(UserErrorMessage.USER_PROFILE_FAILED_NO_USER_PROFILE, Response.Status.BAD_REQUEST);
         }
+
         if (StringUtils.isBlank(userDTO.getDisplayName())) {
             throw new WebApplicationException(UserErrorMessage.DISPLAY_NAME_FAILED_NO_DISPLAY_NAME, Response.Status.BAD_REQUEST);
         }
+
+        if (StringUtils.isBlank(userDTO.getAvatarUrl())) {
+            throw new WebApplicationException(UserErrorMessage.AVATAR_URL_FAILED_NO_AVATAR_URL, Response.Status.BAD_REQUEST);
+        }
     }
 
-    private void validateAvatarURL(UserDTO userDTO) {
-        if (userDTO == null) {
-            throw new WebApplicationException(UserErrorMessage.AVATAR_URL_FAILED_NO_AVATAR_URL, Response.Status.BAD_REQUEST);
-        }
-        if (StringUtils.isBlank(userDTO.getAvatar_url())) {
-            throw new WebApplicationException(UserErrorMessage.AVATAR_URL_FAILED_NO_AVATAR_URL, Response.Status.BAD_REQUEST);
-        }
-    }
-*/
     private User getUser(long userID){
         Optional<User> userOptional = userDAO.find(userID);
         if (!userOptional.isPresent()){
@@ -160,8 +82,25 @@ public class UserProfileController {
         userDTO.setUsername(user.getUsername());
         userDTO.setFirstName(user.getFirstname());
         userDTO.setLastName(user.getLastname());
-        userDTO.setAvatar_url(user.getAvatar_url());
+        userDTO.setAvatarUrl(user.getAvatarUrl());
         userDTO.setDisplayName(user.getDisplayName());
+
+        Set<RolesOrPermissionDTO> roles = user.getRoles().stream()
+            .map(role -> {
+                return new RolesOrPermissionDTO(role.getId(), role.getRole());
+                }).collect(Collectors.toSet());
+
+        Permission userPermission = user.getPermission();
+
+        RolesOrPermissionDTO permissionForUser = new RolesOrPermissionDTO();
+        if(userPermission != null) {
+            permissionForUser.setId(userPermission.getId());
+            permissionForUser.setName(userPermission.getLevel());
+        }
+
+        userDTO.setPermission(permissionForUser);
+        userDTO.setNumOfRoles(user.getRoles().size());
+        userDTO.setRoles(roles);
 
         return userDTO;
     }

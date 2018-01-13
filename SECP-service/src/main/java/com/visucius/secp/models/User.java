@@ -63,11 +63,11 @@ public class User implements Principal {
     private String password;
 
     @Column(name = "display_name", nullable = false)
-    private String display_name;
+    private String displayname;
 
     @URL
     @Column(name = "avatar_url", nullable = false)
-    private String avatar_url;
+    private String avatarurl;
 
     @ManyToMany
     @JoinTable(name = "user_roles",
@@ -191,13 +191,13 @@ public class User implements Principal {
         this.isActive = isActive;
     }
 
-    public String getDisplayName(){ return display_name; }
+    public String getDisplayName(){ return displayname; }
 
-    public void setDisplayName(String displayname){ this.display_name = displayname; }
+    public void setDisplayName(String displayname){ this.displayname = displayname; }
 
-    public String getAvatar_url(){ return avatar_url; }
+    public String getAvatarUrl(){ return avatarurl; }
 
-    public void setAvatar_url(String avatar_url){ this.avatar_url = avatar_url; }
+    public void setAvatarUrl(String avatarurl){ this.avatarurl = avatarurl; }
 
     /*
      * The below three methods are needed for authentication and authorization

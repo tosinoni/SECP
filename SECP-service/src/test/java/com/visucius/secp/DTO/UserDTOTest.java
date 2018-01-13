@@ -97,8 +97,8 @@ public class UserDTOTest {
     @Test
     public void testAvatarURL(){
         UserDTO userDTO = new UserDTO(userID);
-        userDTO.setAvatar_url("mxc://matrix.org/wefh34uihSDRGhw34");
-        assertEquals("Avatar URL is not equal", "mxc://matrix.org/wefh34uihSDRGhw34", userDTO.getAvatar_url());
+        userDTO.setAvatarUrl("mxc://matrix.org/wefh34uihSDRGhw34");
+        assertEquals("Avatar URL is not equal", "mxc://matrix.org/wefh34uihSDRGhw34", userDTO.getAvatarUrl());
     }
 
     @Test

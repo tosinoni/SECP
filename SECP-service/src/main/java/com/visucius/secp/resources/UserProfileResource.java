@@ -32,36 +32,4 @@ public class UserProfileResource {
         return userProfileController.modifyProfile(userDTO);
     }
 
-    /*
-    @POST
-    @Path("/id/{id}/displayname")
-    @UnitOfWork
-    public Response addDisplayName(@Auth UserDTO userDTO, @PathParam("id") long id){
-        return userProfileController.setDisplayName(userDTO,id);
-    }
-
-    @GET
-    @Path("/id/{id}/displayname")
-    @UnitOfWork
-    public Response getDisplayName(@PathParam("id") String id) {
-        return userProfileController.getDisplayName(id);
-    }
-
-    @GET
-    @Path("/id/{id}/avatar_url")
-    @UnitOfWork
-    @URL
-    public Response getAvatarURL(@PathParam("id") String id){
-        return userProfileController.getAvatarURL(id);
-    }
-
-    @POST
-    @Path("/id/{id}/avatar_url")
-    @UnitOfWork
-    @URL
-    public Response addAvatarURL(@Auth UserDTO userDTO, @PathParam("id") long id){
-        return userProfileController.setAvatarURL(userDTO, id);
-    }
-*/
-
 }
