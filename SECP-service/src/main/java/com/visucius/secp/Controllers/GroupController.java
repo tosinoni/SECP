@@ -202,6 +202,9 @@ public class GroupController {
         Set<User> userWithRole = new HashSet<>();
         Set<User> userWithPermissionLevel = new HashSet<>();
 
+        if(permissions.isEmpty() && roles.isEmpty())
+            return new HashSet<>(userRepository.findAll());
+
         permissions.
             forEach(permission -> userWithPermissionLevel.addAll(permission.getUsers()));
         if(roles.isEmpty())
