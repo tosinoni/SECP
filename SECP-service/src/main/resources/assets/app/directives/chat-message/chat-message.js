@@ -21,7 +21,8 @@ angular.module('SECP')
                 });
              }, true);
              $scope.clickProfile = function(){
-                // console.log( $http.get("/SECP/group/verify/admin/id/" + userID));
+
+                // NEED TO ADD CHECK TO SEE IF USER OR PROFILE, THEN GENERATE USER OR PROFILE DIV.
                 $scope.clicked = !$scope.clicked;
                 var chatBlock = document.getElementById("chatBlock");
                 var profileBlock = $("#profileBlock");
