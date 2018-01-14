@@ -128,6 +128,8 @@ public class UserTest {
             "com.visucius.secp.models.User.findAdmins", namedQueriesArray[4].name());
         assertEquals("NamedQueries[5]: name is not equal",
             "com.visucius.secp.models.User.findAllActiveUsers", namedQueriesArray[5].name());
+        assertEquals("NamedQueries[6]: name is not equal",
+            "com.visucius.secp.models.User.search", namedQueriesArray[6].name());
     }
 
     @Test

@@ -25,6 +25,10 @@ import java.util.Set;
         @NamedQuery(
             name = "com.visucius.secp.models.Group.findPrivateGroupForUsers",
             query = "select g from Group g join g.users u where u in (:users) and g.groupType ='PRIVATE'"
+        ),
+        @NamedQuery(
+            name = "com.visucius.secp.models.Group.search",
+            query = "from Group g where lower(g.name) like lower(:value)"
         )
     }
 )

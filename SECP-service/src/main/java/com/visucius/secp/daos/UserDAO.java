@@ -136,4 +136,10 @@ public class UserDAO extends AbstractDAO<User> {
         return (List<User>)
             namedQuery("com.visucius.secp.models.User.findAllActiveUsers").list();
     }
+
+    public List<User> searchForUser(String value)
+    {
+        return (List<User>) namedQuery("com.visucius.secp.models.User.search").
+            setParameter("value",value).list();
+    }
 }

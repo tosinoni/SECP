@@ -11,6 +11,7 @@ import com.visucius.secp.Controllers.User.LoginRequestController;
 import com.visucius.secp.Controllers.TokenController;
 import com.visucius.secp.Controllers.User.UserController;
 import com.visucius.secp.Controllers.User.UserRegistrationController;
+import com.visucius.secp.Controllers.chat.ChatController;
 import com.visucius.secp.auth.SECPAuthenticator;
 import com.visucius.secp.auth.SECPAuthorizer;
 import com.visucius.secp.auth.TokenAuthFilter;
@@ -123,6 +124,7 @@ public class SECPService extends Application<SECPConfiguration> {
         final AdminController adminController = new AdminController(userDAO, rolesDAO, permissionDAO);
         final GroupController groupController = new GroupController(groupDAO,userDAO,rolesDAO, permissionDAO);
         final MessageController messageController = new MessageController(messageDAO);
+        final ChatController chatController = new ChatController(userDAO, groupDAO);
 
 
         //********************** Register authentication for User *****************************
@@ -153,6 +155,7 @@ public class SECPService extends Application<SECPConfiguration> {
             new EntryResource(loginRequestController));
         environment.jersey().register(new AdminResource(adminController, userRegistrationController));
         environment.jersey().register(new UserResource(userController, userRegistrationController));
+        environment.jersey().register(new ChatResource(chatController));
 
         //************************** Error Handling *************************************
         final ErrorPageErrorHandler epeh = new ErrorPageErrorHandler();
