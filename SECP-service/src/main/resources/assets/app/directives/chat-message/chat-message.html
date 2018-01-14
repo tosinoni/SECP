@@ -1,6 +1,6 @@
-<div class="recipient-box" ng-click="clickProfile()">
-    <img src="{{selectedChat.img}}" alt="avatar" class="img-circle" style="width:25px">
-    <span class="recipient-username">{{selectedChat.username}}</span>
+<div class="recipient-box">
+        <img src="{{selectedChat.img}}" alt="avatar" class="img-circle hoverable" style="width:25px" ng-click="clickProfile()">
+        <span class="recipient-username hoverable" ng-click="clickProfile()">{{selectedChat.username}}</span>
     <a href="javascript:void(0);" class="pull-right"><i class="fa fa-search"></i></a>
 </div>
 
