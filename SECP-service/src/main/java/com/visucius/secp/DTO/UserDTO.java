@@ -2,7 +2,9 @@ package com.visucius.secp.DTO;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.visucius.secp.models.Group;
+import org.hibernate.validator.constraints.URL;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -40,6 +42,12 @@ public class UserDTO {
     private RolesOrPermissionDTO permission;
 
     @JsonProperty
+    private String displayName;
+
+    @JsonProperty
+    private String avatarUrl;
+
+    @JsonProperty
     private Set<DeviceDTO> devices = new HashSet<>();
 
     public UserDTO()
@@ -56,6 +64,11 @@ public class UserDTO {
         this.devices = devices;
     }
 
+
+    public UserDTO(long userID, Set<DeviceDTO> devices, String username) {
+        this(userID,devices);
+        this.username = username;
+    }
     public long getUserID() {
         return userID;
     }
@@ -127,6 +140,14 @@ public class UserDTO {
     public void setPermission(RolesOrPermissionDTO permission) {
         this.permission = permission;
     }
+
+    public String getDisplayName(){ return displayName; }
+
+    public void setDisplayName(String displayName){ this.displayName = displayName; }
+
+    public String getAvatarUrl(){ return avatarUrl; }
+
+    public void setAvatarUrl(String avatarUrl){ this.avatarUrl = avatarUrl;}
 
     public Set<DeviceDTO> getDevices() {
         return devices;

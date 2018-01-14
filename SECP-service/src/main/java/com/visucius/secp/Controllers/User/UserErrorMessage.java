@@ -16,6 +16,7 @@ public interface UserErrorMessage {
     String FIRST_NAME_INVALID = "First name is not valid.";
     String LAST_NAME_INVALID = "Last name is not valid.";
     String User_NAME_INVALID = "Username is not valid.";
+    String DISPLAY_NAME_INVALID = "Display name is not valid.";
     String EMAIL_INVALID = "Email is not valid.";
     String PASSWORD_INVALID = "Password is not valid";
     String USER_CREATED = "User Created";
@@ -33,6 +34,11 @@ public interface UserErrorMessage {
     //Get devices error messages
     String DEVICE_GET_FAIL_NO_DEVICE_EXISTS = "No device exists for user.";
     String DEVICE_GET_FAIL_NO_PUBLIC_KEY_EXISTS = "No public key exist for all user's devices.";
+
+    //UserProfile error messages
+    String USER_PROFILE_FAILED_NO_USER_PROFILE = "Failed to find user profile. No profile exists.";
+    String DISPLAY_NAME_FAILED_NO_DISPLAY_NAME = "Failed to set the display name. No display name chosen.";
+    String AVATAR_URL_FAILED_NO_AVATAR_URL = "Failed to set the Avatar URL. No Avatar chosen.";
 
     //modify user error messages
     String MODIFY_USER_FAIL_NO_USER_INFO = "modify user failed. Please provide the information for the user.";

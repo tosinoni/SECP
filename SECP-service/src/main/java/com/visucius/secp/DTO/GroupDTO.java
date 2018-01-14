@@ -35,6 +35,9 @@ public class GroupDTO {
     @JsonProperty
     private Set<UserDTO> users = new HashSet<>();
 
+    @JsonProperty
+    private Set<MessageDTO> messages = new HashSet<>();
+
     public GroupDTO()
     {
     }
@@ -61,6 +64,15 @@ public class GroupDTO {
 
     public void addUser(UserDTO user) {
         this.users.add(user);
+    }
+
+    public Set<MessageDTO> getMessages() {
+        return messages;
+    }
+
+    public void addMessage(MessageDTO message)
+    {
+        this.messages.add(message);
     }
 
     public String getName() {

@@ -5,6 +5,8 @@ import com.codahale.metrics.annotation.Timed;
 import com.visucius.secp.Controllers.GroupController;
 import com.visucius.secp.DTO.GroupCreateRequest;
 import com.visucius.secp.DTO.GroupDTO;
+import com.visucius.secp.DTO.UserDTO;
+import com.visucius.secp.models.User;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 
@@ -13,7 +15,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 @Path("/groups")
-@Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @RolesAllowed("ADMIN")
 public class GroupResource {
@@ -30,8 +31,29 @@ public class GroupResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Timed
     @UnitOfWork
-    public Response create(@Auth GroupCreateRequest request) {
-        return groupController.createGroup(request);
+    public Response createPublicGroup(@Auth GroupCreateRequest request) {
+        return groupController.createPublicGroup(request);
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Timed
+    @UnitOfWork
+    @RolesAllowed({"ADMIN","NORMAL"})
+    @Path("/private")
+    public Response createPrivateGroup(@Auth User user, UserDTO userDTO) {
+        return groupController.createPrivateGroup(user, userDTO);
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @UnitOfWork
+    @RolesAllowed({"ADMIN", "NORMAL"})
+    @Path("/user")
+    public Response getGroupForUser(@Auth User user)
+    {
+        return groupController.getGroupsForUser(user);
     }
 
     @POST

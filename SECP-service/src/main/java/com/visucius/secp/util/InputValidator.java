@@ -1,6 +1,8 @@
 package com.visucius.secp.util;
 
 import org.apache.commons.validator.routines.EmailValidator;
+import org.apache.commons.validator.routines.UrlValidator;
+import org.hibernate.validator.internal.constraintvalidators.hv.URLValidator;
 
 import java.util.regex.Pattern;
 
@@ -25,4 +27,5 @@ public class InputValidator {
         return EmailValidator.getInstance().isValid(email);
     }
 
+    public static boolean isAvatarURLValid(String avatarURL){return UrlValidator.getInstance().isValid(avatarURL); }
 }

@@ -30,6 +30,19 @@ public class GroupDTOTest {
         assertEquals("users are is not equal", users, groupDTO.getUsers());
     }
 
+
+    @Test
+    public void testMessages() {
+        GroupDTO groupDTO = new GroupDTO(groupID);
+
+        MessageDTO messageDTO = new MessageDTO();
+        Set<MessageDTO> messageDTOS = new HashSet<>();
+        messageDTOS.add(messageDTO);
+
+        groupDTO.addMessage(messageDTO);
+        assertEquals("users are is not equal", messageDTOS, groupDTO.getMessages());
+    }
+
     @Test
     public void testName() {
         GroupDTO groupDTO = new GroupDTO(groupID);

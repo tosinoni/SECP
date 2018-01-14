@@ -105,3 +105,5 @@ Alter TABLE Groups ADD COLUMN if not exists isActive BOOLEAN DEFAULT TRUE;
 ALTER TABLE Groups ADD COLUMN if not exists group_type VARCHAR(255);
 DROP TABLE IF EXISTS user_permissions;
 ALTER TABLE USERS ADD COLUMN if not exists permission_id bigint;
+ALTER TABLE Users ADD COLUMN if not exists display_name VARCHAR(255);
+ALTER TABLE Users ADD COLUMN if not exists avatar_url VARCHAR (255);
