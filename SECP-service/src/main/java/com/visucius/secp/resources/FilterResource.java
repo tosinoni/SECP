@@ -35,6 +35,13 @@ public class FilterResource {
         return filterController.createFilter(request);
     }
 
+    @GET
+    @Path("/id/{id}")
+    @UnitOfWork
+    public Response getGroup(@Auth @PathParam("id") String id) {
+        return filterController.getFilterGivenId(id);
+    }
+
     @DELETE
     @UnitOfWork
     @Path("/{id}")

@@ -172,6 +172,17 @@ angular.module('SECP')
             });
         },
 
+        getFilter : function(id) {
+            return $http.get("/SECP/filter/id/" + id)
+                .then(function(res) {
+                    if (res.status == 200) {
+                        return res.data;
+                    }
+                }, function(err) {
+                    return err;
+                });
+        },
+
         getAllFilters : function() {
             return $http.get("/SECP/filter")
                 .then(function(res) {

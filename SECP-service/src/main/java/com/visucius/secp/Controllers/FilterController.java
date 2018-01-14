@@ -1,7 +1,6 @@
 package com.visucius.secp.Controllers;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.Sets;
 import com.visucius.secp.DTO.*;
 import com.visucius.secp.daos.FilterDAO;
 import com.visucius.secp.daos.PermissionDAO;
@@ -62,10 +61,10 @@ public class FilterController {
         }
 
         Filter filter = new Filter(request.name);
-        return updateOrCreateFilter(filter,permissions,roles);
+        return createFilter(filter,permissions,roles);
     }
 
-    private Response updateOrCreateFilter(Filter filter, Set<Long> permissions, Set<Long> roles)
+    private Response createFilter(Filter filter, Set<Long> permissions, Set<Long> roles)
     {
         filter.setPermissions(getPermissions(permissions));
         filter.setRoles(getRoles(roles));
