@@ -15,7 +15,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 @Path("/groups")
-@Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @RolesAllowed("ADMIN")
 public class GroupResource {
@@ -45,6 +44,16 @@ public class GroupResource {
     @Path("/private")
     public Response createPrivateGroup(@Auth User user, UserDTO userDTO) {
         return groupController.createPrivateGroup(user, userDTO);
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @UnitOfWork
+    @RolesAllowed({"ADMIN", "NORMAL"})
+    @Path("/user")
+    public Response getGroupForUser(@Auth User user)
+    {
+        return groupController.getGroupsForUser(user);
     }
 
     @POST

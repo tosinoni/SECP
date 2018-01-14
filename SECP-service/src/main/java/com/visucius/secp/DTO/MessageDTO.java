@@ -30,13 +30,14 @@ public class MessageDTO {
 
     }
 
-    public MessageDTO(long messageId, long groupId, long senderId, String body, MessageType reason)
+    public MessageDTO(long messageId, long groupId, long senderId, String body, MessageType reason, Date timestamp)
     {
         this.messageId = messageId;
         this.groupId = groupId;
         this.senderId = senderId;
         this.body = body;
         this.reason = reason;
+        this.timestamp = new Date(timestamp.getTime());
     }
 
     public long getGroupId() {
