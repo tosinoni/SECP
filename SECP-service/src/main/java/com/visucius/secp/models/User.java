@@ -1,6 +1,7 @@
 package com.visucius.secp.models;
 
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.URL;
 
 import javax.persistence.*;
 
@@ -60,6 +61,13 @@ public class User implements Principal {
 
     @Column(name = "password", nullable = false)
     private String password;
+
+    @Column(name = "display_name", nullable = false)
+    private String displayname;
+
+    @URL
+    @Column(name = "avatar_url", nullable = false)
+    private String avatarurl;
 
     @ManyToMany
     @JoinTable(name = "user_roles",
@@ -182,6 +190,14 @@ public class User implements Principal {
     public void setIsActive(boolean isActive) {
         this.isActive = isActive;
     }
+
+    public String getDisplayName(){ return displayname; }
+
+    public void setDisplayName(String displayname){ this.displayname = displayname; }
+
+    public String getAvatarUrl(){ return avatarurl; }
+
+    public void setAvatarUrl(String avatarurl){ this.avatarurl = avatarurl; }
 
     /*
      * The below three methods are needed for authentication and authorization
