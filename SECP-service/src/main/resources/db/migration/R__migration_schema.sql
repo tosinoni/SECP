@@ -80,7 +80,23 @@ create table IF NOT EXISTS user_roles (
         primary key (user_id, role_id)
 ) engine=MyISAM;
 
+create table IF NOT EXISTS Filters (
+        id bigint not null,
+        name varchar(255) not null,
+        primary key (id)
+) engine=MyISAM;
 
+create table IF NOT EXISTS filter_permissions (
+       group_id bigint not null,
+        permission_id bigint not null,
+        primary key (group_id, permission_id)
+) engine=MyISAM;
+
+create table IF NOT EXISTS filter_roles (
+       group_id bigint not null,
+        role_id bigint not null,
+        primary key (group_id, role_id)
+) engine=MyISAM;
 
 
 #********************** Column changes for table should be added here ************************

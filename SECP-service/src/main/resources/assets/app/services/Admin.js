@@ -172,5 +172,35 @@ angular.module('SECP')
             });
         },
 
+        getAllFilters : function() {
+            return $http.get("/SECP/filter")
+                .then(function(res) {
+                    if (res.status == 200) {
+                        return res.data;
+                    }
+                }, function(err) {
+                    return err;
+                });
+        },
+
+        deleteFilter : function(id) {
+            return $http.delete("/SECP/filter/" + id)
+                .then(function(res) {
+                    return res;
+                }, function(err) {
+                    return err;
+                });
+        },
+
+        addFilter : function(request) {
+            return $http.post("/SECP/filter", request)
+                .then(function(res) {
+                    return res;
+                }, function(err) {
+                    return err;
+                });
+        },
+
+
     }
   });

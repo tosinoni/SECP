@@ -34,8 +34,12 @@
                         ng-options="role.name for role in roles track by role.id" multiple>
                 </select>
 
-                <br><br><input type="checkbox" ng-model="modalData.isActive">
-                 Active status<br>
+                <br><br>
+                <div ng-hide="isfilter">
+                <input type="checkbox" ng-model="modalData.isActive">
+                 Active status
+                </div>
+                <br>
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-default">Submit</button>
