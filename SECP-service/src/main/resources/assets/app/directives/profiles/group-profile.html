@@ -1,4 +1,10 @@
 <div class="animated fadeInRight" id="groupProfileModal">
+
+        <button class="fa fa-pencil" ng-click="editProfile()"></button>
+        <!--Edit Group modal-->
+        <secp-manage-modal name="editGroupModal" frmname="editGroupForm" title="Edit Group"
+        modal-data="editGroupData" save-fn="submitModifyGroup(row)"></secp-manage-modal>
+
         <div id="groupprofile">
             <div>
                 <img src="https://scontent.fykz1-1.fna.fbcdn.net/v/t1.0-1/c90.210.540.540/s160x160/19510125_10213767937303246_5095195573619394298_n.jpg?oh=7768b901dcef45df1ccfa57878be3e89&oe=5AC0FE69"
