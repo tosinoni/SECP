@@ -1,6 +1,7 @@
 package com.visucius.secp.Controllers;
 
 import com.google.common.base.Optional;
+import com.visucius.secp.Controllers.User.UserErrorMessage;
 import com.visucius.secp.DTO.*;
 import com.visucius.secp.daos.GroupDAO;
 import com.visucius.secp.daos.PermissionDAO;
@@ -99,7 +100,6 @@ public class GroupControllerTest {
 
         Mockito.when(userDAO.findUsersWithRole(Matchers.anyInt())).thenReturn(validUsers);
         Mockito.when(userDAO.findUsersWithPermissionLevel(Matchers.anyInt())).thenReturn(validUsers);
-
         Mockito.when(groupDAO.findByName(VALID_GROUP_NAME)).thenReturn(null);
 
 
@@ -154,7 +154,7 @@ public class GroupControllerTest {
 
         exception.expect(WebApplicationException.class);
         exception.expectMessage(GroupErrorMessages.GROUP_NAME_INVALID);
-        controller.createGroup(request);
+        controller.createPublicGroup(request);
     }
 
     @Test
@@ -167,7 +167,7 @@ public class GroupControllerTest {
 
         exception.expect(WebApplicationException.class);
         exception.expectMessage(GroupErrorMessages.GROUP_NAME_INVALID);
-        controller.createGroup(request);
+        controller.createPublicGroup(request);
     }
 
     @Test
@@ -180,7 +180,7 @@ public class GroupControllerTest {
 
         exception.expect(WebApplicationException.class);
         exception.expectMessage(GroupErrorMessages.GROUP_NAME_INVALID);
-        controller.createGroup(request);
+        controller.createPublicGroup(request);
     }
 
     @Test
@@ -196,7 +196,7 @@ public class GroupControllerTest {
 
         exception.expect(WebApplicationException.class);
         exception.expectMessage(String.format(GroupErrorMessages.ROLE_ID_INVALID, INVALID_ROLE_ID));
-        controller.createGroup(request);
+        controller.createPublicGroup(request);
     }
 
     @Test
@@ -212,7 +212,7 @@ public class GroupControllerTest {
 
         exception.expect(WebApplicationException.class);
         exception.expectMessage(String.format(GroupErrorMessages.PERMISSION_ID_INVALID, INVALID_Permission_ID));
-        controller.createGroup(request);
+        controller.createPublicGroup(request);
     }
 
     @Test
@@ -334,7 +334,56 @@ public class GroupControllerTest {
 
 
     @Test
-    public void ValidGroupCreationTest()
+    public void createInvalidPrivateGroup()
+    {
+        UserDTO userDTO = new UserDTO(1);
+        userDTO.setUsername("user1");
+        User user = new User();
+        user.setId(1);
+        user.setUsername("user2");
+        List<User> users = new ArrayList<>();
+        users.add(user);
+        Mockito.when(groupDAO.findPrivateGroupForUsers(Matchers.anySet())).thenReturn(users);
+        Mockito.when(userDAO.getUserWithDevices(Matchers.anyLong())).thenReturn(Optional.fromNullable( new User()));
+        exception.expect(WebApplicationException.class);
+        exception.expectMessage(GroupErrorMessages.PRIVATE_GROUP_EXISTS);
+        controller.createPrivateGroup(user,userDTO);
+    }
+
+    @Test
+    public void createPrivateGroupWithInvalidUser()
+    {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUsername("user1");
+        User user = new User();
+        user.setId(1);
+        user.setUsername("user2");
+        Mockito.when(groupDAO.findPrivateGroupForUsers(Matchers.anySet())).thenReturn(new ArrayList());
+        Mockito.when(userDAO.getUserWithDevices(Matchers.anyLong())).thenReturn(Optional.fromNullable(null));
+        exception.expect(WebApplicationException.class);
+        exception.expectMessage(UserErrorMessage.USER_ID_INVALID);
+        controller.createPrivateGroup(user,userDTO);
+    }
+
+
+    @Test
+    public void createPrivateGroup()
+    {
+        UserDTO userDTO = new UserDTO(1);
+        userDTO.setUsername("user1");
+        User user = new User();
+        user.setId(1);
+        user.setUsername("user2");
+        Mockito.when(userDAO.getUserWithDevices(Matchers.anyLong())).thenReturn(Optional.fromNullable( new User()));
+        Mockito.when(groupDAO.findPrivateGroupForUsers(Matchers.anySet())).thenReturn(new ArrayList());
+        Response response =  controller.createPrivateGroup(user,userDTO);
+        Response validResponse = Response.status(Response.Status.CREATED).entity(getGroupResponse()).build();
+        assertEquals(response.getStatus(), validResponse.getStatus());
+        assertEquals(response.getEntity(),  validResponse.getEntity());
+    }
+
+    @Test
+    public void validGroupCreationTest()
     {
         GroupCreateRequest request = new GroupCreateRequest(
             VALID_GROUP_NAME,
@@ -342,7 +391,7 @@ public class GroupControllerTest {
             validRoles
         );
 
-        Response response = controller.createGroup(request);
+        Response response = controller.createPublicGroup(request);
         Response validResponse = Response.status(Response.Status.CREATED).entity(getGroupResponse()).build();
         assertEquals(response.getStatus(), validResponse.getStatus());
         assertEquals(response.getEntity(),  validResponse.getEntity());

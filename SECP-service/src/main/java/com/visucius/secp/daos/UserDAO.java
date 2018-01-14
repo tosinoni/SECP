@@ -6,6 +6,7 @@ import com.visucius.secp.models.User;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import java.util.List;
@@ -39,6 +40,15 @@ public class UserDAO extends AbstractDAO<User> {
         Optional<User> optionalUser = find(id);
         if(optionalUser.isPresent())
             Hibernate.initialize(optionalUser.get().getGroups());
+
+        return optionalUser;
+    }
+
+    public Optional<User> getUserWithDevices(long id)
+    {
+        Optional<User> optionalUser = find(id);
+        if(optionalUser.isPresent())
+            Hibernate.initialize(optionalUser.get().getDevices());
 
         return optionalUser;
     }

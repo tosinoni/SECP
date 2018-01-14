@@ -2,11 +2,13 @@ package com.visucius.secp.daos;
 
 import com.google.common.base.Optional;
 import com.visucius.secp.models.Group;
+import com.visucius.secp.models.User;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 
 import java.util.List;
+import java.util.Set;
 
 public class GroupDAO extends AbstractDAO<Group> {
 
@@ -53,5 +55,11 @@ public class GroupDAO extends AbstractDAO<Group> {
         return (List<Group>) namedQuery("com.visucius.secp.models.Group.findGroupsForUser").
             setParameter("permissionID",permissionID)
             .setParameterList("roleIDS",roleIDS).list();
+    }
+
+    public List<Group> findPrivateGroupForUsers(Set<User> users)
+    {
+        return (List<Group>) namedQuery("com.visucius.secp.models.Group.findPrivateGroupForUsers").
+            setParameterList("users",users).list();
     }
 }

@@ -123,7 +123,7 @@ public class GroupTest {
 
         //testing the @JoinTable annotation
         NamedQueries namedQueries = ReflectTool.getClassAnnotation(Group.class, NamedQueries.class);
-        assertEquals("NamedQueries:  size is not equal to 5", 3, namedQueries.value().length);
+        assertEquals("NamedQueries:  size is not equal to 4", 4, namedQueries.value().length);
 
         NamedQuery[] namedQueriesArray = namedQueries.value();
 
@@ -133,5 +133,7 @@ public class GroupTest {
             "com.visucius.secp.models.Group.findAllActiveGroups", namedQueriesArray[1].name());
         assertEquals("NamedQueries[2]: name is not equal",
             "com.visucius.secp.models.Group.findGroupsForUser", namedQueriesArray[2].name());
+        assertEquals("NamedQueries[2]: name is not equal",
+            "com.visucius.secp.models.Group.findPrivateGroupForUsers", namedQueriesArray[3].name());
     }
 }

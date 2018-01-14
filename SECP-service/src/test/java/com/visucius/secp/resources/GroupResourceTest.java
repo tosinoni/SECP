@@ -5,6 +5,8 @@ import com.visucius.secp.Controllers.GroupController;
 import com.visucius.secp.daos.*;
 import com.visucius.secp.helpers.ResponseValidator;
 import com.visucius.secp.models.Group;
+import com.visucius.secp.models.User;
+import io.dropwizard.auth.AuthValueFactoryProvider;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -28,6 +30,7 @@ public class GroupResourceTest {
 
     @Rule
     public final ResourceTestRule resources = ResourceTestRule.builder()
+        .addProvider((new AuthValueFactoryProvider.Binder<>(User.class)))
         .addResource(new GroupResource(groupController))
         .build();
 
