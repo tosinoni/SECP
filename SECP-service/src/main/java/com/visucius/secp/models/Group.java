@@ -21,6 +21,10 @@ import java.util.Set;
         @NamedQuery(
             name = "com.visucius.secp.models.Group.findGroupsForUser",
             query = "select g from Group g join g.permissions p join g.roles r where p.id = :permissionID and r.id in (:roleIDS)"
+        ),
+        @NamedQuery(
+            name = "com.visucius.secp.models.Group.findPrivateGroupForUsers",
+            query = "select g from Group g join g.users u where u in (:users) and g.groupType ='PRIVATE'"
         )
     }
 )
@@ -61,7 +65,6 @@ public class Group {
     @Enumerated(value = EnumType.STRING)
     @Column(name = "group_type", nullable = false)
     private GroupType groupType = GroupType.PUBLIC;
-
 
     public Group()
     {
@@ -106,29 +109,18 @@ public class Group {
 
     public void setMessages(Set<Message> messages){this.messages = messages;}
 
-    public void addPermissions(Collection<Permission> permissions)
-    {
-        this.permissions.addAll(permissions);
-    }
-
-    public void addRoles(Collection<Role> roles)
-    {
-        this.roles.addAll(roles);
-    }
-
-    public void removeRoles(Collection<Role> roles)
-    {
-        this.roles.removeAll(roles);
-    }
-
     public void setIsActive(boolean isActive)
     {
         this.isActive = isActive;
     }
 
-    public void removePermissions(Collection<Permission> permissions)
+    public void addUser(User user)
     {
-        this.permissions.removeAll(permissions);
+        this.users.add(user);
+    }
+
+    public void setGroupType(GroupType groupType) {
+        this.groupType = groupType;
     }
 
     public boolean isActive() {
