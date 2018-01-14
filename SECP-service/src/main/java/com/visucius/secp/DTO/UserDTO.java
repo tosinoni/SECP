@@ -64,6 +64,11 @@ public class UserDTO {
         this.devices = devices;
     }
 
+
+    public UserDTO(long userID, Set<DeviceDTO> devices, String username) {
+        this(userID,devices);
+        this.username = username;
+    }
     public long getUserID() {
         return userID;
     }

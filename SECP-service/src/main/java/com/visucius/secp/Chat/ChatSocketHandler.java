@@ -83,8 +83,8 @@ public class ChatSocketHandler implements IMessageHandler {
             createdMessage.getGroup().getId(),
             senderID,
             createdMessage.getBody(),
-            messageDTO.getReason());
-        savedMessage.setTimestamp(createdMessage.getTimestamp());
+            messageDTO.getReason(),
+            messageDTO.getTimestamp());
         return savedMessage;
     }
 
