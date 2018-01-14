@@ -46,7 +46,25 @@ public class FilterController {
         return Response.status(Response.Status.OK).build();
     }
 
-    public Response createFilter(FilterCreateRequest request)
+    public Response modifyFilter(FilterDTO request) {
+
+        Set<Long> permissions = request.getPermissions().stream().
+            map(permission -> permission.getId()).collect(Collectors.toSet());
+        Set<Long> roles = request.getRoles().stream().
+            map(role -> role.getId()).collect(Collectors.toSet());
+
+        String error = validateRolesAndPermissions(permissions, roles);
+        if (StringUtils.isNoneEmpty(error)) {
+            throw new WebApplicationException(
+                error,
+                Response.Status.BAD_REQUEST);
+        }
+
+        Filter filter = getFilter(request.getId());
+        return updateOrCreateFilter(filter,permissions,roles);
+    }
+
+    public Response updateOrCreateFilter(FilterCreateRequest request)
     {
         Set<Long> permissions = request.permissions.stream().
             map(permission -> permission.getId()).collect(Collectors.toSet());
@@ -61,10 +79,10 @@ public class FilterController {
         }
 
         Filter filter = new Filter(request.name);
-        return createFilter(filter,permissions,roles);
+        return updateOrCreateFilter(filter,permissions,roles);
     }
 
-    private Response createFilter(Filter filter, Set<Long> permissions, Set<Long> roles)
+    private Response updateOrCreateFilter(Filter filter, Set<Long> permissions, Set<Long> roles)
     {
         filter.setPermissions(getPermissions(permissions));
         filter.setRoles(getRoles(roles));

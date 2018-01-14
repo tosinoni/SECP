@@ -2,8 +2,11 @@
 <h1 class="portalheader"><i class="fa fa-filter" aria-hidden="true"></i> Filter</h1>
 <p class="note"><strong>Note:</strong> Filter words are used to restrict their use to users in the specified permisssion levels and roles.</p>
 <secp-table name="filterTable" modalname="filterModal" buttonname="New Filter Word" ismanage=true
-            data="filters" headers="filterHeaders" delete-fn="deleteFilter(row)"></secp-table>
+            data="filters" headers="filterHeaders" delete-fn="deleteFilter(row)" edit-fn="editFilterModalFn(row)"></secp-table>
 </body>
 <!-- Create New Filter Word Modal -->
 <secp-manage-modal name="filterModal" frmname="createFilterForm" title="New Filter Word" isfilter = "true"
                    modal-data="createFilterData" inputname="Name" save-fn="addFilter(row)"></secp-manage-modal>
+<!--Edit Filter Word Modal-->
+<secp-manage-modal name="editFilterModal" frmname="editFilterForm" title="Edit Filter Word" isfilter = "true"
+                   modal-data="editFilterData" save-fn="submitModifyFilter(row)"></secp-manage-modal>

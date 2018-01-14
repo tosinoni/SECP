@@ -21,9 +21,7 @@ import org.mockito.Mockito;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
@@ -144,7 +142,7 @@ public class FilterControllerTest {
 
         exception.expect(WebApplicationException.class);
         exception.expectMessage(FilterErrorMessages.FILTER_NAME_INVALID);
-        controller.createFilter(request);
+        controller.updateOrCreateFilter(request);
     }
 
     @Test
@@ -157,7 +155,7 @@ public class FilterControllerTest {
 
         exception.expect(WebApplicationException.class);
         exception.expectMessage(FilterErrorMessages.FILTER_NAME_INVALID);
-        controller.createFilter(request);
+        controller.updateOrCreateFilter(request);
     }
 
     @Test
@@ -170,7 +168,7 @@ public class FilterControllerTest {
 
         exception.expect(WebApplicationException.class);
         exception.expectMessage(FilterErrorMessages.FILTER_NAME_INVALID);
-        controller.createFilter(request);
+        controller.updateOrCreateFilter(request);
     }
 
     @Test
@@ -186,7 +184,7 @@ public class FilterControllerTest {
 
         exception.expect(WebApplicationException.class);
         exception.expectMessage(String.format(FilterErrorMessages.ROLE_ID_INVALID, INVALID_ROLE_ID));
-        controller.createFilter(request);
+        controller.updateOrCreateFilter(request);
     }
 
     @Test
@@ -202,11 +200,11 @@ public class FilterControllerTest {
 
         exception.expect(WebApplicationException.class);
         exception.expectMessage(String.format(FilterErrorMessages.PERMISSION_ID_INVALID, INVALID_Permission_ID));
-        controller.createFilter(request);
+        controller.updateOrCreateFilter(request);
     }
 
     @Test
-    public void ValidGroupCreationTest()
+    public void ValidFilterCreationTest()
     {
         FilterCreateRequest request = new FilterCreateRequest(
             VALID_FILTER_NAME,
@@ -214,14 +212,132 @@ public class FilterControllerTest {
             validRoles
         );
 
-        Response response = controller.createFilter(request);
+        Response response = controller.updateOrCreateFilter(request);
         Response validResponse = Response.status(Response.Status.CREATED).entity(getFilterResponse()).build();
         assertEquals(response.getStatus(), validResponse.getStatus());
-        //assertEquals(response.getEntity(),  validResponse.getEntity());
+        assertEquals(response.getEntity(),  validResponse.getEntity());
+    }
+
+    @Test
+    public void AddInvalidRoleTest()
+    {
+        HashSet<RolesOrPermissionDTO> addRoles = new HashSet<>();
+        addRoles.add(new RolesOrPermissionDTO(INVALID_ROLE_ID,ROLE_NAME));
+        FilterDTO filterDTO = new FilterDTO(FILTERID);
+        filterDTO.setRoles(addRoles);
+        exception.expect(WebApplicationException.class);
+        exception.expectMessage(String.format(GroupErrorMessages.ROLE_ID_INVALID, INVALID_ROLE_ID));
+        controller.modifyFilter(filterDTO);
+    }
+
+    @Test
+    public void AddInvalidPermissionTest()
+    {
+        HashSet<RolesOrPermissionDTO> addPermissions = new HashSet<>();
+        addPermissions.add(new RolesOrPermissionDTO(INVALID_ROLE_ID,PERMISSION_NAME));
+        FilterDTO filterDTO = new FilterDTO(FILTERID);
+        filterDTO.setPermissions(addPermissions);
+
+        exception.expect(WebApplicationException.class);
+        exception.expectMessage(String.format(GroupErrorMessages.PERMISSION_ID_INVALID, INVALID_ROLE_ID));
+        controller.modifyFilter(filterDTO);
+    }
+
+    @Test
+    public void AddValidRoleTest()
+    {
+        HashSet<RolesOrPermissionDTO> addRoles = new HashSet<>();
+        addRoles.add(new RolesOrPermissionDTO(8L,ROLE_NAME));
+        FilterDTO filterDTO = new FilterDTO(FILTERID);
+        filterDTO.setRoles(addRoles);
+        filterDTO.setPermissions(new HashSet<>());
+
+        Response response = controller.modifyFilter(filterDTO);
+        Response validResponse = Response.status(Response.Status.CREATED).entity(getFilterResponse()).build();
+        assertEquals(response.getStatus(), validResponse.getStatus());
+        assertEquals(response.getEntity(),  validResponse.getEntity());
+    }
+
+    @Test
+    public void AddValidPermissionTest()
+    {
+        HashSet<RolesOrPermissionDTO> addPermissions = new HashSet<>();
+        addPermissions.add(new RolesOrPermissionDTO(6L,PERMISSION_NAME));
+        FilterDTO filterDTO = new FilterDTO(FILTERID);
+        filterDTO.setPermissions(addPermissions);
+        filterDTO.setRoles(new HashSet<>());
+
+        Response response = controller.modifyFilter(filterDTO);
+        Response validResponse = Response.status(Response.Status.CREATED).entity(getFilterResponse()).build();
+        assertEquals(response.getStatus(), validResponse.getStatus());
+        assertEquals(response.getEntity(),  validResponse.getEntity());
+    }
+
+
+    @Test
+    public void AddValidPermissionsAndRolesTest()
+    {
+        HashSet<RolesOrPermissionDTO> addPermissions = new HashSet<>();
+        for(long i = NUMBER_OF_PERMISSIONS; i<NUMBER_OF_PERMISSIONS*2;i++)
+        {
+            addPermissions.add(new RolesOrPermissionDTO(i,PERMISSION_NAME + i));
+        }
+
+        HashSet<RolesOrPermissionDTO> addRoles = new HashSet<>();
+        for(long i = NUMBER_OF_ROLES; i<NUMBER_OF_ROLES*2;i++)
+        {
+            addPermissions.add(new RolesOrPermissionDTO(i,ROLE_NAME + i));
+        }
+
+        FilterDTO filterDTO = new FilterDTO(FILTERID);
+        filterDTO.setPermissions(addPermissions);
+        filterDTO.setRoles(addRoles);
+
+        Response response = controller.modifyFilter(filterDTO);
+        Response validResponse = Response.status(Response.Status.CREATED).entity(getFilterResponse()).build();
+        assertEquals(response.getStatus(), validResponse.getStatus());
+        assertEquals(response.getEntity(),  validResponse.getEntity());
+    }
+
+    @Test
+    public void RemoveValidPermissionsAndRolesTest()
+    {
+        HashSet<RolesOrPermissionDTO> removePermissions = new HashSet<>();
+        for(long i = 0; i<NUMBER_OF_PERMISSIONS-1;i++)
+        {
+            removePermissions.add(new RolesOrPermissionDTO(i,PERMISSION_NAME + i));
+        }
+
+        HashSet<RolesOrPermissionDTO> removeRoles = new HashSet<>();
+        for(long i = 0; i<NUMBER_OF_ROLES-1;i++)
+        {
+            removeRoles.add(new RolesOrPermissionDTO(i,ROLE_NAME + i));
+        }
+
+        FilterDTO groupDTO = new FilterDTO(FILTERID);
+        groupDTO.setPermissions(removePermissions);
+        groupDTO.setRoles(removeRoles);
+
+        Response response = controller.modifyFilter(groupDTO);
+        Response validResponse = Response.status(Response.Status.CREATED).entity(getFilterResponse()).build();
+        assertEquals(response.getStatus(), validResponse.getStatus());
+        assertEquals(response.getEntity(),  validResponse.getEntity());
+    }
+
+    @Test
+    public void ModifyGroupWithEmptyRequestTest()
+    {
+        FilterDTO groupDTO = new FilterDTO(FILTERID);
+
+        Response response =  controller.modifyFilter(groupDTO);
+        Response validResponse = Response.status(Response.Status.CREATED).entity(getFilterResponse()).build();
+        assertEquals(response.getStatus(), validResponse.getStatus());
+        assertEquals(response.getEntity(),  validResponse.getEntity());
     }
 
     private FilterDTO getFilterResponse () {
         FilterDTO filterDTO = new FilterDTO(FILTERID);
+        filterDTO.setName(VALID_FILTER_NAME);
         return filterDTO;
     }
 }

@@ -83,7 +83,6 @@ public class FilterDTO {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
         if (!(o instanceof FilterDTO)) return false;
         FilterDTO g = (FilterDTO) o;
 

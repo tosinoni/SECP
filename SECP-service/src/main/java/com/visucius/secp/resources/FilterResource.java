@@ -32,13 +32,13 @@ public class FilterResource {
     @Timed
     @UnitOfWork
     public Response create(@Auth FilterCreateRequest request) {
-        return filterController.createFilter(request);
+        return filterController.updateOrCreateFilter(request);
     }
 
     @GET
     @Path("/id/{id}")
     @UnitOfWork
-    public Response getGroup(@Auth @PathParam("id") String id) {
+    public Response getFilter(@Auth @PathParam("id") String id) {
         return filterController.getFilterGivenId(id);
     }
 
@@ -48,6 +48,17 @@ public class FilterResource {
     public Response deleteFilter(@Auth @PathParam("id") int id)
     {
         return  filterController.deleteFilter(id);
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Timed
+    @UnitOfWork
+    @Path("/modify")
+    public Response modifyGroup(@Auth FilterDTO request)
+    {
+        return  filterController.modifyFilter(request);
     }
 
     @GET

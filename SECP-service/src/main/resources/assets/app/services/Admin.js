@@ -212,6 +212,15 @@ angular.module('SECP')
                 });
         },
 
+        editFilter : function(data) {
+            return $http.post("/SECP/filter/modify",data)
+                .then(function(res) {
+                    return res;
+                }, function(err) {
+                    return err;
+                });
+        }
+
 
     }
   });
