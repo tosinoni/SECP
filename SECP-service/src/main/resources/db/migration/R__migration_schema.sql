@@ -87,15 +87,15 @@ create table IF NOT EXISTS Filters (
 ) engine=MyISAM;
 
 create table IF NOT EXISTS filter_permissions (
-       group_id bigint not null,
+       filter_id bigint not null,
         permission_id bigint not null,
-        primary key (group_id, permission_id)
+        primary key (filter_id, permission_id)
 ) engine=MyISAM;
 
 create table IF NOT EXISTS filter_roles (
-       group_id bigint not null,
+       filter_id bigint not null,
         role_id bigint not null,
-        primary key (group_id, role_id)
+        primary key (filter_id, role_id)
 ) engine=MyISAM;
 
 

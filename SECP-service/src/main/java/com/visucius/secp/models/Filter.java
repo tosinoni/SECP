@@ -32,13 +32,13 @@ public class Filter {
 
     @ManyToMany()
     @JoinTable(name = "filter_roles",
-        joinColumns = { @JoinColumn(name = "group_id") },
+        joinColumns = { @JoinColumn(name = "filter_id") },
         inverseJoinColumns = { @JoinColumn(name = "role_id") })
     private Set<Role> roles = new HashSet<>();
 
     @ManyToMany()
     @JoinTable(name = "filter_permissions",
-        joinColumns = { @JoinColumn(name = "group_id") },
+        joinColumns = { @JoinColumn(name = "filter_id") },
         inverseJoinColumns = { @JoinColumn(name = "permission_id") })
     private Set<Permission> permissions = new HashSet<>();
 
@@ -100,8 +100,8 @@ public class Filter {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Filter)) return false;
-        Filter group = (Filter) o;
-        return id == group.id;
+        Filter filter = (Filter) o;
+        return id == filter.id;
     }
 
     @Override
