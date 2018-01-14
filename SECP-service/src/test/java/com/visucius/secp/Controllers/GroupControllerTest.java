@@ -397,6 +397,24 @@ public class GroupControllerTest {
         assertEquals(response.getEntity(),  validResponse.getEntity());
     }
 
+    @Test
+    public void testGetGroupsForUsers()
+    {
+        User user = new User();
+        Group group = new Group();
+        group.setId(GROUPID);
+        Set<Group> groups = new HashSet<>();
+        Set<GroupDTO> groupDTOS = new HashSet<>();
+        groupDTOS.add(getGroupResponse());
+        groups.add(group);
+        user.setGroups(groups);
+        Mockito.when(userDAO.getUserWithGroups(Matchers.anyLong())).thenReturn(Optional.fromNullable(user));
+        Response response = controller.getGroupsForUser(user);
+        Response validResponse = Response.status(Response.Status.OK).entity(groupDTOS).build();
+        assertEquals(response.getStatus(), validResponse.getStatus());
+        assertEquals(response.getEntity(),  validResponse.getEntity());
+    }
+
     private GroupDTO getGroupResponse () {
         GroupDTO groupDTO = new GroupDTO(GROUPID);
         return groupDTO;

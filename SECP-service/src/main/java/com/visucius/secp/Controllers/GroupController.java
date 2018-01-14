@@ -42,6 +42,18 @@ public class GroupController {
     }
 
 
+    public Response getGroupsForUser(User user)
+    {
+        User userWithGroups = userRepository.getUserWithGroups(user.getId()).get();
+        Set<GroupDTO> response = userWithGroups.getGroups().stream()
+            .map(group -> {
+                return getGroupDTOWithMessages(group);
+            })
+            .collect(Collectors.toSet());
+
+        return Response.status(Response.Status.OK).entity(response).build();
+    }
+
     public Response deleteGroup(int id) {
         Group group = getGroup(id);
         group.setIsActive(false);
@@ -226,6 +238,23 @@ public class GroupController {
         Set<Permission> permissions = new HashSet<>();
         permissionID.forEach(id -> permissions.add(permissionsRepository.find(id).get()));
         return permissions;
+    }
+
+    private GroupDTO getGroupDTOWithMessages(Group group)
+    {
+        GroupDTO groupDTO = getGroupResponse(group);
+        group.getMessages().stream().forEach(message ->
+        {
+            groupDTO.addMessage(
+                new MessageDTO(message.getId(),
+                    group.getId(),
+                    message.getUser().getId(),
+                    message.getBody(),
+                    MessageDTO.MessageType.MESSAGE,
+                    message.getTimestamp()));
+        });
+
+        return groupDTO;
     }
 
     private GroupDTO getGroupResponse(Group group) {

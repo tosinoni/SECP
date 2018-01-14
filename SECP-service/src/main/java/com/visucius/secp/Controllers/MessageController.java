@@ -3,6 +3,8 @@ package com.visucius.secp.Controllers;
 import com.visucius.secp.DTO.MessageDTO;
 import com.visucius.secp.daos.MessageDAO;
 import com.visucius.secp.models.Message;
+import com.visucius.secp.models.User;
+
 import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,15 +36,14 @@ public class MessageController {
         List<MessageDTO> messageDTOS = messages.stream().map(
             (message) ->
             {
-                MessageDTO messageDTO = new MessageDTO(
+                return new MessageDTO(
                     message.getId(),
                     groupID,
                     message.getUser().getId(),
                     message.getBody(),
-                    MessageDTO.MessageType.MESSAGE);
+                    MessageDTO.MessageType.MESSAGE,
+                    message.getTimestamp());
 
-                messageDTO.setTimestamp(message.getTimestamp());
-                return messageDTO;
             })
             .collect(Collectors.toList());
 
