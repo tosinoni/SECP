@@ -42,7 +42,6 @@
 }
 .chat .chat-wrapper .message-list-wrapper .message-list li.left .body {
     display: block;
-    width: 87%;
     float: left;
     position: relative;
 }
@@ -194,4 +193,8 @@
     .chat .chat-wrapper .recipient-box {
         margin-top: 30px;
     }
+
+}
+.recipient-box {
+    cursor: pointer;
 }

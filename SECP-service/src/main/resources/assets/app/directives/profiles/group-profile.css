@@ -1,0 +1,40 @@
+@import url("https://fonts.googleapis.com/css?family=Raleway:400,700");
+#groupprofile{
+    margin-bottom: 50px;
+    text-align: center;
+    font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+#group-name, .list-heading{
+    font-size: 20px;
+    font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+#groupprofile img{
+    margin: 0 auto;
+    border: 7px solid #fff;
+    display: block;
+    height: 250px;
+    width: 250px;
+    border-radius: 50%;
+}
+#user-security-settings, #user-list {
+    text-align: left;
+}
+.list-group{
+    max-height: 200px;
+    overflow: auto;
+    list-style-type: none;
+}
+.list-group-item {
+    height: 25px;
+    float: left;
+    margin-right: 0px;
+    border-right: 1px solid #aaa;
+    padding: 0 20px;
+    border-top: none;
+    border-bottom: none;
+    border-left: none;
+}
+
+.list-group-item:nth-child(3n), .list-group-item:last-child{
+    border-right: none;
+}

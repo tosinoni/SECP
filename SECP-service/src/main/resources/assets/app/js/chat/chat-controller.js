@@ -8,6 +8,7 @@ angular.module('SECP')
       //declaring variables
       $scope.contacts = [];
       $scope.currentUser = Chat.getCurrentUser();
+      $scope.clicked = false;
 
 
       Chat.getChatList().then(function(data) {

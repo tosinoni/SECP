@@ -1,14 +1,15 @@
 'use strict';
 
 angular.module('SECP')
-    .directive('chatMessage', function () {
+    .directive('chatMessage', function ($http) {
     return {
         restrict: 'E', //E = element, A = attribute, C = class, M = comment
         scope: {
             //@ reads the attribute value, = provides two-way binding, & works with functions
             messages: '=',
             currentUser: '=',
-            selectedChat: '='
+            selectedChat: '=',
+            clicked: '='
          },
         templateUrl: 'directives/chat-message/chat-message.html',
         link: function ($scope, element, attrs) {
@@ -19,6 +20,21 @@ angular.module('SECP')
                    scrollTop: $('#chat-scroll').get(0).scrollHeight
                 });
              }, true);
+             $scope.clickProfile = function(){
+                // console.log( $http.get("/SECP/group/verify/admin/id/" + userID));
+                $scope.clicked = !$scope.clicked;
+                var chatBlock = document.getElementById("chatBlock");
+                var profileBlock = $("#profileBlock");
+                if($scope.clicked === false){
+                    chatBlock.setAttribute("class", "col-md-8");
+                    profileBlock.hide();
+                }
+                else{
+                    chatBlock.setAttribute("class", "col-md-4");
+                    profileBlock.fadeIn("slow");
+                    profileBlock.show();
+                }
+             };
         } //DOM manipulation
     }
 });
