@@ -73,12 +73,12 @@ public class FilterController {
         return Response.status(Response.Status.CREATED).entity(getFilterResponse(createdFilter)).build();
     }
 
-    private Filter getFilter(long groupID)
+    private Filter getFilter(long filterID)
     {
-        Optional<Filter> filterOptional = filterRepository.find(groupID);
+        Optional<Filter> filterOptional = filterRepository.find(filterID);
         if (!filterOptional.isPresent()) {
             throw new WebApplicationException(
-                GroupErrorMessages.GROUP_DOES_NOT_EXIST,
+                FilterErrorMessages.FILTER_DOES_NOT_EXIST,
                 Response.Status.BAD_REQUEST);
         }
 
@@ -93,8 +93,8 @@ public class FilterController {
         }
 
         Set<FilterDTO> response = filters.stream()
-            .map(group -> {
-                return getFilterResponse(group);
+            .map(filter -> {
+                return getFilterResponse(filter);
             })
             .collect(Collectors.toSet());
 
@@ -117,7 +117,7 @@ public class FilterController {
 
         if (!isFilterNameValid(name)
             || !InputValidator.isNameValid(name)) {
-            return GroupErrorMessages.GROUP_NAME_INVALID;
+            return FilterErrorMessages.FILTER_NAME_INVALID;
         }
 
         return validateRolesAndPermissions(permissions,roles);
@@ -140,7 +140,7 @@ public class FilterController {
     {
         for (long roleID : roles) {
             if (!isRoleIdValid(roleID)) {
-                return String.format(GroupErrorMessages.ROLE_ID_INVALID, roleID);
+                return String.format(FilterErrorMessages.ROLE_ID_INVALID, roleID);
             }
         }
 
@@ -151,7 +151,7 @@ public class FilterController {
     {
         for (long permissionID : permissions) {
             if (!isPermissionValid(permissionID)) {
-                return String.format(GroupErrorMessages.PERMISSION_ID_INVALID, permissionID);
+                return String.format(FilterErrorMessages.PERMISSION_ID_INVALID, permissionID);
             }
         }
 
