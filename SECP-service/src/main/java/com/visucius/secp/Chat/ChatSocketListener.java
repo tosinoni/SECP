@@ -33,7 +33,7 @@ public class ChatSocketListener implements WebSocketListener, IMessageReceiver {
     @Override
     public void onWebSocketText(String value) {
 
-        log.info("Message was sent from" + user.getUsername());
+        log.info("Message was sent from " + user.getUsername());
         try
         {
             MessageDTO message = JsonUtil.convertStringToJson(value,MessageDTO.class);

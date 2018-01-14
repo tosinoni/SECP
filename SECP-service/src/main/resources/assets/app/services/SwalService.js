@@ -33,7 +33,7 @@ angular.module('SECP')
                     return new Promise((resolve, reject) => {
                         setTimeout(() => {
                             if (inputValue !== infoName) {
-                                swal.showValidationError('input value does not match the selected element.');
+                                swal.showValidationError('Name does not match the selected element.');
                                 reject();
                             }
                             resolve();

@@ -2,16 +2,18 @@
 
 angular.module('SECP')
   .factory('Socket', function($rootScope) {
-    var userID = localStorage.getItem('user');
+    var userID = localStorage.getItem('userID');
+    console.log(userID);
     var socket = new WebSocket("ws://localhost:8080/chat/" + userID);
+
 
     return {
         onopen: function (callback) {
-          socket.onopen = function () {
-            $rootScope.$apply(function () {
-              callback.apply(socket);
-            });
-          };
+            socket.onopen = function () {
+              $rootScope.$apply(function () {
+                callback.apply(socket);
+              });
+            };
         },
 
         onmessage: function (callback) {

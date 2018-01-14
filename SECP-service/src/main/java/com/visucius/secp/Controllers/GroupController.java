@@ -267,7 +267,7 @@ public class GroupController {
         return user.getDevices().stream()
             .filter(device -> !StringUtils.isEmpty(device.getPublicKey()))
             .map(device -> {
-                return new DeviceDTO(device.getId(), device.getPublicKey());
+                return new DeviceDTO(user.getId(), device.getName(), device.getPublicKey());
             }).collect(Collectors.toSet());
     }
 

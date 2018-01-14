@@ -30,6 +30,14 @@ public class MessageDTO {
 
     }
 
+    public MessageDTO(long messageId, long groupId, long senderId, String body)
+    {
+        this.messageId = messageId;
+        this.groupId = groupId;
+        this.senderId = senderId;
+        this.body = body;
+    }
+
     public MessageDTO(long messageId, long groupId, long senderId, String body, MessageType reason)
     {
         this.messageId = messageId;
@@ -81,6 +89,9 @@ public class MessageDTO {
     {
         @JsonProperty("message")
         MESSAGE,
+
+        @JsonProperty("mayday")
+        MAYDAY,
 
     }
 }

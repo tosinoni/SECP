@@ -2,24 +2,28 @@
 
 angular.module('SECP')
   .controller('ChatController',
-    function ($scope, $modal, Chat, Socket) {
-      Socket.onopen(function () {
-        var message = {
-            groupId: 24,
-            reason: 'message',
-            body: 'hi I am user' + localStorage.getItem('user')
-        }
-        Socket.send(message);
-        $scope.websocketConnected = true;
-      });
-
-      Socket.onerror(function (error) {
-        $scope.websocketConnected = false;
-        swal('Oops', "The chat service is not available right now", "error");
-      });
+    function ($scope, $modal, Chat, Socket, EncryptionService) {
+//      Socket.onopen(function () {
+//        var message = {
+//            groupId: 24,
+//            reason: 'message',
+//            body: 'hi I am user' + localStorage.getItem('user')
+//        }
+//        Socket.send(message);
+//        $scope.websocketConnected = true;
+//      });
+//
+//      Socket.onerror(function (error) {
+//        $scope.websocketConnected = false;
+//        swal('Oops', "The chat service is not available right now", "error");
+//      });
 
       Socket.onmessage(function (message) {
-        console.log(message);
+        var messageObj = JSON.parse(message);
+        console.log(messageObj);
+        if (messageObj.reason == "mayday") {
+            EncryptionService.storeSecretKeyForGroup(JSON.parse(messageObj.body), messageObj.groupId);
+        }
       });
 
 

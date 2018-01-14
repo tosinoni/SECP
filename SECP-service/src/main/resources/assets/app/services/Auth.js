@@ -14,9 +14,10 @@ angular.module('SECP')
             .then(function(res) {
                  var user = res.data;
                  localStorage.setItem('token', user.token);
-                 localStorage.setItem('user', user.userID);
+                 localStorage.setItem('userID', user.userID);
                  localStorage.setItem('loginRole', user.loginRole);
                  localStorage.setItem('username', user.username);
+
                  return res;
             }, function(err) {
                 return err;
@@ -32,7 +33,10 @@ angular.module('SECP')
         },
 
         logout : function(){
-            localStorage.clear();
+            localStorage.removeItem('token');
+            localStorage.removeItem('loginRole');
+            localStorage.removeItem('userID');
+            localStorage.removeItem('username');
         },
 
         isUserAnAdmin: function() {

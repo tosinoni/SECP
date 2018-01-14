@@ -1,8 +1,7 @@
 // Declare app level module which depends on filters, and services
 angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
-    'routeStyles', 'angular-jwt', 'ngWebCrypto', 'angular-uuid', 'datatables'])
+    'routeStyles', 'angular-jwt', 'angular-uuid', 'datatables'])
   .config(function ($routeProvider, $locationProvider, jwtOptionsProvider, $httpProvider) {
-
     //add isAdmin function
     var isAdmin = function(Auth, $location) {
         return Auth.isUserAnAdmin().then(function(res){
@@ -181,6 +180,7 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
       $rootScope.logout = function() {
         Auth.logout();
         location.reload();
+        $rootScope.socketLoaded = false;
       }
 
       authManager.checkAuthOnRefresh();
@@ -204,4 +204,3 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
         }
       });
   });
-  

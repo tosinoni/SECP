@@ -38,8 +38,7 @@ public class MessageController {
                     message.getId(),
                     groupID,
                     message.getUser().getId(),
-                    message.getBody(),
-                    MessageDTO.MessageType.MESSAGE);
+                    message.getBody());
 
                 messageDTO.setTimestamp(message.getTimestamp());
                 return messageDTO;

@@ -1,5 +1,5 @@
 angular.module('SECP')
-    .controller('GroupController', function ($scope, Admin, SwalService) {
+    .controller('GroupController', function ($scope, Admin, SwalService, EncryptionService) {
         $scope.groups = [];
         $scope.groupHeaders = ['Name', 'Permission Level(s)', 'Role(s)', 'Participants'];
         $scope.createGroupData = {}; //the data sent to the modal for create group
@@ -9,6 +9,19 @@ angular.module('SECP')
         Admin.getAllGroups().then(function(res) {
             if (res) {
                  $scope.groups = res;
+                 var senderID = localStorage.getItem('user');
+
+                 var group;
+                 for (var g of $scope.groups) {
+                    if(g.groupID == 35) {
+                        group = g;
+                        break;
+                    }
+                 }
+                 console.log(senderID);
+                 console.log(group);
+                 //getting all the groups to populate the table
+                 EncryptionService.sendSecretKeysToGroup(senderID, group);
             }
         });
 
@@ -57,7 +70,7 @@ angular.module('SECP')
         //delete group
         $scope.deleteGroup = function(row) {
             var deleteGroupFunction = function () {
-                console.log(row.groupID);
+
                 Admin.deleteGroup(row.groupID).then(function(res){
                     if (res.status == 200) {
                         //TODO need a way to show that the group is deactivated
@@ -67,8 +80,6 @@ angular.module('SECP')
                     }
                 });
             };
-
-            var deleteStatement = 'Enter the name of the group to delete';
-            SwalService.deleteImportantInformation(row.name, deleteStatement, deleteGroupFunction);
+            SwalService.deleteImportantInformation(row.name, deleteGroupFunction);
         };
     });

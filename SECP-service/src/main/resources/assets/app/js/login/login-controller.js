@@ -1,5 +1,5 @@
 angular.module('SECP')
-    .controller('LoginController', function ($scope, Auth, $location, $webCrypto) {
+    .controller('LoginController', function ($scope, Auth, $location, uuid) {
         $scope.login = function () {
             // TODO: NEED TO SEND AUTHENTICATION EMAIL (IF REQUIRED BY ADMIN) CONTAINING VERIFICATION CODE WHEN SUCCESSFULLY LOGGED IN
             Auth.login($scope.user).then(function (res) {
@@ -18,30 +18,44 @@ angular.module('SECP')
         $scope.registerDevice = function () {
             var deviceName = new Fingerprint().get();
             var username = localStorage.getItem('username');
-            var userID = localStorage.getItem('user');
+            var userID = localStorage.getItem('userID');
 
             Auth.isDeviceRegisteredForUser(userID, deviceName).then(function (status) {
                 if (!status) {
+                    //generate a RSA key pair
+                    //Passphrase generated from username and random numbers.
+                    var PassPhrase = uuid.v4() + username;
 
-                    //creating the user's private and public key
-                    $webCrypto.generate({ name: username })
-                        .success(function (userKey) {
-                            //Getting the user's public key.
-                            publicKeyForUser = $webCrypto.export(userKey);
-                            var req = {
-                                "deviceName": deviceName,
-                                "publicKey": publicKeyForUser,
-                                "userID": userID
-                            };
+                    // The length of the RSA key, in bits.
+                    var Bits = 1024;
 
-                            Auth.addPublicKey(req).then(function (res) {
-                                if (res.status == 201) {
-                                    localStorage.setItem('deviceID', res.data.id);
-                                } else {
-                                    swal('Oops..!', "This device is not supported for chat messages", 'error');
+                    var userPrivatekey = cryptico.generateRSAKey(PassPhrase, Bits);
+                    var publicKeyForUser = cryptico.publicKeyString(userPrivatekey);
+                    var req = {
+                        "deviceName": deviceName,
+                        "publicKey": publicKeyForUser,
+                        "userID": userID
+                    };
+
+                    Auth.addPublicKey(req).then(function (res) {
+                        if (res.status == 201) {
+                            var flatten = function(obj) {
+                                var result = Object.create(obj);
+                                for(var key in result) {
+                                    result[key] = result[key];
                                 }
+                                return result;
+                            }
+                            var obj = {userID: userID, key: userPrivatekey};
+
+                            console.log(obj);
+                            localforage.setItem(username, obj, function(err){
+                                console.log(err);
                             });
-                        });
+                        } else {
+                            swal('Oops..!', "This device is not supported for chat messages", 'error');
+                        }
+                    });
                 }
             });
         }
