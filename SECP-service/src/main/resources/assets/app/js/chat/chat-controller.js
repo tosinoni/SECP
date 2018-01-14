@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('SECP')
-  .controller('ChatController', ['$scope', '$modal', 'Chat',
-    function ($scope, $modal, Chat) {
+  .controller('ChatController',
+    function ($scope, $modal, Chat, Socket) {
 
 
       //declaring variables
@@ -10,6 +10,15 @@ angular.module('SECP')
       $scope.currentUser = Chat.getCurrentUser();
       $scope.clicked = false;
 
+      Socket.onmessage(function (message) {
+        var messageObj = JSON.parse(message);
+        console.log(messageObj);
+      });
+
+      Socket.onopen(function () {
+        console.log("websocket connected");
+        $scope.websocketConnected = true;
+      });
 
       Chat.getChatList().then(function(data) {
         $scope.contacts = data;
@@ -40,4 +49,4 @@ angular.module('SECP')
             $scope.messages = data;
          });
       };
-    }]);
+  });

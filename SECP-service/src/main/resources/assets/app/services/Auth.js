@@ -14,7 +14,7 @@ angular.module('SECP')
             .then(function(res) {
                  var user = res.data;
                  localStorage.setItem('token', user.token);
-                 localStorage.setItem('user', user.userID);
+                 localStorage.setItem('userID', user.userID);
                  localStorage.setItem('loginRole', user.loginRole);
                  localStorage.setItem('username', user.username);
                  return res;
@@ -36,7 +36,7 @@ angular.module('SECP')
         },
 
         isUserAnAdmin: function() {
-            var userID = localStorage.getItem('user');
+            var userID = localStorage.getItem('userID');
 
             return $http.get("/SECP/user/verify/admin/id/" + userID)
             .then(function(res) {
