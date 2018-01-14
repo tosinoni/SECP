@@ -4,7 +4,7 @@
     text-align: center;
     font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
-#group-name, .list-heading{
+#group-name, .profile-list-heading{
     font-size: 1.1em;
     font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
@@ -19,21 +19,12 @@
 #user-security-settings, #user-list {
     text-align: left;
 }
-.list-group{
+.profile-list-group{
     max-height: 200px;
     overflow: auto;
     list-style-type: none;
 }
-.list-group-item {
-    height: 25px;
-    float: left;
-    margin-right: 20px;
-    margin-bottom: 20px;
-    background: #2196F3;
-    color: #bce0fb;
-    border: 1px solid black;
-    border-radius: 3px;
-    letter-spacing: 0.06em;
+.profile-list-group-item {
     text-decoration: aliceblue;
     text-align: center;
     outline: none;
