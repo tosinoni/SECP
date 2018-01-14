@@ -81,10 +81,4 @@ public class GroupResource {
         return groupController.getAllGroups();
     }
 
-    @GET
-    @Path("/id/{id}")
-    @UnitOfWork
-    public Response getGroup(@Auth @PathParam("id") String id) {
-        return groupController.getGroupGivenId(id);
-    }
 }

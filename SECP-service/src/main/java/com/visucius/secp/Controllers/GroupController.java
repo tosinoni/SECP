@@ -266,7 +266,7 @@ public class GroupController {
 
         Set<UserDTO> users = getUsersInGroup(group).stream().filter(user -> user.isActive())
             .map(user -> {
-                return new UserDTO(user.getId(), getDevicesForUser(user));
+                return new UserDTO(user.getId(), getDevicesForUser(user),user.getUsername());
             }).collect(Collectors.toSet());
 
         Set<RolesOrPermissionDTO> roles = group.getRoles().stream()

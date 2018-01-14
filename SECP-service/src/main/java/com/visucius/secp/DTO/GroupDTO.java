@@ -66,6 +66,10 @@ public class GroupDTO {
         this.users.add(user);
     }
 
+    public Set<MessageDTO> getMessages() {
+        return messages;
+    }
+
     public void addMessage(MessageDTO message)
     {
         this.messages.add(message);
