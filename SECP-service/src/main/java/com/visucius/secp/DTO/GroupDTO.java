@@ -38,6 +38,15 @@ public class GroupDTO {
     @JsonProperty
     private Set<MessageDTO> messages = new HashSet<>();
 
+    @JsonProperty
+    private MessageDTO lastMessage;
+
+    @JsonProperty
+    private String displayName;
+
+    @JsonProperty
+    private String avatarUrl;
+
     public GroupDTO()
     {
     }
@@ -130,6 +139,34 @@ public class GroupDTO {
     @JsonIgnore
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public void setMessages(Set<MessageDTO> messages) {
+        this.messages = messages;
+    }
+
+    public MessageDTO getLastMessage() {
+        return lastMessage;
+    }
+
+    public void setLastMessage(MessageDTO lastMessage) {
+        this.lastMessage = lastMessage;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 
     @Override

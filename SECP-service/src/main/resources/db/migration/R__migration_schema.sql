@@ -91,3 +91,5 @@ DROP TABLE IF EXISTS user_permissions;
 ALTER TABLE USERS ADD COLUMN if not exists permission_id bigint;
 ALTER TABLE Users ADD COLUMN if not exists display_name VARCHAR(255);
 ALTER TABLE Users ADD COLUMN if not exists avatar_url VARCHAR (255);
+ALTER TABLE Groups ADD COLUMN if not exists avatar_url VARCHAR (255);
+ALTER TABLE Groups ADD COLUMN if not exists display_name VARCHAR(255);

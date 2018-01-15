@@ -2,6 +2,7 @@ package com.visucius.secp.Controllers;
 
 import com.google.common.base.Optional;
 import com.visucius.secp.Controllers.User.UserErrorMessage;
+import com.visucius.secp.Controllers.User.UserProfileController;
 import com.visucius.secp.DTO.*;
 import com.visucius.secp.daos.GroupDAO;
 import com.visucius.secp.daos.PermissionDAO;
@@ -36,6 +37,7 @@ public class GroupControllerTest {
     private static GroupDAO groupDAO;
     private static RolesDAO rolesDAO;
     private static PermissionDAO permissionsDAO;
+    private static UserProfileController userProfileController;
 
     @Rule
     public final ExpectedException exception = ExpectedException.none();
@@ -75,7 +77,7 @@ public class GroupControllerTest {
         groupDAO = Mockito.mock(GroupDAO.class);
         rolesDAO = Mockito.mock(RolesDAO.class);
         permissionsDAO = Mockito.mock(PermissionDAO.class);
-
+        userProfileController = Mockito.mock(UserProfileController.class);
 
         List<User> validUsers = new ArrayList<>();
         validUsers.add(new User());
@@ -103,7 +105,7 @@ public class GroupControllerTest {
         Mockito.when(groupDAO.findByName(VALID_GROUP_NAME)).thenReturn(null);
 
 
-        controller = new GroupController(groupDAO,userDAO,rolesDAO,permissionsDAO);
+        controller = new GroupController(groupDAO,userDAO,rolesDAO,permissionsDAO, userProfileController);
     }
 
 

@@ -19,6 +19,13 @@ angular.module('SECP')
                 }
             };
 
+            $scope.getTime = function(time) {
+                if(time) {
+                    var date = new Date(time);
+                    return moment(date).startOf('hour').fromNow();
+                }
+            }
+
            $scope.$watch('contacts', function(contacts) {
               if (contacts !== undefined && contacts.length > 0) {
                  $scope.setActive(contacts[0]);

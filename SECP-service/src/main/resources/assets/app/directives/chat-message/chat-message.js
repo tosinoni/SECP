@@ -20,6 +20,41 @@ angular.module('SECP')
                    scrollTop: $('#chat-scroll').get(0).scrollHeight
                 });
              }, true);
+
+             $scope.$watch('selectedChat', function(selectedChat) {
+                  if(selectedChat && selectedChat.users) {
+                     var obj = {};
+                     for(var user of selectedChat.users) {
+                         obj[user.userID] = user;
+                     }
+
+                     $scope.users = obj;
+                  }
+             });
+
+             $scope.getTime = function(time) {
+                 if(time) {
+                     var date = new Date(time);
+                     return moment(date).startOf('hour').fromNow();
+                 }
+             }
+
+             $scope.getMessageSender = function(senderId) {
+                  if(senderId && $scope.users) {
+                      return $scope.users[senderId];
+                  }
+              }
+
+              $scope.getSenderAvatar = function(senderId) {
+                 var sender = $scope.getMessageSender(senderId);
+                 return sender.avatarUrl;
+              }
+
+              $scope.getSenderDisplayName = function(senderId) {
+                   var sender = $scope.getMessageSender(senderId);
+                   return sender.displayName;
+                }
+
              $scope.clickProfile = function(){
 
                 // NEED TO ADD CHECK TO SEE IF USER OR PROFILE, THEN GENERATE USER OR PROFILE DIV.

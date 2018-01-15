@@ -1,6 +1,6 @@
 <div class="recipient-box">
-        <img src="{{selectedChat.img}}" alt="avatar" class="img-circle hoverable" style="width:25px" ng-click="clickProfile()">
-        <span class="recipient-username hoverable" ng-click="clickProfile()">{{selectedChat.username}}</span>
+        <img src="{{selectedChat.avatarUrl}}" alt="avatar" class="img-circle hoverable" style="width:25px" ng-click="clickProfile()">
+        <span class="recipient-username hoverable" ng-click="clickProfile()">{{selectedChat.displayName}}</span>
     <a href="javascript:void(0);" class="pull-right"><i class="fa fa-search"></i></a>
 </div>
 
@@ -12,19 +12,20 @@
                 <a href="javascript:void(0);" class="btn btn-default"><i class="fa fa-spinner"></i> Load More Messages</a>
             </li>
 
-            <li ng-class="currentUser.username !== message.username ? 'left' : 'right'" ng-repeat="message in messages track by message.id">
-                <span class="username">{{message.username}}</span>
+            <li ng-class="currentUser.userID !== message.senderId ? 'left' : 'right'" ng-repeat="message in messages track by message.messageId">
+                <span class="username">{{getDisplayName(message.senderId).displayName}}</span>
                 <small class="timestamp">
-                    <i class="fa fa-clock-o"></i>{{message.timestamp}}
+                    <i class="fa fa-clock-o"></i>{{getTime(message.timestamp)}}
                 </small>
                 <span class="avatar available tooltips" data-toggle="tooltip " data-placement="right"
-                      data-original-title="{{message.username}}">
-                    <img ng-src="{{message.userImg}}" alt="avatar" class="img-circle">
+                      data-original-title="{{getSenderDisplayName(message.senderId)}}">
+                    <img ng-src="{{getSenderAvatar(message.senderId)}}"
+                         alt="{{getSenderDisplayName(message.senderId)}}" class="img-circle">
                 </span>
                 <div class="body">
-                    <div ng-repeat="content in message.contents">
+                    <div>
                         <div class="message well well-sm">
-                            {{content.text}}
+                            {{message.body}}
                             <p ng-show="content.imgSrc">
                                 <img ng-src="{{content.imgSrc}}" alt="">
                             </p>

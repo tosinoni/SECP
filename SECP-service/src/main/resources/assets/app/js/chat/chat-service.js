@@ -6,12 +6,14 @@ angular.module('SECP')
     // you can run some code before
 
     return {
-        getMessages : function(user) {
-            return $http.get("mockedResponses/messages.json")
+        getMessages : function(group) {
+            return $http.get("/SECP/messages/group/" + group.groupID)
             .then(function(res) {
-                   //First function handles success
-                   var userId = user.id;
-                   return res.data[userId];
+                //First function handles success
+                if(res.status == 200) {
+                    console.log(res.data);
+                    return res.data;
+                }
             }, function(err) {
                 //Second function handles error
                 console.log(err);
@@ -20,19 +22,26 @@ angular.module('SECP')
         },
 
         getCurrentUser : function() {
-           var user = {
-              'id' : '1',
-              'username': 'Kevin Mckoy'
-           };
-
-           return user;
+           return $http.get("/SECP/user/profile")
+           .then(function(res) {
+               if(res.status == 200) {
+                   console.log(res.data);
+                   return res.data;
+               }
+           }, function(err) {
+               //Second function handles error
+               console.log(err);
+               console.log("error getting !!" + userId)
+           });
          },
 
         getChatList : function() {
-            return $http.get("mockedResponses/chatList.json")
+            return $http.get("/SECP/groups/user")
             .then(function(res) {
-                   //First function handles success
-                   return res.data;
+                //First function handles success
+                if (res.status == 200) {
+                    return res.data;
+                }
             }, function(err) {
                 //Second function handles error
                 console.log(err);

@@ -1,5 +1,7 @@
 package com.visucius.secp.models;
 
+import org.hibernate.validator.constraints.URL;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
@@ -65,6 +67,13 @@ public class Group {
 
     @Column(name = "isActive", nullable = false)
     private boolean isActive = true;
+
+    @URL
+    @Column(name = "avatar_url", nullable = false)
+    private String avatarurl;
+
+    @Column(name = "display_name", nullable = false)
+    private String displayname;
 
     @Enumerated(value = EnumType.STRING)
     @Column(name = "group_type", nullable = false)
@@ -133,6 +142,22 @@ public class Group {
 
     public GroupType getGroupType() {
         return groupType;
+    }
+
+    public String getAvatarurl() {
+        return avatarurl;
+    }
+
+    public void setAvatarurl(String avatarurl) {
+        this.avatarurl = avatarurl;
+    }
+
+    public String getDisplayname() {
+        return displayname;
+    }
+
+    public void setDisplayname(String displayname) {
+        this.displayname = displayname;
     }
 
     @Override
