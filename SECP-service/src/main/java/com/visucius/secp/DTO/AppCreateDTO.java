@@ -13,6 +13,9 @@ public class AppCreateDTO {
     @JsonProperty
     private Set<String> permissions = new HashSet<>();
 
+    @JsonProperty
+    private String color;
+
     public AppCreateDTO() {
 
     }
@@ -31,5 +34,13 @@ public class AppCreateDTO {
 
     public void setPermissions(Set<String> permissions) {
         this.permissions = permissions;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }

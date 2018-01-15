@@ -6,3 +6,9 @@ th {
     text-align: center;
     cursor: pointer;
 }
+
+.colorbox {
+    width: 100%;
+    height: 1.2em;
+    border-radius: 8px;
+}

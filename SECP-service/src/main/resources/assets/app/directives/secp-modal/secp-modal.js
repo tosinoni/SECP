@@ -9,13 +9,12 @@ angular.module('SECP')
             title: '@',
             body: '@',
             name: '@',
-            ngModel: '=',
             save: '&saveFn'
          },
         templateUrl: 'directives/secp-modal/secp-modal.html',
         link: function ($scope, element, attrs) {
             $scope.saveInput = function() {
-                $scope.save();
+                $scope.save({data:$scope.data});
             }
         } //DOM manipulation
     };

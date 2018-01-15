@@ -77,8 +77,8 @@ public class AdminController {
 
         Set<RolesOrPermissionDTO> response = new HashSet<>();
         for (String name : request.getRoles()) {
-            Role role = rolesDAO.save(new Role(name));
-            response.add(new RolesOrPermissionDTO(role.getId(), role.getRole()));
+            Role role = rolesDAO.save(new Role(name, request.getColor()));
+            response.add(new RolesOrPermissionDTO(role.getId(), role.getRole(), role.getColor()));
         }
 
         return Response.status(Response.Status.CREATED).entity(response).build();
@@ -93,8 +93,8 @@ public class AdminController {
 
         Set<RolesOrPermissionDTO> response = new HashSet<>();
         for (String name : request.getPermissions()) {
-            Permission permission = permissionDAO.save(new Permission(name));
-            response.add(new RolesOrPermissionDTO(permission.getId(), permission.getLevel()));
+            Permission permission = permissionDAO.save(new Permission(name, request.getColor()));
+            response.add(new RolesOrPermissionDTO(permission.getId(), permission.getLevel(), permission.getColor()));
         }
 
         return Response.status(Response.Status.CREATED).entity(response).build();
@@ -134,7 +134,7 @@ public class AdminController {
         }
 
         Set<RolesOrPermissionDTO> response = roles.stream()
-            .map(role -> {return new RolesOrPermissionDTO(role.getId(), role.getRole());})
+            .map(role -> {return new RolesOrPermissionDTO(role.getId(), role.getRole(), role.getColor());})
             .collect(Collectors.toSet());
 
         return Response.status(Response.Status.OK).entity(response).build();
@@ -148,7 +148,7 @@ public class AdminController {
         }
 
         Set<RolesOrPermissionDTO> response = permissions.stream()
-            .map(permission -> {return new RolesOrPermissionDTO(permission.getId(), permission.getLevel());})
+            .map(permission -> {return new RolesOrPermissionDTO(permission.getId(), permission.getLevel(), permission.getColor());})
             .collect(Collectors.toSet());
 
         return Response.status(Response.Status.OK).entity(response).build();
@@ -157,6 +157,10 @@ public class AdminController {
     private String validateCreateRolesRequest(AppCreateDTO request) {
         if (request == null || Util.isCollectionEmpty(request.getRoles())) {
             return  AdminErrorMessage.REGISTER_ROLES_FAIL_EMPTY_REQUEST;
+        }
+
+        else if(StringUtils.isEmpty(request.getColor())){
+            return  AdminErrorMessage.REGISTER_ROLES_FAIL_INVALID_COLOR;
         }
 
         for (String role : request.getRoles()) {
@@ -171,6 +175,10 @@ public class AdminController {
     private String validateCreatePermissionsRequest(AppCreateDTO request) {
         if (request == null || Util.isCollectionEmpty(request.getPermissions())) {
             return  AdminErrorMessage.REGISTER_PERMISSIONS_FAIL_EMPTY_REQUEST;
+        }
+
+        else if(StringUtils.isEmpty(request.getColor())){
+            return  AdminErrorMessage.REGISTER_PERMISSIONS_FAIL_INVALID_COLOR;
         }
 
         for (String name : request.getPermissions()) {

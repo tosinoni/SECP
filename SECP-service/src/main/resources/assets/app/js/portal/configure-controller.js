@@ -2,8 +2,8 @@ angular.module('SECP')
     .controller('ConfigureController', function ($scope, Admin, SwalService) {
         $scope.roles = [];
         $scope.permissions = [];
-        $scope.roleHeaders = ['Role'];
-        $scope.permissionHeaders = ['Permission Level'];
+        $scope.roleHeaders = ['Role', 'Color'];
+        $scope.permissionHeaders = ['Permission Level', 'Color'];
 
         var permissions = document.getElementById("permissionTableDiv");
         var roles = document.getElementById("rolesTableDiv");
@@ -82,10 +82,11 @@ angular.module('SECP')
             SwalService.delete(deleteRoleFunction);
         };
 
-        $scope.savePermission = function() {
-            if ($scope.permissionInput) {
-                var permissions = $scope.permissionInput.split(/[ ,]+/);
-                Admin.addPermissions(permissions).then(function(res){
+        $scope.savePermission = function(data) {
+            if (data && data.value) {
+                var permissions = data.value.split(/[ ,]+/);
+                var obj = {permissions: permissions, color: data.color};
+                Admin.addPermissions(obj).then(function(res){
                     if (res.status == 201) {
                         $scope.permissions = $scope.permissions.concat(res.data);
                         swal('Added!', 'permission was successfully added', "success");
@@ -98,10 +99,11 @@ angular.module('SECP')
             }
         };
 
-        $scope.saveRole = function() {
-            if ($scope.roleInput) {
-                var roles = $scope.roleInput.split(/[ ,]+/);
-                Admin.addRoles(roles).then(function(res){
+        $scope.saveRole = function(data) {
+            if (data && data.value) {
+                var roles = data.value.split(/[ ,]+/);
+                var obj = {roles: roles, color: data.color};
+                Admin.addRoles(obj).then(function(res){
                     if (res.status == 201) {
                         $scope.roles = $scope.roles.concat(res.data);
                         swal('Added!', 'roles was successfully added', "success");

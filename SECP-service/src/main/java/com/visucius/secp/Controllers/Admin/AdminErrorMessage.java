@@ -14,12 +14,14 @@ public interface AdminErrorMessage {
     /*****Roles Error messages ******/
     String REGISTER_ROLES_FAIL_EMPTY_REQUEST = "Registering roles failed. No role provided.";
     String REGISTER_ROLES_FAIL_NAME_EXISTS = "Registering roles failed. Role %s already exists.";
+    String REGISTER_ROLES_FAIL_INVALID_COLOR = "Registering roles failed. No color provided.";
     String DELETE_ROLES_FAIL_ROLE_IN_USE = "Delete role %s failed. There are groups or users using this role.";
 
 
     /*****Permissions Error messages ******/
     String REGISTER_PERMISSIONS_FAIL_EMPTY_REQUEST = "Registering permissions failed. No permission provided.";
     String REGISTER_PERMISSIONS_FAIL_NAME_EXISTS = "Registering permissions failed. Permission %s already exists.";
+    String REGISTER_PERMISSIONS_FAIL_INVALID_COLOR = "Registering permissions failed. No color provided.";
     String DELETE_PERMISSION_FAIL_PERMISSION_IN_USE = "Delete permission %s failed. There are groups or users using this permission.";
 
 }

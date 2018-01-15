@@ -26,6 +26,9 @@ public class Permission {
     @Column(name = "level",unique = true, nullable = false)
     private String level;
 
+    @Column(name = "color", nullable = false)
+    private String color;
+
     @ManyToMany(mappedBy = "permissions", fetch = FetchType.LAZY)
     private Set<Group> groups = new HashSet<>();
 
@@ -39,6 +42,11 @@ public class Permission {
 
     public Permission(String level) {
         this.level = level;
+    }
+
+    public Permission(String level, String color) {
+        this.level = level;
+        this.color = color;
     }
 
     public long getId() {
@@ -81,5 +89,13 @@ public class Permission {
     @Override
     public int hashCode() {
         return Objects.hash(this.level, this.id);
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }

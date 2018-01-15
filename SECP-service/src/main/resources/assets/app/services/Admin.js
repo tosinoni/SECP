@@ -3,9 +3,8 @@
 angular.module('SECP')
   .factory('Admin', function($http) {
     return {
-        addRoles : function(setOfRoles) {
-            var req = {roles: setOfRoles}
-            return $http.post("/SECP/admin/roles", req)
+        addRoles : function(request) {
+            return $http.post("/SECP/admin/roles", request)
             .then(function(res) {
                  return res;
             }, function(err) {
@@ -13,9 +12,8 @@ angular.module('SECP')
             });
         },
 
-        addPermissions : function(setOfPermissions) {
-            var req = {permissions: setOfPermissions}
-            return $http.post("/SECP/admin/permissions", req)
+        addPermissions : function(request) {
+            return $http.post("/SECP/admin/permissions", request)
             .then(function(res) {
                 return res;
             }, function(err) {
@@ -67,15 +65,6 @@ angular.module('SECP')
 
         deletePermission : function(id) {
             return $http.delete("/SECP/admin/permission/id/" + id)
-            .then(function(res) {
-                return res;
-            }, function(err) {
-                return err;
-            });
-        },
-
-        deleteGroup : function(id) {
-            return $http.delete("/SECP/admin/group/id/" + id)
             .then(function(res) {
                 return res;
             }, function(err) {

@@ -180,6 +180,7 @@ a:hover {
 
 .tag-option:hover{
     background-color: #8fcaf3;
+    cursor: pointer;
 }
 
 .configureoption{

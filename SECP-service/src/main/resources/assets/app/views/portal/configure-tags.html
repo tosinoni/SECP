@@ -3,10 +3,10 @@
 <p class="note"><strong>Note:</strong> Add and delete permission levels and user roles by clicking below.</p>
 <div>
     <br>
-    <p class="tag-option"><a class="configureoption" ng-click="permissionClick()"><span class="optionicon" id="optionicon1">+</span><i class="fa fa-low-vision" aria-hidden="true"></i> Permission Levels</a></p>
+    <p class="tag-option" ng-click="permissionClick()"><a class="configureoption" ng-click="permissionClick()"><span class="optionicon" id="optionicon1">+</span><i class="fa fa-low-vision" aria-hidden="true"></i> Permission Levels</a></p>
     <hr id="optionline1">
     <br>
-    <p class="tag-option"><a class="configureoption" ng-click="rolesClick()"><span class="optionicon" id="optionicon2">+</span><i class="fa fa-id-card-o" aria-hidden="true"></i> Roles</a></p>
+    <p class="tag-option" ng-click="rolesClick()"><a class="configureoption" ng-click="rolesClick()"><span class="optionicon" id="optionicon2">+</span><i class="fa fa-id-card-o" aria-hidden="true"></i> Roles</a></p>
     <hr id="optionline2">
 </div>
 <div id="permissionTableDiv">
@@ -20,9 +20,9 @@
 </div>
 
 <!-- Permission Level Modal -->
-<secp-modal ng-model="permissionInput" name="permissionModal" frmName="newpermissionform" title="New Permission"
-            body="Permssion Level" save-fn="savePermission()"></secp-modal>
+<secp-modal name="permissionModal" frmName="newpermissionform" title="New Permission"
+            body="Permssion Level" save-fn="savePermission(data)"></secp-modal>
 <!-- Role Modal -->
-<secp-modal ng-model="roleInput" name="roleModal" frmName="newroleform" title="New Role"
-            body="Role" save-fn="saveRole()"></secp-modal>
+<secp-modal name="roleModal" frmName="newroleform" title="New Role"
+            body="Role" save-fn="saveRole(data)"></secp-modal>
 </body>
