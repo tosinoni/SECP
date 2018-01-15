@@ -62,6 +62,22 @@ angular.module('SECP')
             }
         };
 
+        $scope.searchUsingEnter = function(data) {
+            var code = event.keyCode || event.which;
+            if (code === 13) {
+                if (!event.shiftKey) {
+                    event.preventDefault();
+                    $scope.search(data);
+                }
+            }
+        };
+
+        $scope.search = function(searchString){
+            $scope.searching=true;
+            //IMPLEMENT SEARCH HERE!
+            //Check for empty string etc..
+        }
+
       $scope.contactSelected = function(contact) {
          $scope.selectedChat = contact;
          Chat.getMessages(contact).then(function(data) {
@@ -73,5 +89,8 @@ angular.module('SECP')
 
         $scope.$on('closeSearchResults', function (event, args) {
             $scope.searching = args.searching;
+            //clearing the message input in the textarea
+            $scope.searchInput = null;
+
         });
   });
