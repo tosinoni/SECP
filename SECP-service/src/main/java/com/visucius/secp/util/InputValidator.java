@@ -1,8 +1,8 @@
 package com.visucius.secp.util;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.apache.commons.validator.routines.UrlValidator;
-import org.hibernate.validator.internal.constraintvalidators.hv.URLValidator;
 
 import java.util.regex.Pattern;
 
@@ -19,7 +19,7 @@ public class InputValidator {
 
     public static boolean isNameValid(String name)
     {
-        return name != null && name.length() > 2 && name.length() < 20;
+        return !StringUtils.isEmpty(name) && name.length() < 20;
     }
 
     public static boolean isEmailValid(String email)
