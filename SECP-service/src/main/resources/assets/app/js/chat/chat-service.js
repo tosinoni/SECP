@@ -11,7 +11,6 @@ angular.module('SECP')
             .then(function(res) {
                 //First function handles success
                 if(res.status == 200) {
-                    console.log(res.data);
                     return res.data;
                 }
             }, function(err) {
@@ -25,7 +24,6 @@ angular.module('SECP')
            return $http.get("/SECP/user/profile")
            .then(function(res) {
                if(res.status == 200) {
-                   console.log(res.data);
                    return res.data;
                }
            }, function(err) {

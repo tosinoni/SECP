@@ -304,6 +304,8 @@ public class GroupController {
         groupDTO.setNumOfPermissions(group.getPermissions().size());
         groupDTO.setNumOfRoles(group.getRoles().size());
         groupDTO.setActive(group.isActive());
+        groupDTO.setDisplayName(getDisplayNameForGroup(group));
+        groupDTO.setAvatarUrl(getAvatarForGroup(group));
 
         Set<UserDTO> users = getUsersInGroup(group).stream().filter(user -> user.isActive())
             .map(user -> {

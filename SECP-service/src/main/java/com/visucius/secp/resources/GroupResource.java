@@ -83,6 +83,7 @@ public class GroupResource {
 
     @GET
     @Path("/id/{id}")
+    @RolesAllowed({"ADMIN", "NORMAL"})
     @UnitOfWork
     public Response getGroup(@Auth @PathParam("id") String id) {
         return groupController.getGroupGivenId(id);

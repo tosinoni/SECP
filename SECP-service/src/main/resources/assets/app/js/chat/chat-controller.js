@@ -31,7 +31,6 @@ angular.module('SECP')
 
       Chat.getChatList().then(function(data) {
         if(data) {
-            console.log(data);
             $scope.contacts = data;
         }
       });

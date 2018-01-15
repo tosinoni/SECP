@@ -39,7 +39,6 @@ angular.module('SECP')
                 if (messages) {
                     var currentMessageObj;
                     for (var message of messages) {
-                        console.log(currentMessageObj);
                         if(!currentMessageObj) {
                             currentMessageObj = getMessageObject(message);
                         } else if(currentMessageObj.senderId !== message.senderId) {
@@ -61,7 +60,6 @@ angular.module('SECP')
             $(".message-list-wrapper").niceScroll({autohidemode:'leave'});
             $scope.$watch('messages', function(messages, oldmessages) {
                 $scope.formatedMessages = formatMessages(messages);
-                console.log($scope.formatedMessages);
                 //move the scroll button down to see the latest message
                 $('#chat-scroll').animate({
                    scrollTop: $('#chat-scroll').get(0).scrollHeight

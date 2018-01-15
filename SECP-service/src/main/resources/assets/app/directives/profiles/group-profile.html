@@ -3,52 +3,23 @@
         <i class="fa fa-pencil hoverable" ng-click="editProfile()"></i>
         <div id="groupprofile">
             <div>
-                <img src="https://scontent.fykz1-1.fna.fbcdn.net/v/t1.0-1/c90.210.540.540/s160x160/19510125_10213767937303246_5095195573619394298_n.jpg?oh=7768b901dcef45df1ccfa57878be3e89&oe=5AC0FE69"
-                    class="img-responsive img-circle">
+                <img src="{{group.avatarUrl}}" class="img-responsive img-circle">
             </div>
-            <h4 id="group-name">Group Name</h4>
+            <h4 id="group-name">{{group.displayName}}</h4>
             <div id="user-list">
                 <h3 class="profile-list-heading">Group Members</h3>
                 <ul class="profile-list-group" id="group-members">
-                    <li class="profile-list-group-item">Person1</li>
-                    <li class="profile-list-group-item">Person2</li>
-                    <li class="profile-list-group-item">Person3</li>
-                    <li class="profile-list-group-item">Person4</li>
-                    <li class="profile-list-group-item">Person5</li>
-                    <li class="profile-list-group-item">Person6</li>
-                    <li class="profile-list-group-item">Person7</li>
-                    <li class="profile-list-group-item">Person8</li>
-                    <li class="profile-list-group-item">Person9</li>
-                    <li class="profile-list-group-item">Person0</li>
-                    <li class="profile-list-group-item">Person33</li>
-                    <li class="profile-list-group-item">Person43</li>
-                    <li class="profile-list-group-item">Person13</li>
-                    <li class="profile-list-group-item">Person23</li>
-                    <li class="profile-list-group-item">Person33</li>
-                    <li class="profile-list-group-item">Person43</li>
+                    <li class="profile-list-group-item" ng-repeat="user in group.users">{{user.displayName}}</li>
                 </ul>
             </div>
             <div id="user-security-settings">
                 <h3 class="profile-list-heading">Permission Level</h3>
                 <ul class="profile-list-group" id="permission-item">
-                    <li class="profile-list-group-item">Top Secret</li>
+                    <li class="profile-list-group-item" ng-repeat="permission in group.permission">{{permission.name}}</li>
                 </ul>
                 <h3 class="profile-list-heading">Role(s)</h3>
                 <ul class="profile-list-group" id="role-items ">
-                    <li class="profile-list-group-item">Security</li>
-                    <li class="profile-list-group-item">Front End</li>
-                    <li class="profile-list-group-item">Developer</li>
-                    <li class="profile-list-group-item">Mob Boss</li>
-                    <li class="profile-list-group-item ">Mob Boss0</li>
-                    <li class="profile-list-group-item ">Mob Boss1</li>
-                    <li class="profile-list-group-item ">Mob Boss2</li>
-                    <li class="profile-list-group-item ">Mob Boss3</li>
-                    <li class="profile-list-group-item ">Mob Boss4</li>
-                    <li class="profile-list-group-item ">Mob Boss5</li>
-                    <li class="profile-list-group-item ">Mob Boss6</li>
-                    <li class="profile-list-group-item ">Mob Boss7</li>
-                    <li class="profile-list-group-item ">Mob Boss8</li>
-                    <li class="profile-list-group-item ">Mob Boss9</li>
+                    <li class="profile-list-group-item" ng-repeat="role in group.roles">{{role.name}}</li>
                 </ul>
             </div>
         </div>
