@@ -1,5 +1,7 @@
 package com.visucius.secp.Controllers.chat;
 
+import com.visucius.secp.Controllers.GroupController;
+import com.visucius.secp.Controllers.User.UserProfileController;
 import com.visucius.secp.DTO.GroupDTO;
 import com.visucius.secp.DTO.SearchResultDTO;
 import com.visucius.secp.DTO.UserDTO;
@@ -18,42 +20,46 @@ import java.util.stream.Collectors;
 public class ChatController {
     private UserDAO userDAO;
     private GroupDAO groupDAO;
+    private UserProfileController userProfileController;
+    private GroupController groupController;
 
-    public ChatController(UserDAO userDAO, GroupDAO groupDAO) {
+    public ChatController(UserDAO userDAO, GroupDAO groupDAO,
+                          UserProfileController userProfileController, GroupController groupController) {
         this.userDAO = userDAO;
         this.groupDAO = groupDAO;
+        this.userProfileController = userProfileController;
+        this.groupController = groupController;
     }
 
-    public Response search(String value) {
+    public Response search(User user, String value) {
         if (StringUtils.isEmpty(value)) {
             throw new WebApplicationException(ChatErrorMessage.SEARCH_STRING_INVALID, Response.Status.NO_CONTENT);
         }
 
         SearchResultDTO searchResultDTO = new SearchResultDTO();
 
-        searchResultDTO.setUsers(getUsersMatchingSearchValue(value));
+        searchResultDTO.setUsers(getUsersMatchingSearchValue(user, value));
         searchResultDTO.setGroups(getGroupsMatchingSearchValue(value));
 
         return Response.status(Response.Status.OK).entity(searchResultDTO).build();
     }
 
-    private Set<UserDTO> getUsersMatchingSearchValue(String value) {
+    private Set<UserDTO> getUsersMatchingSearchValue(User searchingUser, String value) {
         List<User> users = userDAO.searchForUser(value);
-        Set<UserDTO> userDTOS = users.stream().map(user -> {
-            UserDTO userDTO = new UserDTO(user.getId());
-            userDTO.setUsername(user.getUsername());
-            return userDTO;
-        }).collect(Collectors.toSet());
+        Set<UserDTO> userDTOS = users.stream()
+            .filter(user -> searchingUser.getId() != user.getId())
+            .map(user -> {
+                return userProfileController.getUserProfileResponse(user); })
+            .collect(Collectors.toSet());
 
         return userDTOS;
     }
 
     private Set<GroupDTO> getGroupsMatchingSearchValue(String value) {
         List<Group> groups = groupDAO.searchForGroup(value);
-        Set<GroupDTO> groupDTOS = groups.stream().map(group -> {
-            GroupDTO groupDTO = new GroupDTO(group.getId());
-            groupDTO.setName(group.getName());
-            return groupDTO;
+        Set<GroupDTO> groupDTOS = groups.stream()
+            .map(group -> {
+                return groupController.getGroupResponse(group);
         }).collect(Collectors.toSet());
 
         return groupDTOS;

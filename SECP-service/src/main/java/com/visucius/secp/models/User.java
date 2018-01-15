@@ -40,7 +40,7 @@ import java.util.Set;
         @NamedQuery(
             name = "com.visucius.secp.models.User.search",
             query = "from User u where lower(u.username) like lower(:value) or " +
-                "lower(u.firstname) like lower(:value) or lower(u.lastname) like lower(:lastname)"
+                "lower(u.firstname) like lower(:value) or lower(u.lastname) like lower(:value)"
         )
     }
 )

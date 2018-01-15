@@ -1,6 +1,7 @@
 package com.visucius.secp.resources;
 
 import com.visucius.secp.Controllers.chat.ChatController;
+import com.visucius.secp.models.User;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 
@@ -24,7 +25,7 @@ public class ChatResource {
     @GET
     @Path("search/{value}")
     @UnitOfWork
-    public Response search(@Auth @PathParam("value") String value) {
-        return chatController.search(value);
+    public Response search(@Auth User user, @PathParam("value") String value) {
+        return chatController.search(user, value);
     }
 }

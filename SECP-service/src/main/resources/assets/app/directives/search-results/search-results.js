@@ -6,7 +6,7 @@ angular.module('SECP')
         restrict: 'E', //E = element, A = attribute, C = class, M = comment
         scope: {
             //@ reads the attribute value, = provides two-way binding, & works with functions
-            contacts: '=',
+            result: '=',
             contactSelected: '&contactSelectedFn'
          },
         templateUrl: 'directives/search-results/search-results.html',

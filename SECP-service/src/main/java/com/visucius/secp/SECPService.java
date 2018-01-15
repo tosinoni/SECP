@@ -126,7 +126,7 @@ public class SECPService extends Application<SECPConfiguration> {
         final UserProfileController userProfileController = new UserProfileController(userDAO);
         final GroupController groupController = new GroupController(groupDAO,userDAO,rolesDAO, permissionDAO, userProfileController);
         final MessageController messageController = new MessageController(messageDAO);
-        final ChatController chatController = new ChatController(userDAO, groupDAO);
+        final ChatController chatController = new ChatController(userDAO, groupDAO, userProfileController, groupController);
 
         //********************** Register authentication for User *****************************
 

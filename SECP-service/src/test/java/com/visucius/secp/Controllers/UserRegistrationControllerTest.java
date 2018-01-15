@@ -70,7 +70,6 @@ public class UserRegistrationControllerTest {
             "alifarah",
             "test@gmail.com",
             "Password1");
-        request.setDisplayName("verrylongdisplaynameamefdsafdsafsdfddfdddddsssssssssfsdfsfsdfsfsdfsdfsdffdsfsfsfsf");
         UserRegistrationResponse response = controller.registerUser(request);
 
         assertFalse(response.success);
@@ -122,7 +121,6 @@ public class UserRegistrationControllerTest {
             "alifarah",
             "test@gmail.com",
             "Password1");
-        request.setDisplayName("");
         UserRegistrationResponse response = controller.registerUser(request);
 
         assertFalse(response.success);
@@ -238,8 +236,6 @@ public class UserRegistrationControllerTest {
             "alifarah",
             "test@gmail.com",
             "Password1");
-        request.setDisplayName("afarah");
-        request.setAvatar_url("https://www.matrix.org");
         UserRegistrationResponse response = controller.registerUser(request);
 
         assertTrue(response.success);

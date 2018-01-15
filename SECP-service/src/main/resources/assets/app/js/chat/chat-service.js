@@ -45,7 +45,18 @@ angular.module('SECP')
                 console.log(err);
                 console.log("error getting chat list!!")
             });
-        }
+        },
+
+        search : function(searchString) {
+           return $http.get("/SECP/chats/search/" + searchString)
+           .then(function(res) {
+               if(res.status == 200) {
+                   return res.data;
+               }
+           }, function(err) {
+               return err;
+           });
+         },
 
     }
 });
