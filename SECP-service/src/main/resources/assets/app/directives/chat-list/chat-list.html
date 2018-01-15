@@ -1,4 +1,4 @@
-<div class="slimScrollDiv">
+<div id="chatListDiv" class="slimScrollDiv">
     <div class="chat-list-wrapper">
         <ul class="chat-list">
             <li ng-class="{active : activeContact === contact}" ng-repeat="contact in contacts track by contact.groupID"
@@ -22,30 +22,4 @@
     </div>
 </div>
 
-<div class="slimScrollDiv" ng-hide="true">
-    <div class="chat-list-wrapper">
-        <ul class="chat-list">
-            <div class="search-results-header"><i class="fa fa-user" aria-hidden="true"></i> Users:</div>
-            <hr class="search-results-hr">
-            <li ng-class="{active : activeContact === contact}" ng-repeat="contact in contacts track by contact.id"
-                ng-click="setActive(contact)" style="padding: 0px 0px 0px 10px;">
-                <div class="body">
-                    <div class="recipient-box">
-                        <span ng-class="['avatar', '{{contact.status}}']">
-                            <img ng-src="{{contact.img}}" alt="{{contact.username}}" class="img-circle" style="width:25px">
-                        </span>
-                        <span class="recipient-username ng-binding">{{contact.username}}</span>
-                    </div>
-                </div>
-            </li>
-
-            <br>
-            <div class="search-results-header"><i class="fa fa-group" aria-hidden="true"></i> Groups:</div>
-            <hr class="search-results-hr">
-            <div class="search-results-header">No group(s) found.</div>
-        </ul>
-    </div>
-</div>
-
 <link type="text/css" rel="stylesheet" href="directives/chat-list/chat-list.css"/>
-

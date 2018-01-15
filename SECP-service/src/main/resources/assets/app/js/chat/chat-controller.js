@@ -5,6 +5,7 @@ angular.module('SECP')
     function ($scope, $modal, Chat, Socket) {
       //declaring variables
       $scope.contacts = [];
+      $scope.searching = false;
 
       Chat.getCurrentUser().then(function(user) {
         if(user) {
@@ -69,4 +70,8 @@ angular.module('SECP')
             }
          });
       };
+
+        $scope.$on('closeSearchResults', function (event, args) {
+            $scope.searching = args.searching;
+        });
   });

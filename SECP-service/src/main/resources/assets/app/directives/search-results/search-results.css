@@ -49,3 +49,27 @@
         height: 250px;
     }
 }
+
+.search-results-hr{
+    margin-bottom: 0px;
+    margin-top: 5px;
+}
+
+.search-results-header{
+    padding: 10px 0px 0px 10px;
+}
+
+.closeSearch{
+    float: right;
+    margin-right: 5px;
+}
+
+#searchResultsDiv{
+    -webkit-transition: all linear 1s;
+    -moz-transition: all linear 1s;
+    transition: all linear 1s;
+}
+
+#searchResultsDiv.ng-hide{
+    opacity:0;
+}
