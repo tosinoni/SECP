@@ -11,21 +11,27 @@ angular.module('SECP')
             $scope.currentUser = user;
         }
       });
+
       $scope.clicked = false;
-      console.log(new Date());
       Socket.onmessage(function (message) {
         var messageObj = JSON.parse(message);
         $scope.messages.push(messageObj);
         toastr.success(messageObj.body, messageObj.senderId);
+        setLastMessageForContacts(messageObj.groupId, messageObj);
       });
 
       Socket.onopen(function () {
         $scope.websocketConnected = true;
       });
 
+      var setLastMessageForContacts = function (groupID, message) {
+        var index = _.findIndex($scope.contacts, function(o) { return o.groupID == groupID; });
+        $scope.contacts[index].lastMessage = message;
+      }
+
       Chat.getChatList().then(function(data) {
-        console.log(data);
         if(data) {
+            console.log(data);
             $scope.contacts = data;
         }
       });
@@ -41,6 +47,7 @@ angular.module('SECP')
 
          Socket.send(messageDTO);
          $scope.messages.push(messageDTO)
+         setLastMessageForContacts(messageDTO.groupId, messageDTO);
          //clearing the message input in the textarea
          $scope.messageInput = null;
       };
