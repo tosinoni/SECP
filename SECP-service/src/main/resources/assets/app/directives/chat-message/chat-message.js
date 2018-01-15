@@ -13,13 +13,61 @@ angular.module('SECP')
          },
         templateUrl: 'directives/chat-message/chat-message.html',
         link: function ($scope, element, attrs) {
+            var getTime = function(time) {
+                if(time) {
+                var date = new Date(time);
+                    return moment(date).startOf('hour').fromNow();
+                }
+            }
+             var getMessageObject = function(message) {
+                var obj = {};
+                obj.id = message.messageId;
+                obj.senderId = message.senderId;
+                obj.timestamp = getTime(message.timestamp);
+                obj.contents = [message];
+
+                if(message.senderId && $scope.users) {
+                    var sender = $scope.users[message.senderId];
+                    obj.displayName = sender.displayName;
+                    obj.userImg = sender.avatarUrl;
+                }
+                return obj;
+             }
+
+             var formatMessages = function(messages) {
+                var formatedMessages = [];
+                if (messages) {
+                    var currentMessageObj;
+                    for (var message of messages) {
+                        console.log(currentMessageObj);
+                        if(!currentMessageObj) {
+                            currentMessageObj = getMessageObject(message);
+                        } else if(currentMessageObj.senderId !== message.senderId) {
+                            formatedMessages.push(currentMessageObj);
+                            currentMessageObj = getMessageObject(message);
+                        } else {
+                            currentMessageObj.contents.push(message);
+                        }
+                    }
+                }
+
+                if (currentMessageObj) {
+                    formatedMessages.push(currentMessageObj)
+                }
+
+                return formatedMessages;
+             }
+
             $(".message-list-wrapper").niceScroll({autohidemode:'leave'});
             $scope.$watch('messages', function(messages, oldmessages) {
+                $scope.formatedMessages = formatMessages(messages);
+                console.log($scope.formatedMessages);
                 //move the scroll button down to see the latest message
                 $('#chat-scroll').animate({
                    scrollTop: $('#chat-scroll').get(0).scrollHeight
                 });
              }, true);
+
 
              $scope.$watch('selectedChat', function(selectedChat) {
                   if(selectedChat && selectedChat.users) {
@@ -31,29 +79,6 @@ angular.module('SECP')
                      $scope.users = obj;
                   }
              });
-
-             $scope.getTime = function(time) {
-                 if(time) {
-                     var date = new Date(time);
-                     return moment(date).startOf('hour').fromNow();
-                 }
-             }
-
-             $scope.getMessageSender = function(senderId) {
-                  if(senderId && $scope.users) {
-                      return $scope.users[senderId];
-                  }
-              }
-
-              $scope.getSenderAvatar = function(senderId) {
-                 var sender = $scope.getMessageSender(senderId);
-                 return sender.avatarUrl;
-              }
-
-              $scope.getSenderDisplayName = function(senderId) {
-                   var sender = $scope.getMessageSender(senderId);
-                   return sender.displayName;
-                }
 
              $scope.clickProfile = function(){
 

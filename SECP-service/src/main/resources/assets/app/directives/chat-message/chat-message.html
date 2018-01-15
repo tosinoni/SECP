@@ -12,20 +12,19 @@
                 <a href="javascript:void(0);" class="btn btn-default"><i class="fa fa-spinner"></i> Load More Messages</a>
             </li>
 
-            <li ng-class="currentUser.userID !== message.senderId ? 'left' : 'right'" ng-repeat="message in messages track by message.messageId">
-                <span class="username">{{getDisplayName(message.senderId).displayName}}</span>
+            <li ng-class="currentUser.userID !== message.senderId ? 'left' : 'right'" ng-repeat="message in formatedMessages track by message.id">
+                <span class="username">{{message.displayName}}</span>
                 <small class="timestamp">
-                    <i class="fa fa-clock-o"></i>{{getTime(message.timestamp)}}
+                    <i class="fa fa-clock-o"></i>{{message.timestamp}}
                 </small>
                 <span class="avatar available tooltips" data-toggle="tooltip " data-placement="right"
-                      data-original-title="{{getSenderDisplayName(message.senderId)}}">
-                    <img ng-src="{{getSenderAvatar(message.senderId)}}"
-                         alt="{{getSenderDisplayName(message.senderId)}}" class="img-circle">
+                      data-original-title="{{message.displayName}}">
+                    <img ng-src="{{message.userImg}}" alt="avatar" class="img-circle">
                 </span>
                 <div class="body">
-                    <div>
+                    <div ng-repeat="content in message.contents">
                         <div class="message well well-sm">
-                            {{message.body}}
+                            {{content.body}}
                             <p ng-show="content.imgSrc">
                                 <img ng-src="{{content.imgSrc}}" alt="">
                             </p>
