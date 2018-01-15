@@ -18,45 +18,41 @@ public class MessageDTOTest {
 
     @Test
     public void testGroupID() {
-        MessageDTO messageDTO = new MessageDTO(messageId,groupId,senderId,body,reason);
+        MessageDTO messageDTO = new MessageDTO(messageId,groupId,senderId,body,reason,timestamp);
         assertEquals("group id is not equal", groupId, messageDTO.getGroupId());
     }
 
     @Test
     public void testTimeStamp() {
-        MessageDTO messageDTO = new MessageDTO(messageId,groupId,senderId,body,reason);
+        MessageDTO messageDTO = new MessageDTO(messageId,groupId,senderId,body,reason, timestamp );
         messageDTO.setTimestamp(timestamp);
         assertEquals("timestamp is not equal", timestamp, messageDTO.getTimestamp());
     }
 
     @Test
     public void testBody() {
-        MessageDTO messageDTO = new MessageDTO(messageId,groupId,senderId,body,reason);
+        MessageDTO messageDTO = new MessageDTO(messageId,groupId,senderId,body,reason,timestamp);
         assertEquals("Body is not equal", body, messageDTO.getBody());
     }
 
 
     @Test
     public void testReason() {
-        MessageDTO messageDTO = new MessageDTO(messageId,groupId,senderId,body,reason);
+        MessageDTO messageDTO = new MessageDTO(messageId,groupId,senderId,body,reason,timestamp);
         assertEquals("reason is not equal", reason, messageDTO.getReason());
     }
 
     @Test
     public void testEquals() {
-        MessageDTO messageDTO = new MessageDTO(messageId,groupId,senderId,body,reason);
-        messageDTO.setTimestamp(timestamp);
-        MessageDTO messageDTO2 = new MessageDTO(messageId,groupId,senderId,body,reason);
-        messageDTO2.setTimestamp(timestamp);
+        MessageDTO messageDTO = new MessageDTO(messageId,groupId,senderId,body,reason,timestamp);
+        MessageDTO messageDTO2 = new MessageDTO(messageId,groupId,senderId,body,reason,timestamp);
         assertEquals(messageDTO,messageDTO2);
     }
 
     @Test
     public void testNotEquals() {
-        MessageDTO messageDTO = new MessageDTO(messageId,groupId,senderId,body,reason);
-        messageDTO.setTimestamp(timestamp);
-        MessageDTO messageDTO2 = new MessageDTO(2,3,senderId,body,reason);
-        messageDTO2.setTimestamp(new Date());
+        MessageDTO messageDTO = new MessageDTO(messageId,groupId,senderId,body,reason,timestamp);
+        MessageDTO messageDTO2 = new MessageDTO(2,3,senderId,body,reason,timestamp);
         assertNotEquals(messageDTO,messageDTO2);
     }
 }

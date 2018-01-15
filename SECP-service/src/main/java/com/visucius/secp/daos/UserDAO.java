@@ -6,6 +6,7 @@ import com.visucius.secp.models.User;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import java.util.List;
@@ -43,6 +44,15 @@ public class UserDAO extends AbstractDAO<User> {
         return optionalUser;
     }
 
+    public Optional<User> getUserWithDevices(long id)
+    {
+        Optional<User> optionalUser = find(id);
+        if(optionalUser.isPresent())
+            Hibernate.initialize(optionalUser.get().getDevices());
+
+        return optionalUser;
+    }
+
     /**
      * Returns the {@link User} with the given userName.
      *
@@ -62,7 +72,6 @@ public class UserDAO extends AbstractDAO<User> {
     public User findByEmail(String email) {
         return (User) namedQuery("com.visucius.secp.models.User.findByEmail").setParameter("email",email).uniqueResult();
     }
-
 
     /**
      * Returns all {@link User} entities.
