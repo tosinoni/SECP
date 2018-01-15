@@ -49,3 +49,12 @@
         height: 250px;
     }
 }
+
+.search-results-hr{
+    margin-bottom: 0px;
+    margin-top: 5px;
+}
+
+.search-results-header{
+    padding: 10px 0px 0px 10px;
+}
