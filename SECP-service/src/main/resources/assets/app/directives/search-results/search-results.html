@@ -1,7 +1,8 @@
 <div id="searchResultsDiv" class="slimScrollDiv">
     <div class="chat-list-wrapper">
         <ul class="chat-list">
-            <div class="search-results-header"><i class="fa fa-user" aria-hidden="true"></i> Users:<i ng-click="closeSearchResults()" class="fa fa-window-close closeSearch" aria-hidden="true"></i></div>
+            <i ng-click="closeSearchResults()" class="fa fa-window-close closeSearch" aria-hidden="true"></i>
+            <div class="search-results-header"><i class="fa fa-user" aria-hidden="true"></i> Users:</div>
             <hr class="search-results-hr">
             <li ng-class="{active : activeContact === contact}" ng-repeat="contact in contacts track by contact.id"
                 ng-click="setActive(contact)" style="padding: 0px 0px 0px 10px;">
