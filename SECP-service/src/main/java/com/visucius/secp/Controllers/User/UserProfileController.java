@@ -68,7 +68,7 @@ public class UserProfileController {
     private User getUser(long userID){
         Optional<User> userOptional = userDAO.find(userID);
         if (!userOptional.isPresent()){
-            throw new WebApplicationException(UserErrorMessage.USER_ID_INVALID,Response.Status.BAD_REQUEST);
+            throw new WebApplicationException(UserErrorMessage.USER_ID_INVALID,Response.Status.NO_CONTENT);
         }
 
         return userOptional.get();

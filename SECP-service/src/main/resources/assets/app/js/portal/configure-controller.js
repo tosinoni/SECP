@@ -4,6 +4,10 @@ angular.module('SECP')
         $scope.permissions = [];
         $scope.roleHeaders = ['Role', 'Color'];
         $scope.permissionHeaders = ['Permission Level', 'Color'];
+        $scope.newPermissionObj = {};
+        $scope.editPermissionObj = {};
+        $scope.newRoleObj = {};
+        $scope.editRoleObj = {};
 
         var permissions = document.getElementById("permissionTableDiv");
         var roles = document.getElementById("rolesTableDiv");
@@ -82,10 +86,23 @@ angular.module('SECP')
             SwalService.delete(deleteRoleFunction);
         };
 
+
+        $scope.editPermissionModalFn = function(row) {
+            $scope.editPermissionObj = row;
+            $('#editPermissionModal').modal('toggle');
+        };
+
+        //this function gets the data to populate the modal and open the modal
+        $scope.editRoleModalFn = function(row) {
+            $scope.editRoleObj = row;
+            $('#editRoleModal').modal('toggle');
+        };
+
         $scope.savePermission = function(data) {
-            if (data && data.value) {
-                var permissions = data.value.split(/[ ,]+/);
+            if (data && data.name) {
+                var permissions = data.name.split(/[ ,]+/);
                 var obj = {permissions: permissions, color: data.color};
+                console.log(obj);
                 Admin.addPermissions(obj).then(function(res){
                     if (res.status == 201) {
                         $scope.permissions = $scope.permissions.concat(res.data);
@@ -100,8 +117,8 @@ angular.module('SECP')
         };
 
         $scope.saveRole = function(data) {
-            if (data && data.value) {
-                var roles = data.value.split(/[ ,]+/);
+            if (data && data.name) {
+                var roles = data.name.split(/[ ,]+/);
                 var obj = {roles: roles, color: data.color};
                 Admin.addRoles(obj).then(function(res){
                     if (res.status == 201) {
