@@ -11,18 +11,27 @@
 </div>
 <div id="permissionTableDiv">
     <secp-table name="permissionTable" modalname="permissionModal" buttonname="New Permission Level"
-                data="permissions" headers="permissionHeaders" delete-fn="deletePermission(row)"></secp-table>
+                data="permissions" headers="permissionHeaders" delete-fn="deletePermission(row)" edit-fn="editPermissionModalFn(row)"></secp-table>
 </div>
 
 <div id="rolesTableDiv">
     <secp-table name="rolesTable" modalname="roleModal" buttonname="New Role"
-                data="roles" headers="roleHeaders" delete-fn="deleteRole(row)"></secp-table>
+                data="roles" headers="roleHeaders" delete-fn="deleteRole(row)" edit-fn="editRoleModalFn(row)"></secp-table>
 </div>
 
-<!-- Permission Level Modal -->
-<secp-modal name="permissionModal" frmName="newpermissionform" title="New Permission"
+<!-- New Permission Level Modal -->
+<secp-modal name="permissionModal" frmName="newpermissionform" title="New Permission" data="newPermissionObj"
             body="Permssion Level" save-fn="savePermission(data)"></secp-modal>
-<!-- Role Modal -->
-<secp-modal name="roleModal" frmName="newroleform" title="New Role"
+
+<!-- Edit Permission Level Modal -->
+<secp-modal name="editPermissionModal" frmName="editpermissionform" title="Edit Permission" data="editPermissionObj"
+            body="Permssion Level" save-fn="editPermission(data)" disable-input="true"></secp-modal>
+
+<!-- New Role Modal -->
+<secp-modal name="roleModal" frmName="newroleform" title="New Role" data="newRoleObj"
             body="Role" save-fn="saveRole(data)"></secp-modal>
+
+<!-- Edit Role Modal -->
+<secp-modal name="editRoleModal" frmName="editroleform" title="Edit Role" data="editRoleObj"
+            body="Role" save-fn="editRole(data)" disable-input="true"></secp-modal>
 </body>
