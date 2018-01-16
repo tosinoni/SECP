@@ -16,7 +16,7 @@ import javax.ws.rs.core.Response;
 @Path("/filter")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-@RolesAllowed("ADMIN")
+@RolesAllowed({"NORMAL", "ADMIN"})
 public class FilterResource {
 
     private FilterController filterController;

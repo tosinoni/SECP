@@ -8,8 +8,10 @@ public class FilterCreateRequest {
 
     @JsonProperty
     public String name;
+
     @JsonProperty
     public Set<RolesOrPermissionDTO> permissions;
+
     @JsonProperty
     public Set<RolesOrPermissionDTO> roles;
 
