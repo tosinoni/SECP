@@ -10,7 +10,7 @@ angular.module('SECP')
          },
         templateUrl: 'directives/profiles/group-profile.html',
         link: function ($scope, element, attrs) {
-
+            var modal = document.getElementById("editModal");
             $scope.$watch('id', function(id) {
                   Group.getProfile(id).then(function(group) {
                       if(group) {
