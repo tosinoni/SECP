@@ -82,6 +82,11 @@ angular.module('SECP')
         }
 
       $scope.contactSelected = function(contact) {
+         var index = _.findIndex($scope.contacts, function(o) { return o.groupID == contact.groupID; });
+         if(index < 0) {
+            $scope.contacts.push(contact);
+         }
+
          $scope.selectedChat = contact;
          Chat.getMessages(contact).then(function(data) {
             if(data) {

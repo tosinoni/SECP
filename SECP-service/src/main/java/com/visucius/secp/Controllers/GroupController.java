@@ -308,6 +308,7 @@ public class GroupController {
         groupDTO.setActive(group.isActive());
         groupDTO.setDisplayName(getDisplayNameForGroup(group));
         groupDTO.setAvatarUrl(getAvatarForGroup(group));
+        groupDTO.setGroupType(group.getGroupType());
 
         Set<UserDTO> users = getUsersInGroup(group).stream().filter(user -> user.isActive())
             .map(user -> {

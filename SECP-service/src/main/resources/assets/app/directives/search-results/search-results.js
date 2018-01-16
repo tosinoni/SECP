@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('SECP')
-    .directive('searchResults', function () {
+    .directive('searchResults', function (Group) {
     return {
         restrict: 'E', //E = element, A = attribute, C = class, M = comment
         scope: {
@@ -14,7 +14,14 @@ angular.module('SECP')
             $(".chat-list-wrapper").niceScroll({autohidemode:'leave'});
 
             $scope.setActive = function(contact) {
-                if($scope.activeContact !== contact) {
+                if (contact.userID) {
+                    Group.getPrivateGroup(contact).then(function(res) {
+                        if (res) {
+                             $scope.activeContact = res;
+                             $scope.contactSelected({'contact' : res});
+                        }
+                    });
+                }else if($scope.activeContact !== contact) {
                     $scope.activeContact = contact;
                     $scope.contactSelected({'contact' : contact});
                 }

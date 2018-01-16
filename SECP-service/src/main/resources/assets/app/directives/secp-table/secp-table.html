@@ -30,7 +30,7 @@
             <td ng-if="row.numOfUsers>-1">{{row.numOfUsers}}</td>
             <td ng-if="row.numOfGroups>-1">{{row.numOfGroups}}</td>
             <td style="text-align: right">
-                <button ng-cloak ng-show="isEditable" ng-click="modify(row)">
+                <button ng-click="modify(row)">
                     <i class="fa fa-eye" aria-hidden="true"></i>
                 </button>
                 <button ng-click="change(row)">

@@ -14,6 +14,17 @@ angular.module('SECP')
             }, function(err) {
                return false;
             });
+        },
+
+        getPrivateGroup: function(user) {
+            return $http.post("/SECP/groups/private", user)
+            .then(function(res) {
+                if (res.status == 200 || res.status == 201) {
+                    return res.data;
+                }
+            }, function(err) {
+               return false;
+            });
         }
     }
   });

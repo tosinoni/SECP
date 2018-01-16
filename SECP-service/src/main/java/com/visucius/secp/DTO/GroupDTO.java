@@ -2,6 +2,7 @@ package com.visucius.secp.DTO;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.visucius.secp.models.GroupType;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -46,6 +47,9 @@ public class GroupDTO {
 
     @JsonProperty
     private String avatarUrl;
+
+    @JsonProperty
+    private GroupType groupType;
 
     public GroupDTO()
     {
@@ -167,6 +171,14 @@ public class GroupDTO {
 
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
+    }
+
+    public GroupType getGroupType() {
+        return groupType;
+    }
+
+    public void setGroupType(GroupType groupType) {
+        this.groupType = groupType;
     }
 
     @Override
