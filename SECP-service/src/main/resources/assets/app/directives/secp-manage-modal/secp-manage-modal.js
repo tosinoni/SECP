@@ -11,6 +11,7 @@ angular.module('SECP')
             name: '@',
             modalData: '=', //this is the data to be used to populate the modal
             isuser: '@',
+            isfilter: '@',
             save: '&saveFn'
          },
         templateUrl: 'directives/secp-manage-modal/secp-manage-modal.html',
