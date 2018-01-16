@@ -12,6 +12,7 @@ angular.module('SECP')
         templateUrl: 'directives/search-results/search-results.html',
         link: function ($scope, element, attrs) {
             $(".chat-list-wrapper").niceScroll({autohidemode:'leave'});
+
             $scope.setActive = function(contact) {
                 if($scope.activeContact !== contact) {
                     $scope.activeContact = contact;

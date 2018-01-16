@@ -298,7 +298,7 @@ public class GroupController {
         return displayName;
     }
 
-    public GroupDTO getGroupResponse(Group group) {
+    private GroupDTO getGroupResponse(Group group) {
         GroupDTO groupDTO = new GroupDTO(group.getId());
         groupDTO.setName(group.getName());
         groupDTO.setNumOfPermissions(group.getPermissions().size());
