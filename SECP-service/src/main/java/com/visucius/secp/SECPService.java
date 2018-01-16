@@ -5,6 +5,7 @@ import com.visucius.secp.Chat.ChatSocketCreator;
 import com.visucius.secp.Chat.ChatSocketHandler;
 import com.visucius.secp.Chat.IMessageHandler;
 import com.visucius.secp.Controllers.Admin.AdminController;
+import com.visucius.secp.Controllers.FilterController;
 import com.visucius.secp.Controllers.GroupController;
 import com.visucius.secp.Controllers.MessageController;
 import com.visucius.secp.Controllers.User.LoginRequestController;
@@ -53,6 +54,7 @@ public class SECPService extends Application<SECPConfiguration> {
             Message.class,
             Role.class,
             Group.class,
+            Filter.class,
             Permission.class,
             Device.class,
             Void.class
@@ -114,7 +116,7 @@ public class SECPService extends Application<SECPConfiguration> {
         final MessageDAO messageDAO = new MessageDAO(hibernateBundle.getSessionFactory());
         final PermissionDAO permissionDAO = new PermissionDAO(hibernateBundle.getSessionFactory());
         final DeviceDAO deviceDAO =  new DeviceDAO(hibernateBundle.getSessionFactory());
-
+        final FilterDAO filterDAO =  new FilterDAO(hibernateBundle.getSessionFactory());
 
 
         //********************** Register Services/Controllers *********************************
@@ -124,6 +126,7 @@ public class SECPService extends Application<SECPConfiguration> {
         final UserController userController = new UserController(userDAO, deviceDAO, permissionDAO, rolesDAO, groupDAO);
         final AdminController adminController = new AdminController(userDAO, rolesDAO, permissionDAO);
         final UserProfileController userProfileController = new UserProfileController(userDAO);
+        final FilterController filterController = new FilterController(filterDAO, rolesDAO, permissionDAO);
         final GroupController groupController = new GroupController(groupDAO,userDAO,rolesDAO, permissionDAO, userProfileController);
         final MessageController messageController = new MessageController(messageDAO);
         final ChatController chatController = new ChatController(userDAO, groupDAO, userProfileController, groupController);
@@ -158,6 +161,8 @@ public class SECPService extends Application<SECPConfiguration> {
         environment.jersey().register(new UserResource(userController, userRegistrationController));
         environment.jersey().register(new ChatResource(chatController));
         environment.jersey().register(new UserProfileResource(userProfileController));
+        environment.jersey().register(
+            new FilterResource(filterController));
 
         //************************** Error Handling *************************************
         final ErrorPageErrorHandler epeh = new ErrorPageErrorHandler();
