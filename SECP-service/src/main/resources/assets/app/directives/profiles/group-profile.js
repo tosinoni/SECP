@@ -14,7 +14,6 @@ angular.module('SECP')
             $scope.$watch('id', function(id) {
                   Group.getProfile(id).then(function(group) {
                       if(group) {
-                          console.log(group);
                           $scope.group = group;
                       }
                   });
@@ -27,6 +26,10 @@ angular.module('SECP')
                 // CHECK TO SEE IF USER OR GROUP. IF USER, CHECK TO SEE IF THE USER PROFILE BELONGS TO THE PERSON LOOKING AT IT.
                 // THEN OPEN EDITABLE. IF GROUP, OPEN EDITABLE.
                 // EDITABLE WOULD BE TO EDIT THE IMAGE AND THE NAME
+            }
+            $scope.closeProfile = function(){
+                document.getElementById("chatBlock").setAttribute("class", "col-md-8");
+                $("#profileBlock").hide();
             }
         } //DOM manipulation
     };

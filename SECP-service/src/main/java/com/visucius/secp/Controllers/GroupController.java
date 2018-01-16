@@ -314,12 +314,12 @@ public class GroupController {
 
         Set<RolesOrPermissionDTO> roles = group.getRoles().stream()
             .map(role -> {
-                return new RolesOrPermissionDTO(role.getId(), role.getRole());
+                return new RolesOrPermissionDTO(role.getId(), role.getRole(), role.getColor());
             }).collect(Collectors.toSet());
 
         Set<RolesOrPermissionDTO> permissions = group.getPermissions().stream()
             .map(permission -> {
-                return new RolesOrPermissionDTO(permission.getId(), permission.getLevel());
+                return new RolesOrPermissionDTO(permission.getId(), permission.getLevel(), permission.getColor());
             }).collect(Collectors.toSet());
 
         groupDTO.setUsers(users);
