@@ -13,10 +13,6 @@ import java.util.Set;
         @NamedQuery(
             name = "com.visucius.secp.models.Filter.findByName",
             query = "from Filter f where f.name = :name"
-        ),
-        @NamedQuery(
-            name = "com.visucius.secp.models.Filter.findAllFilters",
-            query = "select f from Filter f"
         )
     }
 )

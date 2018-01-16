@@ -32,15 +32,9 @@ public class FilterDAO extends AbstractDAO<Filter> {
         currentSession().delete(entity);
     }
 
-    public List<Filter> findAllFilters()
-    {
-        return (List<Filter>)
-            namedQuery("com.visucius.secp.models.Filter.findAllFilters").list();
-    }
-
     public Filter findByName(String name) {
         return (Filter)
-            namedQuery("com.visucius.secp.models.Group.findByName").
+            namedQuery("com.visucius.secp.models.Filter.findByName").
                 setParameter("name",name).uniqueResult();
     }
 }

@@ -91,13 +91,11 @@ public class FilterTest {
 
         //testing the @JoinTable annotation
         NamedQueries namedQueries = ReflectTool.getClassAnnotation(Filter.class, NamedQueries.class);
-        assertEquals("NamedQueries:  size is not equal", 2, namedQueries.value().length);
+        assertEquals("NamedQueries:  size is not equal", 1, namedQueries.value().length);
 
         NamedQuery[] namedQueriesArray = namedQueries.value();
 
         assertEquals("NamedQueries[0]: name is not equal",
             "com.visucius.secp.models.Filter.findByName", namedQueriesArray[0].name());
-        assertEquals("NamedQueries[1]: name is not equal",
-            "com.visucius.secp.models.Filter.findAllFilters", namedQueriesArray[1].name());
     }
 }
