@@ -19,7 +19,7 @@ public class InputValidator {
 
     public static boolean isNameValid(String name)
     {
-        return !StringUtils.isEmpty(name) && name.length() < 20;
+        return !StringUtils.isEmpty(name) && name.length() < 20 && name.length() > 2 ;
     }
 
     public static boolean isEmailValid(String email)

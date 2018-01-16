@@ -123,7 +123,7 @@ public class GroupTest {
 
         //testing the @JoinTable annotation
         NamedQueries namedQueries = ReflectTool.getClassAnnotation(Group.class, NamedQueries.class);
-        assertEquals("NamedQueries:  size is not equal to 4", 4, namedQueries.value().length);
+        assertEquals("NamedQueries:  size is not equal to 5", 5, namedQueries.value().length);
 
         NamedQuery[] namedQueriesArray = namedQueries.value();
 

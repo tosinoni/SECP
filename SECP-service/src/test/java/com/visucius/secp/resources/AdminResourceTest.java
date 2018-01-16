@@ -160,6 +160,7 @@ public class AdminResourceTest {
 
         Set<String> roles = new HashSet<>();
         roles.add(roleName);
+        request.setColor("Green");
         request.setRoles(roles);
 
         Role role = new Role(roleName);
@@ -198,6 +199,7 @@ public class AdminResourceTest {
         Set<String> permissions = new HashSet<>();
         permissions.add(permissionName);
         request.setPermissions(permissions);
+        request.setColor("Green");
 
         Permission permission = new Permission(permissionName);
         Mockito.when(permissionDAO.save(permission)).thenReturn(permission);

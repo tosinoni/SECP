@@ -131,7 +131,7 @@ public class UserTest {
 
         //testing the @JoinTable annotation
         NamedQueries namedQueries = ReflectTool.getClassAnnotation(User.class, NamedQueries.class);
-        assertEquals("NamedQueries:  size is not equal to 6", 6, namedQueries.value().length);
+        assertEquals("NamedQueries:  size is not equal to 7", 7, namedQueries.value().length);
 
         NamedQuery[] namedQueriesArray = namedQueries.value();
 
