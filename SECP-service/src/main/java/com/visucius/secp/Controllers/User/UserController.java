@@ -292,7 +292,7 @@ public class UserController {
 
         Set<RolesOrPermissionDTO> roles = user.getRoles().stream()
             .map(role -> {
-                return new RolesOrPermissionDTO(role.getId(), role.getRole());
+                return new RolesOrPermissionDTO(role.getId(), role.getRole(), role.getColor());
             }).collect(Collectors.toSet());
 
         Permission userPermission = user.getPermission();
@@ -302,6 +302,7 @@ public class UserController {
         if (userPermission != null) {
             permissionForUser.setId(userPermission.getId());
             permissionForUser.setName(userPermission.getLevel());
+            permissionForUser.setColor(userPermission.getColor());
         }
 
         userDTO.setPermission(permissionForUser);
