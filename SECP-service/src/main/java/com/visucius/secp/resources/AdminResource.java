@@ -9,6 +9,7 @@ import com.visucius.secp.DTO.UserRegistrationResponse;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -75,6 +76,22 @@ public class AdminResource {
     @Path("/permissions")
     public Response createPermissions(@Auth AppCreateDTO request) {
         return adminController.registerPermissions(request);
+    }
+
+    @POST
+    @Timed
+    @UnitOfWork
+    @Path("/roles/id{id}")
+    public Response updateRole(@Auth AppCreateDTO request, @PathParam("id") String id) {
+        return adminController.updateRoles(request,id);
+    }
+
+    @POST
+    @Timed
+    @UnitOfWork
+    @Path("/permissions/id/{id}")
+    public Response createPermissions(@Auth AppCreateDTO request, @PathParam("id") String id) {
+        return adminController.updatePermissions(request,id);
     }
 
     @DELETE
