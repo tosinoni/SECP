@@ -93,12 +93,14 @@ public class GroupController {
         group.setGroupType(GroupType.PRIVATE);
         group.addUser(getUser(creator.getId()));
         group.addUser(getUser(userDTO.getUserID()));
+        List<Group> groups = groupRepository.findPrivateGroupForUsers(group.getUsers());
 
-        if(!groupRepository.findPrivateGroupForUsers(group.getUsers()).isEmpty())
+        if(!groups.isEmpty())
         {
-            throw new WebApplicationException(
-                GroupErrorMessages.PRIVATE_GROUP_EXISTS,
-                Response.Status.BAD_REQUEST);        }
+            return Response.
+                status(Response.Status.OK).
+                entity(getGroupResponse(groups.get(0))).build();
+        }
 
         Group createdGroup = groupRepository.save(group);
         return Response.status(Response.Status.CREATED).entity(getGroupResponse(createdGroup)).build();
@@ -341,7 +343,7 @@ public class GroupController {
         if (!userOptional.isPresent()) {
             throw new WebApplicationException(
                 UserErrorMessage.USER_ID_INVALID,
-                Response.Status.NO_CONTENT);
+                Response.Status.BAD_REQUEST);
         }
 
         return userOptional.get();
