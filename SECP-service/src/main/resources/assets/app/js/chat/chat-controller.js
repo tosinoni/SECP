@@ -52,7 +52,7 @@ angular.module('SECP')
          $scope.messageInput = null;
       };
 
-        $scope.sendMessageUsingEnter = function() {
+        $scope.sendMessageUsingEnter = function(event) {
             var code = event.keyCode || event.which;
             if (code === 13) {
                 if (!event.shiftKey) {
