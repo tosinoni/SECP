@@ -5,7 +5,6 @@ import com.visucius.secp.DTO.UserDTO;
 import com.visucius.secp.models.User;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
-import org.hibernate.validator.constraints.URL;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
