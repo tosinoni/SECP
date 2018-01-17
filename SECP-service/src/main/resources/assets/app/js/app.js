@@ -1,6 +1,6 @@
 // Declare app level module which depends on filters, and services
 angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
-    'routeStyles', 'angular-jwt', 'ngWebCrypto', 'angular-uuid', 'datatables'])
+    'routeStyles', 'angular-jwt', 'ngWebCrypto', 'angular-uuid', 'datatables', 'angular-nicescroll'])
   .config(function ($routeProvider, $locationProvider, jwtOptionsProvider, $httpProvider) {
 
     //add isAdmin function

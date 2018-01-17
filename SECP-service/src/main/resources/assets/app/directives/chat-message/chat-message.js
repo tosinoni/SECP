@@ -59,7 +59,6 @@ angular.module('SECP')
                 return formatedMessages;
              }
 
-            $(".message-list-wrapper").niceScroll({autohidemode:'leave'});
             $scope.$watch('messages', function(messages, oldmessages) {
                 $scope.formatedMessages = formatMessages(messages);
                 //move the scroll button down to see the latest message
