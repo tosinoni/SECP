@@ -42,7 +42,7 @@ public class AdminResourceTest {
     private PermissionDAO permissionDAO = Mockito.mock(PermissionDAO.class);
 
     private AdminController adminController = new AdminController(userDAO, rolesDAO, permissionDAO);
-    private UserRegistrationController userRegistrationController = new UserRegistrationController(userDAO);
+    private UserRegistrationController userRegistrationController = new UserRegistrationController(userDAO,permissionDAO);
 
 
     @Rule

@@ -1,15 +1,24 @@
 package com.visucius.secp.Controllers;
 
+import com.google.common.base.Optional;
 import com.visucius.secp.Controllers.User.UserErrorMessage;
 import com.visucius.secp.Controllers.User.UserRegistrationController;
+import com.visucius.secp.DTO.RolesOrPermissionDTO;
+import com.visucius.secp.DTO.UserDTO;
 import com.visucius.secp.DTO.UserRegistrationRequest;
 import com.visucius.secp.DTO.UserRegistrationResponse;
+import com.visucius.secp.daos.PermissionDAO;
 import com.visucius.secp.daos.UserDAO;
+import com.visucius.secp.models.Permission;
 import com.visucius.secp.models.User;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.mockito.Matchers;
 import org.mockito.Mockito;
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 import static org.junit.Assert.*;
@@ -18,14 +27,20 @@ public class UserRegistrationControllerTest {
 
     private UserRegistrationController controller;
     private UserDAO userDAO;
+    private PermissionDAO permissionDAO;
+
+    @Rule
+    public final ExpectedException exception = ExpectedException.none();
 
     @Before
     public void setUp() throws Exception {
         userDAO = Mockito.mock(UserDAO.class);
+        permissionDAO = Mockito.mock(PermissionDAO.class);
+        Mockito.when(permissionDAO.find(Matchers.anyLong())).thenReturn(Optional.fromNullable(new Permission("level", "Blue")));
         Mockito.when(userDAO.findByEmail("duplicate@email.com")).thenReturn(new User());
         Mockito.when(userDAO.findByUserName("duplicateUsername")).thenReturn(new User());
         Mockito.when(userDAO.save(new User())).thenReturn(new User());
-        controller = new UserRegistrationController(userDAO);
+        controller = new UserRegistrationController(userDAO,permissionDAO);
     }
 
     @Test
@@ -37,12 +52,10 @@ public class UserRegistrationControllerTest {
             "alifarah",
             "test@gmail.com",
             "Password1");
-        UserRegistrationResponse response = controller.registerUser(request);
 
-        assertFalse(response.success);
-        assertEquals(response.status, Response.Status.BAD_REQUEST);
-        assertTrue(response.errors.contains(UserErrorMessage.FIRST_NAME_INVALID));
-        assertEquals(response.getMessage(), UserErrorMessage.USER_NOT_CREATED);
+        exception.expect(WebApplicationException.class);
+        exception.expectMessage(UserErrorMessage.FIRST_NAME_INVALID);
+        Response response = controller.registerUser(request);
     }
 
     @Test
@@ -53,12 +66,9 @@ public class UserRegistrationControllerTest {
             "alifarah",
             "test@gmail.com",
             "Password1");
-        UserRegistrationResponse response = controller.registerUser(request);
-
-        assertFalse(response.success);
-        assertEquals(response.status, Response.Status.BAD_REQUEST);
-        assertTrue(response.errors.contains(UserErrorMessage.LAST_NAME_INVALID));
-        assertEquals(response.getMessage(), UserErrorMessage.USER_NOT_CREATED);
+        exception.expect(WebApplicationException.class);
+        exception.expectMessage(UserErrorMessage.LAST_NAME_INVALID);
+        Response response = controller.registerUser(request);
     }
 
     @Test
@@ -70,12 +80,9 @@ public class UserRegistrationControllerTest {
             "alifarah",
             "test@gmail.com",
             "Password1");
-        UserRegistrationResponse response = controller.registerUser(request);
-
-        assertFalse(response.success);
-        assertEquals(response.status, Response.Status.BAD_REQUEST);
-        assertTrue(response.errors.contains(UserErrorMessage.FIRST_NAME_INVALID));
-        assertEquals(response.getMessage(), UserErrorMessage.USER_NOT_CREATED);
+        exception.expect(WebApplicationException.class);
+        exception.expectMessage(UserErrorMessage.FIRST_NAME_INVALID);
+        Response response = controller.registerUser(request);
     }
 
     @Test
@@ -87,12 +94,9 @@ public class UserRegistrationControllerTest {
             "alifarah",
             "test@gmail.com",
             "Password1");
-        UserRegistrationResponse response = controller.registerUser(request);
-
-        assertFalse(response.success);
-        assertEquals(response.status, Response.Status.BAD_REQUEST);
-        assertTrue(response.errors.contains(UserErrorMessage.LAST_NAME_INVALID));
-        assertEquals(response.getMessage(), UserErrorMessage.USER_NOT_CREATED);
+        exception.expect(WebApplicationException.class);
+        exception.expectMessage(UserErrorMessage.LAST_NAME_INVALID);
+        Response response = controller.registerUser(request);
     }
 
     @Test
@@ -103,12 +107,9 @@ public class UserRegistrationControllerTest {
             "alifarah",
             "test@gmail.com",
             "");
-        UserRegistrationResponse response = controller.registerUser(request);
-
-        assertFalse(response.success);
-        assertEquals(response.status, Response.Status.BAD_REQUEST);
-        assertTrue(response.errors.contains(UserErrorMessage.PASSWORD_INVALID));
-        assertEquals(response.getMessage(), UserErrorMessage.USER_NOT_CREATED);
+        exception.expect(WebApplicationException.class);
+        exception.expectMessage(UserErrorMessage.PASSWORD_INVALID);
+        Response response = controller.registerUser(request);
     }
 
     @Test
@@ -119,12 +120,9 @@ public class UserRegistrationControllerTest {
             "alifarah",
             "test@gmail.com",
             "pass");
-        UserRegistrationResponse response = controller.registerUser(request);
-
-        assertFalse(response.success);
-        assertEquals(response.status, Response.Status.BAD_REQUEST);
-        assertTrue(response.errors.contains(UserErrorMessage.PASSWORD_INVALID));
-        assertEquals(response.getMessage(), UserErrorMessage.USER_NOT_CREATED);
+        exception.expect(WebApplicationException.class);
+        exception.expectMessage(UserErrorMessage.PASSWORD_INVALID);
+        Response response = controller.registerUser(request);
     }
 
     @Test
@@ -135,12 +133,9 @@ public class UserRegistrationControllerTest {
             "alifarah",
             "test@gmail.com",
             "Verylongpassword12342343243242324323");
-        UserRegistrationResponse response = controller.registerUser(request);
-
-        assertFalse(response.success);
-        assertEquals(response.status, Response.Status.BAD_REQUEST);
-        assertTrue(response.errors.contains(UserErrorMessage.PASSWORD_INVALID));
-        assertEquals(response.getMessage(), UserErrorMessage.USER_NOT_CREATED);
+        exception.expect(WebApplicationException.class);
+        exception.expectMessage(UserErrorMessage.PASSWORD_INVALID);
+        Response response = controller.registerUser(request);
     }
 
     @Test
@@ -151,12 +146,9 @@ public class UserRegistrationControllerTest {
             "alifarah",
             "test@gmail.com",
             "password1");
-        UserRegistrationResponse response = controller.registerUser(request);
-
-        assertFalse(response.success);
-        assertEquals(response.status, Response.Status.BAD_REQUEST);
-        assertTrue(response.errors.contains(UserErrorMessage.PASSWORD_INVALID));
-        assertEquals(response.getMessage(), UserErrorMessage.USER_NOT_CREATED);
+        exception.expect(WebApplicationException.class);
+        exception.expectMessage(UserErrorMessage.PASSWORD_INVALID);
+        Response response = controller.registerUser(request);
     }
 
     @Test
@@ -168,12 +160,9 @@ public class UserRegistrationControllerTest {
             "alifarah",
             "testgmail.com",
             "Password1");
-        UserRegistrationResponse response = controller.registerUser(request);
-
-        assertFalse(response.success);
-        assertEquals(response.status, Response.Status.BAD_REQUEST);
-        assertTrue(response.errors.contains(UserErrorMessage.EMAIL_INVALID));
-        assertEquals(response.getMessage(), UserErrorMessage.USER_NOT_CREATED);
+        exception.expect(WebApplicationException.class);
+        exception.expectMessage(UserErrorMessage.EMAIL_INVALID);
+        Response response = controller.registerUser(request);
     }
 
     @Test
@@ -185,12 +174,10 @@ public class UserRegistrationControllerTest {
             "alifarah",
             "",
             "Password!");
-        UserRegistrationResponse response = controller.registerUser(request);
 
-        assertFalse(response.success);
-        assertEquals(response.status, Response.Status.BAD_REQUEST);
-        assertTrue(response.errors.contains(UserErrorMessage.EMAIL_INVALID));
-        assertEquals(response.getMessage(), UserErrorMessage.USER_NOT_CREATED);
+        exception.expect(WebApplicationException.class);
+        exception.expectMessage(UserErrorMessage.EMAIL_INVALID);
+        Response response = controller.registerUser(request);
     }
 
     @Test
@@ -202,13 +189,16 @@ public class UserRegistrationControllerTest {
             "alifarah",
             "test@gmail.com",
             "Password1");
-        UserRegistrationResponse response = controller.registerUser(request);
+        request.permission = new RolesOrPermissionDTO(1, "name");
+        UserDTO userDTO = new UserDTO();
+        userDTO.setFirstName("ali");
+        userDTO.setLastName("farah");
+        userDTO.setLastName("alifarah");
 
-        assertTrue(response.success);
-        assertEquals(response.status, Response.Status.CREATED);
-        assertTrue(response.errors.isEmpty());
-        assertTrue(response.getUserID() == 0);
-        assertEquals(response.getMessage(), UserErrorMessage.USER_CREATED);
+        Response response = controller.registerUser(request);
+        Response validResponse = Response.status(Response.Status.CREATED).entity(userDTO).build();
+        assertEquals(response.getStatus(), validResponse.getStatus());
+        assertEquals(response.getEntity(),  validResponse.getEntity());
     }
     @Test
     public void DuplicateUsernameTest() {
@@ -218,12 +208,9 @@ public class UserRegistrationControllerTest {
             "duplicateUsername",
             "alifarah",
             "Password!");
-        UserRegistrationResponse response = controller.registerUser(request);
-
-        assertFalse(response.success);
-        assertEquals(response.status, Response.Status.BAD_REQUEST);
-        assertTrue(response.errors.contains(UserErrorMessage.DUPLICATE_USERNAME));
-        assertEquals(response.getMessage(), UserErrorMessage.USER_NOT_CREATED);
+        exception.expect(WebApplicationException.class);
+        exception.expectMessage(UserErrorMessage.DUPLICATE_USERNAME);
+        Response response = controller.registerUser(request);
     }
 
     @Test
@@ -235,12 +222,9 @@ public class UserRegistrationControllerTest {
             "alifarah",
             "duplicate@email.com",
             "Password!");
-        UserRegistrationResponse response = controller.registerUser(request);
-
-        assertFalse(response.success);
-        assertEquals(response.status, Response.Status.BAD_REQUEST);
-        assertTrue(response.errors.contains(UserErrorMessage.DUPLICATE_EMAIL));
-        assertEquals(response.getMessage(), UserErrorMessage.USER_NOT_CREATED);
+        exception.expect(WebApplicationException.class);
+        exception.expectMessage(UserErrorMessage.DUPLICATE_EMAIL);
+        Response response = controller.registerUser(request);
     }
 
     @Test

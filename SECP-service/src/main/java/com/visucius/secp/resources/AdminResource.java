@@ -51,14 +51,7 @@ public class AdminResource {
     @UnitOfWork
     @Path("/register")
     public Response create(@Auth UserRegistrationRequest request) {
-
-        UserRegistrationResponse response = userRegistrationController.registerUser(request);
-
-        if (response.success) {
-            return Response.status(response.status).entity(response.toString()).build();
-        }
-
-        throw new WebApplicationException(response.getErrors(), response.status);
+        return userRegistrationController.registerUser(request);
     }
 
     @POST
