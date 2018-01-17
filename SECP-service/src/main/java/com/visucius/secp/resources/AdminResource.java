@@ -16,7 +16,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@RolesAllowed("ADMIN")
 @Path("/admin")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -33,7 +32,7 @@ public class AdminResource {
     @POST
     @Path("{id}")
     @UnitOfWork
-    public Response registerAdmin(@Auth @PathParam("id") String id) {
+    public Response registerAdmin(@PathParam("id") String id) {
         adminController.registerAdmin(id);
         return Response.status(Response.Status.OK).build();
     }
@@ -52,7 +51,7 @@ public class AdminResource {
     @Timed
     @UnitOfWork
     @Path("/register")
-    public Response create(@Auth UserRegistrationRequest request) {
+    public Response create(UserRegistrationRequest request) {
         return userRegistrationController.registerUser(request);
     }
 
@@ -68,7 +67,7 @@ public class AdminResource {
     @Timed
     @UnitOfWork
     @Path("/permissions")
-    public Response createPermissions(@Auth AppCreateDTO request) {
+    public Response createPermissions(AppCreateDTO request) {
         return adminController.registerPermissions(request);
     }
 

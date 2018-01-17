@@ -17,12 +17,12 @@ import java.util.Set;
             query = "from Group g where g.name = :name"
         ),
         @NamedQuery(
-            name = "com.visucius.secp.models.Group.findAllActiveGroups",
-            query = "select g from Group g where g.isActive = true"
+            name = "com.visucius.secp.models.Group.findAllPublicGroups",
+            query = "select g from Group g where g.groupType = :type"
         ),
         @NamedQuery(
             name = "com.visucius.secp.models.Group.findGroupsForUser",
-            query = "select g from Group g join g.permissions p join g.roles r where p.id = :permissionID and r.id in (:roleIDS)"
+            query = "select g from Group g join g.permissions p join g.roles r where p.id = :permissionID and (r is null or r.id in (:roleIDS))"
         ),
         @NamedQuery(
             name = "com.visucius.secp.models.Group.findPrivateGroupForUsers",

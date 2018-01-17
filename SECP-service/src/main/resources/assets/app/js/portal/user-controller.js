@@ -1,7 +1,7 @@
 angular.module('SECP')
     .controller('UserController', function ($scope, Admin, SwalService) {
         $scope.users = [];
-        $scope.userHeaders = ['Username', 'First Name', 'Last Name', 'Permission Level', 'Role(s)', 'Groups'];
+        $scope.userHeaders = ['Username', 'First Name', 'Last Name', 'Permission Level', 'Role(s)', 'Groups', 'Login Role'];
         $scope.createUserData = {}; //the data sent to the modal for create user
         $scope.editUserData = {};   //the data sent to the modal for edit user
 

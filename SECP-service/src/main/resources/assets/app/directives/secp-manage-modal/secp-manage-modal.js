@@ -16,6 +16,9 @@ angular.module('SECP')
          },
         templateUrl: 'directives/secp-manage-modal/secp-manage-modal.html',
         link: function ($scope, element, attrs) {
+
+            $scope.loginRoles = ["ADMIN", "NORMAL"];
+
             //getting the adminRoles
             Admin.getRoles().then(function(res) {
                 if (res) {

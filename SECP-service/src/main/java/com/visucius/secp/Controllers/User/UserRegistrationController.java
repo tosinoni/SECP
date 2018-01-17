@@ -55,10 +55,12 @@ public class UserRegistrationController{
             try {
                 String hashPassword = PasswordUtil.createHash(request.password);
                 User user = new User(request.firstName, request.lastName, request.userName, request.email, hashPassword);
+                user.setAvatarUrl(UserDTO.defaultUserAvatar);
+                user.setDisplayName(request.userName);
                 Permission permission = getPermission(request.permission.getId());
                 user.setPermission(permission);
                 User createdUser = userDAO.save(user);
-                UserDTO createdUserDTO = new UserDTO(user);
+                UserDTO createdUserDTO = new UserDTO(createdUser);
                 return Response.status(Response.Status.CREATED).entity(createdUserDTO).build();
 
             } catch (PasswordUtil.CannotPerformOperationException e) {
