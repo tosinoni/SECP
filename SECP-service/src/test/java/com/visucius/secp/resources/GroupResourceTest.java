@@ -44,7 +44,7 @@ public class GroupResourceTest {
 
         //testing with roles in db
         Group group = new Group("developer");
-        Mockito.when(groupDAO.findAll()).thenReturn(Arrays.asList(group));
+        Mockito.when(groupDAO.findAllPublicGroups()).thenReturn(Arrays.asList(group));
         response = resources.client().target(groupsUrl).request().get();
         ResponseValidator.validate(response, 200);
     }
