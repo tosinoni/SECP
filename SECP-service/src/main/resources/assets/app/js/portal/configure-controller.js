@@ -116,6 +116,38 @@ angular.module('SECP')
             }
         };
 
+        //this function handles the information provided by the edit modal
+        $scope.submitModifyPermission = function(data) {
+            if (data) {
+                Admin.modifyPermission(data).then(function(res){
+                    console.log(res);
+                    if (res.status == 201) {
+                        var index = _.findIndex($scope.permissions, function(o) { return o.id == data.id; });
+                        $scope.permissions[index] = res.data;
+                        swal('Modified!','Permission modified.','success');
+                    } else {
+                        swal('Oops!', res.data.message, "error");
+                    }
+                    $('#editPermissionModal').modal('toggle');
+                })
+            }
+        };
+
+        $scope.submitModifyRole = function(data) {
+            if (data) {
+                Admin.modifyRole(data).then(function(res){
+                    if (res.status == 201) {
+                        var index = _.findIndex($scope.roles, function(o) { return o.id == data.id; });
+                        $scope.roles[index] = res.data;
+                        swal('Modified!','Role modified.','success');
+                    } else {
+                        swal('Oops!', res.data.message, "error");
+                    }
+                    $('#editRoleModal').modal('toggle');
+                })
+            }
+        };
+
         $scope.saveRole = function(data) {
             if (data && data.name) {
                 var roles = data.name.split(/[ ,]+/);

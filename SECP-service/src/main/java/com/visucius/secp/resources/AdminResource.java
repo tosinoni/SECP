@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.visucius.secp.Controllers.Admin.AdminController;
 import com.visucius.secp.Controllers.User.UserRegistrationController;
 import com.visucius.secp.DTO.AppCreateDTO;
+import com.visucius.secp.DTO.RolesOrPermissionDTO;
 import com.visucius.secp.DTO.UserRegistrationRequest;
 import com.visucius.secp.DTO.UserRegistrationResponse;
 import io.dropwizard.auth.Auth;
@@ -81,8 +82,8 @@ public class AdminResource {
     @POST
     @Timed
     @UnitOfWork
-    @Path("/roles/id{id}")
-    public Response updateRole(@Auth AppCreateDTO request, @PathParam("id") String id) {
+    @Path("/roles/id/{id}")
+    public Response updateRole(@Auth RolesOrPermissionDTO request, @PathParam("id") String id) {
         return adminController.updateRoles(request,id);
     }
 
@@ -90,7 +91,7 @@ public class AdminResource {
     @Timed
     @UnitOfWork
     @Path("/permissions/id/{id}")
-    public Response createPermissions(@Auth AppCreateDTO request, @PathParam("id") String id) {
+    public Response updatePermissions(@Auth RolesOrPermissionDTO request, @PathParam("id") String id) {
         return adminController.updatePermissions(request,id);
     }
 
