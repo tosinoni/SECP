@@ -102,6 +102,8 @@ public class GroupController {
                 entity(getGroupResponse(groups.get(0))).build();
         }
 
+        group.setDisplayname(getDisplayNameForGroup(group));
+        group.setAvatarurl(getAvatarForGroup(group));
         Group createdGroup = groupRepository.save(group);
         return Response.status(Response.Status.CREATED).entity(getGroupResponse(createdGroup)).build();
     }
@@ -135,6 +137,8 @@ public class GroupController {
     private Response updateOrCreateGroup(Group group, Set<Long> permissions, Set<Long> roles) {
         group.setPermissions(getPermissions(permissions));
         group.setRoles(getRoles(roles));
+        group.setAvatarurl(getAvatarForGroup(group));
+        group.setDisplayname(getDisplayNameForGroup(group));
 
         group.setUsers(this.findUsersWithRolesAndPermissions(group.getRoles(), group.getPermissions()));
         Group createdGroup = groupRepository.save(group);
@@ -153,7 +157,7 @@ public class GroupController {
     }
 
     public Response getAllGroups() {
-        List<Group> groups = groupRepository.findAll();
+        List<Group> groups = groupRepository.findAllPublicGroups();
 
         if (Util.isCollectionEmpty(groups)) {
             return Response.status(Response.Status.NO_CONTENT).build();

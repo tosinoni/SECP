@@ -34,6 +34,13 @@
                         ng-options="role.name for role in roles track by role.id" multiple>
                 </select>
 
+                <div ng-if="isuser">
+                    <br>Login Role:<br>
+                    <select select2 required class="permission-level-select" style="width: 100%" ng-model="modalData.loginRole"
+                            ng-options="role for role in loginRoles">
+                    </select>
+                </div>
+
                 <br><br>
                 <div ng-hide="isfilter">
                 <input type="checkbox" ng-model="modalData.isActive">

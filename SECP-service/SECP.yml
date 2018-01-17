@@ -8,14 +8,14 @@ database:
   user: root
   password:
 
-# url: jdbc:mysql://aaxtpk0cgefevd.cpppkhaefajm.us-east-2.rds.amazonaws.com:3306/ebdb
-#  user: secp
-#  password: Got2btuf
+  #url: jdbc:mysql://aaxtpk0cgefevd.cpppkhaefajm.us-east-2.rds.amazonaws.com:3306/ebdb
+  #user: secp
+  #password: Got2btuf
   validationQuery: select 1
   properties:
     hibernate.temp.use_jdbc_metadata_defaults: false
     hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
-#    hibernate.hbm2ddl.auto: update
+    #hibernate.hbm2ddl.auto: create
     hibernate.format_sql: true
 
   #driverClass: org.postgresql.Driver

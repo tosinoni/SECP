@@ -12,7 +12,7 @@
                 <a href="javascript:void(0);" class="btn btn-default"><i class="fa fa-spinner"></i> Load More Messages</a>
             </li>
 
-            <li ng-class="currentUser.userID !== message.senderId ? 'left' : 'right'" ng-repeat="message in formatedMessages track by message.id">
+            <li ng-class="currentUser.userID !== message.senderId ? 'left' : 'right'" ng-repeat="message in formatedMessages">
                 <span class="username">{{message.displayName}}</span>
                 <small class="timestamp">
                     <i class="fa fa-clock-o"></i>{{message.timestamp}}

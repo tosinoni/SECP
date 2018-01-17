@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.visucius.secp.models.Group;
+import com.visucius.secp.models.LoginRole;
 import com.visucius.secp.models.Permission;
 import com.visucius.secp.models.User;
 import org.apache.commons.lang3.StringUtils;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 
 public class UserDTO {
 
-    private static final String defaultUserAvatar = "https://user-images.githubusercontent.com/14824913/34922743-f386cabc-f961-11e7-84af-be3f61f41005.png";
+    public static final String defaultUserAvatar = "https://user-images.githubusercontent.com/14824913/34922743-f386cabc-f961-11e7-84af-be3f61f41005.png";
 
 
     @JsonProperty
@@ -57,6 +58,9 @@ public class UserDTO {
 
     @JsonProperty
     private Set<DeviceDTO> devices = new HashSet<>();
+
+    @JsonProperty
+    private LoginRole loginRole = LoginRole.NORMAL;
 
     public UserDTO()
     {
@@ -202,6 +206,14 @@ public class UserDTO {
     @JsonIgnore
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public LoginRole getLoginRole() {
+        return loginRole;
+    }
+
+    public void setLoginRole(LoginRole loginRole) {
+        this.loginRole = loginRole;
     }
 
     @Override

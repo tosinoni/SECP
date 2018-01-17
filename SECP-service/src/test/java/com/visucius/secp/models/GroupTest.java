@@ -130,7 +130,7 @@ public class GroupTest {
         assertEquals("NamedQueries[0]: name is not equal",
             "com.visucius.secp.models.Group.findByName", namedQueriesArray[0].name());
         assertEquals("NamedQueries[1]: name is not equal",
-            "com.visucius.secp.models.Group.findAllActiveGroups", namedQueriesArray[1].name());
+            "com.visucius.secp.models.Group.findAllPublicGroups", namedQueriesArray[1].name());
         assertEquals("NamedQueries[2]: name is not equal",
             "com.visucius.secp.models.Group.findGroupsForUser", namedQueriesArray[2].name());
         assertEquals("NamedQueries[3]: name is not equal",

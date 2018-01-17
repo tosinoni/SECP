@@ -2,6 +2,7 @@ package com.visucius.secp.daos;
 
 import com.google.common.base.Optional;
 import com.visucius.secp.models.Group;
+import com.visucius.secp.models.GroupType;
 import com.visucius.secp.models.User;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.HibernateException;
@@ -38,10 +39,11 @@ public class GroupDAO extends AbstractDAO<Group> {
         currentSession().delete(entity);
     }
 
-    public List<Group> findActiveGroups()
+    public List<Group> findAllPublicGroups()
     {
         return (List<Group>)
-            namedQuery("com.visucius.secp.models.Group.findAllActiveGroups").list();
+            namedQuery("com.visucius.secp.models.Group.findAllPublicGroups")
+                .setParameter("type", GroupType.PUBLIC).list();
     }
 
     public Group findByName(String name) {

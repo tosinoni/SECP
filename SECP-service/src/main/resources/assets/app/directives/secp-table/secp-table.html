@@ -29,6 +29,8 @@
             <td>{{row.numOfRoles}}</td>
             <td ng-if="row.numOfUsers>-1">{{row.numOfUsers}}</td>
             <td ng-if="row.numOfGroups>-1">{{row.numOfGroups}}</td>
+            <td ng-if="row.loginRole">{{row.loginRole}}</td>
+
             <td style="text-align: right">
                 <button ng-click="modify(row)">
                     <i class="fa fa-eye" aria-hidden="true"></i>
