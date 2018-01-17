@@ -100,6 +100,36 @@ public class AdminController {
         return Response.status(Response.Status.CREATED).entity(response).build();
     }
 
+    public Response updateRoles(RolesOrPermissionDTO request, String id) {
+        if(StringUtils.isEmpty(request.getColor()))
+        {
+            throw new WebApplicationException(AdminErrorMessage.REGISTER_ROLES_FAIL_INVALID_COLOR, Response.Status.BAD_REQUEST);
+        }
+
+        Role role = getRoleFromID(id);
+        role.setColor(request.getColor());
+        Role savedRole = rolesDAO.save(role);
+
+
+        return Response.status(Response.Status.CREATED).
+            entity(new RolesOrPermissionDTO(savedRole.getId(),savedRole.getRole(),savedRole.getColor())).build();
+    }
+
+    public Response updatePermissions(RolesOrPermissionDTO request, String id) {
+        if(StringUtils.isEmpty(request.getColor()))
+        {
+            throw new WebApplicationException(AdminErrorMessage.REGISTER_ROLES_FAIL_INVALID_COLOR, Response.Status.BAD_REQUEST);
+        }
+
+        Permission permission = getPermissionFromID(id);
+        permission.setColor(request.getColor());
+        Permission savedPermission = permissionDAO.save(permission);
+
+
+        return Response.status(Response.Status.CREATED).
+            entity(new RolesOrPermissionDTO(savedPermission.getId(),savedPermission.getLevel(),savedPermission.getColor())).build();
+    }
+
     public Response deleteRole(String roleID) {
         validateInput(roleID, roleErrorString);
         Role role = getRoleFromID(roleID);

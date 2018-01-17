@@ -208,8 +208,24 @@ angular.module('SECP')
                 }, function(err) {
                     return err;
                 });
+        },
+
+        modifyRole : function(data) {
+            return $http.post("/SECP/admin/roles/id/" + data.id, data)
+            .then(function(res) {
+                return res;
+            }, function(err) {
+                return err;
+            });
+        },
+
+        modifyPermission : function(data) {
+            return $http.post("/SECP/admin/permissions/id/" + data.id, data)
+            .then(function(res) {
+                return res;
+            }, function(err) {
+                return err;
+            });
         }
-
-
     }
   });

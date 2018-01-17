@@ -204,5 +204,5 @@
    white-space: -pre-wrap;     /* Opera <7 */
    white-space: -o-pre-wrap;   /* Opera 7 */
    word-wrap: break-word;      /* IE */
-   max-width: 230px;
+   max-width: 400px;
 }

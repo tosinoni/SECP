@@ -15,9 +15,12 @@ angular.module('SECP')
          },
         templateUrl: 'directives/secp-modal/secp-modal.html',
         link: function ($scope, element, attrs) {
+
+            $scope.$watch('data', function(data) {
+                $scope.modalData = angular.copy(data);
+            });
             $scope.saveInput = function() {
-                console.log($scope.data);
-                $scope.save({data:$scope.data});
+                $scope.save({data:$scope.modalData});
             }
         } //DOM manipulation
     };

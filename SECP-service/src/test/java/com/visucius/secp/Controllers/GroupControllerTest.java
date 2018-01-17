@@ -336,20 +336,23 @@ public class GroupControllerTest {
 
 
     @Test
-    public void createInvalidPrivateGroup()
+    public void createPrivateThatExistsGroup()
     {
+        Group group = new Group();
+        group.setId(GROUPID);
         UserDTO userDTO = new UserDTO(1);
         userDTO.setUsername("user1");
         User user = new User();
         user.setId(1);
         user.setUsername("user2");
-        List<User> users = new ArrayList<>();
-        users.add(user);
-        Mockito.when(groupDAO.findPrivateGroupForUsers(Matchers.anySet())).thenReturn(users);
+        List<Group> groups = new ArrayList<>();
+        groups.add(group);
+        Mockito.when(groupDAO.findPrivateGroupForUsers(Matchers.anySet())).thenReturn(groups);
         Mockito.when(userDAO.getUserWithDevices(Matchers.anyLong())).thenReturn(Optional.fromNullable( new User()));
-        exception.expect(WebApplicationException.class);
-        exception.expectMessage(GroupErrorMessages.PRIVATE_GROUP_EXISTS);
-        controller.createPrivateGroup(user,userDTO);
+        Response response =  controller.createPrivateGroup(user,userDTO);
+        Response validResponse = Response.status(Response.Status.OK).entity(getGroupResponse()).build();
+        assertEquals(response.getStatus(), validResponse.getStatus());
+        assertEquals(response.getEntity(),  validResponse.getEntity());
     }
 
     @Test

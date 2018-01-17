@@ -13,12 +13,14 @@ angular.module('SECP')
          },
         templateUrl: 'directives/chat-message/chat-message.html',
         link: function ($scope, element, attrs) {
+
             var getTime = function(time) {
                 if(time) {
                 var date = new Date(time);
                     return moment(date).startOf('hour').fromNow();
                 }
             }
+
              var getMessageObject = function(message) {
                 var obj = {};
                 obj.id = message.messageId;
@@ -69,6 +71,15 @@ angular.module('SECP')
 
              $scope.$watch('selectedChat', function(selectedChat) {
                   if(selectedChat && selectedChat.users) {
+
+                     if(selectedChat.groupType == "PRIVATE") {
+                        for (var user of selectedChat.users) {
+                            if($scope.currentUser.userID !== user.userID) {
+                                $scope.selectedChat.displayName = user.displayName;
+                                $scope.selectedChat.avatarUrl = user.avatarUrl;
+                            }
+                        }
+                     }
                      var obj = {};
                      for(var user of selectedChat.users) {
                          obj[user.userID] = user;

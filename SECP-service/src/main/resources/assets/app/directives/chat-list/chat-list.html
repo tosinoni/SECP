@@ -9,7 +9,7 @@
                 </span>
                 <div class="body">
                     <div class="header">
-                        <span class="username">{{contact.displayName}}</span>
+                        <span class="username">{{getDisplayName(contact)}}</span>
                         <small class="timestamp text-muted">
                             <i class="fa fa-clock-o"></i>{{getTime(contact.lastMessage.timestamp)}}
                         </small>

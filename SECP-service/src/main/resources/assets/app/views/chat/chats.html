@@ -16,7 +16,7 @@
                                 </div>
                             </div>
 
-                            <chat-list ng-show="!searching" contacts="contacts" contact-selected-fn="contactSelected(contact)"> </chat-list>
+                            <chat-list ng-show="!searching" contacts="contacts" contact-selected-fn="contactSelected(contact)" current-user="currentUser"> </chat-list>
                             <search-results ng-show="searching" result="result" contact-selected-fn="contactSelected(contact)"> </search-results>
                         </div>
                         <div class="col-md-8" id="chatBlock">

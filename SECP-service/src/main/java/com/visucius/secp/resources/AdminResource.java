@@ -4,11 +4,13 @@ import com.codahale.metrics.annotation.Timed;
 import com.visucius.secp.Controllers.Admin.AdminController;
 import com.visucius.secp.Controllers.User.UserRegistrationController;
 import com.visucius.secp.DTO.AppCreateDTO;
+import com.visucius.secp.DTO.RolesOrPermissionDTO;
 import com.visucius.secp.DTO.UserRegistrationRequest;
 import com.visucius.secp.DTO.UserRegistrationResponse;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -68,6 +70,22 @@ public class AdminResource {
     @Path("/permissions")
     public Response createPermissions(@Auth AppCreateDTO request) {
         return adminController.registerPermissions(request);
+    }
+
+    @POST
+    @Timed
+    @UnitOfWork
+    @Path("/roles/id/{id}")
+    public Response updateRole(@Auth RolesOrPermissionDTO request, @PathParam("id") String id) {
+        return adminController.updateRoles(request,id);
+    }
+
+    @POST
+    @Timed
+    @UnitOfWork
+    @Path("/permissions/id/{id}")
+    public Response updatePermissions(@Auth RolesOrPermissionDTO request, @PathParam("id") String id) {
+        return adminController.updatePermissions(request,id);
     }
 
     @DELETE
