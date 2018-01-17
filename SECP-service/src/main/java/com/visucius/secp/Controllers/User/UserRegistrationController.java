@@ -58,7 +58,7 @@ public class UserRegistrationController{
                 Permission permission = getPermission(request.permission.getId());
                 user.setPermission(permission);
                 User createdUser = userDAO.save(user);
-                UserDTO createdUserDTO = new UserDTO(user);
+                UserDTO createdUserDTO = new UserDTO(createdUser);
                 return Response.status(Response.Status.CREATED).entity(createdUserDTO).build();
 
             } catch (PasswordUtil.CannotPerformOperationException e) {
@@ -77,8 +77,6 @@ public class UserRegistrationController{
 
     private String validateInput(UserRegistrationRequest request)
     {
-        List<String> errors = new ArrayList<>();
-
         if(!InputValidator.isNameValid(request.firstName))
         {
             return  UserErrorMessage.FIRST_NAME_INVALID;
