@@ -2,6 +2,7 @@ package com.visucius.secp.resources;
 
 import com.google.common.base.Optional;
 import com.visucius.secp.Controllers.GroupController;
+import com.visucius.secp.Controllers.User.UserProfileController;
 import com.visucius.secp.daos.*;
 import com.visucius.secp.helpers.ResponseValidator;
 import com.visucius.secp.models.Group;
@@ -25,8 +26,9 @@ public class GroupResourceTest {
     private GroupDAO groupDAO = Mockito.mock(GroupDAO.class);
     private RolesDAO rolesDAO = Mockito.mock(RolesDAO.class);
     private PermissionDAO permissionDAO = Mockito.mock(PermissionDAO.class);
+    private UserProfileController userProfileController = Mockito.mock(UserProfileController.class);
 
-    private GroupController groupController  = new GroupController(groupDAO, userDAO, rolesDAO, permissionDAO);
+    private GroupController groupController  = new GroupController(groupDAO, userDAO, rolesDAO, permissionDAO, userProfileController);
 
     @Rule
     public final ResourceTestRule resources = ResourceTestRule.builder()
@@ -42,7 +44,7 @@ public class GroupResourceTest {
 
         //testing with roles in db
         Group group = new Group("developer");
-        Mockito.when(groupDAO.findAll()).thenReturn(Arrays.asList(group));
+        Mockito.when(groupDAO.findAllPublicGroups()).thenReturn(Arrays.asList(group));
         response = resources.client().target(groupsUrl).request().get();
         ResponseValidator.validate(response, 200);
     }

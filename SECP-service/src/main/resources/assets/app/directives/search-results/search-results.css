@@ -1,0 +1,75 @@
+@media (max-width: 767px) {
+.chat .chat-wrapper .chat-list-wrapper {
+    border: 1px solid #ddd;
+    height: 250px;
+    overflow-y: auto;
+}
+.chat .chat-wrapper .chat-list-wrapper .chat-list {
+    padding: 0;
+}
+.chat .chat-wrapper .chat-list-wrapper .chat-list li {
+    display: block;
+    padding: 20px 10px;
+    clear: both;
+    border-bottom: 1px solid #ddd;
+}
+.chat .chat-wrapper .chat-list-wrapper .chat-list li .avatar {
+    display: none;
+}
+.chat .chat-wrapper .chat-list-wrapper .chat-list li .body .header {
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+.chat .chat-wrapper .chat-list-wrapper .chat-list li .body .header .username {
+    font-weight: bold;
+}
+.chat .chat-wrapper .chat-list-wrapper .chat-list li .body .header .timestamp {
+    float: right;
+    color: #999;
+    font-size: 11px;
+    line-height: 18px;
+    font-style: italic;
+}
+.chat .chat-wrapper .chat-list-wrapper .chat-list li .body .header .timestamp i {
+    margin-right: 4px;
+}
+.chat .chat-wrapper .chat-list-wrapper .chat-list li .body p {
+    display: none;
+}
+.chat .chat-wrapper .chat-list-wrapper .chat-list li.active {
+    color: black;
+}
+.chat .chat-wrapper .chat-list-wrapper .chat-list li.active .body .timestamp {
+    color: black;
+}
+}
+
+@media screen and (max-width: 991px) {
+    div.slimScrollDiv, div.chat-list-wrapper {
+        height: 250px;
+    }
+}
+
+.search-results-hr{
+    margin-bottom: 0px;
+    margin-top: 5px;
+}
+
+.search-results-header{
+    padding: 15px 0px 0px 10px;
+}
+
+.closeSearch{
+    float: right;
+    margin: 5px 5px 5px 0px;
+}
+
+#searchResultsDiv{
+    -webkit-transition: all linear 1s;
+    -moz-transition: all linear 1s;
+    transition: all linear 1s;
+}
+
+#searchResultsDiv.ng-hide{
+    opacity:0;
+}

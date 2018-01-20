@@ -12,10 +12,10 @@ import java.util.List;
 public class UserRegistrationResponse extends ResponseMessage {
 
     @JsonIgnore
-    public Response.Status status;
+    private Response.Status status;
 
     @JsonIgnore
-    public List<String> errors;
+    private List<String> errors;
 
     @JsonProperty
     private long userID;
@@ -58,5 +58,13 @@ public class UserRegistrationResponse extends ResponseMessage {
         {
             return "";
         }
+    }
+
+    public Response.Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Response.Status status) {
+        this.status = status;
     }
 }

@@ -3,6 +3,7 @@ package com.visucius.secp.Controllers;
 import com.google.common.base.Optional;
 import com.google.common.collect.Sets;
 import com.visucius.secp.Controllers.User.UserErrorMessage;
+import com.visucius.secp.Controllers.User.UserProfileController;
 import com.visucius.secp.DTO.*;
 import com.visucius.secp.daos.GroupDAO;
 import com.visucius.secp.daos.PermissionDAO;
@@ -17,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,15 +32,22 @@ public class GroupController {
     private UserDAO userRepository;
     private RolesDAO rolesRepository;
     private PermissionDAO permissionsRepository;
+    private UserProfileController userProfileController;
+
+    private static final String publicGroupAvatar = "https://user-images.githubusercontent.com/14824913/34922739-e9cbf830-f961-11e7-9a92-a4559596162f.png";
+    private static final String privateGroupAvatar = "https://user-images.githubusercontent.com/14824913/34922743-f386cabc-f961-11e7-84af-be3f61f41005.png";
+
 
     public GroupController(GroupDAO groupRepository,
                            UserDAO userRepository,
                            RolesDAO rolesRepository,
-                           PermissionDAO permissionDAO) {
+                           PermissionDAO permissionDAO,
+                           UserProfileController userProfileController) {
         this.groupRepository = groupRepository;
         this.userRepository = userRepository;
         this.rolesRepository = rolesRepository;
         this.permissionsRepository = permissionDAO;
+        this.userProfileController = userProfileController;
     }
 
 
@@ -93,6 +102,8 @@ public class GroupController {
                 entity(getGroupResponse(groups.get(0))).build();
         }
 
+        group.setDisplayname(getDisplayNameForGroup(group));
+        group.setAvatarurl(getAvatarForGroup(group));
         Group createdGroup = groupRepository.save(group);
         return Response.status(Response.Status.CREATED).entity(getGroupResponse(createdGroup)).build();
     }
@@ -126,6 +137,8 @@ public class GroupController {
     private Response updateOrCreateGroup(Group group, Set<Long> permissions, Set<Long> roles) {
         group.setPermissions(getPermissions(permissions));
         group.setRoles(getRoles(roles));
+        group.setAvatarurl(getAvatarForGroup(group));
+        group.setDisplayname(getDisplayNameForGroup(group));
 
         group.setUsers(this.findUsersWithRolesAndPermissions(group.getRoles(), group.getPermissions()));
         Group createdGroup = groupRepository.save(group);
@@ -144,7 +157,7 @@ public class GroupController {
     }
 
     public Response getAllGroups() {
-        List<Group> groups = groupRepository.findAll();
+        List<Group> groups = groupRepository.findAllPublicGroups();
 
         if (Util.isCollectionEmpty(groups)) {
             return Response.status(Response.Status.NO_CONTENT).build();
@@ -256,29 +269,64 @@ public class GroupController {
                     message.getTimestamp()));
         });
 
+        if(!Util.isCollectionEmpty(groupDTO.getMessages())) {
+            Comparator<MessageDTO> comp = Comparator.comparingLong(MessageDTO::getMessageId);
+            MessageDTO lastMessage = groupDTO.getMessages().stream().max(comp).get();
+            groupDTO.setLastMessage(lastMessage);
+        }
+
+        groupDTO.setDisplayName(getDisplayNameForGroup(group));
+        groupDTO.setAvatarUrl(getAvatarForGroup(group));
         return groupDTO;
     }
 
-    private GroupDTO getGroupResponse(Group group) {
+    private String getAvatarForGroup(Group group) {
+        String groupAvatar = group.getAvatarurl();
+
+        if(StringUtils.isEmpty(groupAvatar)) {
+            if(group.getGroupType() == null || group.getGroupType().equals(GroupType.PUBLIC)) {
+                groupAvatar = publicGroupAvatar;
+            } else {
+                groupAvatar = privateGroupAvatar;
+            }
+        }
+
+        return groupAvatar;
+    }
+
+    private String getDisplayNameForGroup(Group group) {
+        String displayName = group.getDisplayname();
+
+        if(StringUtils.isEmpty(displayName)) {
+            displayName =  group.getName();
+        }
+
+        return displayName;
+    }
+
+    public GroupDTO getGroupResponse(Group group) {
         GroupDTO groupDTO = new GroupDTO(group.getId());
         groupDTO.setName(group.getName());
         groupDTO.setNumOfPermissions(group.getPermissions().size());
         groupDTO.setNumOfRoles(group.getRoles().size());
         groupDTO.setActive(group.isActive());
+        groupDTO.setDisplayName(getDisplayNameForGroup(group));
+        groupDTO.setAvatarUrl(getAvatarForGroup(group));
+        groupDTO.setGroupType(group.getGroupType());
 
         Set<UserDTO> users = getUsersInGroup(group).stream().filter(user -> user.isActive())
             .map(user -> {
-                return new UserDTO(user.getId(), getDevicesForUser(user),user.getUsername());
+                return userProfileController.getUserProfileResponse(user);
             }).collect(Collectors.toSet());
 
         Set<RolesOrPermissionDTO> roles = group.getRoles().stream()
             .map(role -> {
-                return new RolesOrPermissionDTO(role.getId(), role.getRole());
+                return new RolesOrPermissionDTO(role.getId(), role.getRole(), role.getColor());
             }).collect(Collectors.toSet());
 
         Set<RolesOrPermissionDTO> permissions = group.getPermissions().stream()
             .map(permission -> {
-                return new RolesOrPermissionDTO(permission.getId(), permission.getLevel());
+                return new RolesOrPermissionDTO(permission.getId(), permission.getLevel(), permission.getColor());
             }).collect(Collectors.toSet());
 
         groupDTO.setUsers(users);
@@ -293,15 +341,6 @@ public class GroupController {
         Set<User> users = new HashSet<>();
         Util.addAllIfNotNull(users, group.getUsers());
         return users;
-    }
-
-    private Set<DeviceDTO> getDevicesForUser(User user) {
-        //return devices that have a public key
-        return user.getDevices().stream()
-            .filter(device -> !StringUtils.isEmpty(device.getPublicKey()))
-            .map(device -> {
-                return new DeviceDTO(device.getId(), device.getPublicKey());
-            }).collect(Collectors.toSet());
     }
 
     private User getUser(long userID) {

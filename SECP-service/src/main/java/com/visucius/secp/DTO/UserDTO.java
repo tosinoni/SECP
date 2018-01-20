@@ -4,13 +4,22 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.visucius.secp.models.Group;
+import com.visucius.secp.models.LoginRole;
+import com.visucius.secp.models.Permission;
+import com.visucius.secp.models.User;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.URL;
 
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class UserDTO {
+
+    public static final String defaultUserAvatar = "https://user-images.githubusercontent.com/14824913/34922743-f386cabc-f961-11e7-84af-be3f61f41005.png";
+
+
     @JsonProperty
     private long userID;
 
@@ -50,6 +59,9 @@ public class UserDTO {
     @JsonProperty
     private Set<DeviceDTO> devices = new HashSet<>();
 
+    @JsonProperty
+    private LoginRole loginRole = LoginRole.NORMAL;
+
     public UserDTO()
     {
 
@@ -57,6 +69,32 @@ public class UserDTO {
 
     public UserDTO(long userID) {
         this.userID = userID;
+    }
+
+    public UserDTO(User user){
+        this.userID = user.getId();
+        this.username = user.getUsername();
+        this.firstName = user.getFirstname();
+        this.lastName = user.getLastname();
+        this.avatarUrl = getAvatarForUser(user);
+        this.displayName = getDisplayNameForUser(user);
+
+        Set<RolesOrPermissionDTO> roles = user.getRoles().stream()
+            .map(role -> {
+                return new RolesOrPermissionDTO(role.getId(), role.getRole());
+            }).collect(Collectors.toSet());
+
+        Permission userPermission = user.getPermission();
+
+        RolesOrPermissionDTO permissionForUser = new RolesOrPermissionDTO();
+        if(userPermission != null) {
+            permissionForUser.setId(userPermission.getId());
+            permissionForUser.setName(userPermission.getLevel());
+        }
+
+        this.permission = permissionForUser;
+        this.numOfRoles = user.getRoles().size();
+        this.roles = roles;
     }
 
     public UserDTO(long userID, Set<DeviceDTO> devices) {
@@ -170,12 +208,40 @@ public class UserDTO {
         isActive = active;
     }
 
+    public LoginRole getLoginRole() {
+        return loginRole;
+    }
+
+    public void setLoginRole(LoginRole loginRole) {
+        this.loginRole = loginRole;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof UserDTO)) return false;
         UserDTO u = (UserDTO) o;
         return userID == u.userID && devices.equals(u.devices);
+    }
+
+    private String getAvatarForUser(User user) {
+        String avatarUrl = user.getAvatarUrl();
+
+        if(StringUtils.isEmpty(avatarUrl)) {
+            avatarUrl =  defaultUserAvatar;
+        }
+
+        return avatarUrl;
+    }
+
+    private String getDisplayNameForUser(User user) {
+        String displayName = user.getDisplayName();
+
+        if(StringUtils.isEmpty(displayName)) {
+            displayName =  user.getUsername();
+        }
+
+        return displayName;
     }
 
     @Override

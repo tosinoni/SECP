@@ -2,8 +2,12 @@ angular.module('SECP')
     .controller('ConfigureController', function ($scope, Admin, SwalService) {
         $scope.roles = [];
         $scope.permissions = [];
-        $scope.roleHeaders = ['Role'];
-        $scope.permissionHeaders = ['Permission Level'];
+        $scope.roleHeaders = ['Role', 'Color'];
+        $scope.permissionHeaders = ['Permission Level', 'Color'];
+        $scope.newPermissionObj = {};
+        $scope.editPermissionObj = {};
+        $scope.newRoleObj = {};
+        $scope.editRoleObj = {};
 
         var permissions = document.getElementById("permissionTableDiv");
         var roles = document.getElementById("rolesTableDiv");
@@ -82,10 +86,24 @@ angular.module('SECP')
             SwalService.delete(deleteRoleFunction);
         };
 
-        $scope.savePermission = function() {
-            if ($scope.permissionInput) {
-                var permissions = $scope.permissionInput.split(/[ ,]+/);
-                Admin.addPermissions(permissions).then(function(res){
+
+        $scope.editPermissionModalFn = function(row) {
+            $scope.editPermissionObj = row;
+            $('#editPermissionModal').modal('toggle');
+        };
+
+        //this function gets the data to populate the modal and open the modal
+        $scope.editRoleModalFn = function(row) {
+            $scope.editRoleObj = row;
+            $('#editRoleModal').modal('toggle');
+        };
+
+        $scope.savePermission = function(data) {
+            if (data && data.name) {
+                var permissions = data.name.split(/[ ,]+/);
+                var obj = {permissions: permissions, color: data.color};
+                console.log(obj);
+                Admin.addPermissions(obj).then(function(res){
                     if (res.status == 201) {
                         $scope.permissions = $scope.permissions.concat(res.data);
                         swal('Added!', 'permission was successfully added', "success");
@@ -98,10 +116,43 @@ angular.module('SECP')
             }
         };
 
-        $scope.saveRole = function() {
-            if ($scope.roleInput) {
-                var roles = $scope.roleInput.split(/[ ,]+/);
-                Admin.addRoles(roles).then(function(res){
+        //this function handles the information provided by the edit modal
+        $scope.submitModifyPermission = function(data) {
+            if (data) {
+                Admin.modifyPermission(data).then(function(res){
+                    console.log(res);
+                    if (res.status == 201) {
+                        var index = _.findIndex($scope.permissions, function(o) { return o.id == data.id; });
+                        $scope.permissions[index] = res.data;
+                        swal('Modified!','Permission modified.','success');
+                    } else {
+                        swal('Oops!', res.data.message, "error");
+                    }
+                    $('#editPermissionModal').modal('toggle');
+                })
+            }
+        };
+
+        $scope.submitModifyRole = function(data) {
+            if (data) {
+                Admin.modifyRole(data).then(function(res){
+                    if (res.status == 201) {
+                        var index = _.findIndex($scope.roles, function(o) { return o.id == data.id; });
+                        $scope.roles[index] = res.data;
+                        swal('Modified!','Role modified.','success');
+                    } else {
+                        swal('Oops!', res.data.message, "error");
+                    }
+                    $('#editRoleModal').modal('toggle');
+                })
+            }
+        };
+
+        $scope.saveRole = function(data) {
+            if (data && data.name) {
+                var roles = data.name.split(/[ ,]+/);
+                var obj = {roles: roles, color: data.color};
+                Admin.addRoles(obj).then(function(res){
                     if (res.status == 201) {
                         $scope.roles = $scope.roles.concat(res.data);
                         swal('Added!', 'roles was successfully added', "success");

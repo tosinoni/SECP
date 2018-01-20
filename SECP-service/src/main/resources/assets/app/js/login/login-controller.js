@@ -18,7 +18,7 @@ angular.module('SECP')
         $scope.registerDevice = function () {
             var deviceName = new Fingerprint().get();
             var username = localStorage.getItem('username');
-            var userID = localStorage.getItem('user');
+            var userID = localStorage.getItem('userID');
 
             Auth.isDeviceRegisteredForUser(userID, deviceName).then(function (status) {
                 if (!status) {

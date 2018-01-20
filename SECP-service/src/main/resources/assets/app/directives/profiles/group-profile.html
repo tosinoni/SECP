@@ -1,0 +1,37 @@
+<div class="animated fadeInRight" id="groupProfileModal">
+    <div class="profile-actions">
+        <i class="fa fa-close hoverable" id="closeProfile" ng-click="closeProfile()"></i>
+        <i class="fa fa-pencil hoverable" id="openEditProfile" data-toggle="modal" data-target="#editProfile"></i>
+    </div>
+    <div id="groupprofile">
+            <div>
+                <img src="{{group.avatarUrl}}" class="img-responsive img-circle">
+            </div>
+            <h4 id="group-name">{{group.displayName}}</h4>
+            <div id="user-security-settings">
+                <h3 class="profile-list-heading">Permission Level</h3>
+                <div class="profile-list-group">
+                    <div class="profile-list-group-item" ng-repeat="permission in group.permissions" ng-style="{borderColor: permission.color}">{{permission.name}}</div>
+                </div>
+                <h3 class="profile-list-heading">Role(s)</h3>
+                <div class="profile-list-group">
+                    <div class="profile-list-group-item" ng-repeat="role in group.roles" ng-style="{borderColor: role.color}">{{role.name}}</div>
+                </div>
+            </div>
+            <div id="user-list">
+                <h3 class="profile-list-heading">Group Members</h3>
+
+                <div class="all-users-in-group user-in-group-box">
+                    <div class="user-in-group recipient-username hoverable" ng-repeat="user in group.users">
+                        <img src="{{user.avatarUrl}}" class="img-responsive img-circle" style="width: 40px; display: inline; vertical-align: middle">
+                        {{user.displayName}}
+                        <br>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+</div>
+<edit-profile-modal displayname="{{group.displayName}}" imgurl="{{group.avatarUrl}}"></edit-profile-modal>
+
+<link type="text/css" rel="stylesheet" href="directives/profiles/group-profile.css"/>

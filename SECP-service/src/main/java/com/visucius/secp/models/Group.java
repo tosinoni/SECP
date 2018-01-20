@@ -1,5 +1,7 @@
 package com.visucius.secp.models;
 
+import org.hibernate.validator.constraints.URL;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
@@ -15,16 +17,20 @@ import java.util.Set;
             query = "from Group g where g.name = :name"
         ),
         @NamedQuery(
-            name = "com.visucius.secp.models.Group.findAllActiveGroups",
-            query = "select g from Group g where g.isActive = true"
+            name = "com.visucius.secp.models.Group.findAllPublicGroups",
+            query = "select g from Group g where g.groupType = :type"
         ),
         @NamedQuery(
             name = "com.visucius.secp.models.Group.findGroupsForUser",
-            query = "select g from Group g join g.permissions p join g.roles r where p.id = :permissionID and r.id in (:roleIDS)"
+            query = "select g from Group g join g.permissions p join g.roles r where p.id = :permissionID and (r is null or r.id in (:roleIDS))"
         ),
         @NamedQuery(
             name = "com.visucius.secp.models.Group.findPrivateGroupForUsers",
             query = "select g from Group g inner join g.users u where u in :users and g.groupType = 'PRIVATE' group by g having count (u) = 2"
+        ),
+        @NamedQuery(
+            name = "com.visucius.secp.models.Group.search",
+            query = "from Group g where lower(g.name) like lower(:value)"
         )
     }
 )
@@ -61,6 +67,13 @@ public class Group {
 
     @Column(name = "isActive", nullable = false)
     private boolean isActive = true;
+
+    @URL
+    @Column(name = "avatar_url", nullable = false)
+    private String avatarurl;
+
+    @Column(name = "display_name", nullable = false)
+    private String displayname;
 
     @Enumerated(value = EnumType.STRING)
     @Column(name = "group_type", nullable = false)
@@ -129,6 +142,22 @@ public class Group {
 
     public GroupType getGroupType() {
         return groupType;
+    }
+
+    public String getAvatarurl() {
+        return avatarurl;
+    }
+
+    public void setAvatarurl(String avatarurl) {
+        this.avatarurl = avatarurl;
+    }
+
+    public String getDisplayname() {
+        return displayname;
+    }
+
+    public void setDisplayname(String displayname) {
+        this.displayname = displayname;
     }
 
     @Override

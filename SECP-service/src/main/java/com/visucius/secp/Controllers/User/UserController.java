@@ -172,6 +172,7 @@ public class UserController {
         user.setPermission(getPermission(userDTO.getPermission()));
         user.setRoles(getRoles(userDTO.getRoles()));
         user.setIsActive(userDTO.isActive());
+        user.setLoginRole(userDTO.getLoginRole());
 
         //adding user to groups
         user.setGroups(getUserGroups(user));
@@ -205,6 +206,7 @@ public class UserController {
         //remove user from old group
         Set<Group> oldGroups = Sets.difference(user.getGroups(), groupsForUser);
         oldGroups.stream()
+            .filter(group -> group.getGroupType().equals(GroupType.PUBLIC))
             .map(group -> {
                 group.getUsers().remove(user);
                 groupDAO.save(group);
@@ -284,15 +286,16 @@ public class UserController {
         userDTO.setLastName(user.getLastname());
         userDTO.setNumOfRoles(user.getRoles().size());
         userDTO.setActive(user.isActive());
+        userDTO.setLoginRole(user.getLoginRole());
 
-        Set<GroupDTO> groups = getGroupsForUser(user).stream().filter(group -> group.isActive())
+        Set<GroupDTO> groups = getGroupsForUser(user).stream().filter(group -> group.isActive() && group.getGroupType().equals(GroupType.PUBLIC))
             .map(group -> {
                 return new GroupDTO(group.getId());
             }).collect(Collectors.toSet());
 
         Set<RolesOrPermissionDTO> roles = user.getRoles().stream()
             .map(role -> {
-                return new RolesOrPermissionDTO(role.getId(), role.getRole());
+                return new RolesOrPermissionDTO(role.getId(), role.getRole(), role.getColor());
             }).collect(Collectors.toSet());
 
         Permission userPermission = user.getPermission();
@@ -302,6 +305,7 @@ public class UserController {
         if (userPermission != null) {
             permissionForUser.setId(userPermission.getId());
             permissionForUser.setName(userPermission.getLevel());
+            permissionForUser.setColor(userPermission.getColor());
         }
 
         userDTO.setPermission(permissionForUser);

@@ -1,3 +1,6 @@
+.container {
+    max-width: 100% !important ;
+}
 body{margin-top:20px;}
 
 /* Component: Chat */
@@ -118,4 +121,14 @@ div.slimScrollDiv, div.chat-list-wrapper {
 }
 .border-top-green {
     border-top: 4px solid #27ae60 !important;
+}
+#profileBlock {
+    height: 550px;
+    display: none;
+}
+#chatBlock {
+    -webkit-transition: width 0.3s ease, margin 0.3s ease;
+    -moz-transition: width 0.3s ease, margin 0.3s ease;
+    -o-transition: width 0.3s ease, margin 0.3s ease;
+    transition: width 0.3s ease, margin 0.3s ease;
 }

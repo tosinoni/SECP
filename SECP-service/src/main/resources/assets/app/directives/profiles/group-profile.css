@@ -1,0 +1,64 @@
+@import url("https://fonts.googleapis.com/css?family=Raleway:400,700");
+#groupprofile{
+    margin-bottom: 50px;
+    text-align: center;
+    font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+#group-name, .profile-list-heading{
+    font-size: 1.1em;
+    font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+#groupprofile img{
+    margin: 0 auto;
+    border: 7px solid #fff;
+    display: block;
+    height: 35%;
+    width: 35%;
+    border-radius: 50%;
+}
+#user-security-settings, #user-list {
+    text-align: left;
+}
+.profile-list-group{
+    max-height: 200px;
+    overflow: auto;
+}
+.profile-list-group-item {
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    float:left;
+    border-radius: 5px;
+    border: 1px solid;
+    padding: 5px;
+    margin: 5px;
+}
+
+.all-users-in-group{
+    list-style-type: none;
+}
+
+.user-in-group{
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    margin: 5px;
+}
+.hoverable {
+    cursor: pointer;
+}
+.user-in-group-box{
+    display: block;
+    width: 100%;
+    margin-bottom: 0;
+}
+
+#groupProfileModal{
+    padding-top: 10px;
+}
+#openEditProfile{
+    display: inline;
+    float: right;
+}
+#closeProfile{
+    display: inline;
+    float: left;
+}

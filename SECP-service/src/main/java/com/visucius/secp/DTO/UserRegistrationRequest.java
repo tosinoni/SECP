@@ -2,6 +2,9 @@ package com.visucius.secp.DTO;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class UserRegistrationRequest {
 
     @JsonProperty
@@ -14,16 +17,13 @@ public class UserRegistrationRequest {
     public String userName;
 
     @JsonProperty
-    public String displayName;
-
-    @JsonProperty
     public String email;
 
     @JsonProperty
     public String password;
 
     @JsonProperty
-    public String avatar_url;
+    public RolesOrPermissionDTO permission;
 
     public UserRegistrationRequest()
     {
@@ -39,11 +39,13 @@ public class UserRegistrationRequest {
         this.password = password;
     }
 
-    public String getDisplayName(){ return this.displayName; }
-
-    public void setDisplayName(String displayName){ this.displayName = displayName; }
-
-    public String getAvatar_url(){ return avatar_url; }
-
-    public void setAvatar_url(String avatar_url){ this.avatar_url = avatar_url;}
+    public UserRegistrationRequest(String firstName, String lastName, String userName , String email, String password, RolesOrPermissionDTO permission)
+    {
+        this.firstName = firstName;
+        this.lastName =lastName;
+        this.userName = userName;
+        this.email = email;
+        this.password = password;
+        this.permission = permission;
+    }
 }

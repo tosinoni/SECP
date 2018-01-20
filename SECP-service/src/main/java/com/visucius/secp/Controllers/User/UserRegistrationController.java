@@ -1,15 +1,21 @@
 package com.visucius.secp.Controllers.User;
 
+import com.google.common.base.Optional;
+import com.visucius.secp.DTO.UserDTO;
 import com.visucius.secp.DTO.UserRegistrationRequest;
 import com.visucius.secp.DTO.UserRegistrationResponse;
+import com.visucius.secp.daos.PermissionDAO;
 import com.visucius.secp.daos.UserDAO;
+import com.visucius.secp.models.Permission;
 import com.visucius.secp.models.User;
 import com.visucius.secp.util.InputValidator;
 import com.visucius.secp.util.PasswordUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,35 +25,43 @@ public class UserRegistrationController{
     private static final Logger LOG = LoggerFactory.getLogger(UserRegistrationController.class);
 
     private final UserDAO userDAO;
+    private final PermissionDAO permissionDAO;
 
-
-
-    public UserRegistrationController(UserDAO userDAO)
+    public UserRegistrationController(UserDAO userDAO, PermissionDAO permissionDAO)
     {
+
         this.userDAO = userDAO;
+        this.permissionDAO = permissionDAO;
     }
 
-    public UserRegistrationResponse registerUser(UserRegistrationRequest request) {
+    public Response registerUser(UserRegistrationRequest request) {
 
-        List<String> errors = validateInput(request);
+        String error= validateInput(request);
         if(isUsernameValid(request.userName)) {
-            errors.add(UserErrorMessage.DUPLICATE_USERNAME);
+            throw new WebApplicationException(
+                UserErrorMessage.DUPLICATE_USERNAME,
+                Response.Status.BAD_REQUEST);
         }
 
         if(isEmailValid(request.email))
         {
-            errors.add(UserErrorMessage.DUPLICATE_EMAIL);
+            throw new WebApplicationException(
+                UserErrorMessage.DUPLICATE_EMAIL,
+                Response.Status.BAD_REQUEST);
         }
 
-        if(errors.isEmpty())
+        if(error.isEmpty())
         {
             try {
                 String hashPassword = PasswordUtil.createHash(request.password);
                 User user = new User(request.firstName, request.lastName, request.userName, request.email, hashPassword);
-                user.setAvatarUrl(request.avatar_url);
-                user.setDisplayName(request.displayName);
+                user.setAvatarUrl(UserDTO.defaultUserAvatar);
+                user.setDisplayName(request.userName);
+                Permission permission = getPermission(request.permission.getId());
+                user.setPermission(permission);
                 User createdUser = userDAO.save(user);
-                return new UserRegistrationResponse(true, UserErrorMessage.USER_CREATED, Response.Status.CREATED, errors, createdUser.getId());
+                UserDTO createdUserDTO = new UserDTO(createdUser);
+                return Response.status(Response.Status.CREATED).entity(createdUserDTO).build();
 
             } catch (PasswordUtil.CannotPerformOperationException e) {
                 LOG.error(e.getLocalizedMessage());
@@ -58,45 +72,39 @@ public class UserRegistrationController{
             }
         }
 
-        return new UserRegistrationResponse(false, UserErrorMessage.USER_NOT_CREATED, Response.Status.BAD_REQUEST,errors);
+        throw new WebApplicationException(
+            error,
+            Response.Status.BAD_REQUEST);
     }
 
-    private List<String> validateInput(UserRegistrationRequest request)
+    private String validateInput(UserRegistrationRequest request)
     {
-        List<String> errors = new ArrayList<>();
-
         if(!InputValidator.isNameValid(request.firstName))
         {
-            errors.add(UserErrorMessage.FIRST_NAME_INVALID);
+            return  UserErrorMessage.FIRST_NAME_INVALID;
         }
 
         if(!InputValidator.isNameValid(request.lastName))
         {
-            errors.add(UserErrorMessage.LAST_NAME_INVALID);
+            return UserErrorMessage.LAST_NAME_INVALID;
 
         }
         if(!InputValidator.isNameValid(request.userName))
         {
-            errors.add(UserErrorMessage.User_NAME_INVALID);
-        }
-        if(!InputValidator.isNameValid(request.displayName)){
-            errors.add(UserErrorMessage.DISPLAY_NAME_INVALID);
+             return UserErrorMessage.User_NAME_INVALID;
         }
         if(!InputValidator.isEmailValid(request.email))
         {
-            errors.add(UserErrorMessage.EMAIL_INVALID);
+            return UserErrorMessage.EMAIL_INVALID;
 
-        }
-        if(!InputValidator.isAvatarURLValid(request.avatar_url)){
-            errors.add(UserErrorMessage.AVATAR_URL_FAILED_NO_AVATAR_URL);
         }
 
         if(!InputValidator.isPasswordValid(request.password))
         {
-            errors.add(UserErrorMessage.PASSWORD_INVALID);
+            return UserErrorMessage.PASSWORD_INVALID;
         }
 
-        return errors;
+        return "";
     }
 
     public boolean isUsernameValid(String userName)
@@ -113,5 +121,18 @@ public class UserRegistrationController{
     {
         return userDAO.findByEmail(email) != null;
     }
+
+    private Permission getPermission(long id)
+    {
+        Optional<Permission> permissionOptional = this.permissionDAO.find(id);
+        if(!permissionOptional.isPresent())
+        {
+            throw new WebApplicationException(
+                UserErrorMessage.MODIFY_USER_FAIL_PERMISSIONS_INVALID,
+                Response.Status.BAD_REQUEST);
+        }
+        return permissionOptional.get();
+    }
+
 }
 

@@ -2,6 +2,7 @@ package com.visucius.secp.Controllers.User;
 
 
 import com.google.common.base.Optional;
+import com.visucius.secp.DTO.DeviceDTO;
 import com.visucius.secp.DTO.RolesOrPermissionDTO;
 import com.visucius.secp.DTO.UserDTO;
 import com.visucius.secp.models.Permission;
@@ -23,6 +24,9 @@ public class UserProfileController {
 
     private final UserDAO userDAO;
 
+    private static final String defaultUserAvatar = "https://user-images.githubusercontent.com/14824913/34922743-f386cabc-f961-11e7-84af-be3f61f41005.png";
+
+
     public UserProfileController(UserDAO userDAO){
         this.userDAO = userDAO;
     }
@@ -42,15 +46,8 @@ public class UserProfileController {
         return Response.status(Response.Status.OK).entity(getUserProfileResponse(user)).build();
     }
 
-    public Response getProfile(String userID){
-        if(StringUtils.isBlank(userID) || !StringUtils.isNumeric(userID)) {
-            LOG.warn("Empty user id provided.");
-            throw new WebApplicationException(UserErrorMessage.USER_ID_INVALID, Response.Status.NO_CONTENT);
-        }
-
-        long id = Long.parseLong(userID);
+    public Response getProfile(long id){
         User user = getUser(id);
-
         return Response.status(Response.Status.OK).entity(getUserProfileResponse(user)).build();
     }
 
@@ -71,19 +68,20 @@ public class UserProfileController {
     private User getUser(long userID){
         Optional<User> userOptional = userDAO.find(userID);
         if (!userOptional.isPresent()){
-            throw new WebApplicationException(UserErrorMessage.USER_ID_INVALID,Response.Status.BAD_REQUEST);
+            throw new WebApplicationException(UserErrorMessage.USER_ID_INVALID,Response.Status.NO_CONTENT);
         }
 
         return userOptional.get();
     }
 
-    private UserDTO getUserProfileResponse(User user){
+    public UserDTO getUserProfileResponse(User user){
         UserDTO userDTO = new UserDTO(user.getId());
         userDTO.setUsername(user.getUsername());
         userDTO.setFirstName(user.getFirstname());
         userDTO.setLastName(user.getLastname());
-        userDTO.setAvatarUrl(user.getAvatarUrl());
-        userDTO.setDisplayName(user.getDisplayName());
+        userDTO.setAvatarUrl(getAvatarForUser(user));
+        userDTO.setDisplayName(getDisplayNameForUser(user));
+        userDTO.setDevices(getDevicesForUser(user));
 
         Set<RolesOrPermissionDTO> roles = user.getRoles().stream()
             .map(role -> {
@@ -103,5 +101,34 @@ public class UserProfileController {
         userDTO.setRoles(roles);
 
         return userDTO;
+    }
+
+    private String getDisplayNameForUser(User user) {
+        String displayName = user.getDisplayName();
+
+        if(StringUtils.isEmpty(displayName)) {
+            displayName =  user.getUsername();
+        }
+
+        return displayName;
+    }
+
+    private String getAvatarForUser(User user) {
+        String avatarUrl = user.getAvatarUrl();
+
+        if(StringUtils.isEmpty(avatarUrl)) {
+            avatarUrl =  defaultUserAvatar;
+        }
+
+        return avatarUrl;
+    }
+
+    private Set<DeviceDTO> getDevicesForUser(User user) {
+        //return devices that have a public key
+        return user.getDevices().stream()
+            .filter(device -> !StringUtils.isEmpty(device.getPublicKey()))
+            .map(device -> {
+                return new DeviceDTO(device.getId(), device.getPublicKey());
+            }).collect(Collectors.toSet());
     }
 }

@@ -60,6 +60,15 @@
                         <label>Confirm Password</label>
                         <span class="error" ng-show="frm.password_c.$error.noMatch && frm.password.$dirty">Passwords do not match.</span>
                     </div>
+                    <div class="group">
+                        <label>Permission Level</label>
+                        <br><br>
+                        <select select2 class="permission-level-select" style="width: 100%" id="permissionLevel" name="permissionlevel" ng-model="user.permission" required="required" value=""
+                                ng-options="permission.name for permission in permissions track by permission.id">
+                        </select>
+                        <span class="highlight"></span>
+                        <span class="bar"></span>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer btn-box">

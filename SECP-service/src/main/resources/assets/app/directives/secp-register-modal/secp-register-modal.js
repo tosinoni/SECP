@@ -21,6 +21,12 @@ angular.module('SECP')
                 $scope.user = {};
                 $scope.password_conf = null;
             }
+            //getting the permissions
+            Admin.getPermissions().then(function(res) {
+                if (res) {
+                    $scope.permissions = res;
+                }
+            });
         } //DOM manipulation
     };
 });

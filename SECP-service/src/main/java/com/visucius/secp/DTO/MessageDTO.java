@@ -60,6 +60,14 @@ public class MessageDTO {
         return body;
     }
 
+    public long getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(long messageId) {
+        this.messageId = messageId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof MessageDTO)) {

@@ -9,13 +9,18 @@ angular.module('SECP')
             title: '@',
             body: '@',
             name: '@',
-            ngModel: '=',
-            save: '&saveFn'
+            data: '=',
+            save: '&saveFn',
+            disableInput: '='
          },
         templateUrl: 'directives/secp-modal/secp-modal.html',
         link: function ($scope, element, attrs) {
+
+            $scope.$watch('data', function(data) {
+                $scope.modalData = angular.copy(data);
+            });
             $scope.saveInput = function() {
-                $scope.save();
+                $scope.save({data:$scope.modalData});
             }
         } //DOM manipulation
     };

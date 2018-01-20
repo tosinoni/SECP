@@ -11,7 +11,9 @@ import com.visucius.secp.Controllers.MessageController;
 import com.visucius.secp.Controllers.User.LoginRequestController;
 import com.visucius.secp.Controllers.TokenController;
 import com.visucius.secp.Controllers.User.UserController;
+import com.visucius.secp.Controllers.User.UserProfileController;
 import com.visucius.secp.Controllers.User.UserRegistrationController;
+import com.visucius.secp.Controllers.chat.ChatController;
 import com.visucius.secp.auth.SECPAuthenticator;
 import com.visucius.secp.auth.SECPAuthorizer;
 import com.visucius.secp.auth.TokenAuthFilter;
@@ -118,15 +120,16 @@ public class SECPService extends Application<SECPConfiguration> {
 
 
         //********************** Register Services/Controllers *********************************
-        final UserRegistrationController userRegistrationController = new UserRegistrationController(userDAO);
+        final UserRegistrationController userRegistrationController = new UserRegistrationController(userDAO,permissionDAO);
         final TokenController tokenController = new TokenController(configuration);
         final LoginRequestController loginRequestController = new LoginRequestController(tokenController, userDAO);
         final UserController userController = new UserController(userDAO, deviceDAO, permissionDAO, rolesDAO, groupDAO);
         final AdminController adminController = new AdminController(userDAO, rolesDAO, permissionDAO);
-        final GroupController groupController = new GroupController(groupDAO,userDAO,rolesDAO, permissionDAO);
+        final UserProfileController userProfileController = new UserProfileController(userDAO);
         final FilterController filterController = new FilterController(filterDAO, rolesDAO, permissionDAO);
+        final GroupController groupController = new GroupController(groupDAO,userDAO,rolesDAO, permissionDAO, userProfileController);
         final MessageController messageController = new MessageController(messageDAO);
-
+        final ChatController chatController = new ChatController(userDAO, groupDAO, userProfileController, groupController);
 
         //********************** Register authentication for User *****************************
 
@@ -156,6 +159,8 @@ public class SECPService extends Application<SECPConfiguration> {
             new EntryResource(loginRequestController));
         environment.jersey().register(new AdminResource(adminController, userRegistrationController));
         environment.jersey().register(new UserResource(userController, userRegistrationController));
+        environment.jersey().register(new ChatResource(chatController));
+        environment.jersey().register(new UserProfileResource(userProfileController));
         environment.jersey().register(
             new FilterResource(filterController));
 
