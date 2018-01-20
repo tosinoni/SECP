@@ -19,10 +19,11 @@ angular.module('SECP')
                     $scope.createGroupData = {};
                     $scope.groups.push(res.data);
                     swal('Added!','New group added.','success');
+                    $('#groupModal').modal('toggle');
                 } else {
                     swal('Oops!', res.data.message, "error");
+                    $('#groupModal').modal('toggle');
                 }
-                $('#groupModal').modal('toggle');
             });
         };
 
