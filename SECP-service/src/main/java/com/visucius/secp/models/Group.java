@@ -24,7 +24,7 @@ import java.util.Set;
         ),
         @NamedQuery(
             name = "com.visucius.secp.models.Group.findPrivateGroupForUsers",
-            query = "select g from Group g join g.users u where u in (:users) and g.groupType ='PRIVATE'"
+            query = "select g from Group g inner join g.users u where u in :users and g.groupType = 'PRIVATE' group by g having count (u) = 2"
         )
     }
 )

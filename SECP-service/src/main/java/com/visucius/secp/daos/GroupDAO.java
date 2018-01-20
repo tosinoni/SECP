@@ -60,6 +60,6 @@ public class GroupDAO extends AbstractDAO<Group> {
     public List<Group> findPrivateGroupForUsers(Set<User> users)
     {
         return (List<Group>) namedQuery("com.visucius.secp.models.Group.findPrivateGroupForUsers").
-            setParameterList("users",users).list();
+            setParameter("users",users).list();
     }
 }
