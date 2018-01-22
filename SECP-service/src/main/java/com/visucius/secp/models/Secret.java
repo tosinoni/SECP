@@ -5,6 +5,14 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "secret")
+@NamedQueries(
+    {
+        @NamedQuery(
+            name = "com.visucius.secp.models.Secret.findSecretForDevice",
+            query = "from Secret s where s.groupID = :groupID and s.device.id = :deviceID"
+        )
+    }
+)
 public class Secret {
 
     @Id
@@ -27,10 +35,11 @@ public class Secret {
     {
     }
 
-    public Secret(long groupID, String encryptedSecret) {
+    public Secret(long groupID, String encryptedSecret, Device device) {
 
         this.encryptedSecret = encryptedSecret;
         this.groupID = groupID;
+        this.device = device;
     }
 
     public long getId(){return id;}

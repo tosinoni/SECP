@@ -8,11 +8,8 @@ import com.visucius.secp.Controllers.Admin.AdminController;
 import com.visucius.secp.Controllers.FilterController;
 import com.visucius.secp.Controllers.GroupController;
 import com.visucius.secp.Controllers.MessageController;
-import com.visucius.secp.Controllers.User.LoginRequestController;
+import com.visucius.secp.Controllers.User.*;
 import com.visucius.secp.Controllers.TokenController;
-import com.visucius.secp.Controllers.User.UserController;
-import com.visucius.secp.Controllers.User.UserProfileController;
-import com.visucius.secp.Controllers.User.UserRegistrationController;
 import com.visucius.secp.Controllers.chat.ChatController;
 import com.visucius.secp.auth.SECPAuthenticator;
 import com.visucius.secp.auth.SECPAuthorizer;
@@ -131,6 +128,8 @@ public class SECPService extends Application<SECPConfiguration> {
         final GroupController groupController = new GroupController(groupDAO,userDAO,rolesDAO, permissionDAO, userProfileController);
         final MessageController messageController = new MessageController(messageDAO);
         final ChatController chatController = new ChatController(userDAO, groupDAO, userProfileController, groupController);
+        final DeviceController deviceController = new DeviceController(userDAO, groupDAO, deviceDAO);
+
 
         //********************** Register authentication for User *****************************
 
@@ -162,8 +161,9 @@ public class SECPService extends Application<SECPConfiguration> {
         environment.jersey().register(new UserResource(userController, userRegistrationController));
         environment.jersey().register(new ChatResource(chatController));
         environment.jersey().register(new UserProfileResource(userProfileController));
-        environment.jersey().register(
-            new FilterResource(filterController));
+        environment.jersey().register(new FilterResource(filterController));
+        environment.jersey().register(new DeviceResource(deviceController));
+
 
         //************************** Error Handling *************************************
         final ErrorPageErrorHandler epeh = new ErrorPageErrorHandler();

@@ -61,7 +61,7 @@ angular.module('SECP')
             sendSecretKeysToGroup: function (senderID, group) {
                 if(group && group.users) {
                     var message = {};
-                    var secretKey =  uuid.v4();
+                    var secretKey = cryptico.generateAESKey();
                     console.log(secretKey);
                     var users = group.users;
                     for (var user of users) {

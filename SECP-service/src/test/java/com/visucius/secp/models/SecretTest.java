@@ -9,7 +9,7 @@ import static org.junit.Assert.assertEquals;
 public class SecretTest {
     @Test
     public void testSecretForEntityAndTable() {
-        AssertAnnotations.assertType(Secret.class, Entity.class, Table.class);
+        AssertAnnotations.assertType(Secret.class, Entity.class, Table.class, NamedQueries.class);
     }
 
     @Test
@@ -62,4 +62,16 @@ public class SecretTest {
         assertEquals("JoinColumn device: nullable is true", false, joinColumn.nullable());
     }
 
+    @Test
+    public void testNamedQueries() {
+
+        //testing the @JoinTable annotation
+        NamedQueries namedQueries = ReflectTool.getClassAnnotation(Secret.class, NamedQueries.class);
+        assertEquals("NamedQueries:  size is not equal", 1, namedQueries.value().length);
+
+        NamedQuery[] namedQueriesArray = namedQueries.value();
+
+        assertEquals("NamedQueries[0]: name is not equal",
+            "com.visucius.secp.models.Secret.findSecretForDevice", namedQueriesArray[0].name());
+    }
 }

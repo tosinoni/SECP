@@ -100,7 +100,7 @@ create table IF NOT EXISTS filter_roles (
         primary key (filter_id, role_id)
 ) engine=MyISAM;
 
-create table secret (
+create table IF NOT EXISTS secret (
     id bigint not null,
     encrypted_secret longtext not null,
     group_id bigint not null,

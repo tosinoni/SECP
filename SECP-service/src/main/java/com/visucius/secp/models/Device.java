@@ -34,7 +34,7 @@ public class Device {
     @ManyToMany(mappedBy = "devices", fetch = FetchType.LAZY)
     private Set<User> users = new HashSet<>();
 
-    @OneToMany(mappedBy = "device", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "device", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Secret> groupSecrets = new HashSet<>();
 
     public Device() {
@@ -97,6 +97,6 @@ public class Device {
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.name, this.id, this.publicKey, this.users, this.groupSecrets);
+        return Objects.hash(this.name, this.id, this.publicKey);
     }
 }
