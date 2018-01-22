@@ -1,16 +1,12 @@
 package com.visucius.secp.resources;
 
 import com.visucius.secp.Controllers.User.DeviceController;
-import com.visucius.secp.DTO.DeviceDTO;
 import com.visucius.secp.DTO.SecretDTO;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.annotation.security.RolesAllowed;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Set;
@@ -32,5 +28,12 @@ public class DeviceResource {
     @Path("/secret")
     public Response addSecretGroupForDevices(@Auth Set<SecretDTO> secretDTOS) {
         return deviceController.addSecretGroupForDevices(secretDTOS);
+    }
+
+    @GET
+    @UnitOfWork
+    @Path("/group/{id}")
+    public Response getDevicesForGroup(@Auth @PathParam("id") long groupID) {
+        return deviceController.getDevicesForGroup(groupID);
     }
 }
