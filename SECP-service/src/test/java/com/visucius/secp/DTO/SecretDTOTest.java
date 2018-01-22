@@ -13,6 +13,13 @@ public class SecretDTOTest {
     }
 
     @Test
+    public void testUserID() {
+        SecretDTO secretDTO = new SecretDTO();
+        secretDTO.setUserID(1);
+        assertEquals("user id is not equal", 1, secretDTO.getUserID());
+    }
+
+    @Test
     public void testDeviceID() {
         SecretDTO secretDTO = new SecretDTO();
         secretDTO.setDeviceID(1);
@@ -28,8 +35,9 @@ public class SecretDTOTest {
 
     @Test
     public void testConstructor() {
-        SecretDTO secretDTO = new SecretDTO(1, 1, "hello");
+        SecretDTO secretDTO = new SecretDTO(1, 1, 1, "hello");
         assertEquals("group id is not equal", 1, secretDTO.getGroupID());
+        assertEquals("user id is not equal", 1, secretDTO.getUserID());
         assertEquals("device id is not equal", 1, secretDTO.getDeviceID());
         assertEquals("encrypted secret is not equal", "hello", secretDTO.getEncryptedSecret());
     }

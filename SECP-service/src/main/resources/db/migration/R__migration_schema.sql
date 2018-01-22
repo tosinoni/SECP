@@ -104,6 +104,7 @@ create table IF NOT EXISTS secret (
     id bigint not null,
     encrypted_secret longtext not null,
     group_id bigint not null,
+    user_id bigint not null,
     device_id bigint not null,
     primary key (id)
 ) engine=MyISAM

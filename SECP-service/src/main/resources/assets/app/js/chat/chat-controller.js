@@ -2,9 +2,10 @@
 
 angular.module('SECP')
   .controller('ChatController',
-    function ($scope, $modal, Chat, Socket) {
+    function ($scope, Chat, Socket, EncryptionService) {
       //declaring variables
       $scope.contacts = [];
+      $scope.secretKeysObj = [];
       $scope.searching = false;
 
       Chat.getCurrentUser().then(function(user) {
@@ -12,6 +13,13 @@ angular.module('SECP')
             $scope.currentUser = user;
         }
       });
+
+      EncryptionService.getDecryptedSecretKeys().then(function (keys) {
+          if(keys) {
+              console.log(keys);
+              $scope.secretKeysObj = keys;
+          }
+      })
 
       $scope.clicked = false;
       Socket.onmessage(function (message) {

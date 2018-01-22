@@ -2,6 +2,7 @@ package com.visucius.secp.resources;
 
 import com.visucius.secp.Controllers.User.DeviceController;
 import com.visucius.secp.DTO.SecretDTO;
+import com.visucius.secp.models.User;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 
@@ -27,7 +28,7 @@ public class DeviceResource {
     @UnitOfWork
     @Path("/secret")
     public Response addSecretGroupForDevices(@Auth Set<SecretDTO> secretDTOS) {
-        return deviceController.addSecretGroupForDevices(secretDTOS);
+        return deviceController.addSecretKeyForDevices(secretDTOS);
     }
 
     @GET
@@ -35,5 +36,12 @@ public class DeviceResource {
     @Path("/group/{id}")
     public Response getDevicesForGroup(@Auth @PathParam("id") long groupID) {
         return deviceController.getDevicesForGroup(groupID);
+    }
+
+    @GET
+    @UnitOfWork
+    @Path("/{name}/secret")
+    public Response getSecretKeysForDevice(@Auth User user, @PathParam("name") String deviceName) {
+        return deviceController.getDeviceSecretForUser(user, deviceName);
     }
 }

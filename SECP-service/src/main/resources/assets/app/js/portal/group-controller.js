@@ -20,6 +20,7 @@ angular.module('SECP')
                     $scope.groups.push(res.data);
                     swal('Added!','New group added.','success');
                     $('#groupModal').modal('toggle');
+                    EncryptionService.sendSecretKeysToGroup(res.data.groupID);
                 } else {
                     swal('Oops!', res.data.message, "error");
                     $('#groupModal').modal('toggle');

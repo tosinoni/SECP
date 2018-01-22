@@ -34,8 +34,19 @@ public class SecretTest {
         Column c = ReflectTool.getFieldAnnotation(Secret.class, "groupID", Column.class);
 
         assertEquals("column groupID:  name is not equal", "group_id", c.name());
-        assertEquals("column groupID: unique is false", true, c.unique());
         assertEquals("column groupID: nullable is true", false, c.nullable());
+    }
+
+    @Test
+    public void testUserId() {
+        //testing all the annotations on the groupID field
+        AssertAnnotations.assertField( Secret.class, "userID", Column.class);
+
+        //testing the @column annotation
+        Column c = ReflectTool.getFieldAnnotation(Secret.class, "userID", Column.class);
+
+        assertEquals("column userID:  name is not equal", "user_id", c.name());
+        assertEquals("column userID: nullable is true", false, c.nullable());
     }
 
     @Test
@@ -67,11 +78,13 @@ public class SecretTest {
 
         //testing the @JoinTable annotation
         NamedQueries namedQueries = ReflectTool.getClassAnnotation(Secret.class, NamedQueries.class);
-        assertEquals("NamedQueries:  size is not equal", 1, namedQueries.value().length);
+        assertEquals("NamedQueries:  size is not equal", 2, namedQueries.value().length);
 
         NamedQuery[] namedQueriesArray = namedQueries.value();
 
         assertEquals("NamedQueries[0]: name is not equal",
             "com.visucius.secp.models.Secret.findSecretForDevice", namedQueriesArray[0].name());
+        assertEquals("NamedQueries[1]: name is not equal",
+            "com.visucius.secp.models.Secret.findSecretForUserDevice", namedQueriesArray[1].name());
     }
 }

@@ -52,4 +52,10 @@ public class DeviceDAO extends AbstractDAO<Device> {
             .setParameter("deviceID",deviceID).uniqueResult();
     }
 
+    public List<Secret> findSecretForUserDevice(long userID, long deviceID) {
+        return (List<Secret>) namedQuery("com.visucius.secp.models.Secret.findSecretForUserDevice")
+            .setParameter("userID",userID)
+            .setParameter("deviceID",deviceID).list();
+    }
+
 }

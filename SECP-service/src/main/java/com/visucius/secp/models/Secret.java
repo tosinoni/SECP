@@ -10,6 +10,10 @@ import java.util.Objects;
         @NamedQuery(
             name = "com.visucius.secp.models.Secret.findSecretForDevice",
             query = "from Secret s where s.groupID = :groupID and s.device.id = :deviceID"
+        ),
+        @NamedQuery(
+            name = "com.visucius.secp.models.Secret.findSecretForUserDevice",
+            query = "from Secret s where s.userID = :userID and s.device.id = :deviceID"
         )
     }
 )
@@ -20,8 +24,11 @@ public class Secret {
     @Column(name = "id", unique = true, nullable = false)
     private long id;
 
-    @Column(name = "group_id", nullable = false, unique = true)
+    @Column(name = "group_id", nullable = false)
     private long groupID;
+
+    @Column(name = "user_id", nullable = false)
+    private long userID;
 
     @Lob
     @Column(name = "encrypted_secret", nullable = false)
@@ -35,11 +42,12 @@ public class Secret {
     {
     }
 
-    public Secret(long groupID, String encryptedSecret, Device device) {
+    public Secret(long groupID, long userID, String encryptedSecret, Device device) {
 
         this.encryptedSecret = encryptedSecret;
         this.groupID = groupID;
         this.device = device;
+        this.userID = userID;
     }
 
     public long getId(){return id;}
@@ -70,17 +78,25 @@ public class Secret {
         this.device = device;
     }
 
+    public long getUserID() {
+        return userID;
+    }
+
+    public void setUserID(long userID) {
+        this.userID = userID;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Secret)) return false;
         Secret groupSecret = (Secret) o;
         return id == groupSecret.id && groupID == groupSecret.groupID && encryptedSecret.equals(groupSecret.encryptedSecret)
-            && device.equals(groupSecret.device);
+            && device.equals(groupSecret.device) && userID == groupSecret.userID;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.id,this.encryptedSecret, this.groupID, this.device);
+        return Objects.hash(this.id, this.userID, this.encryptedSecret, this.groupID, this.device);
     }
 }

@@ -30,7 +30,7 @@ public class DeviceController {
         this.userDAO = userDAO;
     }
 
-    public Response addSecretGroupForDevices(Set<SecretDTO> secretDTOS) {
+    public Response addSecretKeyForDevices(Set<SecretDTO> secretDTOS) {
         if (Util.isCollectionEmpty(secretDTOS)) {
             throw new WebApplicationException(UserErrorMessage.SECRET_ADD_FAIL_NO_DEVICE, Response.Status.BAD_REQUEST);
         }
@@ -39,6 +39,27 @@ public class DeviceController {
         addSecretKeyForDevice(secretDTOS);
 
         return Response.status(Response.Status.OK).build();
+    }
+
+    public Response getDeviceSecretForUser(User user, String deviceName) {
+        if (StringUtils.isEmpty(deviceName)) {
+            throw new WebApplicationException(UserErrorMessage.DEVICE_GET_FAIL_NO_DEVICE_EXISTS, Response.Status.NO_CONTENT);
+        }
+
+        Device device = deviceDAO.findByDeviceName(deviceName);
+
+        if(device == null) {
+            throw new WebApplicationException(UserErrorMessage.DEVICE_GET_FAIL_NO_DEVICE_EXISTS, Response.Status.NO_CONTENT);
+        }
+
+        List<Secret> secretsForUserDevice = deviceDAO.findSecretForUserDevice(user.getId(), device.getId());
+
+        Set<SecretDTO> secretDTOS = new HashSet<>();
+        for (Secret secret : secretsForUserDevice) {
+            secretDTOS.add(new SecretDTO(secret));
+        }
+
+        return Response.status(Response.Status.OK).entity(secretDTOS).build();
     }
 
     private void addSecretKeyForDevice(Set<SecretDTO> secretDTOS) {
@@ -52,7 +73,7 @@ public class DeviceController {
                 if (secret != null) {
                     secret.setEncryptedSecret(secretDTO.getEncryptedSecret());
                 } else {
-                    secret = new Secret(secretDTO.getGroupID(), secretDTO.getEncryptedSecret(), device);
+                    secret = new Secret(secretDTO.getGroupID(), secretDTO.getUserID(), secretDTO.getEncryptedSecret(), device);
                 }
 
                 device.getGroupSecrets().add(secret);
@@ -74,7 +95,12 @@ public class DeviceController {
         Set<DeviceDTO> devices = new HashSet<>();
 
         //get all the devices for users
-        devices.addAll(getDevicesForUser(group.getUsers()));
+        Set<DeviceDTO> deviceDTOSForUsers = getDevicesForUser(group.getUsers());
+        if (Util.isCollectionEmpty(deviceDTOSForUsers)) {
+            throw new WebApplicationException(UserErrorMessage.DEVICE_GET_FAIL_NO_DEVICE_EXISTS, Response.Status.NO_CONTENT);
+        }
+
+        devices.addAll(deviceDTOSForUsers);
         //get all the devices for admins
         List<User> admins = userDAO.findAdmins();
 
@@ -124,6 +150,12 @@ public class DeviceController {
 
             if (!groupOptional.isPresent()) {
                 throw new WebApplicationException(UserErrorMessage.SECRET_ADD_FAIL_INVALID_GROUP, Response.Status.BAD_REQUEST);
+            }
+
+            Optional<User> userOptional = userDAO.find(secretDTO.getUserID());
+
+            if (!userOptional.isPresent()) {
+                throw new WebApplicationException(UserErrorMessage.USER_ID_INVALID, Response.Status.BAD_REQUEST);
             }
 
             Optional<Device> deviceOptional = deviceDAO.find(secretDTO.getDeviceID());
