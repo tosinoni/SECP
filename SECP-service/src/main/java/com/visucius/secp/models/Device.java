@@ -1,7 +1,5 @@
 package com.visucius.secp.models;
 
-import com.google.common.collect.Sets;
-
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
@@ -35,6 +33,9 @@ public class Device {
 
     @ManyToMany(mappedBy = "devices", fetch = FetchType.LAZY)
     private Set<User> users = new HashSet<>();
+
+    @OneToMany(mappedBy = "device", fetch = FetchType.LAZY)
+    private Set<Secret> groupSecrets = new HashSet<>();
 
     public Device() {
 
@@ -77,17 +78,25 @@ public class Device {
         this.publicKey = publicKey;
     }
 
+    public Set<Secret> getGroupSecrets() {
+        return groupSecrets;
+    }
+
+    public void setGroupSecrets(Set<Secret> groupSecrets) {
+        this.groupSecrets = groupSecrets;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Device)) return false;
         Device d = (Device) o;
         return id == d.id && name.equals(d.name) && publicKey.equals(d.publicKey)
-            && users.containsAll(d.users) && d.users.size() == users.size();
+            && users.containsAll(d.users) && d.users.size() == users.size() && groupSecrets.equals(d.groupSecrets);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.name, this.id, this.publicKey);
+        return Objects.hash(this.name, this.id, this.publicKey, this.users, this.groupSecrets);
     }
 }

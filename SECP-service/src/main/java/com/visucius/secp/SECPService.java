@@ -57,6 +57,7 @@ public class SECPService extends Application<SECPConfiguration> {
             Filter.class,
             Permission.class,
             Device.class,
+            Secret.class,
             Void.class
         ) {
         @Override

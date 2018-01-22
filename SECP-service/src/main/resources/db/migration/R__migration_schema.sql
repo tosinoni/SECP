@@ -100,6 +100,13 @@ create table IF NOT EXISTS filter_roles (
         primary key (filter_id, role_id)
 ) engine=MyISAM;
 
+create table secret (
+    id bigint not null,
+    encrypted_secret longtext not null,
+    group_id bigint not null,
+    device_id bigint not null,
+    primary key (id)
+) engine=MyISAM
 
 #********************** Column changes for table should be added here ************************
 #Alter TABLE Users ADD COLUMN if not exists isActive BOOLEAN DEFAULT TRUE;
