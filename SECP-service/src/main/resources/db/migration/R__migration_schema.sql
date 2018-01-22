@@ -9,6 +9,9 @@ create table IF NOT EXISTS Groups (
         id bigint not null,
         name varchar(255) not null,
         isActive BOOLEAN not null DEFAULT TRUE,
+        avatar_url VARCHAR (255) not NULL,
+        display_name VARCHAR(255) NOT NULL,
+        group_type VARCHAR(255) NOT NULL,
         primary key (id)
 ) engine=MyISAM;
 
@@ -67,6 +70,8 @@ create table IF NOT EXISTS Users(
         username varchar(255) not null,
         permission_id bigint not null,
         isActive BOOLEAN not null DEFAULT TRUE,
+        avatar_url VARCHAR (255) not NULL,
+        display_name VARCHAR(255) NOT NULL,
         primary key (id)
 ) engine=MyISAM;
 
@@ -107,17 +112,17 @@ create table IF NOT EXISTS secret (
     user_id bigint not null,
     device_id bigint not null,
     primary key (id)
-) engine=MyISAM
+) engine=MyISAM;
 
 #********************** Column changes for table should be added here ************************
-#Alter TABLE Users ADD COLUMN if not exists isActive BOOLEAN DEFAULT TRUE;
-#Alter TABLE Groups ADD COLUMN if not exists isActive BOOLEAN DEFAULT TRUE;
-#ALTER TABLE Groups ADD COLUMN if not exists group_type VARCHAR(255);
+#Alter TABLE Users ADD COLUMN isActive BOOLEAN DEFAULT TRUE;
+#Alter TABLE Groups ADD COLUMN isActive BOOLEAN DEFAULT TRUE;
+#ALTER TABLE Groups ADD COLUMN group_type VARCHAR(255);
 #DROP TABLE IF EXISTS user_permissions;
-#ALTER TABLE Users ADD COLUMN if not exists permission_id bigint;
-#ALTER TABLE Users ADD COLUMN if not exists display_name VARCHAR(255);
-#ALTER TABLE Users ADD COLUMN if not exists avatar_url VARCHAR (255);
-#ALTER TABLE Roles ADD COLUMN if not exists color VARCHAR(255);
-#ALTER TABLE Permissions ADD COLUMN if not exists color VARCHAR(255);
-#ALTER TABLE Groups ADD COLUMN if not exists avatar_url VARCHAR (255);
-#ALTER TABLE Groups ADD COLUMN if not exists display_name VARCHAR(255);
+#ALTER TABLE Users ADD COLUMN permission_id bigint;
+#ALTER TABLE Users ADD COLUMN display_name VARCHAR(255);
+#ALTER TABLE Users ADD COLUMN avatar_url VARCHAR (255);
+#ALTER TABLE Roles ADD COLUMN color VARCHAR(255);
+#ALTER TABLE Permissions ADD COLUMN color VARCHAR(255);
+#ALTER TABLE Groups ADD COLUMN avatar_url VARCHAR (255);
+#ALTER TABLE Groups ADD COLUMN display_name VARCHAR(255);

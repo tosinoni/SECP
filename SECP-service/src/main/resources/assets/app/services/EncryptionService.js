@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('SECP')
-    .factory('EncryptionService', function(Socket, Device) {
+    .factory('EncryptionService', function($scope, Socket, Device, $q) {
 
+        decryptSecretKeysForDevice();
         function sendSecretKeyToDevices (groupID, devices) {
             var deviceDTOS = [];
             var secretKey = cryptico.generateAESKey();
@@ -28,25 +29,32 @@ angular.module('SECP')
         }
 
         function decryptSecretKeysForDevice() {
-            var deferred = $q.defer();
-
-            setTimeout(function() {
-                Device.getSecretKeysForDevice().then(function (keys) {
-                    if (keys) {
+                Device.getSecretKeysForDevice().then(function (secretDTOS) {
+                    if (secretDTOS) {
                         var obj = {};
+                        var userID = localStorage.getItem('userID');
                         localforage.getItem(userID, function (err, userObj) {
                             var privateKey = cryptico.fromJSON(userObj.keypair);
-                            for (var key of keys) {
-                                obj[key.groupID] = cryptico.decrypt(key, privateKey);
+
+                            for (var secretDTO of secretDTOS) {
+                                var decryptedKey = cryptico.decrypt(secretDTO.encryptedSecret, privateKey);
+                                if(decryptedKey.status !== "failure") {
+                                    obj[secretDTO.groupID] = decryptedKey;
+                                }
                             }
 
-                            deferred.resolve(obj);
+                            $scope.userSecretKeys = obj;
                         })
                     }
                 });
-            }, 200);
+        }
 
-            return deferred.promise;
+        function sendSecretKeysToUser(user) {
+            if (user.loginRole == "ADMIN") {
+                //send all the group key to the user
+            } else {
+                
+            }
         }
 
         return {

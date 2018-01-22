@@ -40,6 +40,13 @@ public class DeviceResource {
 
     @GET
     @UnitOfWork
+    @Path("/user/{id}")
+    public Response getDevicesForUser(@Auth @PathParam("id") long userID) {
+        return deviceController.getDevicesForUser(userID);
+    }
+
+    @GET
+    @UnitOfWork
     @Path("/{name}/secret")
     public Response getSecretKeysForDevice(@Auth User user, @PathParam("name") String deviceName) {
         return deviceController.getDeviceSecretForUser(user, deviceName);

@@ -5,7 +5,7 @@ angular.module('SECP')
     var userID = localStorage.getItem('userID');
     var host = location.host;
     //var socket = new WebSocket("ws://" + host + "/chat/" + userID);
-    var socket = new WebSocket("ws://localhost:8080/" + userID);
+    var socket = new WebSocket("ws://localhost:8080/chat/" + userID);
 
       return {
         onopen: function (callback) {

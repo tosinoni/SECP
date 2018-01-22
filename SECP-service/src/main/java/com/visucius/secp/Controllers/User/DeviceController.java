@@ -62,6 +62,9 @@ public class DeviceController {
         return Response.status(Response.Status.OK).entity(secretDTOS).build();
     }
 
+    public Response getDevicesForUser(long userID) {
+    }
+
     private void addSecretKeyForDevice(Set<SecretDTO> secretDTOS) {
 
         for (SecretDTO secretDTO : secretDTOS) {

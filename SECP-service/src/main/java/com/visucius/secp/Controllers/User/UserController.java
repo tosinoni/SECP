@@ -286,7 +286,8 @@ public class UserController {
         userDTO.setActive(user.isActive());
         userDTO.setLoginRole(user.getLoginRole());
 
-        Set<GroupDTO> groups = getGroupsForUser(user).stream().filter(group -> group.isActive() && group.getGroupType().equals(GroupType.PUBLIC))
+        Set<GroupDTO> groups = getGroupsForUser(user).stream()
+            .filter(group -> group.isActive() && group.getGroupType().equals(GroupType.PUBLIC))
             .map(group -> {
                 return new GroupDTO(group.getId());
             }).collect(Collectors.toSet());
