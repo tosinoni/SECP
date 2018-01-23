@@ -97,6 +97,15 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
             isAdmin: isAdmin
           }
       })
+      .when('/portal/audit/ledger', {
+          templateUrl: 'views/portal/audit-ledger.html',
+          controller:'PortalController',
+          css: 'css/portal.css',
+          requiresLogin: true,
+          resolve: {
+              isAdmin: isAdmin
+          }
+      })
       .when('/portal/manage', {
           templateUrl: 'views/portal/manage.html',
           controller:'PortalController',
