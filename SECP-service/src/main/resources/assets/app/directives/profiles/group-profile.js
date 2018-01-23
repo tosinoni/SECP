@@ -10,13 +10,30 @@ angular.module('SECP')
          },
         templateUrl: 'directives/profiles/group-profile.html',
         link: function ($scope, element, attrs) {
-            var modal = document.getElementById("editModal");
+            $scope.isPrivateChat = false;
             $scope.$watch('id', function(id) {
-                  Group.getProfile(id).then(function(group) {
-                      if(group) {
-                          $scope.group = group;
-                      }
-                  });
+                Group.getProfile(id).then(function(group) {
+                    if(group) {
+                        //If there are only two users in the group, that means that there
+                        //should not be an edit or member section.
+                        if(group.users.length === 2){
+                            $scope.isPrivateChat = true;
+                            const localUserID = localStorage.getItem('userID');
+                            for(let user in group.users){
+                                console.log("HI USER " + user.displayName);
+                                if(user.userID != localUserID){
+                                    console.log("HI USER WITH ID" + user.displayName);
+                                }
+                            }
+                        }
+                        else{
+                            $scope.group = group;
+                            $scope.isPrivateChat = false;
+                        }
+                        
+                    }
+                });
+
             });
 
             $("#profileBlock").niceScroll({autohidemode:'leave'});

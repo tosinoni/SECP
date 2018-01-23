@@ -1,7 +1,7 @@
 <div class="animated fadeInRight" id="groupProfileModal">
     <div class="profile-actions">
         <i class="fa fa-close hoverable" id="closeProfile" ng-click="closeProfile()"></i>
-        <i class="fa fa-pencil hoverable" id="openEditProfile" data-toggle="modal" data-target="#editProfile"></i>
+        <i class="fa fa-pencil hoverable" id="openEditProfile" data-toggle="modal" data-target="#editProfile" ng-show="!isPrivateChat"></i>
     </div>
     <div id="groupprofile">
             <div>
@@ -18,7 +18,7 @@
                     <div class="profile-list-group-item" ng-repeat="role in group.roles" ng-style="{borderColor: role.color}">{{role.name}}</div>
                 </div>
             </div>
-            <div id="user-list">
+            <div id="user-list" ng-show="!isPrivateChat">
                 <h3 class="profile-list-heading">Group Members</h3>
 
                 <div class="all-users-in-group user-in-group-box">
