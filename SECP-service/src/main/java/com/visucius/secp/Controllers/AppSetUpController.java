@@ -36,7 +36,7 @@ public class AppSetUpController {
             user.setEmail(email);
             user.setUsername(username);
             user.setAvatarUrl(UserDTO.defaultUserAvatar);
-            user.setDisplayName(user.getLastname());
+            user.setDisplayName(user.getUsername());
             user.setLoginRole(LoginRole.ADMIN);
             user.setPermission(permission);
             try {
