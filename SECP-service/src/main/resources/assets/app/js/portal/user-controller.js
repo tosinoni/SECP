@@ -1,5 +1,5 @@
 angular.module('SECP')
-    .controller('UserController', function ($scope, Admin, SwalService) {
+    .controller('UserController', function ($scope, Admin, SwalService, EncryptionService) {
         $scope.users = [];
         $scope.userHeaders = ['Username', 'First Name', 'Last Name', 'Permission Level', 'Role(s)', 'Groups', 'Login Role'];
         $scope.createUserData = {}; //the data sent to the modal for create user
@@ -19,6 +19,7 @@ angular.module('SECP')
                     $scope.createUserData = {};
                     $scope.users.push(res.data);
                     swal('Added!','New user added.','success');
+                    EncryptionService.sendSecretKeysToUser(res.data);
                 } else {
                     swal('Oops!', res.data.message, "error");
                 }
@@ -46,6 +47,7 @@ angular.module('SECP')
                         var index = _.findIndex($scope.users, function(o) { return o.username == row.username; });
                         $scope.users[index] = res.data;
                         swal('Modified!','User modified.','success');
+                        EncryptionService.sendSecretKeysToUser(res.data);
                     } else {
                         swal('Oops!', res.data.message, "error");
                     }

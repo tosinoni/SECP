@@ -5,7 +5,7 @@ angular.module('SECP')
     function ($scope, Chat, Socket, EncryptionService) {
       //declaring variables
       $scope.contacts = [];
-      $scope.secretKeysObj = [];
+      $scope.secretKeysForChat = {};
       $scope.searching = false;
 
       Chat.getCurrentUser().then(function(user) {
@@ -14,18 +14,27 @@ angular.module('SECP')
         }
       });
 
-      EncryptionService.getDecryptedSecretKeys().then(function (keys) {
-          if(keys) {
-              console.log(keys);
-              $scope.secretKeysObj = keys;
+      EncryptionService.getDecryptedSecretKeys().then(function (userSecretKeys) {
+          if(userSecretKeys) {
+              $scope.secretKeysForChat = userSecretKeys;
           }
-      })
+
+          //need the secret keys first
+          Chat.getChatList().then(function(data) {
+              if(data) {
+                  $scope.contacts = data;
+              }
+          });
+      });
 
       $scope.clicked = false;
       Socket.onmessage(function (message) {
         var messageObj = JSON.parse(message);
+        console.log("received message: " + messageObj.body);
         $scope.messages.push(messageObj);
-        toastr.success(messageObj.body, messageObj.senderId);
+
+        let decryptedMessage = EncryptionService.decryptMessage(messageObj.body, $scope.secretKeysForChat[messageObj.groupId]);
+        toastr.success(decryptedMessage, messageObj.senderId);
         setLastMessageForContacts(messageObj.groupId, messageObj);
       });
 
@@ -38,26 +47,28 @@ angular.module('SECP')
         $scope.contacts[index].lastMessage = message;
       }
 
-      Chat.getChatList().then(function(data) {
-        if(data) {
-            $scope.contacts = data;
-        }
-      });
-
       $scope.sendMessage = function() {
-         var messageDTO = {
-            groupId: $scope.selectedChat.groupID,
-            senderId: $scope.currentUser.userID,
-            body: $scope.messageInput,
-            reason: "message",
-            timestamp: moment()
-         };
+          if ($scope.secretKeysForChat) {
+              let groupID = $scope.selectedChat.groupID;
+              let messageBody = EncryptionService.enryptMessage($scope.messageInput, $scope.secretKeysForChat[groupID]);
 
-         Socket.send(messageDTO);
-         $scope.messages.push(messageDTO)
-         setLastMessageForContacts(messageDTO.groupId, messageDTO);
-         //clearing the message input in the textarea
-         $scope.messageInput = null;
+              console.log("sending message: " + messageBody);
+              var messageDTO = {
+                  groupId: groupID,
+                  senderId: $scope.currentUser.userID,
+                  body: messageBody,
+                  reason: "message",
+                  timestamp: moment()
+              };
+
+              Socket.send(messageDTO);
+              $scope.messages.push(messageDTO)
+              setLastMessageForContacts(messageDTO.groupId, messageDTO);
+              //clearing the message input in the textarea
+              $scope.messageInput = null;
+          } else {
+              swal("Oops..", "You cannot chat because you dont have the encryption keys", "error");
+          }
       };
 
         $scope.sendMessageUsingEnter = function(event) {

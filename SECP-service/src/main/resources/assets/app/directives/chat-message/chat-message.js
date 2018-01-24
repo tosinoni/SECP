@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('SECP')
-    .directive('chatMessage', function ($http) {
+    .directive('chatMessage', function (EncryptionService) {
     return {
         restrict: 'E', //E = element, A = attribute, C = class, M = comment
         scope: {
@@ -9,6 +9,7 @@ angular.module('SECP')
             messages: '=',
             currentUser: '=',
             selectedChat: '=',
+            secretKeys: '=',
             clicked: '='
          },
         templateUrl: 'directives/chat-message/chat-message.html',
@@ -59,12 +60,14 @@ angular.module('SECP')
                 return formatedMessages;
              }
 
-            $scope.$watch('messages', function(messages, oldmessages) {
-                $scope.formatedMessages = formatMessages(messages);
-                //move the scroll button down to see the latest message
-                $('#chat-scroll').animate({
-                   scrollTop: $('#chat-scroll').get(0).scrollHeight
-                });
+            $scope.$watch('messages', function(newMessages) {
+                if(!_.isEmpty($scope.secretKeys)) {
+                    $scope.formatedMessages = formatMessages(newMessages);
+                    //move the scroll button down to see the latest message
+                    $('#chat-scroll').animate({
+                        scrollTop: $('#chat-scroll').get(0).scrollHeight
+                    });
+                }
              }, true);
 
 
@@ -87,6 +90,14 @@ angular.module('SECP')
                      $scope.users = obj;
                   }
              });
+
+            $scope.getDecryptedMessage = function(message) {
+                var groupId = $scope.selectedChat.groupID;
+                if (message && !_.isEmpty($scope.secretKeys)) {
+                    return EncryptionService.decryptMessage(message, $scope.secretKeys[groupId]);
+                }
+
+            }
 
              $scope.clickProfile = function(){
 

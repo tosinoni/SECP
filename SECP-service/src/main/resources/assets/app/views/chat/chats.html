@@ -16,12 +16,12 @@
                                 </div>
                             </div>
 
-                            <chat-list ng-show="!searching" contacts="contacts" contact-selected-fn="contactSelected(contact)" current-user="currentUser"> </chat-list>
+                            <chat-list ng-show="!searching" secret-keys="secretKeysForChat" contacts="contacts" contact-selected-fn="contactSelected(contact)" current-user="currentUser"> </chat-list>
                             <search-results ng-show="searching" result="result" contact-selected-fn="contactSelected(contact)"> </search-results>
                         </div>
                         <div class="col-md-8" id="chatBlock">
                             <div>
-                                <chat-message messages="messages" current-user="currentUser" clicked="clicked" selected-chat="selectedChat"> </chat-message>
+                                <chat-message messages="messages" secret-keys="secretKeysForChat" current-user="currentUser" clicked="clicked" selected-chat="selectedChat"> </chat-message>
                             </div>
                             <div class="compose-box">
                                 <div class="row">

@@ -1,13 +1,14 @@
 'use strict';
 
 angular.module('SECP')
-    .directive('chatList', function () {
+    .directive('chatList', function (EncryptionService) {
     return {
         restrict: 'E', //E = element, A = attribute, C = class, M = comment
         scope: {
             //@ reads the attribute value, = provides two-way binding, & works with functions
             contacts: '=',
             currentUser: '=',
+            secretKeys: '=',
             contactSelected: '&contactSelectedFn'
          },
         templateUrl: 'directives/chat-list/chat-list.html',
@@ -36,6 +37,13 @@ angular.module('SECP')
                     }
                 }
                 return group.displayName;
+            }
+
+            $scope.getDecryptedMessage = function(message) {
+                if (message && !_.isEmpty($scope.secretKeys)) {
+                    return EncryptionService.decryptMessage(message.body, $scope.secretKeys[message.groupId]);
+                }
+
             }
 
            $scope.$watch('contacts', function(contacts) {

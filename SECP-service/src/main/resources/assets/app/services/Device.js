@@ -14,6 +14,17 @@ angular.module('SECP')
                 });
             },
 
+            getDevicesForUser : function(userID) {
+                return $http.get("/SECP/device/user/" + userID)
+                .then(function(res) {
+                    if(res.status == 200) {
+                        return res.data;
+                    }
+                }, function(err) {
+                    return err;
+                });
+            },
+
             getSecretKeysForDevice : function() {
                 var deviceName = new Fingerprint().get();
                 return $http.get("/SECP/device/" + deviceName + "/secret")
@@ -29,8 +40,8 @@ angular.module('SECP')
             sendSecretKeyToDevices : function(devices) {
                 return $http.post("/SECP/device/secret/", devices)
                 .then(function(res) {
-                    if(res.status == 200) {
-                        return res.data;
+                    if(res.status != 200) {
+                        swal("Oops..", "could not send secret key to devices.", "error");
                     }
                 }, function(err) {
                     return err;

@@ -63,6 +63,13 @@ public class DeviceController {
     }
 
     public Response getDevicesForUser(long userID) {
+        Optional<User> userOptional = userDAO.find(userID);
+
+        if (!userOptional.isPresent()) {
+            throw new WebApplicationException(UserErrorMessage.USER_ID_INVALID, Response.Status.NO_CONTENT);
+        }
+
+        return Response.status(Response.Status.OK).entity(getDevicesForUser(userOptional.get())).build();
     }
 
     private void addSecretKeyForDevice(Set<SecretDTO> secretDTOS) {

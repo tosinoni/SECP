@@ -1,18 +1,15 @@
 'use strict';
 
 angular.module('SECP')
-    .factory('EncryptionService', function($scope, Socket, Device, $q) {
+    .factory('EncryptionService', function(Socket, Device, $q) {
+        function getSecretKeyToSendToDevices (groupID, devices, secretKey) {
+            let deviceDTOS = [];
 
-        decryptSecretKeysForDevice();
-        function sendSecretKeyToDevices (groupID, devices) {
-            var deviceDTOS = [];
-            var secretKey = cryptico.generateAESKey();
-
-            for (var device of devices) {
-                var secretObj = {};
+            for (let device of devices) {
+                let secretObj = {};
                 if (device.publicKey) {
                     //encrypt the secret key with the users public key
-                    var EncryptionResult = cryptico.encrypt(secretKey, device.publicKey);
+                    let EncryptionResult = cryptico.encrypt(JSON.stringify(secretKey), device.publicKey);
                     secretObj.groupID = groupID;
                     secretObj.deviceID = device.deviceID;
                     secretObj.encryptedSecret = EncryptionResult.cipher;
@@ -21,54 +18,75 @@ angular.module('SECP')
                 }
             }
 
-            Device.sendSecretKeyToDevices(deviceDTOS).then(function(res) {
-                if (!res) {
-                    console.log("could not send secret key to devices.");
-                }
-            });
+            return deviceDTOS;
         }
 
-        function decryptSecretKeysForDevice() {
+        function getDecryptedSecretKeys() {
+            let deferred = $q.defer();
+
+            setTimeout(function() {
                 Device.getSecretKeysForDevice().then(function (secretDTOS) {
                     if (secretDTOS) {
-                        var obj = {};
-                        var userID = localStorage.getItem('userID');
+                        let obj = {};
+                        let userID = localStorage.getItem('userID');
                         localforage.getItem(userID, function (err, userObj) {
-                            var privateKey = cryptico.fromJSON(userObj.keypair);
+                            let privateKey = cryptico.fromJSON(userObj.keypair);
 
-                            for (var secretDTO of secretDTOS) {
-                                var decryptedKey = cryptico.decrypt(secretDTO.encryptedSecret, privateKey);
-                                if(decryptedKey.status !== "failure") {
-                                    obj[secretDTO.groupID] = decryptedKey;
+                            for (let secretDTO of secretDTOS) {
+                                let decryptedKey = cryptico.decrypt(secretDTO.encryptedSecret, privateKey);
+                                if (decryptedKey.status !== "failure") {
+                                    obj[secretDTO.groupID] = JSON.parse(decryptedKey.plaintext);
                                 }
                             }
 
-                            $scope.userSecretKeys = obj;
+                            deferred.resolve(obj);
                         })
                     }
                 });
+            });
+
+            return deferred.promise;
         }
 
-        function sendSecretKeysToUser(user) {
-            if (user.loginRole == "ADMIN") {
-                //send all the group key to the user
-            } else {
-                
-            }
+        function sendSecretKeyToUserDevices(user, devices) {
+            getDecryptedSecretKeys().then(function (userSecretKeys) {
+                if(userSecretKeys) {
+                    let isAdmin = user.loginRole === "ADMIN";
+                    let groups = [];
+
+                    if (isAdmin) {
+                        //send all the group key to the user devices
+                        groups = Object.keys(userSecretKeys);
+                    } else if (user.groups) {
+                        groups = user.groups.map(function (group) {
+                            return group.groupID;
+                        });
+                    }
+
+                    let secretDTOS = [];
+
+                    for (let groupID of groups) {
+                        let secretKeyForGroup = userSecretKeys[groupID];
+                        secretDTOS = secretDTOS.concat(getSecretKeyToSendToDevices(groupID, devices, secretKeyForGroup));
+                    }
+
+                    Device.sendSecretKeyToDevices(secretDTOS);
+                }
+            });
         }
 
         return {
             generateKeyPair: function (userID) {
                 // The passphrase used to repeatably generate this RSA key.
-                var PassPhrase = userID + " is a member of SECP.";
+                let PassPhrase = userID + " is a member of SECP.";
 
                 // The length of the RSA key, in bits.
-                var Bits = 1024;
+                let Bits = 1024;
 
                 //key pair for user
-                var keypair = cryptico.generateRSAKey(PassPhrase, Bits);
+                let keypair = cryptico.generateRSAKey(PassPhrase, Bits);
 
-                var userObj = {keypair:  cryptico.toJSON(keypair)};
+                let userObj = {keypair:  cryptico.toJSON(keypair)};
 
                 localforage.setItem(userID, userObj);
                 return keypair;
@@ -77,11 +95,33 @@ angular.module('SECP')
             sendSecretKeysToGroup: function (groupID) {
                 Device.getDevicesForGroup(groupID).then(function(devices) {
                     if (devices) {
-                        sendSecretKeyToDevices(groupID, devices);
+                        let secretKey = cryptico.generateAESKey();
+                        let secretDTOS = getSecretKeyToSendToDevices(groupID, devices, secretKey);
+                        Device.sendSecretKeyToDevices(secretDTOS);
                     }
                 });
             },
 
-            getDecryptedSecretKeys: decryptSecretKeysForDevice
+            sendSecretKeysToUser: function (user) {
+                Device.getDevicesForUser(user.userID).then(function (devices) {
+                    if (devices && devices.length > 0) {
+                        sendSecretKeyToUserDevices(user, devices);
+                    }
+                });
+            },
+
+            enryptMessage: function (message, aesEncryptionKey) {
+                if(message && aesEncryptionKey) {
+                    return cryptico.encryptAESCBC(message, aesEncryptionKey);
+                }
+            },
+
+            decryptMessage: function (encryptedMessage, aesDecryptionKey) {
+                if(encryptedMessage && aesDecryptionKey) {
+                    return cryptico.decryptAESCBC(encryptedMessage, aesDecryptionKey);
+                }
+            },
+
+            getDecryptedSecretKeys: getDecryptedSecretKeys
         }
     });

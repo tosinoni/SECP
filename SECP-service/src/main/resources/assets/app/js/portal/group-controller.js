@@ -1,5 +1,5 @@
 angular.module('SECP')
-    .controller('GroupController', function ($scope, Admin, SwalService) {
+    .controller('GroupController', function ($scope, Admin, SwalService, EncryptionService) {
         $scope.groups = [];
         $scope.groupHeaders = ['Name', 'Permission Level(s)', 'Role(s)', 'Participants'];
         $scope.createGroupData = {}; //the data sent to the modal for create group
@@ -48,6 +48,7 @@ angular.module('SECP')
                         var index = _.findIndex($scope.groups, function(o) { return o.groupID == row.groupID; });
                         $scope.groups[index] = res.data;
                         swal('Modified!','Group modified.','success');
+                        EncryptionService.sendSecretKeysToGroup(res.data.groupID);
                     } else {
                         swal('Oops!', res.data.message, "error");
                     }
