@@ -59,7 +59,7 @@ angular.module('SECP')
                   senderId: $scope.currentUser.userID,
                   body: messageBody,
                   reason: "message",
-                  timestamp: moment()
+                  timestamp: new Date()
               };
 
               Socket.send(messageDTO);
