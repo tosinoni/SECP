@@ -4,12 +4,9 @@ import com.visucius.secp.Chat.ChatServlet;
 import com.visucius.secp.Chat.ChatSocketCreator;
 import com.visucius.secp.Chat.ChatSocketHandler;
 import com.visucius.secp.Chat.IMessageHandler;
+import com.visucius.secp.Controllers.*;
 import com.visucius.secp.Controllers.Admin.AdminController;
-import com.visucius.secp.Controllers.FilterController;
-import com.visucius.secp.Controllers.GroupController;
-import com.visucius.secp.Controllers.MessageController;
 import com.visucius.secp.Controllers.User.*;
-import com.visucius.secp.Controllers.TokenController;
 import com.visucius.secp.Controllers.chat.ChatController;
 import com.visucius.secp.auth.SECPAuthenticator;
 import com.visucius.secp.auth.SECPAuthorizer;
@@ -182,5 +179,13 @@ public class SECPService extends Application<SECPConfiguration> {
         ServletRegistration.Dynamic webSocket = environment.servlets().addServlet("ws", new ChatServlet(chatSocketCreator));
         webSocket.setAsyncSupported(true);
         webSocket.addMapping("/chat/*");
+
+        //registering default user
+        final AppSetUpController appSetUpController = new UnitOfWorkAwareProxyFactory(hibernateBundle)
+            .create(AppSetUpController.class,
+                new Class<?>[]  { PermissionDAO.class, UserDAO.class},
+                new Object[]    { permissionDAO, userDAO});
+        environment.jersey().register(appSetUpController);
+        appSetUpController.setUp();
     }
 }
