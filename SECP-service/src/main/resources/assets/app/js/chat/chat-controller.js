@@ -30,11 +30,12 @@ angular.module('SECP')
       $scope.clicked = false;
       Socket.onmessage(function (message) {
         var messageObj = JSON.parse(message);
+        console.log(messageObj);
         console.log("received message: " + messageObj.body);
         $scope.messages.push(messageObj);
 
         let decryptedMessage = EncryptionService.decryptMessage(messageObj.body, $scope.secretKeysForChat[messageObj.groupId]);
-        toastr.success(decryptedMessage, messageObj.senderId);
+        toastr.success(decryptedMessage, messageObj.senderDisplayName);
         setLastMessageForContacts(messageObj.groupId, messageObj);
       });
 

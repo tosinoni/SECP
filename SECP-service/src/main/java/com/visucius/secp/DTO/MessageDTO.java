@@ -23,6 +23,9 @@ public class MessageDTO {
     private String body;
 
     @JsonProperty
+    private String senderDisplayName;
+
+    @JsonProperty
     private MessageType reason;
 
     public MessageDTO()
@@ -66,6 +69,14 @@ public class MessageDTO {
 
     public void setMessageId(long messageId) {
         this.messageId = messageId;
+    }
+
+    public String getSenderDisplayName() {
+        return senderDisplayName;
+    }
+
+    public void setSenderDisplayName(String senderDisplayName) {
+        this.senderDisplayName = senderDisplayName;
     }
 
     @Override

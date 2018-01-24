@@ -3,6 +3,7 @@ package com.visucius.secp.Chat;
 import com.visucius.secp.DTO.MessageDTO;
 import com.visucius.secp.daos.MessageDAO;
 import com.visucius.secp.models.Group;
+import com.visucius.secp.models.GroupType;
 import com.visucius.secp.models.Message;
 import com.visucius.secp.models.User;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -78,6 +79,7 @@ public class ChatSocketHandler implements IMessageHandler {
         Message message = new Message(messageDTO.getBody(),user,group);
         message.setTimestamp(new Date());
         Message createdMessage = messageRepository.save(message);
+
         MessageDTO savedMessage = new MessageDTO(
             createdMessage.getId(),
             createdMessage.getGroup().getId(),
@@ -85,6 +87,10 @@ public class ChatSocketHandler implements IMessageHandler {
             createdMessage.getBody(),
             messageDTO.getReason(),
             messageDTO.getTimestamp());
+
+        if(user.getDisplayName() != null) {
+            savedMessage.setSenderDisplayName(user.getDisplayName());
+        }
         return savedMessage;
     }
 
