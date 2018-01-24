@@ -2,7 +2,7 @@
 
 angular.module('SECP')
   .controller('ChatController',
-    function ($scope, $modal, Chat, Socket) {
+    function ($scope, $modal, Chat, Socket, Admin) {
       //declaring variables
       $scope.contacts = [];
       $scope.searching = false;
@@ -36,20 +36,45 @@ angular.module('SECP')
         }
       });
 
-      $scope.sendMessage = function() {
-         var messageDTO = {
-            groupId: $scope.selectedChat.groupID,
-            senderId: $scope.currentUser.userID,
-            body: $scope.messageInput,
-            reason: "message",
-            timestamp: moment()
-         };
+      $scope.sendMessageOnceFiltered = function(){
+          var messageDTO = {
+              groupId: $scope.selectedChat.groupID,
+              senderId: $scope.currentUser.userID,
+              body: $scope.messageInput,
+              reason: "message",
+              timestamp: moment()
+          };
 
-         Socket.send(messageDTO);
-         $scope.messages.push(messageDTO)
-         setLastMessageForContacts(messageDTO.groupId, messageDTO);
-         //clearing the message input in the textarea
-         $scope.messageInput = null;
+          Socket.send(messageDTO);
+          $scope.messages.push(messageDTO)
+          setLastMessageForContacts(messageDTO.groupId, messageDTO);
+          //clearing the message input in the textarea
+          $scope.messageInput = null;
+        }
+
+      $scope.sendMessage = function() {
+          let filterWords = Admin.getAllFilters();
+          //Concat the permission levels and roles of the sender and receiver into one array
+          console.log(Admin.getUser($scope.currentUser.userID));
+          let tags = Admin.getUser($scope.currentUser.userID).permissions.concat(Admin.getUser($scope.currentUser.userID).roles);
+          let receiverTags = Admin.getGroup($scope.selectedChat.groupID).permissions.concat(Admin.getGroup($scope.selectedChat.groupID).roles);
+          tags.concat(receiverTags);
+          let messageContent = $scope.messageInput;
+          let canSendMessage = true;
+          for(let filterWord in filterWords){
+              if(messageContent.includes(filterWord)){
+                  canSendMessage = false;
+                  swal(
+                      'Oops...',
+                      'Could not deliver message due to sensitive content!',
+                      'error'
+                  )
+                  break;
+              }
+          }
+          if(canSendMessage){
+            $scope.sendMessageOnceFiltered();
+          }
       };
 
         $scope.sendMessageUsingEnter = function(event) {
