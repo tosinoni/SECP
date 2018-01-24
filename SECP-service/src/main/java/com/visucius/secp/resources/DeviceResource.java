@@ -27,7 +27,7 @@ public class DeviceResource {
     @POST
     @UnitOfWork
     @Path("/secret")
-    public Response addSecretGroupForDevices(@Auth Set<SecretDTO> secretDTOS) {
+    public Response addSecretKeyForDevices(@Auth Set<SecretDTO> secretDTOS) {
         return deviceController.addSecretKeyForDevices(secretDTOS);
     }
 

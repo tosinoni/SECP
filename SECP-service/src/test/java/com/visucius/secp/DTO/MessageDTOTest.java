@@ -43,6 +43,13 @@ public class MessageDTOTest {
     }
 
     @Test
+    public void testSenderDisplayName() {
+        MessageDTO messageDTO = new MessageDTO();
+        messageDTO.setSenderDisplayName("user1");
+        assertEquals("sender display name is not equal", "user1", messageDTO.getSenderDisplayName());
+    }
+
+    @Test
     public void testEquals() {
         MessageDTO messageDTO = new MessageDTO(messageId,groupId,senderId,body,reason,timestamp);
         MessageDTO messageDTO2 = new MessageDTO(messageId,groupId,senderId,body,reason,timestamp);
