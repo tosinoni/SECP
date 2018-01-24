@@ -1,6 +1,6 @@
 // Declare app level module which depends on filters, and services
 angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
-    'routeStyles', 'angular-jwt', 'datatables', 'angular-nicescroll'])
+    'routeStyles', 'angular-jwt', 'datatables'])
   .config(function ($routeProvider, $locationProvider, jwtOptionsProvider, $httpProvider) {
       localforage.setDriver([localforage.WEBSQL, localforage.INDEXEDDB]);
 
