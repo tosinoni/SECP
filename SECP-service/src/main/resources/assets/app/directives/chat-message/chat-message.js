@@ -98,7 +98,6 @@ angular.module('SECP')
                 }
 
             }
-
              $scope.clickProfile = function(){
 
                 // NEED TO ADD CHECK TO SEE IF USER OR PROFILE, THEN GENERATE USER OR PROFILE DIV.

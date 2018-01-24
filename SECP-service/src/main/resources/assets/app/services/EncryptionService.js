@@ -86,9 +86,6 @@ angular.module('SECP')
                 //key pair for user
                 let keypair = cryptico.generateRSAKey(PassPhrase, Bits);
 
-                let userObj = {keypair:  cryptico.toJSON(keypair)};
-
-                localforage.setItem(userID, userObj);
                 return keypair;
             },
 

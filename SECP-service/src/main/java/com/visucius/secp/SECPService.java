@@ -130,7 +130,6 @@ public class SECPService extends Application<SECPConfiguration> {
         final ChatController chatController = new ChatController(userDAO, groupDAO, userProfileController, groupController);
         final DeviceController deviceController = new DeviceController(userDAO, groupDAO, deviceDAO);
 
-
         //********************** Register authentication for User *****************************
 
         environment.jersey().register(RolesAllowedDynamicFeature.class);
@@ -163,7 +162,6 @@ public class SECPService extends Application<SECPConfiguration> {
         environment.jersey().register(new UserProfileResource(userProfileController));
         environment.jersey().register(new FilterResource(filterController));
         environment.jersey().register(new DeviceResource(deviceController));
-
 
         //************************** Error Handling *************************************
         final ErrorPageErrorHandler epeh = new ErrorPageErrorHandler();
