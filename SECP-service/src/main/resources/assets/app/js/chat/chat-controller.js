@@ -90,7 +90,6 @@ angular.module('SECP')
                 delayTimer = setTimeout(function() {
                    Chat.search(searchString).then(function(data) {
                        if(data) {
-                           console.log(data);
                            $scope.result = data;
                        }
                    });
@@ -105,6 +104,7 @@ angular.module('SECP')
          var index = _.findIndex($scope.contacts, function(o) { return o.groupID == contact.groupID; });
          if(index < 0) {
             $scope.contacts.push(contact);
+            EncryptionService.sendSecretKeysToGroup(contact.groupID);
          }
 
          $scope.selectedChat = contact;
