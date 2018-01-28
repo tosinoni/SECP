@@ -1,28 +1,28 @@
-<div class="animated fadeInRight" id="groupProfileModal">
+<div class="animated fadeInRight" id="profileModal">
     <div class="profile-actions">
         <i class="fa fa-close hoverable" id="closeProfile" ng-click="closeProfile()"></i>
         <i class="fa fa-pencil hoverable" id="openEditProfile" data-toggle="modal" data-target="#editProfile" ng-show="!isPrivateChat"></i>
     </div>
-    <div id="groupprofile">
+    <div id="profile">
             <div>
-                <img src="{{group.avatarUrl}}" class="img-responsive img-circle">
+                <img src="{{profile.avatarUrl}}" class="img-responsive img-circle">
             </div>
-            <h4 id="group-name">{{group.displayName}}</h4>
-            <div id="user-security-settings">
+            <h4 id="name">{{profile.displayName}}</h4>
+            <div id="security-settings">
                 <h3 class="profile-list-heading">Permission Level</h3>
                 <div class="profile-list-group">
-                    <div class="profile-list-group-item" ng-repeat="permission in group.permissions" ng-style="{borderColor: permission.color}">{{permission.name}}</div>
+                    <div class="profile-list-group-item" ng-repeat="permission in profile.permissions" ng-style="{borderColor: permission.color}">{{permission.name}}</div>
                 </div>
                 <h3 class="profile-list-heading">Role(s)</h3>
                 <div class="profile-list-group">
-                    <div class="profile-list-group-item" ng-repeat="role in group.roles" ng-style="{borderColor: role.color}">{{role.name}}</div>
+                    <div class="profile-list-group-item" ng-repeat="role in profile.roles" ng-style="{borderColor: role.color}">{{role.name}}</div>
                 </div>
             </div>
             <div id="user-list" ng-show="!isPrivateChat">
                 <h3 class="profile-list-heading">Group Members</h3>
 
                 <div class="all-users-in-group user-in-group-box">
-                    <div class="user-in-group recipient-username hoverable" ng-repeat="user in group.users">
+                    <div class="user-in-group recipient-username hoverable" ng-repeat="user in profile.users">
                         <img src="{{user.avatarUrl}}" class="img-responsive img-circle" style="width: 40px; display: inline; vertical-align: middle">
                         {{user.displayName}}
                         <br>
@@ -32,6 +32,6 @@
             </div>
         </div>
 </div>
-<edit-profile-modal displayname="{{group.displayName}}" imgurl="{{group.avatarUrl}}"></edit-profile-modal>
+<edit-profile-modal displayname="{{profile.displayName}}" imgurl="{{profile.avatarUrl}}"></edit-profile-modal>
 
-<link type="text/css" rel="stylesheet" href="directives/profiles/group-profile.css"/>
+<link type="text/css" rel="stylesheet" href="directives/profiles/profile.css"/>

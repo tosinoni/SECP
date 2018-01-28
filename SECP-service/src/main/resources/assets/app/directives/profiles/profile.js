@@ -1,14 +1,14 @@
 'use strict';
 
 angular.module('SECP')
-    .directive('groupProfile', function (Group) {
+    .directive('profile', function (Group) {
     return {
         restrict: 'E',
         scope: {
             id: '=',
             modalname: '@'
          },
-        templateUrl: 'directives/profiles/group-profile.html',
+        templateUrl: 'directives/profiles/profile.html',
         link: function ($scope, element, attrs) {
             $scope.isPrivateChat = false;
             $scope.$watch('id', function(id) {
@@ -16,21 +16,26 @@ angular.module('SECP')
                     if(group) {
                         //If there are only two users in the group, that means that there
                         //should not be an edit or member section.
-                        if(group.users.length === 2){
+                        if(group.groupType === "PRIVATE"){
                             $scope.isPrivateChat = true;
                             const localUserID = localStorage.getItem('userID');
-                            for(let user in group.users){
-                                console.log("HI USER " + user.displayName);
+                            for(let user of group.users){
                                 if(user.userID != localUserID){
-                                    console.log("HI USER WITH ID" + user.displayName);
+                                    //on load, if the selected group is a private group,
+                                    //error msg reads that scope.group is undefined. To counteract this,
+                                    //need to set it to an object first.
+                                    $scope.profile = {};
+                                    $scope.profile.avatarUrl = user.avatarUrl;
+                                    $scope.profile.displayName = user.displayName;
+                                    $scope.profile.permissions = {'0': user.permission};
+                                    $scope.profile.roles = user.roles;
                                 }
                             }
                         }
                         else{
-                            $scope.group = group;
+                            $scope.profile = group;
                             $scope.isPrivateChat = false;
-                        }
-                        
+                        }  
                     }
                 });
 
