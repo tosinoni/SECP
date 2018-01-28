@@ -22,7 +22,7 @@ import java.util.Set;
         ),
         @NamedQuery(
             name = "com.visucius.secp.models.Group.findGroupsForUser",
-            query = "select g from Group g join g.permissions p join g.roles r where p.id = :permissionID and (r is null or r.id in (:roleIDS))"
+            query = "select g from Group g join g.users u where u.id = :userID and g.groupType = 'PUBLIC'"
         ),
         @NamedQuery(
             name = "com.visucius.secp.models.Group.findPrivateGroupForUsers",

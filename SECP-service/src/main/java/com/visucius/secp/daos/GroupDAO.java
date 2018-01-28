@@ -52,11 +52,10 @@ public class GroupDAO extends AbstractDAO<Group> {
                 setParameter("name",name).uniqueResult();
     }
 
-    public List<Group> findGroupsForUser(long permissionID, List<Long> roleIDS)
+    public List<Group> findGroupsForUser(long userID)
     {
         return (List<Group>) namedQuery("com.visucius.secp.models.Group.findGroupsForUser").
-            setParameter("permissionID",permissionID)
-            .setParameterList("roleIDS",roleIDS).list();
+            setParameter("userID",userID).list();
     }
 
     public List<Group> findPrivateGroupForUsers(Set<User> users)
