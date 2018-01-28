@@ -2,7 +2,7 @@
 
 angular.module('SECP')
   .controller('ChatController',
-    function ($scope, $modal, Chat, Socket, Admin) {
+    function ($scope, $modal, Chat, Socket, Admin, $q) {
       //declaring variables
       $scope.contacts = [];
       $scope.searching = false;
@@ -37,24 +37,28 @@ angular.module('SECP')
       });
 
       $scope.sendMessage = function(){
-          if($scope.messageContainsFilterWord()) {
-              var messageDTO = {
-                  groupId: $scope.selectedChat.groupID,
-                  senderId: $scope.currentUser.userID,
-                  body: $scope.messageInput,
-                  reason: "message",
-                  timestamp: moment()
-              };
+          var promise = $scope.messageContainsFilterWord();
+          promise.then(function(messageContainsFilterWord) {
+              if(!messageContainsFilterWord){
+                  var messageDTO = {
+                      groupId: $scope.selectedChat.groupID,
+                      senderId: $scope.currentUser.userID,
+                      body: $scope.messageInput,
+                      reason: "message",
+                      timestamp: moment()
+                  };
 
-              Socket.send(messageDTO);
-              $scope.messages.push(messageDTO)
-              setLastMessageForContacts(messageDTO.groupId, messageDTO);
-              //clearing the message input in the textarea
-              $scope.messageInput = null;
-          }
-        }
+                  Socket.send(messageDTO);
+                  $scope.messages.push(messageDTO)
+                  setLastMessageForContacts(messageDTO.groupId, messageDTO);
+                  //clearing the message input in the textarea
+                  $scope.messageInput = null;
+              }
+          });
+        };
 
       $scope.messageContainsFilterWord = function() {
+          var deffered = $q.defer();
           let senderPermission = $scope.currentUser.permission
           let senderRoles = $scope.currentUser.roles;
           let receiverPermissions = $scope.selectedChat.permissions;
@@ -77,23 +81,26 @@ angular.module('SECP')
                                   'Could not deliver message due to sensitive content!',
                                   'error'
                               )
-                              return true;
+                              deffered.resolve(true);
                           }
                       }
                   }
               }
+
+              deffered.resolve(false);
           });
-          return false;
+          return deffered.promise;
       };
+
       $scope.messageSendable = function(filterPermissions, filterRoles, senderPermission, senderRoles, receiverPermissions, receiverRoles){
           //Check to see if the sender permission is part of the allowed filter permissions
-          if(filterPermissions.contains(senderPermission)){
+          if(filterPermissions.indexOf(senderPermission)>-1){
               //Perform the intersection of senderRoles and filterRoles
               if(senderRoles.filter((role) => filterRoles.includes(role))){
                   //Check to see if receiverPermissions is subset of filterPermissions
-                  if(receiverPermissions.some((permission) => filterPermissions.indexOf(permission)===-1)){
+                  if(receiverPermissions.some((permission) => filterPermissions.indexOf(permission)>-1)){
                       //Check to see if receiverRoles is subset of filterRoles
-                      if(receiverRoles.some((permission) => filterRoles.indexOf(permission)===-1)){
+                      if(receiverRoles.some((permission) => filterRoles.indexOf(permission)>-1)){
                           return true;
                       }
                   }
