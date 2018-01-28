@@ -15,7 +15,7 @@ database:
   properties:
     hibernate.temp.use_jdbc_metadata_defaults: false
     hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
-    #hibernate.hbm2ddl.auto: create
+  #  hibernate.hbm2ddl.auto: create
     hibernate.format_sql: true
 
   #driverClass: org.postgresql.Driver

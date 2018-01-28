@@ -18,9 +18,9 @@ angular.module('SECP')
                 if (res.status == 201) {
                     $scope.createGroupData = {};
                     $scope.groups.push(res.data);
-                    swal('Added!','New group added.','success');
                     $('#groupModal').modal('toggle');
                     EncryptionService.sendSecretKeysToGroup(res.data.groupID);
+                    swal('Added!','New group added.','success');
                 } else {
                     swal('Oops!', res.data.message, "error");
                     $('#groupModal').modal('toggle');

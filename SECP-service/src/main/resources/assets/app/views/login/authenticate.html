@@ -1,19 +1,10 @@
-<div class="container-fluid">
-    <h1 class="portalheader"><i class="fa fa-envelope" aria-hidden="true"></i> Authenticate</h1>
-    <div class="form-group">
-        <form ng-submit="authenticate()" name="authForm">
-            <div>
-                <p>Enter the verification code sent to your email address</p>
-            </div>
-            <div class="group">
-                <input type="text" required ng-model="code" name="code" />
-                <span class="highlight"></span>
-                <span class="bar"></span>
-                <label>Enter Code</label>
-            </div>
-            <div class="btn-box">
-                <button type="submit" class="btn btn-submit" ng-disabled="authForm.$invalid">Verify</button>
-            </div>
-        </form>
-    </div>
+<h1 class="pageheader">
+    <i class="fa fa-handshake-o" aria-hidden="true"></i>
+    Authentication
+</h1>
+<p class="note"><strong>Note:</strong> This is a new Device. Please select a medium of authorization below.</p>
+
+<div>
+    <p class="linkoption" ng-cloak ng-if="isDevice" ng-click="authorizeByUserDevice()"><i class="fa fa-mobile" aria-hidden="true"></i> Device</p>
+    <p class="linkoption" ng-click="authorizeByAdmin()"><i class="fa fa-user-secret" aria-hidden="true"></i> Admin </p>
 </div>

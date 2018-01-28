@@ -121,13 +121,24 @@ public class DeviceController {
 
         devices.addAll(deviceDTOSForUsers);
         //get all the devices for admins
+        Util.addAllIfNotNull(devices, getAdminDevices());
+
+        return Response.status(Response.Status.OK).entity(devices).build();
+    }
+
+    public Response getAllDevicesForAdmins() {
+        return Response.status(Response.Status.OK).entity(getAdminDevices()).build();
+    }
+
+    private Set<DeviceDTO> getAdminDevices() {
+        Set<DeviceDTO> devicesForAdmins = new HashSet<>();
         List<User> admins = userDAO.findAdmins();
 
         if (!Util.isCollectionEmpty(admins)) {
-            devices.addAll(getDevicesForUser(new HashSet<User>(admins)));
+            devicesForAdmins.addAll(getDevicesForUser(new HashSet<User>(admins)));
         }
 
-        return Response.status(Response.Status.OK).entity(devices).build();
+        return devicesForAdmins;
     }
 
     private Set<DeviceDTO> getDevicesForUser(Set<User> users) {

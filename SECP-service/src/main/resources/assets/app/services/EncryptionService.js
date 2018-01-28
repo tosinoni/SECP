@@ -26,16 +26,19 @@ angular.module('SECP')
 
             setTimeout(function() {
                 Device.getSecretKeysForDevice().then(function (secretDTOS) {
+                    console.log(secretDTOS);
                     if (secretDTOS) {
                         let obj = {};
                         let userID = localStorage.getItem('userID');
                         localforage.getItem(userID, function (err, userObj) {
                             let privateKey = cryptico.fromJSON(userObj.keypair);
-
                             for (let secretDTO of secretDTOS) {
                                 let decryptedKey = cryptico.decrypt(secretDTO.encryptedSecret, privateKey);
                                 if (decryptedKey.status !== "failure") {
                                     obj[secretDTO.groupID] = JSON.parse(decryptedKey.plaintext);
+                                } else {
+                                    swal("Oops..", "Cannot decrypt secret keys using private key", "error");
+                                    break;
                                 }
                             }
 

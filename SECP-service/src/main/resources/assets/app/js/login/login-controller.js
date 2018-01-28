@@ -1,5 +1,5 @@
 angular.module('SECP')
-    .controller('LoginController', function ($scope, Auth, $location, EncryptionService) {
+    .controller('LoginController', function ($scope, Auth, $location, EncryptionService, $rootScope) {
         $scope.login = function () {
             // TODO: NEED TO SEND AUTHENTICATION EMAIL (IF REQUIRED BY ADMIN) CONTAINING VERIFICATION CODE WHEN SUCCESSFULLY LOGGED IN
             Auth.login($scope.user).then(function (res) {
@@ -24,28 +24,33 @@ angular.module('SECP')
 
             Auth.isDeviceRegisteredForUser(userID, deviceName).then(function (status) {
                 if (!status) {
-                    var keypairForUser = EncryptionService.generateKeyPair(userID);
+                    $rootScope.deviceAuthorized = false;
+                    $location.path("/authenticate");
+                    console.log($rootScope);
+                    //var keypairForUser = EncryptionService.generateKeyPair(userID);
 
-                    let userObj = {keypair:  cryptico.toJSON(keypairForUser)};
+                    //let userObj = {keypair:  cryptico.toJSON(keypairForUser)};
 
-                    localforage.setItem(userID, userObj).then(function () {
-                        //Getting the user's public key.
-                        let publicKeyForUser = cryptico.publicKeyString(keypairForUser);
-                        var req = {
-                            "deviceName": deviceName,
-                            "publicKey": publicKeyForUser,
-                            "userID": userID
-                        };
 
-                        Auth.addPublicKey(req).then(function (res) {
-                            if (res.status !== 201) {
-                                swal('Oops..!', "This device is not supported for chat messages", 'error')
-                            }
-                        })
-
-                        $scope.visitNextPage();
-                    });
+                    // localforage.setItem(userID, userObj).then(function () {
+                    //     //Getting the user's public key.
+                    //     let publicKeyForUser = cryptico.publicKeyString(keypairForUser);
+                    //     var req = {
+                    //         "deviceName": deviceName,
+                    //         "publicKey": publicKeyForUser,
+                    //         "userID": userID
+                    //     };
+                    //
+                    //     Auth.addPublicKey(req).then(function (res) {
+                    //         if (res.status !== 201) {
+                    //             swal('Oops..!', "This device is not supported for chat messages", 'error')
+                    //         }
+                    //     })
+                    //
+                    //     $scope.visitNextPage();
+                    // });
                 } else {
+                    $rootScope.deviceAuthorized = true;
                     $scope.visitNextPage();
                 }
             });

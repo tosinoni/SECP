@@ -25,6 +25,17 @@ angular.module('SECP')
                 });
             },
 
+            getDevicesForAdmins : function() {
+                return $http.get("/SECP/device/admins/")
+                .then(function(res) {
+                    if(res.status == 200) {
+                        return res.data;
+                    }
+                }, function(err) {
+                    return err;
+                });
+            },
+
             getSecretKeysForDevice : function() {
                 var deviceName = new Fingerprint().get();
                 return $http.get("/SECP/device/" + deviceName + "/secret")

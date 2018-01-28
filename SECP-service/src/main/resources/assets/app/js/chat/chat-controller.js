@@ -2,7 +2,7 @@
 
 angular.module('SECP')
   .controller('ChatController',
-    function ($scope, Chat, Socket, EncryptionService) {
+    function ($scope, Chat, Socket, EncryptionService, SwalService) {
       //declaring variables
       $scope.contacts = [];
       $scope.secretKeysForChat = {};
@@ -17,8 +17,6 @@ angular.module('SECP')
       EncryptionService.getDecryptedSecretKeys().then(function (userSecretKeys) {
           var deviceName = new Fingerprint().get();
           console.log(deviceName);
-
-          console.log(userSecretKeys);
           if(userSecretKeys) {
               $scope.secretKeysForChat = userSecretKeys;
           }
@@ -53,8 +51,8 @@ angular.module('SECP')
       }
 
       $scope.sendMessage = function() {
-          if ($scope.secretKeysForChat) {
-              let groupID = $scope.selectedChat.groupID;
+          let groupID = $scope.selectedChat.groupID;
+          if (!_.isEmpty($scope.secretKeysForChat) && $scope.secretKeysForChat[groupID]) {
               let messageBody = EncryptionService.enryptMessage($scope.messageInput, $scope.secretKeysForChat[groupID]);
 
               console.log("sending message: " + messageBody);
@@ -72,7 +70,7 @@ angular.module('SECP')
               //clearing the message input in the textarea
               $scope.messageInput = null;
           } else {
-              swal("Oops..", "You cannot chat because you dont have the encryption keys", "error");
+              SwalService.requestSecretKeyForDevice();
           }
       };
 

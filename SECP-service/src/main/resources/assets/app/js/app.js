@@ -38,9 +38,10 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
         css: 'css/form.css',
       })
       .when('/authenticate', {
-        templateUrl: 'views/login/authenticate.html',
-        controller: 'AuthenticateController',
-        css: 'css/form.css'
+          templateUrl: 'views/login/authenticate.html',
+          controller: 'AuthenticateController',
+          css: 'css/form.css',
+          requiresLogin: true
       })
       .when('/chats', {
         templateUrl: 'views/chat/chats.html',
@@ -188,6 +189,8 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
       $rootScope.getHomeUrl = function() {
         if(Auth.isTokenExpired()) {
             return '/';
+        } else if(!$rootScope.deviceAuthorized) {
+            return '/authenticate'
         } else if(!$rootScope.isAdmin) {
             return '/chats'
         }
@@ -197,9 +200,11 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
       $rootScope.$on("$locationChangeStart", function(event) {
         // handle route changes
         if(!Auth.isTokenExpired()) {
-            Auth.isUserAnAdmin().then(function(res){
-                $rootScope.isAdmin = res;
-            });
+            if($rootScope.deviceAuthorized) {
+                Auth.isUserAnAdmin().then(function (res) {
+                    $rootScope.isAdmin = res;
+                });
+            }
         }
       });
   });
