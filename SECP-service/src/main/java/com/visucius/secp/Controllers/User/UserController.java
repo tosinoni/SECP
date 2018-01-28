@@ -2,7 +2,10 @@ package com.visucius.secp.Controllers.User;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Sets;
-import com.visucius.secp.DTO.*;
+import com.visucius.secp.DTO.DeviceDTO;
+import com.visucius.secp.DTO.GroupDTO;
+import com.visucius.secp.DTO.RolesOrPermissionDTO;
+import com.visucius.secp.DTO.UserDTO;
 import com.visucius.secp.daos.*;
 import com.visucius.secp.models.*;
 import com.visucius.secp.util.Util;
@@ -203,7 +206,7 @@ public class UserController {
         //remove user from old group
         Set<Group> oldGroups = Sets.difference(user.getGroups(), groupsForUser);
         oldGroups.stream()
-            .filter(group -> group.getGroupType().equals(GroupType.PUBLIC))
+            .filter(group -> !groupsForUser.contains(group) && group.getGroupType().equals(GroupType.PUBLIC))
             .map(group -> {
                 group.getUsers().remove(user);
                 groupDAO.save(group);
@@ -256,7 +259,6 @@ public class UserController {
         if (deviceDTO == null) {
             throw new WebApplicationException(UserErrorMessage.DEVICE_ADD_FAIL_NO_DEVICE_INFO, Response.Status.BAD_REQUEST);
         }
-
         if (StringUtils.isBlank(deviceDTO.getDeviceName())) {
             throw new WebApplicationException(UserErrorMessage.DEVICE_ADD_FAIL_NO_DEVICE_NAME, Response.Status.BAD_REQUEST);
         } else if (StringUtils.isBlank(deviceDTO.getPublicKey()) || deviceDTO.getPublicKey().length() < 100) {
@@ -286,8 +288,7 @@ public class UserController {
         userDTO.setActive(user.isActive());
         userDTO.setLoginRole(user.getLoginRole());
 
-        Set<GroupDTO> groups = getGroupsForUser(user).stream()
-            .filter(group -> group.isActive() && group.getGroupType().equals(GroupType.PUBLIC))
+        Set<GroupDTO> groups = getGroupsForUser(user).stream().filter(group -> group.isActive() && group.getGroupType().equals(GroupType.PUBLIC))
             .map(group -> {
                 return new GroupDTO(group.getId());
             }).collect(Collectors.toSet());

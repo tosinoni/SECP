@@ -1,12 +1,19 @@
 'use strict';
 
 angular.module('SECP')
-  .factory('Socket', function($rootScope) {
-    var userID = localStorage.getItem('userID');
-    var host = location.host;
-    var socket = new WebSocket("ws://" + host + "/chat/" + userID);
+  .factory('Socket', function($rootScope, $location) {
+    let userID = localStorage.getItem('userID');
+    let host = location.host;
+    let protocol = "wss";
 
-    return {
+    if($location.protocol() === "http") {
+        protocol = "ws";
+    }
+
+    //var socket = new WebSocket(protocol + "://" + host + "/chat/" + userID);
+      var socket = new WebSocket("ws://localhost:8080/chat/" + userID);
+
+      return {
         onopen: function (callback) {
           socket.onopen = function () {
             $rootScope.$apply(function () {

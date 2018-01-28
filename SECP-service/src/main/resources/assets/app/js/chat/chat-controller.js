@@ -15,6 +15,10 @@ angular.module('SECP')
       });
 
       EncryptionService.getDecryptedSecretKeys().then(function (userSecretKeys) {
+          var deviceName = new Fingerprint().get();
+          console.log(deviceName);
+
+          console.log(userSecretKeys);
           if(userSecretKeys) {
               $scope.secretKeysForChat = userSecretKeys;
           }
