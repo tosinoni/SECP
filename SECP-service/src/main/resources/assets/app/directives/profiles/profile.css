@@ -1,14 +1,14 @@
 @import url("https://fonts.googleapis.com/css?family=Raleway:400,700");
-#groupprofile{
+#profile{
     margin-bottom: 50px;
     text-align: center;
     font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
-#group-name, .profile-list-heading{
+#name, .profile-list-heading{
     font-size: 1.1em;
     font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
-#groupprofile img{
+#profile img{
     margin: 0 auto;
     border: 7px solid #fff;
     display: block;
@@ -16,7 +16,7 @@
     width: 35%;
     border-radius: 50%;
 }
-#user-security-settings, #user-list {
+#security-settings, #user-list {
     text-align: left;
 }
 .profile-list-group{
@@ -51,7 +51,7 @@
     margin-bottom: 0;
 }
 
-#groupProfileModal{
+#profileModal{
     padding-top: 10px;
 }
 #openEditProfile{
