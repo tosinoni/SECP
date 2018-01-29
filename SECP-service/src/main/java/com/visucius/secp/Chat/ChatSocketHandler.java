@@ -8,15 +8,12 @@ import com.visucius.secp.models.Message;
 import com.visucius.secp.models.User;
 import io.dropwizard.hibernate.UnitOfWork;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ChatSocketHandler implements IMessageHandler {
 
-    private ConcurrentHashMap<Long,Set<IMessageReceiver>> activeUsers;
+    private ConcurrentHashMap<User,Set<IMessageReceiver>> activeUsers;
     private final MessageDAO messageRepository;
     private final GroupDAO groupRepository;
 
@@ -30,13 +27,13 @@ public class ChatSocketHandler implements IMessageHandler {
     @Override
     public void attachSession(IMessageReceiver messageReceiver) {
 
-        long userID = messageReceiver.getUser().getId();
-        if (activeUsers.containsKey(userID)) {
-            activeUsers.get(userID).add(messageReceiver);
+        User user = messageReceiver.getUser();
+        if (activeUsers.containsKey(user)) {
+            activeUsers.get(user).add(messageReceiver);
         } else {
             Set<IMessageReceiver> receivers = new HashSet<>();
             receivers.add(messageReceiver);
-            activeUsers.put(userID, receivers);
+            activeUsers.put(user, receivers);
         }
 
     }
@@ -44,12 +41,12 @@ public class ChatSocketHandler implements IMessageHandler {
     @Override
     public void detachSession(IMessageReceiver messageReceiver) {
 
-        long userID = messageReceiver.getUser().getId();
-        if (activeUsers.containsKey(userID)) {
-            Set<IMessageReceiver> receivers = activeUsers.get(userID);
+        User user = messageReceiver.getUser();
+        if (activeUsers.containsKey(user)) {
+            Set<IMessageReceiver> receivers = activeUsers.get(user);
             receivers.remove(messageReceiver);
             if (receivers.isEmpty())
-                activeUsers.remove(userID);
+                activeUsers.remove(user);
 
         }
     }
@@ -58,12 +55,12 @@ public class ChatSocketHandler implements IMessageHandler {
     @UnitOfWork
     public void notifySession(MessageDTO message, IMessageReceiver receiver) {
         MessageDTO savedMessage = saveMessage(message, receiver);
-        for(IMessageReceiver messageReceiver: getReceivers(message)) {
+        for(IMessageReceiver messageReceiver: getReceivers(message,receiver)) {
             messageReceiver.updateUser(savedMessage);
         }
     }
 
-    private Set<IMessageReceiver> getReceivers(MessageDTO messageDTO)
+    private Set<IMessageReceiver> getReceivers(MessageDTO messageDTO, IMessageReceiver receiver)
     {
         Set<IMessageReceiver> receivers = new HashSet<>();
         if(messageDTO.getReason() == MessageDTO.MessageType.MESSAGE)
@@ -73,15 +70,24 @@ public class ChatSocketHandler implements IMessageHandler {
             {
                 Group group = groupOptional.get();
                 group.getUsers().forEach(user -> {
-                    long userId = user.getId();
-                    if(this.activeUsers.containsKey(userId))
-                        receivers.addAll(this.activeUsers.get(userId));
+                    if(this.activeUsers.containsKey(user))
+                        receivers.addAll(this.activeUsers.get(user));
                 });
             }
         }
-        else {
-            if(activeUsers.containsKey(messageDTO.getSenderId()))
-                return activeUsers.get(messageDTO.getSenderId());
+        else if(messageDTO.getReason() == MessageDTO.MessageType.REGISTRATION_USER) {
+            return activeUsers.get(receiver.getUser());
+        }
+        else if(messageDTO.getReason() == MessageDTO.MessageType.REGISTRATION_ADMIN)
+        {
+            this.activeUsers.forEach((key, value) ->
+            {
+                if(key.isAdmin())
+                {
+                    receivers.addAll(activeUsers.get(key));
+                }
+
+            });
         }
 
         return receivers;

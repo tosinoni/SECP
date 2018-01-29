@@ -101,6 +101,9 @@ public class MessageDTO {
     {
         @JsonProperty("message")
         MESSAGE,
-
+        @JsonProperty("registration_user")
+        REGISTRATION_USER,
+        @JsonProperty("registration_admin")
+        REGISTRATION_ADMIN,
     }
 }

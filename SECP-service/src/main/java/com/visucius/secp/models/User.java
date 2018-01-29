@@ -232,6 +232,11 @@ public class User implements Principal {
         devices.add(device);
     }
 
+    public boolean isAdmin()
+    {
+        return this.loginRole == LoginRole.ADMIN;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
