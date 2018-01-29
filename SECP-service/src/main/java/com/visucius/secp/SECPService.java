@@ -168,8 +168,8 @@ public class SECPService extends Application<SECPConfiguration> {
         //************************** WebSocket Servlet *************************************
         ChatSocketHandler chatSocketHandler = new UnitOfWorkAwareProxyFactory(hibernateBundle)
             .create(ChatSocketHandler.class,
-                new Class<?>[]  { MessageDAO.class},
-                new Object[]    { messageDAO});
+                new Class<?>[]  { MessageDAO.class, GroupDAO.class},
+                new Object[]    { messageDAO, groupDAO});
 
         ChatSocketCreator chatSocketCreator = new UnitOfWorkAwareProxyFactory(hibernateBundle)
             .create(ChatSocketCreator.class,

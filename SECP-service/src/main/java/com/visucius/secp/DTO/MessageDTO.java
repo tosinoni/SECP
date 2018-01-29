@@ -67,8 +67,8 @@ public class MessageDTO {
         return messageId;
     }
 
-    public void setMessageId(long messageId) {
-        this.messageId = messageId;
+    public long getSenderId() {
+        return senderId;
     }
 
     public String getSenderDisplayName() {
