@@ -26,6 +26,9 @@ public class MessageDTO {
     private String senderDisplayName;
 
     @JsonProperty
+    private String senderDeviceName;
+
+    @JsonProperty
     private MessageType reason;
 
     public MessageDTO()
@@ -79,6 +82,14 @@ public class MessageDTO {
         this.senderDisplayName = senderDisplayName;
     }
 
+    public String getSenderDeviceName() {
+        return senderDeviceName;
+    }
+
+    public void setSenderDeviceName(String senderDeviceName) {
+        this.senderDeviceName = senderDeviceName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof MessageDTO)) {
@@ -103,7 +114,10 @@ public class MessageDTO {
         MESSAGE,
         @JsonProperty("user_authorization")
         USER_AUTHORIZATION,
-        @JsonProperty("admin_authoriztion")
+        @JsonProperty("admin_authorization")
         ADMIN_AUTHORIZATION,
+
+        @JsonProperty("user_approved")
+        USER_APPROVED,
     }
 }

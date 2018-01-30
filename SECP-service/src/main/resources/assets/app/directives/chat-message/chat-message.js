@@ -60,15 +60,18 @@ angular.module('SECP')
                 return formatedMessages;
              }
 
-            $scope.$watch('messages', function(newMessages) {
-                if(!_.isEmpty($scope.secretKeys)) {
-                    $scope.formatedMessages = formatMessages(newMessages);
-                    //move the scroll button down to see the latest message
-                    $('#chat-scroll').animate({
-                        scrollTop: $('#chat-scroll').get(0).scrollHeight
-                    });
-                }
-             }, true);
+             let displayMessages = function (newVal) {
+                 if(!_.isEmpty($scope.secretKeys)) {
+                     $scope.formatedMessages = formatMessages($scope.messages);
+                     //move the scroll button down to see the latest message
+                     $('#chat-scroll').animate({
+                         scrollTop: $('#chat-scroll').get(0).scrollHeight
+                     });
+                 }
+             }
+            $scope.$watch('messages', displayMessages, true);
+
+            $scope.$watch('secretKeys', displayMessages, true);
 
 
              $scope.$watch('selectedChat', function(selectedChat) {

@@ -5,9 +5,9 @@ angular.module('SECP')
         var requiredStatus = 'required';
         var approvedStatus = 'approved';
 
-        function generateKeyPair (userID) {
+        function generateKeyPair (deviceName) {
             // The passphrase used to repeatably generate this RSA key.
-            let PassPhrase = userID + " is a member of SECP.";
+            let PassPhrase = deviceName + " is a member of SECP.";
 
             // The length of the RSA key, in bits.
             let Bits = 1024;
@@ -25,6 +25,7 @@ angular.module('SECP')
                 let secretObj = {};
                 if (device.publicKey) {
                     //encrypt the secret key with the users public key
+                    console.log(device.publicKey);
                     let EncryptionResult = cryptico.encrypt(JSON.stringify(secretKey), device.publicKey);
                     secretObj.groupID = groupID;
                     secretObj.deviceID = device.deviceID;
@@ -42,12 +43,12 @@ angular.module('SECP')
 
             setTimeout(function() {
                 Device.getSecretKeysForDevice().then(function (secretDTOS) {
-                    console.log(secretDTOS);
                     if (secretDTOS) {
                         let obj = {};
                         let userID = localStorage.getItem('userID');
                         localforage.getItem(userID, function (err, userObj) {
                             let privateKey = cryptico.fromJSON(userObj.keypair);
+
                             for (let secretDTO of secretDTOS) {
                                 let decryptedKey = cryptico.decrypt(secretDTO.encryptedSecret, privateKey);
                                 if (decryptedKey.status !== "failure") {
@@ -89,31 +90,35 @@ angular.module('SECP')
                         secretDTOS = secretDTOS.concat(getSecretKeyToSendToDevices(groupID, devices, secretKeyForGroup));
                     }
 
+                    console.log(secretDTOS);
                     Device.sendSecretKeyToDevices(secretDTOS);
                 }
             });
         }
 
         function getApprovalFromUserDevice(userID, approvalType) {
-            let keypair = generateKeyPair(userID);
             let deviceName = new Fingerprint().get();
+            let keypair = generateKeyPair(deviceName);
 
-            let messageBody = {
-                publicKey : cryptico.publicKeyString(keypair),
-                status: requiredStatus,
-                deviceName : deviceName
-            }
+            let userObj = {keypair:  cryptico.toJSON(keypair)};
+            localforage.setItem(userID, userObj).then(function () {
+                let messageBody = {
+                    publicKey: cryptico.publicKeyString(keypair),
+                    status: requiredStatus,
+                    deviceName: deviceName
+                }
 
-            let messageDTO = {
-                body: JSON.stringify(messageBody),
-                senderId: userID,
-                reason: approvalType
-            }
+                let messageDTO = {
+                    body: JSON.stringify(messageBody),
+                    senderId: userID,
+                    reason: approvalType
+                }
 
-            Socket.send(messageDTO);
+                Socket.send(messageDTO);
+            });
         }
 
-        function sendAuthorizationApproval(userID, deviceName, approvalType) {
+        function sendAuthorizationApproval(userID, deviceName) {
             let messageBody = {
                 status: approvedStatus,
                 deviceName : deviceName
@@ -122,10 +127,8 @@ angular.module('SECP')
             let messageDTO = {
                 body: JSON.stringify(messageBody),
                 senderId: userID,
-                reason: approvalType
+                reason: "user_approved"
             }
-
-            console.log(messageDTO);
 
             Socket.send(messageDTO);
         }
@@ -150,13 +153,13 @@ angular.module('SECP')
             return deferred.promise;
         }
 
-        function approveDevice(userID, deviceName, devicePublicKey, messageReason) {
+        function approveDevice(userID, deviceName, devicePublicKey) {
             UserService.getUser(userID).then(function (user) {
                 if (user) {
                     registerNewDevice(userID, deviceName, devicePublicKey).then(function (newDevice) {
                         console.log(newDevice);
                         sendSecretKeyToUserDevices(user, [newDevice]);
-                        sendAuthorizationApproval(userID, deviceName, messageReason);
+                        sendAuthorizationApproval(userID, deviceName);
                     });
                 }
             })
@@ -175,7 +178,7 @@ angular.module('SECP')
 
             if (messageBody.status === requiredStatus && deviceName !== messageBody.deviceName) {
                 let callbackFn = function () {
-                    approveDevice(messageObj.senderId, messageBody.deviceName, messageBody.publicKey, messageObj.reason)
+                    approveDevice(messageObj.senderId, messageBody.deviceName, messageBody.publicKey)
                     swal("Yaah", "Device Approved", "success");
                 }
 
@@ -184,6 +187,19 @@ angular.module('SECP')
                 swal("Yaah", "Device approved", "success");
                 visitNextPage();
             }
+        }
+
+        function registerDefaultUser(userID) {
+            let deviceName = new Fingerprint().get();
+            let keypair = generateKeyPair(deviceName);
+
+            let userObj = {keypair:  cryptico.toJSON(keypair)};
+            localforage.setItem(userID, userObj).then(function () {
+                let devicePublicKey = cryptico.publicKeyString(keypair);
+                registerNewDevice(userID, deviceName, devicePublicKey).then(function (newDevice) {
+                    visitNextPage();
+                });
+            })
         }
         return {
             generateKeyPair: generateKeyPair,
@@ -219,6 +235,7 @@ angular.module('SECP')
             },
 
             getDecryptedSecretKeys: getDecryptedSecretKeys,
+            registerDefaultUser: registerDefaultUser,
             getApprovalFromUserDevice: getApprovalFromUserDevice,
             handleAuthorizationRequest: handleAuthorizationRequest
         }

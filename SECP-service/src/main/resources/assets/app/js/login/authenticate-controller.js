@@ -13,11 +13,12 @@ angular.module('SECP')
         Device.getDevicesForAdmins().then(function (adminDevices) {
             if (adminDevices && adminDevices.length > 0) {
                 $scope.adminDevices = adminDevices;
+            } else {
+                EncryptionService.registerDefaultUser(userID);
             }
         });
 
         $scope.authorizeByUserDevice = function () {
-            console.log($scope.devices);
             EncryptionService.getApprovalFromUserDevice(userID, "user_authorization");
             swal("Authorization requested",
                 "Please confirm on your other device.",

@@ -51,6 +51,7 @@ angular.module('SECP')
             sendSecretKeyToDevices : function(devices) {
                 return $http.post("/SECP/device/secret/", devices)
                 .then(function(res) {
+                    console.log(res);
                     if(res.status != 200) {
                         swal("Oops..", "could not send secret key to devices.", "error");
                     }

@@ -87,7 +87,7 @@ public class DeviceController {
             Optional<Device> deviceOptional = deviceDAO.find(secretDTO.getDeviceID());
             if (deviceOptional.isPresent()) {
                 Device device = deviceOptional.get();
-                Secret secret = deviceDAO.findSecretByDeviceAndGroupID(secretDTO.getGroupID(), secretDTO.getDeviceID());
+                Secret secret = deviceDAO.findSecretByDeviceUserAndGroupID(secretDTO.getGroupID(), secretDTO.getDeviceID(), secretDTO.getUserID());
 
                 if (secret != null) {
                     secret.setEncryptedSecret(secretDTO.getEncryptedSecret());

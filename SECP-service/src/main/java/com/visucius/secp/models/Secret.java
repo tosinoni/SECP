@@ -9,7 +9,7 @@ import java.util.Objects;
     {
         @NamedQuery(
             name = "com.visucius.secp.models.Secret.findSecretForDevice",
-            query = "from Secret s where s.groupID = :groupID and s.device.id = :deviceID"
+            query = "from Secret s where s.groupID = :groupID and s.device.id = :deviceID and s.userID = :userID"
         ),
         @NamedQuery(
             name = "com.visucius.secp.models.Secret.findSecretForUserDevice",

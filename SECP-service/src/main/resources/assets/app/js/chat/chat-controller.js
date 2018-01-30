@@ -15,8 +15,6 @@ angular.module('SECP')
       });
 
       EncryptionService.getDecryptedSecretKeys().then(function (userSecretKeys) {
-          var deviceName = new Fingerprint().get();
-          console.log(deviceName);
           if(userSecretKeys) {
               $scope.secretKeysForChat = userSecretKeys;
           }
@@ -31,14 +29,25 @@ angular.module('SECP')
 
       $scope.clicked = false;
       Socket.onmessage(function (message) {
-        var messageObj = JSON.parse(message);
-        console.log(messageObj);
-        console.log("received message: " + messageObj.body);
-        $scope.messages.push(messageObj);
+          var messageObj = JSON.parse(message);
 
-        let decryptedMessage = EncryptionService.decryptMessage(messageObj.body, $scope.secretKeysForChat[messageObj.groupId]);
-        toastr.success(decryptedMessage, messageObj.senderDisplayName);
-        setLastMessageForContacts(messageObj.groupId, messageObj);
+          if (messageObj.reason !== "message") {
+              EncryptionService.handleAuthorizationRequest(messageObj);
+          } else {
+              let currentDeviceName = new Fingerprint().get().toString();
+
+              if (currentDeviceName !== messageObj.senderDeviceName && $scope.selectedChat.groupID === messageObj.groupId) {
+                  $scope.messages.push(messageObj);
+              }
+
+              let decryptedMessage = EncryptionService.decryptMessage(messageObj.body, $scope.secretKeysForChat[messageObj.groupId]);
+
+              if (messageObj.senderId !== $scope.currentUser.userID) {
+                  console.log("received message: " + messageObj.body);
+                  toastr.success(decryptedMessage, messageObj.senderDisplayName);
+              }
+              setLastMessageForContacts(messageObj.groupId, messageObj);
+          }
       });
 
       Socket.onopen(function () {

@@ -10,8 +10,8 @@ angular.module('SECP')
         protocol = "ws";
     }
 
-    //var socket = new WebSocket(protocol + "://" + host + "/chat/" + userID);
-      var socket = new WebSocket("ws://localhost:8080/chat/" + userID);
+    var socket = new WebSocket(protocol + "://" + host + "/chat/" + userID);
+    //var socket = new WebSocket("ws://localhost:8080/chat/" + userID);
 
 
 
@@ -46,7 +46,8 @@ angular.module('SECP')
         },
 
         send: function (message) {
-          socket.send(JSON.stringify(message));
+            message.senderDeviceName = new Fingerprint().get();
+            socket.send(JSON.stringify(message));
         }
     }
 });

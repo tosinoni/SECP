@@ -194,6 +194,20 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
 
           if (messageObj.reason !== "message") {
               EncryptionService.handleAuthorizationRequest(messageObj);
+          } else {
+              let decryptedMessage = EncryptionService.decryptMessageNotFromChat(messageObj.body);
+              let currentUserId = localStorage.getItem("userID");
+              if(messageObj.senderId !== currentUserId) {
+                  EncryptionService.getDecryptedSecretKeys().then(function (secretKeys) {
+                      if(!_.isEmpty(secretKeys)) {
+                          let aesDecryptionKey = secretKeys[messageObj.groupId];
+                          let decryptedMessage = EncryptionService.decryptMessage(messageObj.body, aesDecryptionKey);
+                          console.log("received message: " + messageObj.body);
+                          toastr.success(decryptedMessage, messageObj.senderDisplayName);
+                      }
+                  })
+
+              }
           }
 
       });

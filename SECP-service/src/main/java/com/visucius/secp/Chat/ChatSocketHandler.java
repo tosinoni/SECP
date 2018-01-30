@@ -77,6 +77,16 @@ public class ChatSocketHandler implements IMessageHandler {
                 });
             }
         }
+        else if(messageDTO.getReason() == MessageDTO.MessageType.USER_APPROVED)
+        {
+            long userID = messageDTO.getSenderId();
+            this.activeUsers.forEach((user, iMessageReceivers) ->
+            {
+                if(user.getId() == userID)
+                    receivers.addAll(iMessageReceivers);
+            });
+        }
+
         else if(messageDTO.getReason() == MessageDTO.MessageType.USER_AUTHORIZATION) {
             return activeUsers.get(receiver.getUser());
         }
@@ -116,6 +126,8 @@ public class ChatSocketHandler implements IMessageHandler {
         if(user.getDisplayName() != null) {
             savedMessage.setSenderDisplayName(user.getDisplayName());
         }
+
+        savedMessage.setSenderDeviceName(messageDTO.getSenderDeviceName());
         return savedMessage;
     }
 

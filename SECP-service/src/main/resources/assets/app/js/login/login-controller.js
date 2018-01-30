@@ -25,7 +25,6 @@ angular.module('SECP')
             Auth.isDeviceRegisteredForUser(userID, deviceName).then(function (status) {
                 if (!status) {
                     $location.path("/authenticate");
-                    console.log($rootScope);
                     //var keypairForUser = EncryptionService.generateKeyPair(userID);
 
                     //let userObj = {keypair:  cryptico.toJSON(keypairForUser)};

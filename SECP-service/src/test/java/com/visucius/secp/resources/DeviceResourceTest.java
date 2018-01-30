@@ -148,7 +148,7 @@ public class DeviceResourceTest {
         secretDTO.setEncryptedSecret("encryptedText");
         secretDTOS.add(secretDTO);
         Secret secret = new Secret();
-        Mockito.when(deviceDAO.findSecretByDeviceAndGroupID(secretDTO.getGroupID(), secretDTO.getDeviceID()))
+        Mockito.when(deviceDAO.findSecretByDeviceUserAndGroupID(secretDTO.getGroupID(), secretDTO.getDeviceID(), secretDTO.getUserID()))
             .thenReturn(secret);
         response = resources.client().target(addSecretToDevicesUrl).request().post(Entity.json(secretDTOS));
         ResponseValidator.validate(response, 200);
