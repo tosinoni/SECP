@@ -13,6 +13,8 @@ angular.module('SECP')
     //var socket = new WebSocket(protocol + "://" + host + "/chat/" + userID);
       var socket = new WebSocket("ws://localhost:8080/chat/" + userID);
 
+
+
       return {
         onopen: function (callback) {
           socket.onopen = function () {

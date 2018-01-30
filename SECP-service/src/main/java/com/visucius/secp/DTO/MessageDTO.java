@@ -56,7 +56,7 @@ public class MessageDTO {
     }
 
     public Date getTimestamp() {
-        return new Date(this.timestamp.getTime());
+        return this.timestamp;
     }
 
     public String getBody() {
@@ -101,9 +101,9 @@ public class MessageDTO {
     {
         @JsonProperty("message")
         MESSAGE,
-        @JsonProperty("registration_user")
-        REGISTRATION_USER,
-        @JsonProperty("registration_admin")
-        REGISTRATION_ADMIN,
+        @JsonProperty("user_authorization")
+        USER_AUTHORIZATION,
+        @JsonProperty("admin_authoriztion")
+        ADMIN_AUTHORIZATION,
     }
 }

@@ -118,7 +118,7 @@ public class UserController {
             user.addDevice(device);
             userDAO.save(user);
             LOG.info("New device added for user");
-            return Response.status(Response.Status.CREATED).entity(device.getId()).build();
+            return Response.status(Response.Status.CREATED).entity(new DeviceDTO(device, user.getId())).build();
         }
 
         throw new WebApplicationException(UserErrorMessage.DEVICE_ADD_FAIL_DEVICE_EXISTS, Response.Status.BAD_REQUEST);

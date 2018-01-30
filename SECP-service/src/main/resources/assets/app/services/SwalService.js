@@ -19,6 +19,49 @@ angular.module('SECP')
         }).catch((result) => {});
     };
 
+    function verifyInformation(title, infoName, callback) {
+        swal({
+            title: title,
+            input: 'text',
+            showCancelButton: true,
+            confirmButtonText: 'Submit',
+            showLoaderOnConfirm: true,
+            preConfirm: (inputValue) => {
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        if (inputValue !== infoName) {
+                            swal.showValidationError('input value does not match.');
+                            reject();
+                        }
+                        resolve();
+                    }, 100)
+                });
+            },
+            allowOutsideClick: () => !swal.isLoading()
+        }).then((result) => {
+            if (result) {
+                callback();
+            }
+        }).catch((result) => {});
+    }
+
+    function authorizeUserSwal(deviceName, callback) {
+        let title = "Please enter these characters to verify: " + deviceName;
+        swal({
+            title: 'New device detected',
+            text: "Do you want to trust this device?!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Trust it!'
+        }).then((result) => {
+            if (result) {
+                verifyInformation(title, deviceName.toString(), callback);
+            }
+        }).catch((result) => {});
+    }
+
     return {
         delete : deleteSwal,
         deleteImportantInformation : function(infoName, deleteTitle, callback) {
@@ -49,6 +92,8 @@ angular.module('SECP')
             };
 
             deleteSwal(deleteImportantInformationFunction);
-        }
+        },
+
+        authorizeUserSwal: authorizeUserSwal
     }
   });

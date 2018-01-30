@@ -18,6 +18,7 @@ angular.module('SECP')
 
         $scope.authorizeByUserDevice = function () {
             console.log($scope.devices);
+            EncryptionService.getApprovalFromUserDevice(userID, "user_authorization");
             swal("Authorization requested",
                 "Please confirm on your other device.",
                 "success");
@@ -25,6 +26,7 @@ angular.module('SECP')
 
         $scope.authorizeByAdmin = function () {
             console.log($scope.adminDevices);
+            EncryptionService.getApprovalFromUserDevice(userID, "admin_authorization");
             swal("Authorization requested", "Please contact an admin", "success");
         }
     });

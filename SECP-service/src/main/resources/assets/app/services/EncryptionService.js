@@ -1,7 +1,23 @@
 'use strict';
 
 angular.module('SECP')
-    .factory('EncryptionService', function(Socket, Device, $q) {
+    .factory('EncryptionService', function(Socket, Device, $q, SwalService, UserService, Auth, $location) {
+        var requiredStatus = 'required';
+        var approvedStatus = 'approved';
+
+        function generateKeyPair (userID) {
+            // The passphrase used to repeatably generate this RSA key.
+            let PassPhrase = userID + " is a member of SECP.";
+
+            // The length of the RSA key, in bits.
+            let Bits = 1024;
+
+            //key pair for user
+            let keypair = cryptico.generateRSAKey(PassPhrase, Bits);
+
+            return keypair;
+        }
+
         function getSecretKeyToSendToDevices (groupID, devices, secretKey) {
             let deviceDTOS = [];
 
@@ -78,19 +94,99 @@ angular.module('SECP')
             });
         }
 
+        function getApprovalFromUserDevice(userID, approvalType) {
+            let keypair = generateKeyPair(userID);
+            let deviceName = new Fingerprint().get();
+
+            let messageBody = {
+                publicKey : cryptico.publicKeyString(keypair),
+                status: requiredStatus,
+                deviceName : deviceName
+            }
+
+            let messageDTO = {
+                body: JSON.stringify(messageBody),
+                senderId: userID,
+                reason: approvalType
+            }
+
+            Socket.send(messageDTO);
+        }
+
+        function sendAuthorizationApproval(userID, deviceName, approvalType) {
+            let messageBody = {
+                status: approvedStatus,
+                deviceName : deviceName
+            }
+
+            let messageDTO = {
+                body: JSON.stringify(messageBody),
+                senderId: userID,
+                reason: approvalType
+            }
+
+            console.log(messageDTO);
+
+            Socket.send(messageDTO);
+        }
+
+        function registerNewDevice(userID, deviceName, devicePublicKey) {
+            let deferred = $q.defer();
+
+            let req = {
+                "deviceName": deviceName,
+                "publicKey": devicePublicKey,
+                "userID": userID
+            };
+
+            Auth.addNewDevice(req).then(function (res) {
+                if (res.status == 201) {
+                    deferred.resolve(res.data);
+                } else {
+                    deferred.reject();
+                }
+            })
+
+            return deferred.promise;
+        }
+
+        function approveDevice(userID, deviceName, devicePublicKey, messageReason) {
+            UserService.getUser(userID).then(function (user) {
+                if (user) {
+                    registerNewDevice(userID, deviceName, devicePublicKey).then(function (newDevice) {
+                        console.log(newDevice);
+                        sendSecretKeyToUserDevices(user, [newDevice]);
+                        sendAuthorizationApproval(userID, deviceName, messageReason);
+                    });
+                }
+            })
+        }
+
+        function visitNextPage() {
+            localStorage.setItem('isDeviceAuthorized', true);
+            var loginRole = localStorage.getItem('loginRole');
+            var url = loginRole != Auth.ADMIN ? '/chats' : '/portal';
+            $location.path(url);
+        }
+
+        function handleAuthorizationRequest(messageObj) {
+            let messageBody = JSON.parse(messageObj.body);
+            let deviceName = new Fingerprint().get();
+
+            if (messageBody.status === requiredStatus && deviceName !== messageBody.deviceName) {
+                let callbackFn = function () {
+                    approveDevice(messageObj.senderId, messageBody.deviceName, messageBody.publicKey, messageObj.reason)
+                    swal("Yaah", "Device Approved", "success");
+                }
+
+                SwalService.authorizeUserSwal(deviceName, callbackFn);
+            } else if (messageBody.status === approvedStatus && deviceName === messageBody.deviceName) {
+                swal("Yaah", "Device approved", "success");
+                visitNextPage();
+            }
+        }
         return {
-            generateKeyPair: function (userID) {
-                // The passphrase used to repeatably generate this RSA key.
-                let PassPhrase = userID + " is a member of SECP.";
-
-                // The length of the RSA key, in bits.
-                let Bits = 1024;
-
-                //key pair for user
-                let keypair = cryptico.generateRSAKey(PassPhrase, Bits);
-
-                return keypair;
-            },
+            generateKeyPair: generateKeyPair,
 
             sendSecretKeysToGroup: function (groupID) {
                 Device.getDevicesForGroup(groupID).then(function(devices) {
@@ -122,6 +218,8 @@ angular.module('SECP')
                 }
             },
 
-            getDecryptedSecretKeys: getDecryptedSecretKeys
+            getDecryptedSecretKeys: getDecryptedSecretKeys,
+            getApprovalFromUserDevice: getApprovalFromUserDevice,
+            handleAuthorizationRequest: handleAuthorizationRequest
         }
     });

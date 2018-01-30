@@ -54,7 +54,9 @@ public class ChatSocketHandler implements IMessageHandler {
     @Override
     @UnitOfWork
     public void notifySession(MessageDTO message, IMessageReceiver receiver) {
-        MessageDTO savedMessage = saveMessage(message, receiver);
+        MessageDTO savedMessage = message;
+        if(message.getReason().equals(MessageDTO.MessageType.MESSAGE))
+            savedMessage = saveMessage(message, receiver);
         for(IMessageReceiver messageReceiver: getReceivers(message,receiver)) {
             messageReceiver.updateUser(savedMessage);
         }
@@ -75,10 +77,10 @@ public class ChatSocketHandler implements IMessageHandler {
                 });
             }
         }
-        else if(messageDTO.getReason() == MessageDTO.MessageType.REGISTRATION_USER) {
+        else if(messageDTO.getReason() == MessageDTO.MessageType.USER_AUTHORIZATION) {
             return activeUsers.get(receiver.getUser());
         }
-        else if(messageDTO.getReason() == MessageDTO.MessageType.REGISTRATION_ADMIN)
+        else if(messageDTO.getReason() == MessageDTO.MessageType.ADMIN_AUTHORIZATION)
         {
             this.activeUsers.forEach((key, value) ->
             {

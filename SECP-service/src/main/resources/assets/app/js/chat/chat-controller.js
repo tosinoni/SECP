@@ -2,7 +2,7 @@
 
 angular.module('SECP')
   .controller('ChatController',
-    function ($scope, Chat, Socket, EncryptionService, SwalService) {
+    function ($scope, Chat, Socket, EncryptionService, SwalService, Admin, $q) {
       //declaring variables
       $scope.contacts = [];
       $scope.secretKeysForChat = {};

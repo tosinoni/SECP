@@ -42,6 +42,11 @@ public class DeviceDTO {
         }
     }
 
+    public DeviceDTO(Device device, long userID) {
+        this(device);
+        this.userID = userID;
+    }
+
     public String getDeviceName() {
         return deviceName;
     }

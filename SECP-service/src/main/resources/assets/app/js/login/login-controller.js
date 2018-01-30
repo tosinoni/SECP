@@ -1,5 +1,5 @@
 angular.module('SECP')
-    .controller('LoginController', function ($scope, Auth, $location, EncryptionService, $rootScope) {
+    .controller('LoginController', function ($scope, Auth, $location, EncryptionService) {
         $scope.login = function () {
             // TODO: NEED TO SEND AUTHENTICATION EMAIL (IF REQUIRED BY ADMIN) CONTAINING VERIFICATION CODE WHEN SUCCESSFULLY LOGGED IN
             Auth.login($scope.user).then(function (res) {
@@ -24,7 +24,6 @@ angular.module('SECP')
 
             Auth.isDeviceRegisteredForUser(userID, deviceName).then(function (status) {
                 if (!status) {
-                    $rootScope.deviceAuthorized = false;
                     $location.path("/authenticate");
                     console.log($rootScope);
                     //var keypairForUser = EncryptionService.generateKeyPair(userID);
@@ -50,7 +49,7 @@ angular.module('SECP')
                     //     $scope.visitNextPage();
                     // });
                 } else {
-                    $rootScope.deviceAuthorized = true;
+                    localStorage.setItem('isDeviceAuthorized', true);
                     $scope.visitNextPage();
                 }
             });

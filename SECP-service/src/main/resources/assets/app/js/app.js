@@ -183,7 +183,21 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
              requireBase: false
       });
   })
-  .run(function($rootScope,Auth,authManager) {
+  .run(function($rootScope,Auth,authManager, Socket, EncryptionService, $location) {
+
+      let isDeviceAuthorized = function () {
+          return localStorage.getItem('isDeviceAuthorized');
+      }
+
+      Socket.onmessage(function (message) {
+          let messageObj = JSON.parse(message);
+
+          if (messageObj.reason !== "message") {
+              EncryptionService.handleAuthorizationRequest(messageObj);
+          }
+
+      });
+
       $(document).click(function(event) {
           $(".navbar-collapse").collapse('hide');
       });
@@ -198,7 +212,7 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
       $rootScope.getHomeUrl = function() {
         if(Auth.isTokenExpired()) {
             return '/';
-        } else if(!$rootScope.deviceAuthorized) {
+        } else if(!isDeviceAuthorized()) {
             return '/authenticate'
         } else if(!$rootScope.isAdmin) {
             return '/chats'
@@ -209,10 +223,12 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
       $rootScope.$on("$locationChangeStart", function(event) {
         // handle route changes
         if(!Auth.isTokenExpired()) {
-            if($rootScope.deviceAuthorized) {
+            if(isDeviceAuthorized()) {
                 Auth.isUserAnAdmin().then(function (res) {
                     $rootScope.isAdmin = res;
                 });
+            } else {
+                $location.path("/authenticate");
             }
         }
       });
