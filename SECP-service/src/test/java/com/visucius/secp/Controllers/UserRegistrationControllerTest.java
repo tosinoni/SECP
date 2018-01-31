@@ -7,6 +7,7 @@ import com.visucius.secp.DTO.RolesOrPermissionDTO;
 import com.visucius.secp.DTO.UserDTO;
 import com.visucius.secp.DTO.UserRegistrationRequest;
 import com.visucius.secp.DTO.UserRegistrationResponse;
+import com.visucius.secp.daos.GroupDAO;
 import com.visucius.secp.daos.PermissionDAO;
 import com.visucius.secp.daos.UserDAO;
 import com.visucius.secp.models.Permission;
@@ -28,6 +29,8 @@ public class UserRegistrationControllerTest {
     private UserRegistrationController controller;
     private UserDAO userDAO;
     private PermissionDAO permissionDAO;
+    private GroupDAO groupDAO;
+
 
     @Rule
     public final ExpectedException exception = ExpectedException.none();
@@ -35,12 +38,13 @@ public class UserRegistrationControllerTest {
     @Before
     public void setUp() throws Exception {
         userDAO = Mockito.mock(UserDAO.class);
+        groupDAO = Mockito.mock(GroupDAO.class);
         permissionDAO = Mockito.mock(PermissionDAO.class);
         Mockito.when(permissionDAO.find(Matchers.anyLong())).thenReturn(Optional.fromNullable(new Permission("level", "Blue")));
         Mockito.when(userDAO.findByEmail("duplicate@email.com")).thenReturn(new User());
         Mockito.when(userDAO.findByUserName("duplicateUsername")).thenReturn(new User());
         Mockito.when(userDAO.save(new User())).thenReturn(new User());
-        controller = new UserRegistrationController(userDAO,permissionDAO);
+        controller = new UserRegistrationController(userDAO,permissionDAO,groupDAO);
     }
 
     @Test

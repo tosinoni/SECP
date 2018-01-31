@@ -5,6 +5,10 @@ angular.module('SECP')
         var requiredStatus = 'required';
         var approvedStatus = 'approved';
 
+        Socket.onopen(function () {
+            console.log("socketOpen");
+        });
+
         function generateKeyPair (deviceName) {
             // The passphrase used to repeatably generate this RSA key.
             let PassPhrase = deviceName + " is a member of SECP.";
@@ -204,10 +208,9 @@ angular.module('SECP')
         return {
             generateKeyPair: generateKeyPair,
 
-            sendSecretKeysToGroup: function (groupID) {
+            sendSecretKeysToGroup: function (groupID, secretKey) {
                 Device.getDevicesForGroup(groupID).then(function(devices) {
                     if (devices) {
-                        let secretKey = cryptico.generateAESKey();
                         let secretDTOS = getSecretKeyToSendToDevices(groupID, devices, secretKey);
                         Device.sendSecretKeyToDevices(secretDTOS);
                     }

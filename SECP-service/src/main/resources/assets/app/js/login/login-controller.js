@@ -25,28 +25,6 @@ angular.module('SECP')
             Auth.isDeviceRegisteredForUser(userID, deviceName).then(function (status) {
                 if (!status) {
                     $location.path("/authenticate");
-                    //var keypairForUser = EncryptionService.generateKeyPair(userID);
-
-                    //let userObj = {keypair:  cryptico.toJSON(keypairForUser)};
-
-
-                    // localforage.setItem(userID, userObj).then(function () {
-                    //     //Getting the user's public key.
-                    //     let publicKeyForUser = cryptico.publicKeyString(keypairForUser);
-                    //     var req = {
-                    //         "deviceName": deviceName,
-                    //         "publicKey": publicKeyForUser,
-                    //         "userID": userID
-                    //     };
-                    //
-                    //     Auth.addPublicKey(req).then(function (res) {
-                    //         if (res.status !== 201) {
-                    //             swal('Oops..!', "This device is not supported for chat messages", 'error')
-                    //         }
-                    //     })
-                    //
-                    //     $scope.visitNextPage();
-                    // });
                 } else {
                     localStorage.setItem('isDeviceAuthorized', true);
                     $scope.visitNextPage();

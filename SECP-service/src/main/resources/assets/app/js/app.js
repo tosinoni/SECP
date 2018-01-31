@@ -49,18 +49,6 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
         css: 'css/chat.css',
         requiresLogin: true
       })
-      .when('/user-profile', {
-        templateUrl: 'views/profile/user-profile.html',
-        controller: 'UserProfileController',
-        css: 'css/user-profile.css',
-        requiresLogin: true
-      })
-      .when('/group-profile', {
-        templateUrl: 'views/profile/group-profile.html',
-        controller: 'GroupProfileController',
-        css: 'css/group-profile.css',
-        requiresLogin: true
-      })
       .when('/portal', {
         templateUrl: 'views/portal/portal.html',
         controller: 'PortalController',

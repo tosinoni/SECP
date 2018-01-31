@@ -19,7 +19,8 @@ angular.module('SECP')
                     $scope.createGroupData = {};
                     $scope.groups.push(res.data);
                     $('#groupModal').modal('toggle');
-                    EncryptionService.sendSecretKeysToGroup(res.data.groupID);
+                    let secretKey = cryptico.generateAESKey();
+                    EncryptionService.sendSecretKeysToGroup(res.data.groupID, secretKey);
                     swal('Added!','New group added.','success');
                 } else {
                     swal('Oops!', res.data.message, "error");
@@ -47,8 +48,11 @@ angular.module('SECP')
                     if (res.status == 201) {
                         var index = _.findIndex($scope.groups, function(o) { return o.groupID == row.groupID; });
                         $scope.groups[index] = res.data;
-                        swal('Modified!','Group modified.','success');
-                        EncryptionService.sendSecretKeysToGroup(res.data.groupID);
+                        EncryptionService.getDecryptedSecretKeys().then(function (userSecretKeys) {
+                            let groupId = res.data.groupID;
+                            EncryptionService.sendSecretKeysToGroup(groupId, userSecretKeys[groupId]);
+                            swal('Modified!','Group modified.','success');
+                        });
                     } else {
                         swal('Oops!', res.data.message, "error");
                     }

@@ -116,7 +116,7 @@ public class SECPService extends Application<SECPConfiguration> {
 
 
         //********************** Register Services/Controllers *********************************
-        final UserRegistrationController userRegistrationController = new UserRegistrationController(userDAO,permissionDAO);
+        final UserRegistrationController userRegistrationController = new UserRegistrationController(userDAO,permissionDAO,groupDAO);
         final TokenController tokenController = new TokenController(configuration);
         final LoginRequestController loginRequestController = new LoginRequestController(tokenController, userDAO);
         final UserController userController = new UserController(userDAO, deviceDAO, permissionDAO, rolesDAO, groupDAO);

@@ -1,8 +1,6 @@
 angular.module('SECP')
     .controller('AuthenticateController', function ($scope, Device, EncryptionService) {
-
         var userID = localStorage.getItem('userID');
-
         Device.getDevicesForUser(userID).then(function (devices) {
             if (devices && devices.length > 0) {
                 $scope.isDevice = true;

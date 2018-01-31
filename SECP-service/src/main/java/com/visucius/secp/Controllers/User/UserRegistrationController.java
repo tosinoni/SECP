@@ -1,11 +1,15 @@
 package com.visucius.secp.Controllers.User;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.Sets;
 import com.visucius.secp.DTO.UserDTO;
 import com.visucius.secp.DTO.UserRegistrationRequest;
 import com.visucius.secp.DTO.UserRegistrationResponse;
+import com.visucius.secp.daos.GroupDAO;
 import com.visucius.secp.daos.PermissionDAO;
 import com.visucius.secp.daos.UserDAO;
+import com.visucius.secp.models.Group;
+import com.visucius.secp.models.GroupType;
 import com.visucius.secp.models.Permission;
 import com.visucius.secp.models.User;
 import com.visucius.secp.util.InputValidator;
@@ -18,20 +22,25 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class UserRegistrationController{
 
     private static final Logger LOG = LoggerFactory.getLogger(UserRegistrationController.class);
 
     private final UserDAO userDAO;
+    private final GroupDAO groupDAO;
     private final PermissionDAO permissionDAO;
 
-    public UserRegistrationController(UserDAO userDAO, PermissionDAO permissionDAO)
+    public UserRegistrationController(UserDAO userDAO, PermissionDAO permissionDAO, GroupDAO groupDAO)
     {
 
         this.userDAO = userDAO;
         this.permissionDAO = permissionDAO;
+        this.groupDAO = groupDAO;
     }
 
     public Response registerUser(UserRegistrationRequest request) {
@@ -59,6 +68,7 @@ public class UserRegistrationController{
                 user.setDisplayName(request.userName);
                 Permission permission = getPermission(request.permission.getId());
                 user.setPermission(permission);
+                user.setGroups(getUserGroups(user));
                 User createdUser = userDAO.save(user);
                 UserDTO createdUserDTO = new UserDTO(createdUser);
                 return Response.status(Response.Status.CREATED).entity(createdUserDTO).build();
@@ -132,6 +142,24 @@ public class UserRegistrationController{
                 Response.Status.BAD_REQUEST);
         }
         return permissionOptional.get();
+    }
+
+    private boolean isUserInGroup(Group group, User user) {
+        return group.getGroupType().equals(GroupType.PUBLIC)
+            && (group.getPermissions().isEmpty() || group.getPermissions().contains(user.getPermission()))
+            && (group.getRoles().isEmpty() || !Sets.intersection(group.getRoles(), user.getRoles()).isEmpty());
+    }
+    private Set<Group> getUserGroups(User user) {
+        //get user's new group
+        Set<Group> groupsForUser = groupDAO.findAll().stream()
+            .filter(group -> isUserInGroup(group, user))
+            .map(group -> {
+                group.getUsers().add(user);
+                groupDAO.save(group);
+                return group;
+            }).collect(Collectors.toSet());
+
+        return groupsForUser;
     }
 
 }
