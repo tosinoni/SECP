@@ -17,7 +17,7 @@ public class MessageDTO {
     private long senderId;
 
     @JsonProperty
-    private Date timestamp;
+    private Date timestamp = new Date();
 
     @JsonProperty
     private String body;
@@ -59,7 +59,7 @@ public class MessageDTO {
     }
 
     public Date getTimestamp() {
-        return this.timestamp;
+        return new Date(timestamp.getTime());
     }
 
     public String getBody() {

@@ -1,5 +1,5 @@
 angular.module('SECP')
-    .controller('LoginController', function ($scope, Auth, $location, EncryptionService) {
+    .controller('LoginController', function ($scope, Auth, $location) {
         $scope.login = function () {
             // TODO: NEED TO SEND AUTHENTICATION EMAIL (IF REQUIRED BY ADMIN) CONTAINING VERIFICATION CODE WHEN SUCCESSFULLY LOGGED IN
             Auth.login($scope.user).then(function (res) {

@@ -177,15 +177,14 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
           return localStorage.getItem('isDeviceAuthorized');
       }
 
-      Socket.onmessage(function (message) {
+      Socket.subscribe(function (message) {
           let messageObj = JSON.parse(message);
 
           if (messageObj.reason !== "message") {
               EncryptionService.handleAuthorizationRequest(messageObj);
-          } else {
-              let decryptedMessage = EncryptionService.decryptMessageNotFromChat(messageObj.body);
+          } else if($location.path() !== "/chats"){
               let currentUserId = localStorage.getItem("userID");
-              if(messageObj.senderId !== currentUserId) {
+              if(messageObj.senderId.toString() !== currentUserId) {
                   EncryptionService.getDecryptedSecretKeys().then(function (secretKeys) {
                       if(!_.isEmpty(secretKeys)) {
                           let aesDecryptionKey = secretKeys[messageObj.groupId];
@@ -232,6 +231,7 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
             } else {
                 $location.path("/authenticate");
             }
+            Socket.connect();
         }
       });
   });

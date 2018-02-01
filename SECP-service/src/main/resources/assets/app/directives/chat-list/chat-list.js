@@ -24,7 +24,7 @@ angular.module('SECP')
             $scope.getTime = function(time) {
                 if(time) {
                     var date = new Date(time);
-                    return moment(date).startOf('hour').fromNow();
+                    return moment(date).fromNow();
                 }
             }
 

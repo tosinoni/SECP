@@ -28,7 +28,7 @@ angular.module('SECP')
       });
 
       $scope.clicked = false;
-      Socket.onmessage(function (message) {
+      Socket.subscribe(function (message) {
           var messageObj = JSON.parse(message);
 
           if (messageObj.reason !== "message") {
@@ -53,10 +53,6 @@ angular.module('SECP')
                   }
               });
           }
-      });
-
-      Socket.onopen(function () {
-        $scope.websocketConnected = true;
       });
 
       var setLastMessageForContacts = function (groupID, message) {

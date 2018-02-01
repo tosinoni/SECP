@@ -5,10 +5,6 @@ angular.module('SECP')
         var requiredStatus = 'required';
         var approvedStatus = 'approved';
 
-        Socket.onopen(function () {
-            console.log("socketOpen");
-        });
-
         function generateKeyPair (deviceName) {
             // The passphrase used to repeatably generate this RSA key.
             let PassPhrase = deviceName + " is a member of SECP.";
@@ -29,7 +25,6 @@ angular.module('SECP')
                 let secretObj = {};
                 if (device.publicKey) {
                     //encrypt the secret key with the users public key
-                    console.log(device.publicKey);
                     let EncryptionResult = cryptico.encrypt(JSON.stringify(secretKey), device.publicKey);
                     secretObj.groupID = groupID;
                     secretObj.deviceID = device.deviceID;
@@ -74,7 +69,7 @@ angular.module('SECP')
 
         function sendSecretKeyToUserDevices(user, devices) {
             getDecryptedSecretKeys().then(function (userSecretKeys) {
-                if(userSecretKeys) {
+                if(!_.isEmpty(userSecretKeys)) {
                     let isAdmin = user.loginRole === "ADMIN";
                     let groups = [];
 
@@ -94,7 +89,6 @@ angular.module('SECP')
                         secretDTOS = secretDTOS.concat(getSecretKeyToSendToDevices(groupID, devices, secretKeyForGroup));
                     }
 
-                    console.log(secretDTOS);
                     Device.sendSecretKeyToDevices(secretDTOS);
                 }
             });
@@ -161,7 +155,6 @@ angular.module('SECP')
             UserService.getUser(userID).then(function (user) {
                 if (user) {
                     registerNewDevice(userID, deviceName, devicePublicKey).then(function (newDevice) {
-                        console.log(newDevice);
                         sendSecretKeyToUserDevices(user, [newDevice]);
                         sendAuthorizationApproval(userID, deviceName);
                     });
@@ -173,7 +166,7 @@ angular.module('SECP')
             localStorage.setItem('isDeviceAuthorized', true);
             var loginRole = localStorage.getItem('loginRole');
             var url = loginRole != Auth.ADMIN ? '/chats' : '/portal';
-            $location.path(url);
+            document.location.href = url;
         }
 
         function handleAuthorizationRequest(messageObj) {
@@ -188,8 +181,8 @@ angular.module('SECP')
 
                 SwalService.authorizeUserSwal(deviceName, callbackFn);
             } else if (messageBody.status === approvedStatus && deviceName === messageBody.deviceName) {
-                swal("Yaah", "Device approved", "success");
                 visitNextPage();
+                swal("Yaah", "Device approved", "success");
             }
         }
 
@@ -206,8 +199,6 @@ angular.module('SECP')
             })
         }
         return {
-            generateKeyPair: generateKeyPair,
-
             sendSecretKeysToGroup: function (groupID, secretKey) {
                 Device.getDevicesForGroup(groupID).then(function(devices) {
                     if (devices) {
