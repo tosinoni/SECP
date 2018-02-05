@@ -2,6 +2,7 @@ package com.visucius.secp.daos;
 
 import com.google.common.base.Optional;
 import com.visucius.secp.models.Device;
+import com.visucius.secp.models.Secret;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
@@ -43,6 +44,19 @@ public class DeviceDAO extends AbstractDAO<Device> {
     {
         return (List<Device>) namedQuery("com.visucius.secp.models.Device.getDevicesForUser").
             setParameter("id",userID).list();
+    }
+
+    public Secret findSecretByDeviceUserAndGroupID(long groupID, long deviceID, long userID) {
+        return (Secret) namedQuery("com.visucius.secp.models.Secret.findSecretForDevice")
+            .setParameter("groupID",groupID)
+            .setParameter("deviceID",deviceID)
+            .setParameter("userID",userID).uniqueResult();
+    }
+
+    public List<Secret> findSecretForUserDevice(long userID, long deviceID) {
+        return (List<Secret>) namedQuery("com.visucius.secp.models.Secret.findSecretForUserDevice")
+            .setParameter("userID",userID)
+            .setParameter("deviceID",deviceID).list();
     }
 
 }

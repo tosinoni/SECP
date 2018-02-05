@@ -1,8 +1,7 @@
 // Declare app level module which depends on filters, and services
 angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
-    'routeStyles', 'angular-jwt', 'ngWebCrypto', 'angular-uuid', 'datatables', 'angular-nicescroll'])
+    'routeStyles', 'angular-jwt', 'datatables'])
   .config(function ($routeProvider, $locationProvider, jwtOptionsProvider, $httpProvider) {
-
     //add isAdmin function
     var isAdmin = function(Auth, $location) {
         return Auth.isUserAnAdmin().then(function(res){
@@ -39,9 +38,10 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
         css: 'css/form.css',
       })
       .when('/authenticate', {
-        templateUrl: 'views/login/authenticate.html',
-        controller: 'AuthenticateController',
-        css: 'css/form.css'
+          templateUrl: 'views/login/authenticate.html',
+          controller: 'AuthenticateController',
+          css: 'css/form.css',
+          requiresLogin: true
       })
       .when('/chats', {
         templateUrl: 'views/chat/chats.html',
@@ -171,7 +171,34 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
              requireBase: false
       });
   })
-  .run(function($rootScope,Auth,authManager) {
+  .run(function($rootScope,Auth,authManager, Socket, EncryptionService, $location) {
+
+      let isDeviceAuthorized = function () {
+          return localStorage.getItem('isDeviceAuthorized');
+      }
+
+      Socket.subscribe(function (message) {
+          let messageObj = JSON.parse(message);
+
+          if (messageObj.reason !== "message") {
+              EncryptionService.handleAuthorizationRequest(messageObj);
+          } else if($location.path() !== "/chats"){
+              let currentUserId = localStorage.getItem("userID");
+              if(messageObj.senderId.toString() !== currentUserId) {
+                  EncryptionService.getDecryptedSecretKeys().then(function (secretKeys) {
+                      if(!_.isEmpty(secretKeys)) {
+                          let aesDecryptionKey = secretKeys[messageObj.groupId];
+                          let decryptedMessage = EncryptionService.decryptMessage(messageObj.body, aesDecryptionKey);
+                          console.log("received message: " + messageObj.body);
+                          toastr.success(decryptedMessage, messageObj.senderDisplayName);
+                      }
+                  })
+
+              }
+          }
+
+      });
+
       $(document).click(function(event) {
           $(".navbar-collapse").collapse('hide');
       });
@@ -186,6 +213,8 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
       $rootScope.getHomeUrl = function() {
         if(Auth.isTokenExpired()) {
             return '/';
+        } else if(!isDeviceAuthorized()) {
+            return '/authenticate'
         } else if(!$rootScope.isAdmin) {
             return '/chats'
         }
@@ -195,9 +224,14 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
       $rootScope.$on("$locationChangeStart", function(event) {
         // handle route changes
         if(!Auth.isTokenExpired()) {
-            Auth.isUserAnAdmin().then(function(res){
-                $rootScope.isAdmin = res;
-            });
+            if(isDeviceAuthorized()) {
+                Auth.isUserAnAdmin().then(function (res) {
+                    $rootScope.isAdmin = res;
+                });
+            } else {
+                $location.path("/authenticate");
+            }
+            Socket.connect();
         }
       });
   });

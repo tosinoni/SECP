@@ -95,6 +95,7 @@ public class UserDTO {
         this.permission = permissionForUser;
         this.numOfRoles = user.getRoles().size();
         this.roles = roles;
+        this.numOfGroups = user.getGroups().size();
     }
 
     public UserDTO(long userID, Set<DeviceDTO> devices) {

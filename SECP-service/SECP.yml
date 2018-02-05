@@ -28,7 +28,7 @@ database:
   #properties:
   #  hibernate.temp.use_jdbc_metadata_defaults: false
   #  hibernate.dialect: org.hibernate.dialect.PostgreSQL82Dialect
-  #  hibernate.hbm2ddl.auto: update
+  #   hibernate.hbm2ddl.auto: create
   #  hibernate.format_sql: true
 
 server:
@@ -70,7 +70,7 @@ logging:
   # Logger-specific levels.
   loggers:
     com.example: INFO
-    org.hibernate.SQL: ALL
+    org.hibernate.SQL: ERROR
 
   appenders:
     - type: console

@@ -2,9 +2,10 @@
 
 angular.module('SECP')
   .controller('ChatController',
-    function ($scope, $modal, Chat, Socket, Admin, $q) {
+    function ($scope, Chat, Socket, EncryptionService, SwalService, Admin, $q) {
       //declaring variables
       $scope.contacts = [];
+      $scope.secretKeysForChat = {};
       $scope.searching = false;
 
       Chat.getCurrentUser().then(function(user) {
@@ -13,21 +14,57 @@ angular.module('SECP')
         }
       });
 
-      $scope.clicked = false;
-      Socket.onmessage(function (message) {
-        var messageObj = JSON.parse(message);
-        $scope.messages.push(messageObj);
-        toastr.success(messageObj.body, messageObj.senderId);
-        setLastMessageForContacts(messageObj.groupId, messageObj);
+      EncryptionService.getDecryptedSecretKeys().then(function (userSecretKeys) {
+          if(userSecretKeys) {
+              $scope.secretKeysForChat = userSecretKeys;
+          }
+
+          //need the secret keys first
+          Chat.getChatList().then(function(data) {
+              if(data) {
+                  $scope.contacts = data;
+              }
+          });
       });
 
-      Socket.onopen(function () {
-        $scope.websocketConnected = true;
+      $scope.clicked = false;
+      Socket.subscribe(function (message) {
+          var messageObj = JSON.parse(message);
+
+          if (messageObj.reason !== "message") {
+              EncryptionService.handleAuthorizationRequest(messageObj);
+          } else {
+              let currentDeviceName = new Fingerprint().get().toString();
+
+              if (currentDeviceName !== messageObj.senderDeviceName && $scope.selectedChat.groupID === messageObj.groupId) {
+                  $scope.messages.push(messageObj);
+              }
+
+              EncryptionService.getDecryptedSecretKeys().then(function (secretKeys) {
+                  if(!_.isEmpty(secretKeys)) {
+                      let aesDecryptionKey = secretKeys[messageObj.groupId];
+                      let decryptedMessage = EncryptionService.decryptMessage(messageObj.body, aesDecryptionKey);
+
+                      if (messageObj.senderId !== $scope.currentUser.userID) {
+                          console.log("received message: " + messageObj.body);
+                          toastr.success(decryptedMessage, messageObj.senderDisplayName);
+                      }
+                      setLastMessageForContacts(messageObj.groupId, messageObj);
+                  }
+              });
+          }
       });
 
       var setLastMessageForContacts = function (groupID, message) {
         var index = _.findIndex($scope.contacts, function(o) { return o.groupID == groupID; });
-        $scope.contacts[index].lastMessage = message;
+          if(index < 0) {
+              Group.getProfile(groupID).then(function (contact) {
+                  $scope.contacts.push(contact);
+                  $scope.contacts[index].lastMessage = message;
+              })
+          } else {
+              $scope.contacts[index].lastMessage = message;
+          }
       }
 
       Chat.getChatList().then(function(data) {
@@ -36,26 +73,32 @@ angular.module('SECP')
         }
       });
 
-      $scope.sendMessage = function(){
+      $scope.sendMessage = function() {
           var promise = $scope.messageContainsFilterWord();
           promise.then(function(messageContainsFilterWord) {
-              if(!messageContainsFilterWord){
-                  var messageDTO = {
-                      groupId: $scope.selectedChat.groupID,
-                      senderId: $scope.currentUser.userID,
-                      body: $scope.messageInput,
-                      reason: "message",
-                      timestamp: moment()
-                  };
+              if (!messageContainsFilterWord) {
+                  let groupID = $scope.selectedChat.groupID;
+                  if (!_.isEmpty($scope.secretKeysForChat) && $scope.secretKeysForChat[groupID]) {
+                      let messageBody = EncryptionService.enryptMessage($scope.messageInput, $scope.secretKeysForChat[groupID]);
 
-                  Socket.send(messageDTO);
-                  $scope.messages.push(messageDTO)
-                  setLastMessageForContacts(messageDTO.groupId, messageDTO);
-                  //clearing the message input in the textarea
-                  $scope.messageInput = null;
+                      console.log("sending message: " + messageBody);
+                      var messageDTO = {
+                          groupId: groupID,
+                          senderId: $scope.currentUser.userID,
+                          body: messageBody,
+                          reason: "message",
+                          timestamp: new Date()
+                      };
+
+                      Socket.send(messageDTO);
+                      $scope.messages.push(messageDTO);
+                      setLastMessageForContacts(messageDTO.groupId, messageDTO);
+                      //clearing the message input in the textarea
+                      $scope.messageInput = null;
+                  }
               }
           });
-        };
+      };
 
       $scope.messageContainsFilterWord = function() {
           var deffered = $q.defer();
@@ -127,7 +170,6 @@ angular.module('SECP')
                 delayTimer = setTimeout(function() {
                    Chat.search(searchString).then(function(data) {
                        if(data) {
-                           console.log(data);
                            $scope.result = data;
                        }
                    });
@@ -139,17 +181,23 @@ angular.module('SECP')
         }
 
       $scope.contactSelected = function(contact) {
-         var index = _.findIndex($scope.contacts, function(o) { return o.groupID == contact.groupID; });
-         if(index < 0) {
-            $scope.contacts.push(contact);
-         }
+          EncryptionService.getDecryptedSecretKeys().then(function (userSecretKeys) {
+              $scope.secretKeysForChat = userSecretKeys;
 
-         $scope.selectedChat = contact;
-         Chat.getMessages(contact).then(function(data) {
-            if(data) {
-                $scope.messages = data.reverse();
-            }
-         });
+              var index = _.findIndex($scope.contacts, function(o) { return o.groupID == contact.groupID; });
+              if(index < 0) {
+                  $scope.contacts.push(contact);
+                  let secretKey = cryptico.generateAESKey();
+                  EncryptionService.sendSecretKeysToGroup(contact.groupID, secretKey);
+              }
+
+              $scope.selectedChat = contact;
+              Chat.getMessages(contact).then(function(data) {
+                  if(data) {
+                      $scope.messages = data.reverse();
+                  }
+              });
+          });
       };
 
         $scope.$on('closeSearchResults', function (event, args) {

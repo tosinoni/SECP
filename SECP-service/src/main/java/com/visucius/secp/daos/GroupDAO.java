@@ -5,6 +5,7 @@ import com.visucius.secp.models.Group;
 import com.visucius.secp.models.GroupType;
 import com.visucius.secp.models.User;
 import io.dropwizard.hibernate.AbstractDAO;
+import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 
@@ -20,7 +21,12 @@ public class GroupDAO extends AbstractDAO<Group> {
 
 
     public Optional<Group> find(long id) {
-        return Optional.fromNullable(get(id));
+        Optional<Group> groupOptional =  Optional.fromNullable(get(id));
+        if(groupOptional.isPresent())
+        {
+            Hibernate.initialize(groupOptional.get().getUsers());
+        }
+        return groupOptional;
     }
 
     public List<Group> findAll() {
@@ -52,11 +58,10 @@ public class GroupDAO extends AbstractDAO<Group> {
                 setParameter("name",name).uniqueResult();
     }
 
-    public List<Group> findGroupsForUser(long permissionID, List<Long> roleIDS)
+    public List<Group> findGroupsForUser(long userID)
     {
         return (List<Group>) namedQuery("com.visucius.secp.models.Group.findGroupsForUser").
-            setParameter("permissionID",permissionID)
-            .setParameterList("roleIDS",roleIDS).list();
+            setParameter("userID",userID).list();
     }
 
     public List<Group> findPrivateGroupForUsers(Set<User> users)

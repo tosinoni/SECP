@@ -61,7 +61,7 @@ angular.module('SECP')
             });
         },
 
-        addPublicKey : function(req) {
+        addNewDevice : function(req) {
             return $http.post("/SECP/user/device", req)
             .then(function(res) {
                 return res;

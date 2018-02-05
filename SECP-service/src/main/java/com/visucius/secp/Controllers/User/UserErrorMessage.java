@@ -31,6 +31,14 @@ public interface UserErrorMessage {
     String DEVICE_ADD_FAIL_USER_NOT_FOUND = "Device addition Failed. User id does not exist.";
     String DEVICE_ADD_FAIL_DEVICE_EXISTS = "Device addition Failed. Device already exist for the user";
 
+    //secret error messages
+    String SECRET_ADD_FAIL_NO_SECRET_INFO = "Encryption failed. Encryption key was not provided.";
+    String SECRET_ADD_FAIL_INVALID_DEVICE = "Encryption failed. Invalid device provided.";
+    String SECRET_ADD_FAIL_INVALID_GROUP = "Encryption failed. Invalid group provided.";
+    String SECRET_ADD_FAIL_NO_SECRET_KEY = "Encryption failed. Encryption key was not provided.";
+    String SECRET_ADD_FAIL_NO_DEVICE = "Encryption failed. No device provided.";
+
+
     //Get devices error messages
     String DEVICE_GET_FAIL_NO_DEVICE_EXISTS = "No device exists for user.";
     String DEVICE_GET_FAIL_NO_PUBLIC_KEY_EXISTS = "No public key exist for all user's devices.";
@@ -45,5 +53,4 @@ public interface UserErrorMessage {
     String MODIFY_USER_FAIL_PERMISSIONS_REQUIRED = "modify user failed. A user must have only one permission";
     String MODIFY_USER_FAIL_PERMISSIONS_INVALID = "modify user failed. Permission %s does not exist";
     String MODIFY_USER_FAIL_ROLES_INVALID = "modify user failed. role %s does not exist";
-
 }

@@ -1,6 +1,9 @@
 package com.visucius.secp.DTO;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.visucius.secp.models.Device;
+
+import java.util.Objects;
 
 public class DeviceDTO {
 
@@ -29,6 +32,19 @@ public class DeviceDTO {
         this.userID = userID;
         this.deviceName = deviceName;
         this.publicKey = publicKey;
+    }
+
+    public DeviceDTO(Device device) {
+        if (device != null) {
+            this.deviceID = device.getId();
+            this.deviceName = device.getName();
+            this.publicKey = device.getPublicKey();
+        }
+    }
+
+    public DeviceDTO(Device device, long userID) {
+        this(device);
+        this.userID = userID;
     }
 
     public String getDeviceName() {
@@ -61,5 +77,19 @@ public class DeviceDTO {
 
     public void setDeviceID(long deviceID) {
         this.deviceID = deviceID;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DeviceDTO)) return false;
+        DeviceDTO deviceDTO = (DeviceDTO) o;
+        return deviceID == deviceDTO.deviceID && userID == deviceDTO.userID && deviceName.equals(deviceDTO.deviceName)
+            && publicKey.equals(deviceDTO.publicKey);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.deviceID, this.deviceName, this.publicKey, this.userID);
     }
 }

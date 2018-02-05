@@ -47,7 +47,7 @@ public class ChatController {
     private Set<UserDTO> getUsersMatchingSearchValue(User searchingUser, String value) {
         List<User> users = userDAO.searchForUser(value);
         Set<UserDTO> userDTOS = users.stream()
-            .filter(user -> searchingUser.getId() != user.getId())
+            .filter(user -> searchingUser.getId() != user.getId() && !user.getDevices().isEmpty())
             .map(user -> {
                 return userProfileController.getUserProfileResponse(user); })
             .collect(Collectors.toSet());

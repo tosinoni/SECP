@@ -117,4 +117,15 @@ public class DeviceTest {
         device.setUsers(users);
         return device;
     }
+
+    @Test
+    public void testGroupSecrets() {
+        //testing all the annotations on the id field
+        AssertAnnotations.assertField( Device.class, "groupSecrets", OneToMany.class);
+
+        //testing the @column annotation
+        OneToMany m = ReflectTool.getFieldAnnotation(Device.class, "groupSecrets", OneToMany.class);
+
+        assertEquals("ManyToMany:  mappedBy is not equal", "device", m.mappedBy());
+    }
 }

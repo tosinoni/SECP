@@ -1,5 +1,6 @@
 package com.visucius.secp.DTO;
 
+import com.visucius.secp.models.Device;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -51,6 +52,17 @@ public class DeviceDTOTest {
     public void testConstructorWithDeviceIdandPublicKey() {
         DeviceDTO deviceDTO = new DeviceDTO(deviceId, publicKey);
         assertEquals("userID is not equal",deviceId, deviceDTO.getDeviceID());
+        assertEquals("public key is not equal",publicKey, deviceDTO.getPublicKey());
+    }
+
+    @Test
+    public void testConstructorWithDeviceModel() {
+        Device device = new Device(deviceName, publicKey);
+        device.setId(deviceId);
+
+        DeviceDTO deviceDTO = new DeviceDTO(device);
+        assertEquals("device id is not equal",deviceId, deviceDTO.getDeviceID());
+        assertEquals("device name is not equal",deviceName, deviceDTO.getDeviceName());
         assertEquals("public key is not equal",publicKey, deviceDTO.getPublicKey());
     }
 }

@@ -118,7 +118,7 @@ public class UserController {
             user.addDevice(device);
             userDAO.save(user);
             LOG.info("New device added for user");
-            return Response.status(Response.Status.CREATED).entity(device.getId()).build();
+            return Response.status(Response.Status.CREATED).entity(new DeviceDTO(device, user.getId())).build();
         }
 
         throw new WebApplicationException(UserErrorMessage.DEVICE_ADD_FAIL_DEVICE_EXISTS, Response.Status.BAD_REQUEST);
@@ -195,37 +195,26 @@ public class UserController {
     }
 
     private Set<Group> getUserGroups(User user) {
+        Set<Long> newGroupIDS = new HashSet<>();
+
         //get user's new group
-        Set<Group> groupsForUser = findGroupsForUser(user.getPermission(), user.getRoles()).stream()
+        Set<Group> groupsForUser = groupDAO.findGroupsForUser(user.getId()).stream()
             .map(group -> {
                 group.getUsers().add(user);
                 groupDAO.save(group);
+                newGroupIDS.add(group.getId());
                 return group;
             }).collect(Collectors.toSet());
 
         //remove user from old group
-        Set<Group> oldGroups = Sets.difference(user.getGroups(), groupsForUser);
-        oldGroups.stream()
-            .filter(group -> group.getGroupType().equals(GroupType.PUBLIC))
-            .map(group -> {
+        for (Group group : user.getGroups()) {
+            if (!newGroupIDS.contains(group.getId()) && group.getGroupType().equals(GroupType.PUBLIC)) {
                 group.getUsers().remove(user);
                 groupDAO.save(group);
-                return group;
-            }).collect(Collectors.toSet());
+            }
+        }
 
         return groupsForUser;
-    }
-
-
-    private Set<Group> findGroupsForUser(Permission permission, Set<Role> roles)
-    {
-        List<Long> roleIDS = roles.stream()
-            .map(role -> { return role.getId(); }).collect(Collectors.toList());
-
-        if (roleIDS.isEmpty())
-            roleIDS.add(-1L);
-        List<Group> groups = groupDAO.findGroupsForUser(permission.getId(), roleIDS);
-        return new HashSet<>(groups);
     }
 
     private void validatePermission(RolesOrPermissionDTO permission)

@@ -4,15 +4,9 @@ import com.visucius.secp.Chat.ChatServlet;
 import com.visucius.secp.Chat.ChatSocketCreator;
 import com.visucius.secp.Chat.ChatSocketHandler;
 import com.visucius.secp.Chat.IMessageHandler;
+import com.visucius.secp.Controllers.*;
 import com.visucius.secp.Controllers.Admin.AdminController;
-import com.visucius.secp.Controllers.FilterController;
-import com.visucius.secp.Controllers.GroupController;
-import com.visucius.secp.Controllers.MessageController;
-import com.visucius.secp.Controllers.User.LoginRequestController;
-import com.visucius.secp.Controllers.TokenController;
-import com.visucius.secp.Controllers.User.UserController;
-import com.visucius.secp.Controllers.User.UserProfileController;
-import com.visucius.secp.Controllers.User.UserRegistrationController;
+import com.visucius.secp.Controllers.User.*;
 import com.visucius.secp.Controllers.chat.ChatController;
 import com.visucius.secp.auth.SECPAuthenticator;
 import com.visucius.secp.auth.SECPAuthorizer;
@@ -57,6 +51,7 @@ public class SECPService extends Application<SECPConfiguration> {
             Filter.class,
             Permission.class,
             Device.class,
+            Secret.class,
             Void.class
         ) {
         @Override
@@ -121,7 +116,7 @@ public class SECPService extends Application<SECPConfiguration> {
 
 
         //********************** Register Services/Controllers *********************************
-        final UserRegistrationController userRegistrationController = new UserRegistrationController(userDAO,permissionDAO);
+        final UserRegistrationController userRegistrationController = new UserRegistrationController(userDAO,permissionDAO,groupDAO);
         final TokenController tokenController = new TokenController(configuration);
         final LoginRequestController loginRequestController = new LoginRequestController(tokenController, userDAO);
         final UserController userController = new UserController(userDAO, deviceDAO, permissionDAO, rolesDAO, groupDAO);
@@ -131,6 +126,7 @@ public class SECPService extends Application<SECPConfiguration> {
         final GroupController groupController = new GroupController(groupDAO,userDAO,rolesDAO, permissionDAO, userProfileController);
         final MessageController messageController = new MessageController(messageDAO);
         final ChatController chatController = new ChatController(userDAO, groupDAO, userProfileController, groupController);
+        final DeviceController deviceController = new DeviceController(userDAO, groupDAO, deviceDAO);
 
         //********************** Register authentication for User *****************************
 
@@ -162,8 +158,8 @@ public class SECPService extends Application<SECPConfiguration> {
         environment.jersey().register(new UserResource(userController, userRegistrationController));
         environment.jersey().register(new ChatResource(chatController));
         environment.jersey().register(new UserProfileResource(userProfileController));
-        environment.jersey().register(
-            new FilterResource(filterController));
+        environment.jersey().register(new FilterResource(filterController));
+        environment.jersey().register(new DeviceResource(deviceController));
 
         //************************** Error Handling *************************************
         final ErrorPageErrorHandler epeh = new ErrorPageErrorHandler();
@@ -173,8 +169,8 @@ public class SECPService extends Application<SECPConfiguration> {
         //************************** WebSocket Servlet *************************************
         ChatSocketHandler chatSocketHandler = new UnitOfWorkAwareProxyFactory(hibernateBundle)
             .create(ChatSocketHandler.class,
-                new Class<?>[]  { MessageDAO.class},
-                new Object[]    { messageDAO});
+                new Class<?>[]  { MessageDAO.class, GroupDAO.class},
+                new Object[]    { messageDAO, groupDAO});
 
         ChatSocketCreator chatSocketCreator = new UnitOfWorkAwareProxyFactory(hibernateBundle)
             .create(ChatSocketCreator.class,
@@ -184,5 +180,13 @@ public class SECPService extends Application<SECPConfiguration> {
         ServletRegistration.Dynamic webSocket = environment.servlets().addServlet("ws", new ChatServlet(chatSocketCreator));
         webSocket.setAsyncSupported(true);
         webSocket.addMapping("/chat/*");
+
+        //registering default user
+        final AppSetUpController appSetUpController = new UnitOfWorkAwareProxyFactory(hibernateBundle)
+            .create(AppSetUpController.class,
+                new Class<?>[]  { PermissionDAO.class, UserDAO.class},
+                new Object[]    { permissionDAO, userDAO});
+        environment.jersey().register(appSetUpController);
+        appSetUpController.setUp();
     }
 }

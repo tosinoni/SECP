@@ -49,7 +49,7 @@ public class GroupDTO {
     private String avatarUrl;
 
     @JsonProperty
-    private GroupType groupType;
+    private GroupType groupType = GroupType.PUBLIC;
 
     public GroupDTO()
     {

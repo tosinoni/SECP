@@ -17,10 +17,16 @@ public class MessageDTO {
     private long senderId;
 
     @JsonProperty
-    private Date timestamp;
+    private Date timestamp = new Date();
 
     @JsonProperty
     private String body;
+
+    @JsonProperty
+    private String senderDisplayName;
+
+    @JsonProperty
+    private String senderDeviceName;
 
     @JsonProperty
     private MessageType reason;
@@ -53,7 +59,7 @@ public class MessageDTO {
     }
 
     public Date getTimestamp() {
-        return new Date(this.timestamp.getTime());
+        return new Date(timestamp.getTime());
     }
 
     public String getBody() {
@@ -64,8 +70,24 @@ public class MessageDTO {
         return messageId;
     }
 
-    public void setMessageId(long messageId) {
-        this.messageId = messageId;
+    public long getSenderId() {
+        return senderId;
+    }
+
+    public String getSenderDisplayName() {
+        return senderDisplayName;
+    }
+
+    public void setSenderDisplayName(String senderDisplayName) {
+        this.senderDisplayName = senderDisplayName;
+    }
+
+    public String getSenderDeviceName() {
+        return senderDeviceName;
+    }
+
+    public void setSenderDeviceName(String senderDeviceName) {
+        this.senderDeviceName = senderDeviceName;
     }
 
     @Override
@@ -90,6 +112,12 @@ public class MessageDTO {
     {
         @JsonProperty("message")
         MESSAGE,
+        @JsonProperty("user_authorization")
+        USER_AUTHORIZATION,
+        @JsonProperty("admin_authorization")
+        ADMIN_AUTHORIZATION,
 
+        @JsonProperty("user_approved")
+        USER_APPROVED,
     }
 }

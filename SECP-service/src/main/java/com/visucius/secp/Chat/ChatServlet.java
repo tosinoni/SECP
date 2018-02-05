@@ -15,6 +15,7 @@ public class ChatServlet extends WebSocketServlet {
 
     @Override
     public void configure(WebSocketServletFactory factory) {
+        factory.getPolicy().setIdleTimeout(Integer.MAX_VALUE);
         factory.setCreator(this.chatSocketCreator);
     }
 }

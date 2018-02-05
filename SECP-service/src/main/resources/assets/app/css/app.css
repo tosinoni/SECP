@@ -52,3 +52,41 @@ body {
 .red{
     color:red;
 }
+
+.pageheader{
+    font-family:"Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 2.5em;
+    font-weight: 300;
+    color: #2196F3;
+    margin-bottom: 1em;
+}
+
+.linkoption{
+    font-family:"Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 1.2em;
+    margin-left: auto;
+    margin-right: auto;
+    width: 12em;
+    border-radius: 25px;
+    border: 1px solid #2196F3;
+    padding: 20px;
+    margin-bottom: 10px;
+    color: black;
+    cursor: pointer;
+}
+
+.linkoption:hover {
+    background-color: #2196F3;
+    color: white;
+}
+
+.note
+{
+    color: black;
+    border: solid 1px #33c600;
+    background-color: #94f37c;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    padding: 14px 20px;
+}

@@ -1,72 +1,108 @@
 package com.visucius.secp.Chat;
 
 import com.visucius.secp.DTO.MessageDTO;
+import com.visucius.secp.daos.GroupDAO;
 import com.visucius.secp.daos.MessageDAO;
 import com.visucius.secp.models.Group;
 import com.visucius.secp.models.Message;
 import com.visucius.secp.models.User;
 import io.dropwizard.hibernate.UnitOfWork;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ChatSocketHandler implements IMessageHandler {
 
-    private ConcurrentHashMap<Long,Set<IMessageReceiver>> activeGroups;
+    private ConcurrentHashMap<User,Set<IMessageReceiver>> activeUsers;
     private final MessageDAO messageRepository;
+    private final GroupDAO groupRepository;
 
-    public ChatSocketHandler(MessageDAO messageRepository)
+    public ChatSocketHandler(MessageDAO messageRepository, GroupDAO groupRepository)
     {
-        this.activeGroups = new ConcurrentHashMap<>();
+        this.activeUsers = new ConcurrentHashMap<>();
         this.messageRepository = messageRepository;
+        this.groupRepository = groupRepository;
     }
 
     @Override
     public void attachSession(IMessageReceiver messageReceiver) {
-        Set<Group> groups = messageReceiver.getUser().getGroups();
-        for(Group group: groups)
-        {
-            long groupID = group.getId();
-            if(activeGroups.containsKey(groupID)) {
-                activeGroups.get(groupID).add(messageReceiver);
-            }
-            else
-            {
-                Set<IMessageReceiver> receivers = new HashSet<>();
-                receivers.add(messageReceiver);
-                activeGroups.put(groupID,receivers);
-            }
+
+        User user = messageReceiver.getUser();
+        if (activeUsers.containsKey(user)) {
+            activeUsers.get(user).add(messageReceiver);
+        } else {
+            Set<IMessageReceiver> receivers = new HashSet<>();
+            receivers.add(messageReceiver);
+            activeUsers.put(user, receivers);
         }
+
     }
 
     @Override
     public void detachSession(IMessageReceiver messageReceiver) {
-        Set<Group> groups = messageReceiver.getUser().getGroups();
-        for (Group group : groups) {
-            long groupID = group.getId();
-            if(activeGroups.containsKey(groupID)) {
-                Set<IMessageReceiver> receivers = activeGroups.get(groupID);
-                receivers.remove(messageReceiver);
-                if(receivers.isEmpty())
-                    activeGroups.remove(groupID);
-            }
+
+        User user = messageReceiver.getUser();
+        if (activeUsers.containsKey(user)) {
+            Set<IMessageReceiver> receivers = activeUsers.get(user);
+            receivers.remove(messageReceiver);
+            if (receivers.isEmpty())
+                activeUsers.remove(user);
+
         }
     }
 
     @Override
     @UnitOfWork
     public void notifySession(MessageDTO message, IMessageReceiver receiver) {
-        long groupID = message.getGroupId();
-        long senderID = receiver.getUser().getId();
-        MessageDTO savedMessage = saveMessage(message, receiver);
-        for(IMessageReceiver messageReceiver: activeGroups.get(groupID)) {
-            long receiverID = messageReceiver.getUser().getId();
-            if (receiverID != senderID)
-                messageReceiver.updateUser(savedMessage);
+        MessageDTO savedMessage = message;
+        if(message.getReason().equals(MessageDTO.MessageType.MESSAGE))
+            savedMessage = saveMessage(message, receiver);
+        for(IMessageReceiver messageReceiver: getReceivers(message,receiver)) {
+            messageReceiver.updateUser(savedMessage);
         }
+    }
+
+    private Set<IMessageReceiver> getReceivers(MessageDTO messageDTO, IMessageReceiver receiver)
+    {
+        Set<IMessageReceiver> receivers = new HashSet<>();
+        if(messageDTO.getReason() == MessageDTO.MessageType.MESSAGE)
+        {
+            com.google.common.base.Optional<Group> groupOptional = groupRepository.find(messageDTO.getGroupId());
+            if(groupOptional.isPresent())
+            {
+                Group group = groupOptional.get();
+                group.getUsers().forEach(user -> {
+                    if(this.activeUsers.containsKey(user))
+                        receivers.addAll(this.activeUsers.get(user));
+                });
+            }
+        }
+        else if(messageDTO.getReason() == MessageDTO.MessageType.USER_APPROVED)
+        {
+            long userID = messageDTO.getSenderId();
+            this.activeUsers.forEach((user, iMessageReceivers) ->
+            {
+                if(user.getId() == userID)
+                    receivers.addAll(iMessageReceivers);
+            });
+        }
+
+        else if(messageDTO.getReason() == MessageDTO.MessageType.USER_AUTHORIZATION) {
+            return activeUsers.get(receiver.getUser());
+        }
+        else if(messageDTO.getReason() == MessageDTO.MessageType.ADMIN_AUTHORIZATION)
+        {
+            this.activeUsers.forEach((key, value) ->
+            {
+                if(key.isAdmin())
+                {
+                    receivers.addAll(activeUsers.get(key));
+                }
+
+            });
+        }
+
+        return receivers;
     }
 
     private MessageDTO saveMessage(MessageDTO messageDTO, IMessageReceiver receiver)
@@ -78,13 +114,20 @@ public class ChatSocketHandler implements IMessageHandler {
         Message message = new Message(messageDTO.getBody(),user,group);
         message.setTimestamp(new Date());
         Message createdMessage = messageRepository.save(message);
+
         MessageDTO savedMessage = new MessageDTO(
             createdMessage.getId(),
             createdMessage.getGroup().getId(),
             senderID,
             createdMessage.getBody(),
             messageDTO.getReason(),
-            messageDTO.getTimestamp());
+            message.getTimestamp());
+
+        if(user.getDisplayName() != null) {
+            savedMessage.setSenderDisplayName(user.getDisplayName());
+        }
+
+        savedMessage.setSenderDeviceName(messageDTO.getSenderDeviceName());
         return savedMessage;
     }
 

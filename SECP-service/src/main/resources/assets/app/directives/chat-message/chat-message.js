@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('SECP')
-    .directive('chatMessage', function ($http) {
+    .directive('chatMessage', function (EncryptionService) {
     return {
         restrict: 'E', //E = element, A = attribute, C = class, M = comment
         scope: {
@@ -9,6 +9,7 @@ angular.module('SECP')
             messages: '=',
             currentUser: '=',
             selectedChat: '=',
+            secretKeys: '=',
             clicked: '='
          },
         templateUrl: 'directives/chat-message/chat-message.html',
@@ -16,8 +17,8 @@ angular.module('SECP')
 
             var getTime = function(time) {
                 if(time) {
-                var date = new Date(time);
-                    return moment(date).startOf('hour').fromNow();
+                    var date = new Date(time);
+                    return moment(date).fromNow();
                 }
             }
 
@@ -59,13 +60,18 @@ angular.module('SECP')
                 return formatedMessages;
              }
 
-            $scope.$watch('messages', function(messages, oldmessages) {
-                $scope.formatedMessages = formatMessages(messages);
-                //move the scroll button down to see the latest message
-                $('#chat-scroll').animate({
-                   scrollTop: $('#chat-scroll').get(0).scrollHeight
-                });
-             }, true);
+             let displayMessages = function (newVal) {
+                 if(!_.isEmpty($scope.secretKeys)) {
+                     $scope.formatedMessages = formatMessages($scope.messages);
+                     //move the scroll button down to see the latest message
+                     $('#chat-scroll').animate({
+                         scrollTop: $('#chat-scroll').get(0).scrollHeight
+                     });
+                 }
+             }
+            $scope.$watch('messages', displayMessages, true);
+
+            $scope.$watch('secretKeys', displayMessages, true);
 
 
              $scope.$watch('selectedChat', function(selectedChat) {
@@ -88,6 +94,13 @@ angular.module('SECP')
                   }
              });
 
+            $scope.getDecryptedMessage = function(message) {
+                var groupId = $scope.selectedChat.groupID;
+                if (message && !_.isEmpty($scope.secretKeys)) {
+                    return EncryptionService.decryptMessage(message, $scope.secretKeys[groupId]);
+                }
+
+            }
              $scope.clickProfile = function(){
 
                 // NEED TO ADD CHECK TO SEE IF USER OR PROFILE, THEN GENERATE USER OR PROFILE DIV.

@@ -19,6 +19,23 @@ angular.module('SECP')
         }).catch((result) => {});
     };
 
+    function authorizeUserSwal(deviceName, callback) {
+        let title = "Please enter these characters to verify: " + deviceName;
+        swal({
+            title: 'New device detected',
+            text: "Do you want to trust this device?!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Trust it!'
+        }).then((result) => {
+            if (result) {
+                callback();
+            }
+        }).catch((result) => {});
+    }
+
     return {
         delete : deleteSwal,
         deleteImportantInformation : function(infoName, deleteTitle, callback) {
@@ -49,6 +66,8 @@ angular.module('SECP')
             };
 
             deleteSwal(deleteImportantInformationFunction);
-        }
+        },
+
+        authorizeUserSwal: authorizeUserSwal
     }
   });
