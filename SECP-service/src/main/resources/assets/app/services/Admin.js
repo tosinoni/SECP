@@ -230,11 +230,20 @@ angular.module('SECP')
 
         auditUser : function(request) {
             return $http.post("/SECP/admin/audit/user", request)
-                .then(function(res) {
-                    return res;
-                }, function(err) {
-                    return err;
-                });
+            .then(function(res) {
+                return res;
+            }, function(err) {
+                return err;
+            });
+        },
+
+        auditGroup : function(request) {
+            return $http.post("/SECP/admin/audit/groups", request)
+            .then(function(res) {
+                return res;
+            }, function(err) {
+                return err;
+            });
         }
     }
   });

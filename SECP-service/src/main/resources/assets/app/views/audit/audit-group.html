@@ -6,17 +6,12 @@
 <form name="groupaudit">
     <div class="audituserlabel"><label>Group:</label></div>
     <div class="auditgroupinput">
-        <select class="audit-group-select" style="width: 100%" ng-model="auditGroup" name="group">
-            <option value="">Select</option>
-            <option value="group1">Developers</option>
-            <option value="group2">Managers</option>
-            <option value="group3">UX Design</option>
-            <option value="group4">Production Issues</option>
-            <option value="group5">Group Chat</option>
+        <select select2 class="audit-group-select" style="width: 100%" ng-model="audit.groups" name="group" multiple
+                ng-options='g as g.name for g in groups'>
         </select>
     </div>
 
-    <div ng-controller="GroupAuditAdvancedSearch">
+    <div>
         <div class="advancedsearchdiv">
             <button class="advancedsearchbutton" ng-click="isCollapsed = !isCollapsed">Filter</button>
         </div>

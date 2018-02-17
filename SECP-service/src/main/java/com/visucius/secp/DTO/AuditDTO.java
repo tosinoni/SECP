@@ -3,6 +3,7 @@ package com.visucius.secp.DTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 public class AuditDTO {
@@ -10,13 +11,16 @@ public class AuditDTO {
     private UserDTO fromUser;
 
     @JsonProperty
-    private Set<UserDTO> toUsers;
+    private Set<UserDTO> toUsers = new HashSet<>();
 
     @JsonProperty
     private Date fromDate;
 
     @JsonProperty
     private Date toDate;
+
+    @JsonProperty
+    private Set<GroupDTO> groups = new HashSet<>();
 
     public AuditDTO() {
 
@@ -39,18 +43,26 @@ public class AuditDTO {
     }
 
     public Date getFromDate() {
-        return fromDate;
+        return new Date(fromDate.getTime());
     }
 
     public void setFromDate(Date fromDate) {
-        this.fromDate = fromDate;
+        this.fromDate = new Date(fromDate.getTime());
     }
 
     public Date getToDate() {
-        return toDate;
+        return new Date(toDate.getTime());
     }
 
     public void setToDate(Date toDate) {
-        this.toDate = toDate;
+        this.toDate = new Date(toDate.getTime());
+    }
+
+    public Set<GroupDTO> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(Set<GroupDTO> groups) {
+        this.groups = groups;
     }
 }

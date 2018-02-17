@@ -69,7 +69,7 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
       })
       .when('/portal/audit/user', {
           templateUrl: 'views/audit/audit-user.html',
-          controller:'PortalController',
+          controller:'AuditUserController',
           css: 'css/portal.css',
           requiresLogin: true,
           resolve: {
@@ -78,7 +78,7 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
       })
       .when('/portal/audit/group', {
           templateUrl: 'views/audit/audit-group.html',
-          controller:'PortalController',
+          controller:'AuditGroupController',
           css: 'css/portal.css',
           requiresLogin: true,
           resolve: {

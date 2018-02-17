@@ -13,6 +13,7 @@ import com.visucius.secp.models.LoginRole;
 import com.visucius.secp.models.Permission;
 import com.visucius.secp.models.Role;
 import com.visucius.secp.models.User;
+import io.dropwizard.auth.AuthValueFactoryProvider;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.junit.Rule;
 import org.junit.Test;
@@ -43,12 +44,13 @@ public class AdminResourceTest {
     private RolesDAO rolesDAO = Mockito.mock(RolesDAO.class);
     private PermissionDAO permissionDAO = Mockito.mock(PermissionDAO.class);
 
-    private AdminController adminController = new AdminController(userDAO, rolesDAO, permissionDAO);
+    private AdminController adminController = new AdminController(userDAO, rolesDAO, permissionDAO, groupDAO);
     private UserRegistrationController userRegistrationController = new UserRegistrationController(userDAO,permissionDAO,groupDAO);
 
 
     @Rule
     public final ResourceTestRule resources = ResourceTestRule.builder()
+        .addProvider((new AuthValueFactoryProvider.Binder<>(User.class)))
         .addResource(new AdminResource(adminController, userRegistrationController))
         .build();
 

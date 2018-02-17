@@ -3,6 +3,7 @@ package com.visucius.secp.Controllers.Admin;
 import com.google.common.base.Optional;
 import com.google.common.collect.Sets;
 import com.visucius.secp.DTO.*;
+import com.visucius.secp.daos.GroupDAO;
 import com.visucius.secp.daos.PermissionDAO;
 import com.visucius.secp.daos.RolesDAO;
 import com.visucius.secp.daos.UserDAO;
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -23,18 +25,21 @@ public class AdminController {
     private final static Logger LOG = LoggerFactory.getLogger(AdminController.class);
 
     private final UserDAO userDAO;
+    private final GroupDAO groupDAO;
     private final RolesDAO rolesDAO;
     private final PermissionDAO permissionDAO;
 
     private final String userErrorString = "user";
+    private final String groupErrorString = "group";
     private final String roleErrorString = "role";
     private final String permissionErrorString = "permission";
 
 
-    public AdminController(UserDAO userDAO, RolesDAO rolesDAO, PermissionDAO permissionDAO) {
+    public AdminController(UserDAO userDAO, RolesDAO rolesDAO, PermissionDAO permissionDAO, GroupDAO groupDAO) {
         this.userDAO = userDAO;
         this.rolesDAO = rolesDAO;
         this.permissionDAO = permissionDAO;
+        this.groupDAO = groupDAO;
     }
 
     public void registerAdmin(String userID) {
@@ -181,6 +186,28 @@ public class AdminController {
         return Response.status(Response.Status.OK).entity(response).build();
     }
 
+    public Response getGroupsAudit(AuditDTO groupsAuditDTO) {
+        validateGroupsAuditDTO(groupsAuditDTO);
+
+        Set<GroupDTO> groupDTOS = groupsAuditDTO.getGroups().stream()
+            .map(groupDTO -> {
+                Group group = getGroupFromID(groupDTO.getGroupID());
+                if(Util.isCollectionEmpty(group.getMessages())) {
+                    return null;
+                }
+                return new GroupDTO(group);
+            }).collect(Collectors.toSet());
+
+        //remove all null elements from set
+        groupDTOS.removeAll(Collections.singleton(null));
+
+        if(groupDTOS.isEmpty()) {
+            throw new WebApplicationException(AdminErrorMessage.AUDIT_GROUP_FAIL_NO_CONVERSATIONS, Response.Status.BAD_REQUEST);
+        }
+
+        return Response.status(Response.Status.OK).entity(groupDTOS).build();
+    }
+
     public Response getUserAudit(User user, AuditDTO userAuditDTO) {
         validateUserAuditDTO(user, userAuditDTO);
         Set<Group> privateGroupsToBeAudited = getPrivateGroupsToBeAuditedForUser(userAuditDTO);
@@ -238,6 +265,17 @@ public class AdminController {
             for (UserDTO userDTO : userAuditDTO.getToUsers())
                 getUserFromID(userDTO.getUserID());
         }
+    }
+
+    private void validateGroupsAuditDTO(AuditDTO groupsAuditDTO) {
+        if(groupsAuditDTO == null || groupsAuditDTO.getGroups().isEmpty()) {
+            throw new WebApplicationException(AdminErrorMessage.AUDIT_GROUP_FAIL_EMPTY_REQUEST, Response.Status.BAD_REQUEST);
+        }
+
+        //validate the group ids of groups to audit
+        for (GroupDTO groupDTO : groupsAuditDTO.getGroups())
+            getGroupFromID(groupDTO.getGroupID());
+
     }
 
     private String validateCreateRolesRequest(AppCreateDTO request) {
@@ -298,6 +336,17 @@ public class AdminController {
         }
 
         return user.get();
+    }
+
+    private Group getGroupFromID(long id) {
+        Optional<Group> group = groupDAO.find(id);
+
+        if (!group.isPresent()) {
+            String error = String.format(AdminErrorMessage.DOES_NOT_EXIST, groupErrorString);
+            throw new WebApplicationException(error, Response.Status.BAD_REQUEST);
+        }
+
+        return group.get();
     }
 
     private Role getRoleFromID(String roleID) {

@@ -8,7 +8,6 @@ import com.visucius.secp.models.User;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -17,6 +16,7 @@ import javax.ws.rs.core.Response;
 @Path("/admin")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@RolesAllowed("ADMIN")
 public class AdminResource {
     private final AdminController adminController;
     private final UserRegistrationController userRegistrationController;
@@ -118,5 +118,12 @@ public class AdminResource {
     @UnitOfWork
     public Response getUserAudit(@Auth User user, AuditDTO userAuditDTO) {
         return adminController.getUserAudit(user, userAuditDTO);
+    }
+
+    @POST
+    @Path("/audit/groups")
+    @UnitOfWork
+    public Response getUserAudit(@Auth AuditDTO groupAuditDTO) {
+        return adminController.getGroupsAudit(groupAuditDTO);
     }
 }

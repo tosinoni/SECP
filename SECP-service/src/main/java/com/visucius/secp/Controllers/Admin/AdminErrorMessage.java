@@ -29,4 +29,8 @@ public interface AdminErrorMessage {
     String AUDIT_USER_FAIL_INVALID_FROM_USER = "You cannot audit yourself.";
     String AUDIT_USER_FAIL_NO_CONVERSATIONS = "No conversations exist for selected user based on search criteria.";
 
+    /*****Audit Group Error messages ******/
+    String AUDIT_GROUP_FAIL_EMPTY_REQUEST = "No group provided for auditing.";
+    String AUDIT_GROUP_FAIL_NO_CONVERSATIONS = "No conversations exist for selected group(s) based on search criteria.";
+
 }
