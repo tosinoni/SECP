@@ -52,6 +52,7 @@ public class SECPService extends Application<SECPConfiguration> {
             Permission.class,
             Device.class,
             Secret.class,
+            Record.class,
             Void.class
         ) {
         @Override
@@ -114,6 +115,7 @@ public class SECPService extends Application<SECPConfiguration> {
         final PermissionDAO permissionDAO = new PermissionDAO(hibernateBundle.getSessionFactory());
         final DeviceDAO deviceDAO =  new DeviceDAO(hibernateBundle.getSessionFactory());
         final FilterDAO filterDAO =  new FilterDAO(hibernateBundle.getSessionFactory());
+        final RecordsDAO recordsDAO =  new RecordsDAO(hibernateBundle.getSessionFactory());
 
 
         //********************** Register Services/Controllers *********************************
@@ -121,7 +123,7 @@ public class SECPService extends Application<SECPConfiguration> {
         final TokenController tokenController = new TokenController(configuration);
         final LoginRequestController loginRequestController = new LoginRequestController(tokenController, userDAO);
         final UserController userController = new UserController(userDAO, deviceDAO, permissionDAO, rolesDAO, groupDAO);
-        final AdminController adminController = new AdminController(userDAO, rolesDAO, permissionDAO, groupDAO);
+        final AdminController adminController = new AdminController(userDAO, rolesDAO, permissionDAO, groupDAO, recordsDAO);
         final UserProfileController userProfileController = new UserProfileController(userDAO);
         final FilterController filterController = new FilterController(filterDAO, rolesDAO, permissionDAO);
         final GroupController groupController = new GroupController(groupDAO,userDAO,rolesDAO, permissionDAO, userProfileController);

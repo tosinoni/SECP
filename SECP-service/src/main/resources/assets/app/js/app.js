@@ -87,7 +87,7 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
       })
       .when('/portal/audit/ledger', {
           templateUrl: 'views/audit/audit-ledger.html',
-          controller:'PortalController',
+          controller:'AuditLedgerController',
           css: 'css/portal.css',
           requiresLogin: true,
           resolve: {

@@ -3,4 +3,20 @@
     <i class="fa fa-book" aria-hidden="true"></i>
      Ledger
 </h1>
+
+<table id="ledger" datatable="ng" class="display" cellspacing="0" width="100%">
+    <thead>
+    <tr>
+        <th ng-repeat="header in headers">{{header}}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-cloak ng-repeat="row in ledger">
+        <td>{{row.editorName}}</td>
+        <td>{{row.actionType}}</td>
+        <td>{{row.editorAction}}</td>
+        <td>{{row.timestamp}}</td>
+    </tr>
+    </tbody>
+</table>
 </body>

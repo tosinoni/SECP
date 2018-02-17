@@ -3,10 +3,7 @@ package com.visucius.secp.Controllers.Admin;
 import com.google.common.base.Optional;
 import com.google.common.collect.Sets;
 import com.visucius.secp.DTO.*;
-import com.visucius.secp.daos.GroupDAO;
-import com.visucius.secp.daos.PermissionDAO;
-import com.visucius.secp.daos.RolesDAO;
-import com.visucius.secp.daos.UserDAO;
+import com.visucius.secp.daos.*;
 import com.visucius.secp.models.*;
 import com.visucius.secp.util.Util;
 import org.apache.commons.lang3.StringUtils;
@@ -28,6 +25,8 @@ public class AdminController {
     private final GroupDAO groupDAO;
     private final RolesDAO rolesDAO;
     private final PermissionDAO permissionDAO;
+    private final RecordsDAO recordsDAO;
+
 
     private final String userErrorString = "user";
     private final String groupErrorString = "group";
@@ -35,11 +34,14 @@ public class AdminController {
     private final String permissionErrorString = "permission";
 
 
-    public AdminController(UserDAO userDAO, RolesDAO rolesDAO, PermissionDAO permissionDAO, GroupDAO groupDAO) {
+    public AdminController(UserDAO userDAO, RolesDAO rolesDAO,
+                           PermissionDAO permissionDAO, GroupDAO groupDAO,
+                           RecordsDAO recordsDAO) {
         this.userDAO = userDAO;
         this.rolesDAO = rolesDAO;
         this.permissionDAO = permissionDAO;
         this.groupDAO = groupDAO;
+        this.recordsDAO = recordsDAO;
     }
 
     public void registerAdmin(String userID) {
@@ -185,6 +187,21 @@ public class AdminController {
 
         return Response.status(Response.Status.OK).entity(response).build();
     }
+
+    public Response getLedger() {
+        List<Record> allRecords = recordsDAO.findAll();
+
+        if(Util.isCollectionEmpty(allRecords)) {
+            return Response.status(Response.Status.NO_CONTENT).build();
+        }
+
+        Set<RecordsDTO> ledger = allRecords.stream()
+            .map(record -> {return new RecordsDTO(record);})
+            .collect(Collectors.toSet());
+
+        return Response.status(Response.Status.OK).entity(ledger).build();
+    }
+
 
     public Response getGroupsAudit(AuditDTO groupsAuditDTO) {
         validateGroupsAuditDTO(groupsAuditDTO);

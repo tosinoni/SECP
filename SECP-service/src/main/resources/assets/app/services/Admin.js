@@ -244,6 +244,17 @@ angular.module('SECP')
             }, function(err) {
                 return err;
             });
-        }
+        },
+
+        getLedger : function() {
+            return $http.get("/SECP/admin/ledger")
+            .then(function(res) {
+                if (res.status == 200) {
+                    return res.data;
+                }
+            }, function(err) {
+                return err;
+            });
+        },
     }
   });

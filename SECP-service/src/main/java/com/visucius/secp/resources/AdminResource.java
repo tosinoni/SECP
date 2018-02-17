@@ -126,4 +126,11 @@ public class AdminResource {
     public Response getUserAudit(@Auth AuditDTO groupAuditDTO) {
         return adminController.getGroupsAudit(groupAuditDTO);
     }
+
+    @GET
+    @Path("/ledger")
+    @UnitOfWork
+    public Response getLedger() {
+        return adminController.getLedger();
+    }
 }

@@ -114,6 +114,15 @@ create table IF NOT EXISTS secret (
     primary key (id)
 ) engine=MyISAM;
 
+create table IF NOT EXISTS Records (
+    id bigint not null,
+    editor_name varchar(255) not null,
+    action_type varchar(255) not null,
+    editor_action longtext not null,
+    timestamp datetime,
+    primary key (id)
+) engine=MyISAM;
+
 #********************** Column changes for table should be added here ************************
 #Alter TABLE Users ADD COLUMN isActive BOOLEAN DEFAULT TRUE;
 #Alter TABLE Groups ADD COLUMN isActive BOOLEAN DEFAULT TRUE;

@@ -4,10 +4,7 @@ import com.google.common.base.Optional;
 import com.visucius.secp.Controllers.Admin.AdminController;
 import com.visucius.secp.Controllers.User.UserRegistrationController;
 import com.visucius.secp.DTO.AppCreateDTO;
-import com.visucius.secp.daos.GroupDAO;
-import com.visucius.secp.daos.PermissionDAO;
-import com.visucius.secp.daos.RolesDAO;
-import com.visucius.secp.daos.UserDAO;
+import com.visucius.secp.daos.*;
 import com.visucius.secp.helpers.ResponseValidator;
 import com.visucius.secp.models.LoginRole;
 import com.visucius.secp.models.Permission;
@@ -43,8 +40,9 @@ public class AdminResourceTest {
     private GroupDAO groupDAO = Mockito.mock(GroupDAO.class);
     private RolesDAO rolesDAO = Mockito.mock(RolesDAO.class);
     private PermissionDAO permissionDAO = Mockito.mock(PermissionDAO.class);
+    private RecordsDAO recordsDAO = Mockito.mock(RecordsDAO.class);
 
-    private AdminController adminController = new AdminController(userDAO, rolesDAO, permissionDAO, groupDAO);
+    private AdminController adminController = new AdminController(userDAO, rolesDAO, permissionDAO, groupDAO, recordsDAO);
     private UserRegistrationController userRegistrationController = new UserRegistrationController(userDAO,permissionDAO,groupDAO);
 
 
