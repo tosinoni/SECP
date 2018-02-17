@@ -1,28 +1,56 @@
 angular.module('SECP')
-  .controller('PortalController', ['$scope', function ($scope) {
-      //Beautifies select field to searchable dropdowns
-      $('.audit-user-select').select2();
-      $('.audit-group-select').select2();
+  .controller('PortalController', function ($scope, Admin, $location) {
+      $scope.users = [];
+      $scope.fromUsers = [];
+      $scope.toUsersList = [];
 
-      //Used in filter as well as audit views
-      $('.permission-level-select').select2();
-      $('.role-select').select2();
+      Admin.getAllUsers().then(function (users) {
+          $scope.fromUsers = angular.copy(users);
+          $scope.toUsersList = angular.copy(users);
+          $scope.users = angular.copy(users);
+      });
+
+      $scope.$watch('audit.fromUser', function(newFromAuditUser) {
+          if(newFromAuditUser) {
+              let index = _.findIndex($scope.users, function(u) { return u.userID == newFromAuditUser.userID; });
+              let newToUsers = angular.copy($scope.users);
+              newToUsers.splice(index, 1);
+              $scope.toUsersList = newToUsers;
+          }
+      });
+
 
       //Ensures the admin is not able to audit without specifying a user
       $scope.validateUserAudit = function() {
-          if (!$scope.auditUser) {
+          if (!$scope.audit || !$scope.audit.fromUser) {
               swal({
                   position: 'top-right',
                   type: 'error',
-                  title: 'Please specify a username',
+                  title: 'Please specify a user to audit',
                   showConfirmButton: false,
                   timer: 1500
-              });
+              }).catch((result) => {});
+          } else {
+              Admin.auditUser($scope.audit).then(function (res) {
+                  if(res.status !== 200) {
+                      swal("Audit request failed", res.data.message, "error");
+                  } else {
+                      let user = $scope.audit.fromUser;
+                      let userName = user.firstName + ' ' + user.lastName;
+                      $location.path('/portal/audit/view').search({
+                          groups: res.data,
+                          name: userName,
+                          auditUser: user
+                      });
+                      swal("Yaah", "Audit request successful", "success");
+                  }
+              })
           }
       }
+
       //Ensures the admin is not able to audit without specifying a group
       $scope.validateGroupAudit = function() {
-          if (!$scope.auditGroup) {
+          if (!$scope.audit || !scope.audit.fromUser) {
               swal({
                   position: 'top-right',
                   type: 'error',
@@ -34,7 +62,7 @@ angular.module('SECP')
       }
       //Populates the advanced search time for user auditing
       $('input[name=todate]').val(moment().format('YYYY-MM-DDTHH:mm'));
-  }]);
+  });
 //Collapsible for User Audit Advanced Search
 angular.module('SECP').controller('UserAuditAdvancedSearch', function ($scope) {
     $scope.isCollapsed = true;

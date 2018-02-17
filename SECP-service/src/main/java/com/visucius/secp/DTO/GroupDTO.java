@@ -2,11 +2,13 @@ package com.visucius.secp.DTO;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.visucius.secp.models.Group;
 import com.visucius.secp.models.GroupType;
 
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class GroupDTO {
     @JsonProperty
@@ -57,6 +59,24 @@ public class GroupDTO {
 
     public GroupDTO(long groupID) {
         this.groupID = groupID;
+    }
+
+    public GroupDTO(Group group) {
+        this.groupID = group.getId();
+        this.avatarUrl = group.getAvatarurl();
+        this.groupType = group.getGroupType();
+        this.displayName = group.getDisplayname();
+
+        this.messages = group.getMessages().stream().map(message -> {
+            return new MessageDTO(message);
+        }).collect(Collectors.toSet());
+
+        this.lastMessage = this.messages.stream().reduce((first, second) -> second)
+            .orElse(null);
+
+        this.users = group.getUsers().stream().map(user -> {
+            return new UserDTO(user);
+        }).collect(Collectors.toSet());
     }
 
     public long getGroupID() {

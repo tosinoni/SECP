@@ -1,15 +1,12 @@
 package com.visucius.secp.Controllers.Admin;
 
 import com.google.common.base.Optional;
-import com.visucius.secp.DTO.AppCreateDTO;
-import com.visucius.secp.DTO.RolesOrPermissionDTO;
+import com.google.common.collect.Sets;
+import com.visucius.secp.DTO.*;
 import com.visucius.secp.daos.PermissionDAO;
 import com.visucius.secp.daos.RolesDAO;
 import com.visucius.secp.daos.UserDAO;
-import com.visucius.secp.models.LoginRole;
-import com.visucius.secp.models.Permission;
-import com.visucius.secp.models.Role;
-import com.visucius.secp.models.User;
+import com.visucius.secp.models.*;
 import com.visucius.secp.util.Util;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -184,6 +181,65 @@ public class AdminController {
         return Response.status(Response.Status.OK).entity(response).build();
     }
 
+    public Response getUserAudit(User user, AuditDTO userAuditDTO) {
+        validateUserAuditDTO(user, userAuditDTO);
+        Set<Group> privateGroupsToBeAudited = getPrivateGroupsToBeAuditedForUser(userAuditDTO);
+
+        if(privateGroupsToBeAudited.isEmpty()) {
+            throw new WebApplicationException(AdminErrorMessage.AUDIT_USER_FAIL_NO_CONVERSATIONS, Response.Status.BAD_REQUEST);
+        }
+
+        Set<GroupDTO> groupDTOS = privateGroupsToBeAudited.stream().map(group -> {
+            return new GroupDTO(group);
+        }).collect(Collectors.toSet());
+
+        return Response.status(Response.Status.OK).entity(groupDTOS).build();
+    }
+
+    private Set<Group> getPrivateGroupsToBeAuditedForUser(AuditDTO userAuditDTO) {
+        Set<Group> fromUserPrivateGroups = getUserPrivateGroups(userAuditDTO.getFromUser().getUserID());
+
+        if(!Util.isCollectionEmpty(userAuditDTO.getToUsers()) && !fromUserPrivateGroups.isEmpty()) {
+            Set<Group> commonGroups = new HashSet<>();
+
+            for (UserDTO userDTO : userAuditDTO.getToUsers()) {
+                Set<Group> toUserPrivateGroups = getUserPrivateGroups(userDTO.getUserID());
+                Set<Group> commonGroup = Sets.intersection(fromUserPrivateGroups, toUserPrivateGroups);
+                Util.addAllIfNotNull(commonGroups, commonGroup);
+            }
+
+            return commonGroups;
+        }
+
+        return fromUserPrivateGroups;
+    }
+
+    private Set<Group> getUserPrivateGroups(long userID) {
+        User user = getUserFromID(userID);
+
+        return  user.getGroups().stream()
+            .filter(group -> group.getGroupType().equals(GroupType.PRIVATE) && !group.getMessages().isEmpty())
+            .collect(Collectors.toSet());
+    }
+
+    private void validateUserAuditDTO(User user, AuditDTO userAuditDTO) {
+        if(userAuditDTO == null || userAuditDTO.getFromUser() == null) {
+            throw new WebApplicationException(AdminErrorMessage.AUDIT_USER_FAIL_EMPTY_REQUEST, Response.Status.BAD_REQUEST);
+        }
+
+        User fromUser = getUserFromID(userAuditDTO.getFromUser().getUserID());
+
+        if(user.getId() == fromUser.getId()) {
+            throw new WebApplicationException(AdminErrorMessage.AUDIT_USER_FAIL_INVALID_FROM_USER, Response.Status.BAD_REQUEST);
+        }
+
+        //validate the user ids of toUSers
+        if(!Util.isCollectionEmpty(userAuditDTO.getToUsers())) {
+            for (UserDTO userDTO : userAuditDTO.getToUsers())
+                getUserFromID(userDTO.getUserID());
+        }
+    }
+
     private String validateCreateRolesRequest(AppCreateDTO request) {
         if (request == null || Util.isCollectionEmpty(request.getRoles())) {
             return  AdminErrorMessage.REGISTER_ROLES_FAIL_EMPTY_REQUEST;
@@ -230,6 +286,10 @@ public class AdminController {
     private User getUserFromID(String userID) {
         long id = Long.parseLong(userID);
 
+        return getUserFromID(id);
+    }
+
+    private User getUserFromID(long id) {
         Optional<User> user = userDAO.find(id);
 
         if (!user.isPresent()) {

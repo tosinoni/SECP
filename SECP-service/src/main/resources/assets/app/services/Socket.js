@@ -15,7 +15,8 @@ angular.module('SECP')
       return {
           connect : function () {
               let userID = localStorage.getItem('userID');
-              var url = protocol + "://" + host + "/chat/" + userID;
+              //var url = protocol + "://" + host + "/chat/" + userID;
+              var url = "ws://localhost:8080/chat/" + userID;
 
               if (service.ws)
                   return;

@@ -1,6 +1,7 @@
 package com.visucius.secp.DTO;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.visucius.secp.models.Message;
 
 import java.util.Date;
 import java.util.Objects;
@@ -44,6 +45,16 @@ public class MessageDTO {
         this.body = body;
         this.reason = reason;
         this.timestamp = new Date(timestamp.getTime());
+    }
+
+    public MessageDTO(Message message) {
+        this.messageId = message.getId();
+        this.groupId = message.getGroup().getId();
+        this.senderId = message.getUser().getId();
+        this.body = message.getBody();
+        this.timestamp = message.getTimestamp();
+        this.reason = MessageType.MESSAGE;
+        this.senderDisplayName = message.getUser().getDisplayName();
     }
 
     public long getGroupId() {

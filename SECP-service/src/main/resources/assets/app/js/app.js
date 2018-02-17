@@ -59,7 +59,7 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
         }
       })
       .when('/portal/audit', {
-        templateUrl: 'views/portal/audit.html',
+        templateUrl: 'views/audit/audit.html',
         controller: 'PortalController',
         css: 'css/portal.css',
         requiresLogin: true,
@@ -68,7 +68,7 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
         }
       })
       .when('/portal/audit/user', {
-          templateUrl: 'views/portal/audit-user.html',
+          templateUrl: 'views/audit/audit-user.html',
           controller:'PortalController',
           css: 'css/portal.css',
           requiresLogin: true,
@@ -77,7 +77,7 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
           }
       })
       .when('/portal/audit/group', {
-          templateUrl: 'views/portal/audit-group.html',
+          templateUrl: 'views/audit/audit-group.html',
           controller:'PortalController',
           css: 'css/portal.css',
           requiresLogin: true,
@@ -86,7 +86,7 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
           }
       })
       .when('/portal/audit/ledger', {
-          templateUrl: 'views/portal/audit-ledger.html',
+          templateUrl: 'views/audit/audit-ledger.html',
           controller:'PortalController',
           css: 'css/portal.css',
           requiresLogin: true,
@@ -94,6 +94,15 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
               isAdmin: isAdmin
           }
       })
+        .when('/portal/audit/view', {
+            templateUrl: 'views/audit/audit-view.html',
+            controller:'AuditViewController',
+            css: 'css/portal.css',
+            requiresLogin: true,
+            resolve: {
+                isAdmin: isAdmin
+            }
+        })
       .when('/portal/manage', {
           templateUrl: 'views/portal/manage.html',
           controller:'PortalController',

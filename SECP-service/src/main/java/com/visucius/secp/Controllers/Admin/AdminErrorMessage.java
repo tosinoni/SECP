@@ -24,4 +24,9 @@ public interface AdminErrorMessage {
     String REGISTER_PERMISSIONS_FAIL_INVALID_COLOR = "Registering permissions failed. No color provided.";
     String DELETE_PERMISSION_FAIL_PERMISSION_IN_USE = "Delete permission %s failed. There are groups or users using this permission.";
 
+    /*****Audit User Error messages ******/
+    String AUDIT_USER_FAIL_EMPTY_REQUEST = "No user provided for auditing.";
+    String AUDIT_USER_FAIL_INVALID_FROM_USER = "You cannot audit yourself.";
+    String AUDIT_USER_FAIL_NO_CONVERSATIONS = "No conversations exist for selected user based on search criteria.";
+
 }

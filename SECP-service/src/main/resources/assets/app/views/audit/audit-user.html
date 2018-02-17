@@ -1,0 +1,43 @@
+<body>
+<h1 class="portalheader">
+    <i class="fa fa-user" aria-hidden="true"></i>
+     Audit User
+</h1>
+<form name="useraudit">
+    <div class="audituserlabel"><label>From:</label></div>
+    <div class="audituserinput">
+        <select id="fromAuditUser" select2 class="audit-user-select" style="width: 100%" ng-model="audit.fromUser" required
+                ng-options='u as (u.firstName + " " + u.lastName) for u in fromUsers'>
+        </select>
+    </div>
+    <br>
+    <div class="audituserlabel"><label>To:</label></div>
+    <div class="audituserinput">
+        <select select2 id="toAuditUser" class="audit-user-select" ng-model="audit.toUsers" style="width: 100%" multiple
+                ng-options='u as (u.firstName + " " + u.lastName) for u in toUsersList'>
+        </select>
+    </div>
+
+    <div ng-controller="UserAuditAdvancedSearch">
+        <div class="advancedsearchdiv">
+            <button class="advancedsearchbutton" ng-click="isCollapsed = !isCollapsed">Advanced Search</button>
+        </div>
+        <div collapse="isCollapsed">
+            <hr>
+            <div class="well well-lg">
+                <p>From:</p>
+                <i class="fa fa-calendar" aria-hidden="true"></i> <input class="dateinput" ng-model="audit.fromDate" name = "fromdate" type="datetime-local">
+                <br>
+                <br>
+                <p>To:</p>
+                <i class="fa fa-calendar" aria-hidden="true"></i> <input class="dateinput" ng-model="audit.toDate" name = "todate" type="datetime-local">
+            </div>
+        </div>
+    </div>
+
+    <div class="auditbtn-box">
+        <button type="submit" class="auditbtn btn-submit" ng-click="validateUserAudit()">Audit</button>
+    </div>
+
+</form>
+</body>

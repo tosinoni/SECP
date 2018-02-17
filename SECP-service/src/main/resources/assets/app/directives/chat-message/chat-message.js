@@ -91,6 +91,7 @@ angular.module('SECP')
                      }
 
                      $scope.users = obj;
+                     displayMessages();
                   }
              });
 

@@ -226,6 +226,15 @@ angular.module('SECP')
             }, function(err) {
                 return err;
             });
+        },
+
+        auditUser : function(request) {
+            return $http.post("/SECP/admin/audit/user", request)
+                .then(function(res) {
+                    return res;
+                }, function(err) {
+                    return err;
+                });
         }
     }
   });

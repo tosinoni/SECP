@@ -2,7 +2,7 @@
 
 angular.module('SECP')
   .controller('ChatController',
-    function ($scope, Chat, Socket, EncryptionService, SwalService, Admin, $q) {
+    function ($scope, Chat, Socket, EncryptionService, SwalService, Admin, $q, $location, Group) {
       //declaring variables
       $scope.contacts = [];
       $scope.secretKeysForChat = {};
@@ -33,7 +33,7 @@ angular.module('SECP')
 
           if (messageObj.reason !== "message") {
               EncryptionService.handleAuthorizationRequest(messageObj);
-          } else {
+          } else if($location.path() === "/chats"){
               let currentDeviceName = new Fingerprint().get().toString();
 
               if (currentDeviceName !== messageObj.senderDeviceName && $scope.selectedChat.groupID === messageObj.groupId) {
@@ -189,6 +189,7 @@ angular.module('SECP')
                   $scope.contacts.push(contact);
                   let secretKey = cryptico.generateAESKey();
                   EncryptionService.sendSecretKeysToGroup(contact.groupID, secretKey);
+                  $scope.secretKeysForChat[contact.groupID] = secretKey;
               }
 
               $scope.selectedChat = contact;

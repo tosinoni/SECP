@@ -3,10 +3,8 @@ package com.visucius.secp.resources;
 import com.codahale.metrics.annotation.Timed;
 import com.visucius.secp.Controllers.Admin.AdminController;
 import com.visucius.secp.Controllers.User.UserRegistrationController;
-import com.visucius.secp.DTO.AppCreateDTO;
-import com.visucius.secp.DTO.RolesOrPermissionDTO;
-import com.visucius.secp.DTO.UserRegistrationRequest;
-import com.visucius.secp.DTO.UserRegistrationResponse;
+import com.visucius.secp.DTO.*;
+import com.visucius.secp.models.User;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 
@@ -113,5 +111,12 @@ public class AdminResource {
     @UnitOfWork
     public Response getAllPermissions() {
         return adminController.getAllPermissions();
+    }
+
+    @POST
+    @Path("/audit/user")
+    @UnitOfWork
+    public Response getUserAudit(@Auth User user, AuditDTO userAuditDTO) {
+        return adminController.getUserAudit(user, userAuditDTO);
     }
 }
