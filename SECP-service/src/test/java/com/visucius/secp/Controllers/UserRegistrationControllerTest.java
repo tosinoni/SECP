@@ -9,6 +9,7 @@ import com.visucius.secp.DTO.UserRegistrationRequest;
 import com.visucius.secp.DTO.UserRegistrationResponse;
 import com.visucius.secp.daos.GroupDAO;
 import com.visucius.secp.daos.PermissionDAO;
+import com.visucius.secp.daos.RecordsDAO;
 import com.visucius.secp.daos.UserDAO;
 import com.visucius.secp.models.Permission;
 import com.visucius.secp.models.User;
@@ -30,6 +31,7 @@ public class UserRegistrationControllerTest {
     private UserDAO userDAO;
     private PermissionDAO permissionDAO;
     private GroupDAO groupDAO;
+    private RecordsDAO recordsDAO;
 
 
     @Rule
@@ -40,11 +42,13 @@ public class UserRegistrationControllerTest {
         userDAO = Mockito.mock(UserDAO.class);
         groupDAO = Mockito.mock(GroupDAO.class);
         permissionDAO = Mockito.mock(PermissionDAO.class);
+        recordsDAO = Mockito.mock(RecordsDAO.class);
+
         Mockito.when(permissionDAO.find(Matchers.anyLong())).thenReturn(Optional.fromNullable(new Permission("level", "Blue")));
         Mockito.when(userDAO.findByEmail("duplicate@email.com")).thenReturn(new User());
         Mockito.when(userDAO.findByUserName("duplicateUsername")).thenReturn(new User());
         Mockito.when(userDAO.save(new User())).thenReturn(new User());
-        controller = new UserRegistrationController(userDAO,permissionDAO,groupDAO);
+        controller = new UserRegistrationController(userDAO,permissionDAO,groupDAO, recordsDAO);
     }
 
     @Test
@@ -59,7 +63,7 @@ public class UserRegistrationControllerTest {
 
         exception.expect(WebApplicationException.class);
         exception.expectMessage(UserErrorMessage.FIRST_NAME_INVALID);
-        Response response = controller.registerUser(request);
+        Response response = controller.registerUser(new User(),request);
     }
 
     @Test
@@ -72,7 +76,7 @@ public class UserRegistrationControllerTest {
             "Password1");
         exception.expect(WebApplicationException.class);
         exception.expectMessage(UserErrorMessage.LAST_NAME_INVALID);
-        Response response = controller.registerUser(request);
+        Response response = controller.registerUser(new User(), request);
     }
 
     @Test
@@ -86,7 +90,7 @@ public class UserRegistrationControllerTest {
             "Password1");
         exception.expect(WebApplicationException.class);
         exception.expectMessage(UserErrorMessage.FIRST_NAME_INVALID);
-        Response response = controller.registerUser(request);
+        Response response = controller.registerUser(new User(),request);
     }
 
     @Test
@@ -100,7 +104,7 @@ public class UserRegistrationControllerTest {
             "Password1");
         exception.expect(WebApplicationException.class);
         exception.expectMessage(UserErrorMessage.LAST_NAME_INVALID);
-        Response response = controller.registerUser(request);
+        Response response = controller.registerUser(new User(),request);
     }
 
     @Test
@@ -113,7 +117,7 @@ public class UserRegistrationControllerTest {
             "");
         exception.expect(WebApplicationException.class);
         exception.expectMessage(UserErrorMessage.PASSWORD_INVALID);
-        Response response = controller.registerUser(request);
+        Response response = controller.registerUser(new User(),request);
     }
 
     @Test
@@ -126,7 +130,7 @@ public class UserRegistrationControllerTest {
             "pass");
         exception.expect(WebApplicationException.class);
         exception.expectMessage(UserErrorMessage.PASSWORD_INVALID);
-        Response response = controller.registerUser(request);
+        Response response = controller.registerUser(new User(),request);
     }
 
     @Test
@@ -139,7 +143,7 @@ public class UserRegistrationControllerTest {
             "Verylongpassword12342343243242324323");
         exception.expect(WebApplicationException.class);
         exception.expectMessage(UserErrorMessage.PASSWORD_INVALID);
-        Response response = controller.registerUser(request);
+        Response response = controller.registerUser(new User(),request);
     }
 
     @Test
@@ -152,7 +156,7 @@ public class UserRegistrationControllerTest {
             "password1");
         exception.expect(WebApplicationException.class);
         exception.expectMessage(UserErrorMessage.PASSWORD_INVALID);
-        Response response = controller.registerUser(request);
+        Response response = controller.registerUser(new User(),request);
     }
 
     @Test
@@ -166,7 +170,7 @@ public class UserRegistrationControllerTest {
             "Password1");
         exception.expect(WebApplicationException.class);
         exception.expectMessage(UserErrorMessage.EMAIL_INVALID);
-        Response response = controller.registerUser(request);
+        Response response = controller.registerUser(new User(),request);
     }
 
     @Test
@@ -181,7 +185,7 @@ public class UserRegistrationControllerTest {
 
         exception.expect(WebApplicationException.class);
         exception.expectMessage(UserErrorMessage.EMAIL_INVALID);
-        Response response = controller.registerUser(request);
+        Response response = controller.registerUser(new User(),request);
     }
 
     @Test
@@ -199,7 +203,7 @@ public class UserRegistrationControllerTest {
         userDTO.setLastName("farah");
         userDTO.setLastName("alifarah");
 
-        Response response = controller.registerUser(request);
+        Response response = controller.registerUser(new User(),request);
         Response validResponse = Response.status(Response.Status.CREATED).entity(userDTO).build();
         assertEquals(response.getStatus(), validResponse.getStatus());
         assertEquals(response.getEntity(),  validResponse.getEntity());
@@ -214,7 +218,7 @@ public class UserRegistrationControllerTest {
             "Password!");
         exception.expect(WebApplicationException.class);
         exception.expectMessage(UserErrorMessage.DUPLICATE_USERNAME);
-        Response response = controller.registerUser(request);
+        Response response = controller.registerUser(new User(),request);
     }
 
     @Test
@@ -228,7 +232,7 @@ public class UserRegistrationControllerTest {
             "Password!");
         exception.expect(WebApplicationException.class);
         exception.expectMessage(UserErrorMessage.DUPLICATE_EMAIL);
-        Response response = controller.registerUser(request);
+        Response response = controller.registerUser(new User(),request);
     }
 
     @Test

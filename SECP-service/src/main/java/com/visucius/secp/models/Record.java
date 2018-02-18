@@ -32,6 +32,13 @@ public class Record {
 
     }
 
+    public Record(String editorName, ActionType actionType, String editorAction, Date timestamp) {
+        this.editorName = editorName;
+        this.actionType = actionType;
+        this.editorAction = editorAction;
+        this.timestamp = timestamp;
+    }
+
     public long getId() {
         return id;
     }

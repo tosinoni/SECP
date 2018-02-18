@@ -4,10 +4,7 @@ import com.google.common.base.Optional;
 import com.visucius.secp.Controllers.User.UserErrorMessage;
 import com.visucius.secp.Controllers.User.UserProfileController;
 import com.visucius.secp.DTO.*;
-import com.visucius.secp.daos.GroupDAO;
-import com.visucius.secp.daos.PermissionDAO;
-import com.visucius.secp.daos.RolesDAO;
-import com.visucius.secp.daos.UserDAO;
+import com.visucius.secp.daos.*;
 import com.visucius.secp.models.Group;
 import com.visucius.secp.models.Permission;
 import com.visucius.secp.models.Role;
@@ -37,6 +34,8 @@ public class GroupControllerTest {
     private static GroupDAO groupDAO;
     private static RolesDAO rolesDAO;
     private static PermissionDAO permissionsDAO;
+    private static RecordsDAO recordsDAO;
+
     private static UserProfileController userProfileController;
 
     @Rule
@@ -77,6 +76,7 @@ public class GroupControllerTest {
         groupDAO = Mockito.mock(GroupDAO.class);
         rolesDAO = Mockito.mock(RolesDAO.class);
         permissionsDAO = Mockito.mock(PermissionDAO.class);
+        recordsDAO = Mockito.mock(RecordsDAO.class);
         userProfileController = Mockito.mock(UserProfileController.class);
 
         List<User> validUsers = new ArrayList<>();
@@ -105,7 +105,7 @@ public class GroupControllerTest {
         Mockito.when(groupDAO.findByName(VALID_GROUP_NAME)).thenReturn(null);
 
 
-        controller = new GroupController(groupDAO,userDAO,rolesDAO,permissionsDAO, userProfileController);
+        controller = new GroupController(groupDAO,userDAO,rolesDAO,permissionsDAO, recordsDAO, userProfileController);
     }
 
 
@@ -156,7 +156,7 @@ public class GroupControllerTest {
 
         exception.expect(WebApplicationException.class);
         exception.expectMessage(GroupErrorMessages.GROUP_NAME_INVALID);
-        controller.createPublicGroup(request);
+        controller.createPublicGroup(new User(), request);
     }
 
     @Test
@@ -169,7 +169,7 @@ public class GroupControllerTest {
 
         exception.expect(WebApplicationException.class);
         exception.expectMessage(GroupErrorMessages.GROUP_NAME_INVALID);
-        controller.createPublicGroup(request);
+        controller.createPublicGroup(new User(),request);
     }
 
     @Test
@@ -182,7 +182,7 @@ public class GroupControllerTest {
 
         exception.expect(WebApplicationException.class);
         exception.expectMessage(GroupErrorMessages.GROUP_NAME_INVALID);
-        controller.createPublicGroup(request);
+        controller.createPublicGroup(new User(),request);
     }
 
     @Test
@@ -198,7 +198,7 @@ public class GroupControllerTest {
 
         exception.expect(WebApplicationException.class);
         exception.expectMessage(String.format(GroupErrorMessages.ROLE_ID_INVALID, INVALID_ROLE_ID));
-        controller.createPublicGroup(request);
+        controller.createPublicGroup(new User(),request);
     }
 
     @Test
@@ -214,7 +214,7 @@ public class GroupControllerTest {
 
         exception.expect(WebApplicationException.class);
         exception.expectMessage(String.format(GroupErrorMessages.PERMISSION_ID_INVALID, INVALID_Permission_ID));
-        controller.createPublicGroup(request);
+        controller.createPublicGroup(new User(),request);
     }
 
     @Test
@@ -226,7 +226,7 @@ public class GroupControllerTest {
         groupDTO.setRoles(addRoles);
         exception.expect(WebApplicationException.class);
         exception.expectMessage(String.format(GroupErrorMessages.ROLE_ID_INVALID, INVALID_ROLE_ID));
-        controller.modifyGroup(groupDTO);
+        controller.modifyGroup(new User(),groupDTO);
     }
 
     @Test
@@ -239,7 +239,7 @@ public class GroupControllerTest {
 
         exception.expect(WebApplicationException.class);
         exception.expectMessage(String.format(GroupErrorMessages.PERMISSION_ID_INVALID, INVALID_ROLE_ID));
-        controller.modifyGroup(groupDTO);
+        controller.modifyGroup(new User(),groupDTO);
     }
 
     @Test
@@ -251,7 +251,7 @@ public class GroupControllerTest {
         groupDTO.setRoles(addRoles);
         groupDTO.setPermissions(new HashSet<>());
 
-        Response response = controller.modifyGroup(groupDTO);
+        Response response = controller.modifyGroup(new User(),groupDTO);
         Response validResponse = Response.status(Response.Status.CREATED).entity(getGroupResponse()).build();
         assertEquals(response.getStatus(), validResponse.getStatus());
         assertEquals(response.getEntity(),  validResponse.getEntity());
@@ -266,7 +266,7 @@ public class GroupControllerTest {
         groupDTO.setPermissions(addPermissions);
         groupDTO.setRoles(new HashSet<>());
 
-        Response response = controller.modifyGroup(groupDTO);
+        Response response = controller.modifyGroup(new User(),groupDTO);
         Response validResponse = Response.status(Response.Status.CREATED).entity(getGroupResponse()).build();
         assertEquals(response.getStatus(), validResponse.getStatus());
         assertEquals(response.getEntity(),  validResponse.getEntity());
@@ -292,7 +292,7 @@ public class GroupControllerTest {
         groupDTO.setPermissions(addPermissions);
         groupDTO.setRoles(addRoles);
 
-        Response response = controller.modifyGroup(groupDTO);
+        Response response = controller.modifyGroup(new User(),groupDTO);
         Response validResponse = Response.status(Response.Status.CREATED).entity(getGroupResponse()).build();
         assertEquals(response.getStatus(), validResponse.getStatus());
         assertEquals(response.getEntity(),  validResponse.getEntity());
@@ -317,7 +317,7 @@ public class GroupControllerTest {
         groupDTO.setPermissions(removePermissions);
         groupDTO.setRoles(removeRoles);
 
-        Response response = controller.modifyGroup(groupDTO);
+        Response response = controller.modifyGroup(new User(),groupDTO);
         Response validResponse = Response.status(Response.Status.CREATED).entity(getGroupResponse()).build();
         assertEquals(response.getStatus(), validResponse.getStatus());
         assertEquals(response.getEntity(),  validResponse.getEntity());
@@ -328,7 +328,7 @@ public class GroupControllerTest {
     {
         GroupDTO groupDTO = new GroupDTO(GROUPID);
 
-        Response response =  controller.modifyGroup(groupDTO);
+        Response response =  controller.modifyGroup(new User(),groupDTO);
         Response validResponse = Response.status(Response.Status.CREATED).entity(getGroupResponse()).build();
         assertEquals(response.getStatus(), validResponse.getStatus());
         assertEquals(response.getEntity(),  validResponse.getEntity());
@@ -396,7 +396,7 @@ public class GroupControllerTest {
             validRoles
         );
 
-        Response response = controller.createPublicGroup(request);
+        Response response = controller.createPublicGroup(new User(),request);
         Response validResponse = Response.status(Response.Status.CREATED).entity(getGroupResponse()).build();
         assertEquals(response.getStatus(), validResponse.getStatus());
         assertEquals(response.getEntity(),  validResponse.getEntity());

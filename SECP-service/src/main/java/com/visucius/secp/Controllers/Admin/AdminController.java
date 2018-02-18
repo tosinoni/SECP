@@ -44,7 +44,7 @@ public class AdminController {
         this.recordsDAO = recordsDAO;
     }
 
-    public void registerAdmin(String userID) {
+    public void registerAdmin(User requestUser, String userID) {
         validateInput(userID, userErrorString);
         User user = getUserFromID(userID);
 
@@ -56,9 +56,13 @@ public class AdminController {
         user.setLoginRole(LoginRole.ADMIN);
         userDAO.save(user);
         LOG.info("New admin created.");
+
+        //adding the record to ledger
+        String action = user.getFirstname() + " " + user.getLastname() + " was made an admin";
+        recordsDAO.save(Util.createRecord(requestUser, ActionType.ADMIN, action));
     }
 
-    public void removeAdmin(String userID) {
+    public void removeAdmin(User requestUser, String userID) {
         validateInput(userID, userErrorString);
         User user = getUserFromID(userID);
 
@@ -70,9 +74,13 @@ public class AdminController {
         user.setLoginRole(LoginRole.NORMAL);
         userDAO.save(user);
         LOG.info("An admin has been removed.");
+
+        //adding the record to ledger
+        String action = user.getFirstname() + " " + user.getLastname() + " was removed as an admin";
+        recordsDAO.save(Util.createRecord(requestUser, ActionType.ADMIN, action));
     }
 
-    public Response registerRoles(AppCreateDTO request) {
+    public Response registerRoles(User requestUser, AppCreateDTO request) {
         String error = validateCreateRolesRequest(request);
         if(StringUtils.isNoneEmpty(error))
         {
@@ -85,10 +93,14 @@ public class AdminController {
             response.add(new RolesOrPermissionDTO(role.getId(), role.getRole(), role.getColor()));
         }
 
+        //adding the record to ledger
+        String action = "Role " + StringUtils.join(request.getRoles(), ",") +  " was created";
+        recordsDAO.save(Util.createRecord(requestUser, ActionType.ROLE, action));
+
         return Response.status(Response.Status.CREATED).entity(response).build();
     }
 
-    public Response registerPermissions(AppCreateDTO request) {
+    public Response registerPermissions(User requestUser, AppCreateDTO request) {
         String error = validateCreatePermissionsRequest(request);
         if(StringUtils.isNoneEmpty(error))
         {
@@ -101,40 +113,59 @@ public class AdminController {
             response.add(new RolesOrPermissionDTO(permission.getId(), permission.getLevel(), permission.getColor()));
         }
 
+
+        //adding the record to ledger
+        String action = "Permissions " + StringUtils.join(request.getPermissions(), ",") +  " was created";
+        recordsDAO.save(Util.createRecord(requestUser, ActionType.PERMISSION, action));
+
         return Response.status(Response.Status.CREATED).entity(response).build();
     }
 
-    public Response updateRoles(RolesOrPermissionDTO request, String id) {
+    public Response updateRoles(User requestUser, RolesOrPermissionDTO request, String id) {
         if(StringUtils.isEmpty(request.getColor()))
         {
             throw new WebApplicationException(AdminErrorMessage.REGISTER_ROLES_FAIL_INVALID_COLOR, Response.Status.BAD_REQUEST);
         }
 
         Role role = getRoleFromID(id);
+        String previousColor = role.getColor();
+
+
         role.setColor(request.getColor());
         Role savedRole = rolesDAO.save(role);
 
+        //adding the record to ledger
+        String action = "Color of Role " + savedRole.getRole() +  " was changed from "
+            + previousColor + " to " + savedRole.getColor() ;
+        recordsDAO.save(Util.createRecord(requestUser, ActionType.ROLE, action));
 
         return Response.status(Response.Status.CREATED).
             entity(new RolesOrPermissionDTO(savedRole.getId(),savedRole.getRole(),savedRole.getColor())).build();
     }
 
-    public Response updatePermissions(RolesOrPermissionDTO request, String id) {
+    public Response updatePermissions(User requestUser, RolesOrPermissionDTO request, String id) {
         if(StringUtils.isEmpty(request.getColor()))
         {
             throw new WebApplicationException(AdminErrorMessage.REGISTER_ROLES_FAIL_INVALID_COLOR, Response.Status.BAD_REQUEST);
         }
 
         Permission permission = getPermissionFromID(id);
+        String previousColor = permission.getColor();
+
         permission.setColor(request.getColor());
         Permission savedPermission = permissionDAO.save(permission);
 
+
+        //adding the record to ledger
+        String action = "Color of Permission " + savedPermission.getLevel()
+            +  " was changed from " + previousColor + " to " + savedPermission.getColor() ;
+        recordsDAO.save(Util.createRecord(requestUser, ActionType.PERMISSION, action));
 
         return Response.status(Response.Status.CREATED).
             entity(new RolesOrPermissionDTO(savedPermission.getId(),savedPermission.getLevel(),savedPermission.getColor())).build();
     }
 
-    public Response deleteRole(String roleID) {
+    public Response deleteRole(User requestUser, String roleID) {
         validateInput(roleID, roleErrorString);
         Role role = getRoleFromID(roleID);
 
@@ -144,10 +175,15 @@ public class AdminController {
         }
 
         rolesDAO.delete(role);
+
+        //adding the record to ledger
+        String action = "Role " + role.getRole() + " was deleted";
+        recordsDAO.save(Util.createRecord(requestUser, ActionType.ROLE, action));
+
         return Response.status(Response.Status.OK).build();
     }
 
-    public Response deletePermission(String permissionID) {
+    public Response deletePermission(User requestUser, String permissionID) {
         validateInput(permissionID, permissionErrorString);
         Permission permission = getPermissionFromID(permissionID);
 
@@ -157,6 +193,11 @@ public class AdminController {
         }
 
         permissionDAO.delete(permission);
+
+        //adding the record to ledger
+        String action = "Permission " + permission.getLevel() + " was deleted";
+        recordsDAO.save(Util.createRecord(requestUser, ActionType.PERMISSION, action));
+
         return Response.status(Response.Status.OK).build();
     }
 
@@ -203,8 +244,10 @@ public class AdminController {
     }
 
 
-    public Response getGroupsAudit(AuditDTO groupsAuditDTO) {
+    public Response getGroupsAudit(User requestUser, AuditDTO groupsAuditDTO) {
         validateGroupsAuditDTO(groupsAuditDTO);
+
+        Set<String> groupNames = new HashSet<>();
 
         Set<GroupDTO> groupDTOS = groupsAuditDTO.getGroups().stream()
             .map(groupDTO -> {
@@ -212,6 +255,8 @@ public class AdminController {
                 if(Util.isCollectionEmpty(group.getMessages())) {
                     return null;
                 }
+
+                groupNames.add(group.getName());
                 return new GroupDTO(group);
             }).collect(Collectors.toSet());
 
@@ -221,6 +266,10 @@ public class AdminController {
         if(groupDTOS.isEmpty()) {
             throw new WebApplicationException(AdminErrorMessage.AUDIT_GROUP_FAIL_NO_CONVERSATIONS, Response.Status.BAD_REQUEST);
         }
+
+        //adding the record to ledger
+        String action = "Group " + StringUtils.join(groupNames, ",") + " was audited";
+        recordsDAO.save(Util.createRecord(requestUser, ActionType.AUDIT, action));
 
         return Response.status(Response.Status.OK).entity(groupDTOS).build();
     }
@@ -236,6 +285,11 @@ public class AdminController {
         Set<GroupDTO> groupDTOS = privateGroupsToBeAudited.stream().map(group -> {
             return new GroupDTO(group);
         }).collect(Collectors.toSet());
+
+        //adding the record to ledger
+        String action = "User " + userAuditDTO.getFromUser().getFirstName() + " "
+            + userAuditDTO.getFromUser().getLastName() + " was audited";
+        recordsDAO.save(Util.createRecord(user, ActionType.AUDIT, action));
 
         return Response.status(Response.Status.OK).entity(groupDTOS).build();
     }

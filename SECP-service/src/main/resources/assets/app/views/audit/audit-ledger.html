@@ -4,7 +4,7 @@
      Ledger
 </h1>
 
-<table id="ledger" datatable="ng" class="display" cellspacing="0" width="100%">
+<table id="ledger" datatable="ng" class="display" cellspacing="0" width="100%" dt-options="showCase.dtOptions">
     <thead>
     <tr>
         <th ng-repeat="header in headers">{{header}}</th>
@@ -15,7 +15,7 @@
         <td>{{row.editorName}}</td>
         <td>{{row.actionType}}</td>
         <td>{{row.editorAction}}</td>
-        <td>{{row.timestamp}}</td>
+        <td>{{getTime(row.timestamp)}}</td>
     </tr>
     </tbody>
 </table>

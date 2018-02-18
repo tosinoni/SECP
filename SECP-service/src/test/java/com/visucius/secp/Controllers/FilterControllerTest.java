@@ -6,10 +6,12 @@ import com.visucius.secp.DTO.FilterDTO;
 import com.visucius.secp.DTO.RolesOrPermissionDTO;
 import com.visucius.secp.daos.FilterDAO;
 import com.visucius.secp.daos.PermissionDAO;
+import com.visucius.secp.daos.RecordsDAO;
 import com.visucius.secp.daos.RolesDAO;
 import com.visucius.secp.models.Filter;
 import com.visucius.secp.models.Permission;
 import com.visucius.secp.models.Role;
+import com.visucius.secp.models.User;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -33,6 +35,8 @@ public class FilterControllerTest {
     private static FilterDAO filterDAO;
     private static RolesDAO rolesDAO;
     private static PermissionDAO permissionsDAO;
+    private static RecordsDAO recordsDAO;
+
 
     @Rule
     public final ExpectedException exception = ExpectedException.none();
@@ -71,6 +75,7 @@ public class FilterControllerTest {
         filterDAO = Mockito.mock(FilterDAO.class);
         rolesDAO = Mockito.mock(RolesDAO.class);
         permissionsDAO = Mockito.mock(PermissionDAO.class);
+        recordsDAO = Mockito.mock(RecordsDAO.class);
 
         Filter validFilter = new Filter(VALID_FILTER_NAME);
         validFilter.setId(1);
@@ -91,7 +96,7 @@ public class FilterControllerTest {
 
         Mockito.when(filterDAO.findByName(VALID_FILTER_NAME)).thenReturn(null);
 
-        controller = new FilterController(filterDAO,rolesDAO,permissionsDAO);
+        controller = new FilterController(filterDAO,rolesDAO,permissionsDAO, recordsDAO);
     }
 
 
@@ -142,7 +147,7 @@ public class FilterControllerTest {
 
         exception.expect(WebApplicationException.class);
         exception.expectMessage(FilterErrorMessages.FILTER_NAME_INVALID);
-        controller.updateOrCreateFilter(request);
+        controller.updateOrCreateFilter(new User(), request);
     }
 
     @Test
@@ -155,7 +160,7 @@ public class FilterControllerTest {
 
         exception.expect(WebApplicationException.class);
         exception.expectMessage(FilterErrorMessages.FILTER_NAME_INVALID);
-        controller.updateOrCreateFilter(request);
+        controller.updateOrCreateFilter(new User(), request);
     }
 
     @Test
@@ -168,7 +173,7 @@ public class FilterControllerTest {
 
         exception.expect(WebApplicationException.class);
         exception.expectMessage(FilterErrorMessages.FILTER_NAME_INVALID);
-        controller.updateOrCreateFilter(request);
+        controller.updateOrCreateFilter(new User(), request);
     }
 
     @Test
@@ -184,7 +189,7 @@ public class FilterControllerTest {
 
         exception.expect(WebApplicationException.class);
         exception.expectMessage(String.format(FilterErrorMessages.ROLE_ID_INVALID, INVALID_ROLE_ID));
-        controller.updateOrCreateFilter(request);
+        controller.updateOrCreateFilter(new User(), request);
     }
 
     @Test
@@ -200,7 +205,7 @@ public class FilterControllerTest {
 
         exception.expect(WebApplicationException.class);
         exception.expectMessage(String.format(FilterErrorMessages.PERMISSION_ID_INVALID, INVALID_Permission_ID));
-        controller.updateOrCreateFilter(request);
+        controller.updateOrCreateFilter(new User(), request);
     }
 
     @Test
@@ -212,7 +217,7 @@ public class FilterControllerTest {
             validRoles
         );
 
-        Response response = controller.updateOrCreateFilter(request);
+        Response response = controller.updateOrCreateFilter(new User(), request);
         Response validResponse = Response.status(Response.Status.CREATED).entity(getFilterResponse()).build();
         assertEquals(response.getStatus(), validResponse.getStatus());
         assertEquals(response.getEntity(),  validResponse.getEntity());
@@ -227,7 +232,7 @@ public class FilterControllerTest {
         filterDTO.setRoles(addRoles);
         exception.expect(WebApplicationException.class);
         exception.expectMessage(String.format(GroupErrorMessages.ROLE_ID_INVALID, INVALID_ROLE_ID));
-        controller.modifyFilter(filterDTO);
+        controller.modifyFilter(new User(), filterDTO);
     }
 
     @Test
@@ -240,7 +245,7 @@ public class FilterControllerTest {
 
         exception.expect(WebApplicationException.class);
         exception.expectMessage(String.format(GroupErrorMessages.PERMISSION_ID_INVALID, INVALID_ROLE_ID));
-        controller.modifyFilter(filterDTO);
+        controller.modifyFilter(new User(), filterDTO);
     }
 
     @Test
@@ -252,7 +257,7 @@ public class FilterControllerTest {
         filterDTO.setRoles(addRoles);
         filterDTO.setPermissions(new HashSet<>());
 
-        Response response = controller.modifyFilter(filterDTO);
+        Response response = controller.modifyFilter(new User(), filterDTO);
         Response validResponse = Response.status(Response.Status.CREATED).entity(getFilterResponse()).build();
         assertEquals(response.getStatus(), validResponse.getStatus());
         assertEquals(response.getEntity(),  validResponse.getEntity());
@@ -267,7 +272,7 @@ public class FilterControllerTest {
         filterDTO.setPermissions(addPermissions);
         filterDTO.setRoles(new HashSet<>());
 
-        Response response = controller.modifyFilter(filterDTO);
+        Response response = controller.modifyFilter(new User(), filterDTO);
         Response validResponse = Response.status(Response.Status.CREATED).entity(getFilterResponse()).build();
         assertEquals(response.getStatus(), validResponse.getStatus());
         assertEquals(response.getEntity(),  validResponse.getEntity());
@@ -293,7 +298,7 @@ public class FilterControllerTest {
         filterDTO.setPermissions(addPermissions);
         filterDTO.setRoles(addRoles);
 
-        Response response = controller.modifyFilter(filterDTO);
+        Response response = controller.modifyFilter(new User(), filterDTO);
         Response validResponse = Response.status(Response.Status.CREATED).entity(getFilterResponse()).build();
         assertEquals(response.getStatus(), validResponse.getStatus());
         assertEquals(response.getEntity(),  validResponse.getEntity());
@@ -318,7 +323,7 @@ public class FilterControllerTest {
         groupDTO.setPermissions(removePermissions);
         groupDTO.setRoles(removeRoles);
 
-        Response response = controller.modifyFilter(groupDTO);
+        Response response = controller.modifyFilter(new User(), groupDTO);
         Response validResponse = Response.status(Response.Status.CREATED).entity(getFilterResponse()).build();
         assertEquals(response.getStatus(), validResponse.getStatus());
         assertEquals(response.getEntity(),  validResponse.getEntity());
@@ -329,7 +334,7 @@ public class FilterControllerTest {
     {
         FilterDTO groupDTO = new FilterDTO(FILTERID);
 
-        Response response =  controller.modifyFilter(groupDTO);
+        Response response =  controller.modifyFilter(new User(), groupDTO);
         Response validResponse = Response.status(Response.Status.CREATED).entity(getFilterResponse()).build();
         assertEquals(response.getStatus(), validResponse.getStatus());
         assertEquals(response.getEntity(),  validResponse.getEntity());

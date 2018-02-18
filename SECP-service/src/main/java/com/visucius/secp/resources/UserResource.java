@@ -6,6 +6,7 @@ import com.visucius.secp.Controllers.User.UserController;
 import com.visucius.secp.Controllers.User.UserRegistrationController;
 import com.visucius.secp.DTO.DeviceDTO;
 import com.visucius.secp.DTO.UserDTO;
+import com.visucius.secp.models.User;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 import org.apache.commons.lang3.StringUtils;
@@ -119,15 +120,15 @@ public class UserResource {
     @Path("/id/{id}")
     @UnitOfWork
     @RolesAllowed({ "ADMIN"})
-    public Response deleteUser(@Auth @PathParam("id") String id) {
-        return userController.deleteUser(id);
+    public Response deleteUser(@Auth User user, @PathParam("id") String id) {
+        return userController.deleteUser(user, id);
     }
 
     @POST
     @Path("/modify")
     @UnitOfWork
     @RolesAllowed("ADMIN")
-    public Response modifyUser(@Auth UserDTO userDTO) {
-        return userController.modifyUser(userDTO);
+    public Response modifyUser(@Auth User user, UserDTO userDTO) {
+        return userController.modifyUser(user, userDTO);
     }
 }

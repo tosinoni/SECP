@@ -4,6 +4,7 @@ import com.google.common.base.Optional;
 import com.visucius.secp.Controllers.FilterController;
 import com.visucius.secp.daos.FilterDAO;
 import com.visucius.secp.daos.PermissionDAO;
+import com.visucius.secp.daos.RecordsDAO;
 import com.visucius.secp.daos.RolesDAO;
 import com.visucius.secp.helpers.ResponseValidator;
 import com.visucius.secp.models.Filter;
@@ -23,8 +24,10 @@ public class FilterResourceTest {
     private FilterDAO filterDAO = Mockito.mock(FilterDAO.class);
     private RolesDAO rolesDAO = Mockito.mock(RolesDAO.class);
     private PermissionDAO permissionDAO = Mockito.mock(PermissionDAO.class);
+    private RecordsDAO recordsDAO = Mockito.mock(RecordsDAO.class);
 
-    private FilterController filterController = new FilterController(filterDAO, rolesDAO, permissionDAO);
+
+    private FilterController filterController = new FilterController(filterDAO, rolesDAO, permissionDAO, recordsDAO);
 
     @Rule
     public final ResourceTestRule resources = ResourceTestRule.builder()

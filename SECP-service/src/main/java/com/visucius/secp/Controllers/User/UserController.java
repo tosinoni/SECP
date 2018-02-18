@@ -28,14 +28,16 @@ public class UserController {
     private GroupDAO groupDAO;
     private PermissionDAO permissionDAO;
     private RolesDAO rolesDAO;
+    private RecordsDAO recordsDAO;
 
     public UserController(UserDAO userDAO, DeviceDAO deviceDAO, PermissionDAO permissionDAO,
-                          RolesDAO rolesDAO, GroupDAO groupDAO) {
+                          RolesDAO rolesDAO, GroupDAO groupDAO, RecordsDAO recordsDAO) {
         this.userDAO = userDAO;
         this.deviceDAO = deviceDAO;
         this.rolesDAO = rolesDAO;
         this.permissionDAO = permissionDAO;
         this.groupDAO = groupDAO;
+        this.recordsDAO = recordsDAO;
     }
 
     public Response getAllUsers() {
@@ -65,7 +67,7 @@ public class UserController {
         return Response.status(Response.Status.OK).entity(getUserResponse(user)).build();
     }
 
-    public Response deleteUser(String id)
+    public Response deleteUser(User requestUser, String id)
     {
         if(StringUtils.isEmpty(id) || !StringUtils.isNumeric(id)) {
             return Response.status(Response.Status.NO_CONTENT).build();
@@ -75,6 +77,11 @@ public class UserController {
         User user = getUser(userID);
         user.setIsActive(false);
         userDAO.save(user);
+
+        //adding the record to ledger
+        String action = "User " + user.getFirstname() + " " + user.getLastname() + " was deactivated";
+        addActionToRecord(requestUser, action);
+
         return Response.status(Response.Status.OK).build();
     }
 
@@ -159,7 +166,7 @@ public class UserController {
         return Response.status(Response.Status.OK).entity(responseEntity).build();
     }
 
-    public Response modifyUser(UserDTO userDTO) {
+    public Response modifyUser(User requestUser, UserDTO userDTO) {
         if (userDTO == null) {
             throw new WebApplicationException(UserErrorMessage.MODIFY_USER_FAIL_NO_USER_INFO,
                 Response.Status.BAD_REQUEST);
@@ -178,6 +185,10 @@ public class UserController {
         user.setGroups(getUserGroups(user));
 
         userDAO.save(user);
+
+        //adding the record to ledger
+        String action = "User " + user.getFirstname() + " " + user.getLastname() + " was modified";
+        addActionToRecord(requestUser, action);
 
         return Response.status(Response.Status.OK).entity(getUserResponse(user)).build();
     }
@@ -310,5 +321,9 @@ public class UserController {
         Util.addAllIfNotNull(groups, user.getGroups());
 
         return groups;
+    }
+
+    private void addActionToRecord(User requestUser, String action) {
+        recordsDAO.save(Util.createRecord(requestUser, ActionType.USER, action));
     }
 }

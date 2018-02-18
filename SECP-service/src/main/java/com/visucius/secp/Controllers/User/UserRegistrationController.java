@@ -7,13 +7,12 @@ import com.visucius.secp.DTO.UserRegistrationRequest;
 import com.visucius.secp.DTO.UserRegistrationResponse;
 import com.visucius.secp.daos.GroupDAO;
 import com.visucius.secp.daos.PermissionDAO;
+import com.visucius.secp.daos.RecordsDAO;
 import com.visucius.secp.daos.UserDAO;
-import com.visucius.secp.models.Group;
-import com.visucius.secp.models.GroupType;
-import com.visucius.secp.models.Permission;
-import com.visucius.secp.models.User;
+import com.visucius.secp.models.*;
 import com.visucius.secp.util.InputValidator;
 import com.visucius.secp.util.PasswordUtil;
+import com.visucius.secp.util.Util;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,16 +33,20 @@ public class UserRegistrationController{
     private final UserDAO userDAO;
     private final GroupDAO groupDAO;
     private final PermissionDAO permissionDAO;
+    private final RecordsDAO recordsDAO;
 
-    public UserRegistrationController(UserDAO userDAO, PermissionDAO permissionDAO, GroupDAO groupDAO)
+
+    public UserRegistrationController(UserDAO userDAO, PermissionDAO permissionDAO,
+                                      GroupDAO groupDAO, RecordsDAO recordsDAO)
     {
 
         this.userDAO = userDAO;
         this.permissionDAO = permissionDAO;
         this.groupDAO = groupDAO;
+        this.recordsDAO = recordsDAO;
     }
 
-    public Response registerUser(UserRegistrationRequest request) {
+    public Response registerUser(User requestUser, UserRegistrationRequest request) {
 
         String error= validateInput(request);
         if(isUsernameValid(request.userName)) {
@@ -71,6 +74,11 @@ public class UserRegistrationController{
                 user.setGroups(getUserGroups(user));
                 User createdUser = userDAO.save(user);
                 UserDTO createdUserDTO = new UserDTO(createdUser);
+
+                //adding the record to ledger
+                String action = user.getFirstname() + " " + user.getLastname() + " was created";
+                recordsDAO.save(Util.createRecord(requestUser, ActionType.USER, action));
+
                 return Response.status(Response.Status.CREATED).entity(createdUserDTO).build();
 
             } catch (PasswordUtil.CannotPerformOperationException e) {

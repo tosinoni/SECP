@@ -30,16 +30,16 @@ public class AdminResource {
     @POST
     @Path("{id}")
     @UnitOfWork
-    public Response registerAdmin(@PathParam("id") String id) {
-        adminController.registerAdmin(id);
+    public Response registerAdmin(@Auth User user, @PathParam("id") String id) {
+        adminController.registerAdmin(user, id);
         return Response.status(Response.Status.OK).build();
     }
 
     @DELETE
     @Path("{id}")
     @UnitOfWork
-    public Response removeAdmin(@Auth @PathParam("id") String id) {
-        adminController.removeAdmin(id);
+    public Response removeAdmin(@Auth User user, @PathParam("id") String id) {
+        adminController.removeAdmin(user, id);
         return Response.status(Response.Status.OK).build();
     }
 
@@ -49,54 +49,54 @@ public class AdminResource {
     @Timed
     @UnitOfWork
     @Path("/register")
-    public Response create(UserRegistrationRequest request) {
-        return userRegistrationController.registerUser(request);
+    public Response create(@Auth User user, UserRegistrationRequest request) {
+        return userRegistrationController.registerUser(user, request);
     }
 
     @POST
     @Timed
     @UnitOfWork
     @Path("/roles")
-    public Response createRoles(@Auth AppCreateDTO request) {
-        return adminController.registerRoles(request);
+    public Response createRoles(@Auth User user, AppCreateDTO request) {
+        return adminController.registerRoles(user, request);
     }
 
     @POST
     @Timed
     @UnitOfWork
     @Path("/permissions")
-    public Response createPermissions(AppCreateDTO request) {
-        return adminController.registerPermissions(request);
+    public Response createPermissions(@Auth User user, AppCreateDTO request) {
+        return adminController.registerPermissions(user, request);
     }
 
     @POST
     @Timed
     @UnitOfWork
     @Path("/roles/id/{id}")
-    public Response updateRole(@Auth RolesOrPermissionDTO request, @PathParam("id") String id) {
-        return adminController.updateRoles(request,id);
+    public Response updateRole(@Auth User user, RolesOrPermissionDTO request, @PathParam("id") String id) {
+        return adminController.updateRoles(user, request,id);
     }
 
     @POST
     @Timed
     @UnitOfWork
     @Path("/permissions/id/{id}")
-    public Response updatePermissions(@Auth RolesOrPermissionDTO request, @PathParam("id") String id) {
-        return adminController.updatePermissions(request,id);
+    public Response updatePermissions(@Auth User user, RolesOrPermissionDTO request, @PathParam("id") String id) {
+        return adminController.updatePermissions(user, request,id);
     }
 
     @DELETE
     @Path("/role/id/{id}")
     @UnitOfWork
-    public Response deleteRole(@Auth @PathParam("id") String id) {
-        return adminController.deleteRole(id);
+    public Response deleteRole(@Auth User user, @PathParam("id") String id) {
+        return adminController.deleteRole(user, id);
     }
 
     @DELETE
     @Path("/permission/id/{id}")
     @UnitOfWork
-    public Response deletePermission(@Auth @PathParam("id") String id) {
-        return adminController.deletePermission(id);
+    public Response deletePermission(@Auth User user, @PathParam("id") String id) {
+        return adminController.deletePermission(user, id);
     }
 
     @GET
@@ -123,8 +123,8 @@ public class AdminResource {
     @POST
     @Path("/audit/groups")
     @UnitOfWork
-    public Response getUserAudit(@Auth AuditDTO groupAuditDTO) {
-        return adminController.getGroupsAudit(groupAuditDTO);
+    public Response getGroupAudit(@Auth User user, AuditDTO groupAuditDTO) {
+        return adminController.getGroupsAudit(user, groupAuditDTO);
     }
 
     @GET

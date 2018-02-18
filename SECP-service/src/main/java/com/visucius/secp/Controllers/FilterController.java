@@ -4,10 +4,9 @@ import com.google.common.base.Optional;
 import com.visucius.secp.DTO.*;
 import com.visucius.secp.daos.FilterDAO;
 import com.visucius.secp.daos.PermissionDAO;
+import com.visucius.secp.daos.RecordsDAO;
 import com.visucius.secp.daos.RolesDAO;
-import com.visucius.secp.models.Filter;
-import com.visucius.secp.models.Permission;
-import com.visucius.secp.models.Role;
+import com.visucius.secp.models.*;
 import com.visucius.secp.util.InputValidator;
 import com.visucius.secp.util.Util;
 import org.apache.commons.lang3.StringUtils;
@@ -27,26 +26,34 @@ public class FilterController {
 
     private FilterDAO filterRepository;
     private RolesDAO rolesRepository;
+    private RecordsDAO recordsDAO;
     private PermissionDAO permissionsRepository;
 
     public FilterController(FilterDAO filterRepository,
                             RolesDAO rolesRepository,
-                            PermissionDAO permissionDAO)
+                            PermissionDAO permissionDAO,
+                            RecordsDAO recordsDAO)
     {
         this.filterRepository = filterRepository;
         this.rolesRepository = rolesRepository;
         this.permissionsRepository = permissionDAO;
+        this.recordsDAO = recordsDAO;
     }
 
 
-    public Response deleteFilter(int id)
+    public Response deleteFilter(User requestUser, int id)
     {
         Filter filter = getFilter(id);
         filterRepository.delete(filter);
+
+        //adding the record to ledger
+        String action = "Filter word " + filter.getName() + " was deleted";
+        addActionToRecord(requestUser, action);
+
         return Response.status(Response.Status.OK).build();
     }
 
-    public Response modifyFilter(FilterDTO request) {
+    public Response modifyFilter(User requestUser, FilterDTO request) {
 
         Set<Long> permissions = request.getPermissions().stream().
             map(permission -> permission.getId()).collect(Collectors.toSet());
@@ -61,10 +68,15 @@ public class FilterController {
         }
 
         Filter filter = getFilter(request.getId());
+
+        //adding the record to ledger
+        String action = "Filter word " + filter.getName() + " was modified";
+        addActionToRecord(requestUser, action);
+
         return updateOrCreateFilter(filter,permissions,roles);
     }
 
-    public Response updateOrCreateFilter(FilterCreateRequest request)
+    public Response updateOrCreateFilter(User requestUser, FilterCreateRequest request)
     {
         Set<Long> permissions = request.permissions.stream().
             map(permission -> permission.getId()).collect(Collectors.toSet());
@@ -79,6 +91,10 @@ public class FilterController {
         }
 
         Filter filter = new Filter(request.name);
+
+        //adding the record to ledger
+        String action = "Filter word " + filter.getName() + " was created";
+        addActionToRecord(requestUser, action);
         return updateOrCreateFilter(filter,permissions,roles);
     }
 
@@ -209,6 +225,10 @@ public class FilterController {
         filterDTO.setPermissions(permissions);
 
         return filterDTO;
+    }
+
+    private void addActionToRecord(User requestUser, String action) {
+        recordsDAO.save(Util.createRecord(requestUser, ActionType.FILTER, action));
     }
 
     private boolean isPermissionValid(long id)

@@ -35,9 +35,10 @@ public class UserResourceTest {
     private DeviceDAO deviceDAO = Mockito.mock(DeviceDAO.class);
     private PermissionDAO permissionDAO = Mockito.mock(PermissionDAO.class);
     private RolesDAO rolesDAO = Mockito.mock(RolesDAO.class);
+    private RecordsDAO recordsDAO = Mockito.mock(RecordsDAO.class);
     private GroupDAO groupDAO = Mockito.mock(GroupDAO.class);
 
-    private UserController userController = new UserController(userDAO, deviceDAO, permissionDAO, rolesDAO, groupDAO);
+    private UserController userController = new UserController(userDAO, deviceDAO, permissionDAO, rolesDAO, groupDAO, recordsDAO);
     private UserRegistrationController userRegistrationController  = Mockito.mock((UserRegistrationController.class));
 
     //test variables

@@ -5,6 +5,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.visucius.secp.Controllers.FilterController;
 import com.visucius.secp.DTO.FilterCreateRequest;
 import com.visucius.secp.DTO.FilterDTO;
+import com.visucius.secp.models.User;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 
@@ -31,23 +32,23 @@ public class FilterResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Timed
     @UnitOfWork
-    public Response create(@Auth FilterCreateRequest request) {
-        return filterController.updateOrCreateFilter(request);
+    public Response create(@Auth User user, FilterCreateRequest request) {
+        return filterController.updateOrCreateFilter(user, request);
     }
 
     @GET
     @Path("/id/{id}")
     @UnitOfWork
-    public Response getFilter(@Auth @PathParam("id") String id) {
+    public Response getFilter(@Auth User user, @PathParam("id") String id) {
         return filterController.getFilterGivenId(id);
     }
 
     @DELETE
     @UnitOfWork
     @Path("/{id}")
-    public Response deleteFilter(@Auth @PathParam("id") int id)
+    public Response deleteFilter(@Auth User user, @PathParam("id") int id)
     {
-        return  filterController.deleteFilter(id);
+        return  filterController.deleteFilter(user, id);
     }
 
     @POST
@@ -56,9 +57,9 @@ public class FilterResource {
     @Timed
     @UnitOfWork
     @Path("/modify")
-    public Response modifyGroup(@Auth FilterDTO request)
+    public Response modifyFilter(@Auth User user, FilterDTO request)
     {
-        return  filterController.modifyFilter(request);
+        return  filterController.modifyFilter(user, request);
     }
 
     @GET

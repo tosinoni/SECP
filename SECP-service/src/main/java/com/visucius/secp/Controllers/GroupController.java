@@ -5,10 +5,7 @@ import com.google.common.collect.Sets;
 import com.visucius.secp.Controllers.User.UserErrorMessage;
 import com.visucius.secp.Controllers.User.UserProfileController;
 import com.visucius.secp.DTO.*;
-import com.visucius.secp.daos.GroupDAO;
-import com.visucius.secp.daos.PermissionDAO;
-import com.visucius.secp.daos.RolesDAO;
-import com.visucius.secp.daos.UserDAO;
+import com.visucius.secp.daos.*;
 import com.visucius.secp.models.*;
 import com.visucius.secp.util.InputValidator;
 import com.visucius.secp.util.Util;
@@ -32,6 +29,7 @@ public class GroupController {
     private UserDAO userRepository;
     private RolesDAO rolesRepository;
     private PermissionDAO permissionsRepository;
+    private RecordsDAO recordsRepository;
     private UserProfileController userProfileController;
 
     private static final String publicGroupAvatar = "https://user-images.githubusercontent.com/14824913/34922739-e9cbf830-f961-11e7-9a92-a4559596162f.png";
@@ -42,12 +40,14 @@ public class GroupController {
                            UserDAO userRepository,
                            RolesDAO rolesRepository,
                            PermissionDAO permissionDAO,
+                           RecordsDAO recordsRepository,
                            UserProfileController userProfileController) {
         this.groupRepository = groupRepository;
         this.userRepository = userRepository;
         this.rolesRepository = rolesRepository;
         this.permissionsRepository = permissionDAO;
         this.userProfileController = userProfileController;
+        this.recordsRepository = recordsRepository;
     }
 
 
@@ -63,14 +63,19 @@ public class GroupController {
         return Response.status(Response.Status.OK).entity(response).build();
     }
 
-    public Response deleteGroup(int id) {
+    public Response deleteGroup(User requestUser, int id) {
         Group group = getGroup(id);
         group.setIsActive(false);
         groupRepository.save(group);
+
+        //adding the record to ledger
+        String action = "Group " + group.getDisplayname() + " was deactivated";
+        addActionToRecord(requestUser, action);
+
         return Response.status(Response.Status.OK).build();
     }
 
-    public Response createPublicGroup(GroupCreateRequest request) {
+    public Response createPublicGroup(User requestUser, GroupCreateRequest request) {
         Set<Long> permissions = request.permissions.stream().
             map(permission -> permission.getId()).collect(Collectors.toSet());
         Set<Long> roles = request.roles.stream().
@@ -83,6 +88,11 @@ public class GroupController {
         }
 
         Group group = new Group(request.name);
+
+        //adding the record to ledger
+        String action = "Group " + group.getDisplayname() + " was created";
+        addActionToRecord(requestUser, action);
+
         return updateOrCreateGroup(group, permissions, roles);
     }
 
@@ -108,7 +118,7 @@ public class GroupController {
         return Response.status(Response.Status.CREATED).entity(getGroupResponse(createdGroup)).build();
     }
 
-    public Response modifyGroup(GroupDTO request) {
+    public Response modifyGroup(User requestUser, GroupDTO request) {
 
         Set<Long> permissions = request.getPermissions().stream().
             map(permission -> permission.getId()).collect(Collectors.toSet());
@@ -131,6 +141,11 @@ public class GroupController {
         }
 
         group.setIsActive(request.isActive());
+
+        //adding the record to ledger
+        String action = "Group " + group.getDisplayname() + " was modified";
+        addActionToRecord(requestUser, action);
+
         return updateOrCreateGroup(group, permissions, roles);
     }
 
@@ -142,6 +157,7 @@ public class GroupController {
 
         group.setUsers(this.findUsersWithRolesAndPermissions(group.getRoles(), group.getPermissions()));
         Group createdGroup = groupRepository.save(group);
+
         return Response.status(Response.Status.CREATED).entity(getGroupResponse(createdGroup)).build();
     }
 
@@ -364,6 +380,10 @@ public class GroupController {
         }
 
         return groupName.toString();
+    }
+
+    private void addActionToRecord(User requestUser, String action) {
+        recordsRepository.save(Util.createRecord(requestUser, ActionType.GROUP, action));
     }
 
     private boolean isPermissionValid(long id) {

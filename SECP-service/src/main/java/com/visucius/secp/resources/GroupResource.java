@@ -31,8 +31,8 @@ public class GroupResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Timed
     @UnitOfWork
-    public Response createPublicGroup(@Auth GroupCreateRequest request) {
-        return groupController.createPublicGroup(request);
+    public Response createPublicGroup(@Auth User user, GroupCreateRequest request) {
+        return groupController.createPublicGroup(user, request);
     }
 
     @POST
@@ -62,17 +62,17 @@ public class GroupResource {
     @Timed
     @UnitOfWork
     @Path("/modify")
-    public Response modifyGroup(@Auth GroupDTO request)
+    public Response modifyGroup(@Auth User user, GroupDTO request)
     {
-        return  groupController.modifyGroup(request);
+        return  groupController.modifyGroup(user, request);
     }
 
     @DELETE
     @UnitOfWork
     @Path("/{id}")
-    public Response deleteGroup(@Auth @PathParam("id") int id)
+    public Response deleteGroup(@Auth User user, @PathParam("id") int id)
     {
-        return  groupController.deleteGroup(id);
+        return  groupController.deleteGroup(user, id);
     }
 
     @GET

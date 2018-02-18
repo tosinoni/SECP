@@ -119,14 +119,14 @@ public class SECPService extends Application<SECPConfiguration> {
 
 
         //********************** Register Services/Controllers *********************************
-        final UserRegistrationController userRegistrationController = new UserRegistrationController(userDAO,permissionDAO,groupDAO);
+        final UserRegistrationController userRegistrationController = new UserRegistrationController(userDAO,permissionDAO,groupDAO, recordsDAO);
         final TokenController tokenController = new TokenController(configuration);
         final LoginRequestController loginRequestController = new LoginRequestController(tokenController, userDAO);
-        final UserController userController = new UserController(userDAO, deviceDAO, permissionDAO, rolesDAO, groupDAO);
+        final UserController userController = new UserController(userDAO, deviceDAO, permissionDAO, rolesDAO, groupDAO, recordsDAO);
         final AdminController adminController = new AdminController(userDAO, rolesDAO, permissionDAO, groupDAO, recordsDAO);
         final UserProfileController userProfileController = new UserProfileController(userDAO);
-        final FilterController filterController = new FilterController(filterDAO, rolesDAO, permissionDAO);
-        final GroupController groupController = new GroupController(groupDAO,userDAO,rolesDAO, permissionDAO, userProfileController);
+        final FilterController filterController = new FilterController(filterDAO, rolesDAO, permissionDAO, recordsDAO);
+        final GroupController groupController = new GroupController(groupDAO,userDAO,rolesDAO, permissionDAO, recordsDAO, userProfileController);
         final MessageController messageController = new MessageController(messageDAO);
         final ChatController chatController = new ChatController(userDAO, groupDAO, userProfileController, groupController);
         final DeviceController deviceController = new DeviceController(userDAO, groupDAO, deviceDAO);

@@ -26,9 +26,12 @@ public class GroupResourceTest {
     private GroupDAO groupDAO = Mockito.mock(GroupDAO.class);
     private RolesDAO rolesDAO = Mockito.mock(RolesDAO.class);
     private PermissionDAO permissionDAO = Mockito.mock(PermissionDAO.class);
+    private RecordsDAO recordsDAO = Mockito.mock(RecordsDAO.class);
+
     private UserProfileController userProfileController = Mockito.mock(UserProfileController.class);
 
-    private GroupController groupController  = new GroupController(groupDAO, userDAO, rolesDAO, permissionDAO, userProfileController);
+    private GroupController groupController  = new GroupController(groupDAO, userDAO, rolesDAO, permissionDAO,
+        recordsDAO, userProfileController);
 
     @Rule
     public final ResourceTestRule resources = ResourceTestRule.builder()
