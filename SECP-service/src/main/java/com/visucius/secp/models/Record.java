@@ -36,7 +36,7 @@ public class Record {
         this.editorName = editorName;
         this.actionType = actionType;
         this.editorAction = editorAction;
-        this.timestamp = timestamp;
+        this.timestamp = new Date(timestamp.getTime());
     }
 
     public long getId() {
