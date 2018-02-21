@@ -45,6 +45,7 @@ angular.module('SECP')
                             auditUser: user
                         });
                         swal("Yaah", "Audit request successful", "success");
+                        $scope.audit = {};
                     }
                 })
             }

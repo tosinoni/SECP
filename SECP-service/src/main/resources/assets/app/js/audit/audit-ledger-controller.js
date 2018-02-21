@@ -6,7 +6,6 @@ angular.module('SECP')
         $scope.dtOptions = DTOptionsBuilder.newOptions();
 
         Admin.getLedger().then(function (ledger) {
-            console.log(ledger);
             if(ledger) {
                 $scope.ledger = ledger;
             }

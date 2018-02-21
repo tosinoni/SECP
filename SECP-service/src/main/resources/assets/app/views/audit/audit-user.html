@@ -3,7 +3,7 @@
     <i class="fa fa-user" aria-hidden="true"></i>
      Audit User
 </h1>
-<form name="useraudit">
+<form name="useraudit" ng-submit="validateUserAudit()">
     <div class="audituserlabel"><label>From:</label></div>
     <div class="audituserinput">
         <select id="fromAuditUser" select2 class="audit-user-select" style="width: 100%" ng-model="audit.fromUser" required
@@ -18,7 +18,7 @@
         </select>
     </div>
 
-    <div ng-controller="UserAuditAdvancedSearch">
+    <div>
         <div class="advancedsearchdiv">
             <button class="advancedsearchbutton" ng-click="isCollapsed = !isCollapsed">Advanced Search</button>
         </div>
@@ -26,17 +26,17 @@
             <hr>
             <div class="well well-lg">
                 <p>From:</p>
-                <i class="fa fa-calendar" aria-hidden="true"></i> <input class="dateinput" ng-model="audit.fromDate" name = "fromdate" type="datetime-local">
+                <i class="fa fa-calendar" aria-hidden="true"></i> <input class="dateinput" ng-model="fromDate" name = "fromdate" type="datetime-local">
                 <br>
                 <br>
                 <p>To:</p>
-                <i class="fa fa-calendar" aria-hidden="true"></i> <input class="dateinput" ng-model="audit.toDate" name = "todate" type="datetime-local">
+                <i class="fa fa-calendar" aria-hidden="true"></i> <input class="dateinput" ng-model="toDate" name = "todate" type="datetime-local">
             </div>
         </div>
     </div>
 
     <div class="auditbtn-box">
-        <button type="submit" class="auditbtn btn-submit" ng-click="validateUserAudit()">Audit</button>
+        <button type="submit" class="auditbtn btn-submit">Audit</button>
     </div>
 
 </form>

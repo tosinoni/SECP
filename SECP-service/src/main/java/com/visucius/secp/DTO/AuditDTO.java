@@ -14,10 +14,10 @@ public class AuditDTO {
     private Set<UserDTO> toUsers = new HashSet<>();
 
     @JsonProperty
-    private Date fromDate;
+    private Date fromDate = new Date();
 
     @JsonProperty
-    private Date toDate;
+    private Date toDate = new Date();
 
     @JsonProperty
     private Set<GroupDTO> groups = new HashSet<>();
