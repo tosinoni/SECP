@@ -1,5 +1,5 @@
 angular.module('SECP')
-  .controller('HowToController', ['$scope', function ($scope) {
+  .controller('DocsController', ['$scope', function ($scope) {
       $(document).ready(function(){
           // Add minus icon for collapse element which is open by default
           $(".collapse.in").each(function(){
