@@ -69,6 +69,7 @@ public class SECPService extends Application<SECPConfiguration> {
     @Override
     public void initialize(Bootstrap<SECPConfiguration> bootstrap) {
         bootstrap.addBundle(new AssetsBundle("/assets/app/", "/", "index.html"));
+        bootstrap.addBundle(new AssetsBundle("/assets/app/", "/docs", "index.html", "docs"));
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/login", "index.html", "login"));
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/login/authenticate", "index.html", "authenticate"));
         bootstrap.addBundle(new AssetsBundle("/assets/app", "/login/forgot-password", "index.html", "forgot-password"));
