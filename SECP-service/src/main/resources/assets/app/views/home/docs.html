@@ -1,0 +1,302 @@
+<body>
+<div class="bs-example">
+    <h1 class="portalheader">
+        <i class="fa fa-book" aria-hidden="true"></i>
+        Documentation
+    </h1>
+    <div class="panel-group" id="accordion">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOverview"><span class="fa fa-plus"></span> System Overview</a>
+                </h4>
+            </div>
+            <div id="collapseOverview" class="panel-collapse collapse in">
+                <div class="panel-body">
+                    <p>The <strong>Secure Electronic Communication Platform</strong> is a platform that enables secure communication in enterprises via encrypted channels. The system is designed to combat corporate espionage through auditing, the maintenance of logs and a central ledger of system administrative activity.</p>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseFeatures"><span class="fa fa-plus"></span> Core System Functionalities</a>
+                </h4>
+            </div>
+            <div id="collapseFeatures" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <p><i class="fa fa-mobile" aria-hidden="true"></i> Mobile Friendly</p>
+                            <p><i class="fa fa-group" aria-hidden="true"></i> Group Chats</p>
+                            <p><i class="fa fa-lock" aria-hidden="true"></i> Encrypted Data</p>
+                        </div>
+                        <div class="col-sm-4">
+                            <p><i class="fa fa-filter" aria-hidden="true"></i>   Filtering</p>
+                            <p><i class="fa fa-eye" aria-hidden="true"></i>  Auditing</p>
+                            <p><i class="fa fa-tags" aria-hidden="true"></i> Customization</p>
+                        </div>
+                        <div class="col-sm-4">
+                            <p><i class="fa fa-line-chart" aria-hidden="true"></i> Logging</p>
+                            <p><i class="fa fa-thumbs-up" aria-hidden="true"></i> Rigorous Testing</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseVideo"><span class="fa fa-plus"></span> User Guide</a>
+                </h4>
+            </div>
+            <div id="collapseVideo" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <p>The following set of videos show a quick overview on accessing and performing core system functionalities and system validations.</p>
+                    <p><a href="https://youtu.be/Jn9LZgfccO0" target="_blank">#1 - Landing Page</a></p>
+                    <p><a href="https://youtu.be/qHjFSAh3-e4" target="_blank">#2 - Basic User Login</a></p>
+                    <p><a href="https://youtu.be/lHDHbcpOwhg" target="_blank">#3 - User Chatting</a></p>
+                    <p><a href="https://youtu.be/wcwBtO3jIc4" target="_blank">#4 - Incoming User Chat</a></p>
+                    <p><a href="https://youtu.be/zYxWOKnrk_M" target="_blank">#5 - Group Chat</a></p>
+                    <p><a href="https://youtu.be/uhNTp3H-v-Q" target="_blank">#6 - Group Chat Profile</a></p>
+                    <p><a href="https://youtu.be/JXcz9fV5boM" target="_blank">#7 - Admin Portal and Ledger</a></p>
+                    <p><a href="https://youtu.be/lvnHhDmnULo" target="_blank">#8 - Admin Auditing Groups</a></p>
+                    <p><a href="https://youtu.be/KJVH6mGxt3E" target="_blank">#9 - Admin Auditing a User</a></p>
+                    <p><a href="https://youtu.be/cJa4HCr7ARM" target="_blank">#10 - Admin Creating a User</a></p>
+                    <p><a href="https://youtu.be/f0e3b4LUZq0" target="_blank">#11 - Admin Incoming 2 Factor Authentication</a></p>
+                    <p><a href="https://youtu.be/4bpSEeQxmzc" target="_blank">#12 - Admin Creating a Group</a></p>
+                    <p><a href="https://youtu.be/rrOPMH0RUL4" target="_blank">#13 - Admin Creating a Filter Word</a></p>
+                    <p><a href="https://youtu.be/AHk3vL2f3_8" target="_blank">#14 - Testing a Filter Word</a></p>
+                    <p><a href="https://youtu.be/z5FcOq2tZq4" target="_blank">#15 - Admin Creating a Tag</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseDevelopers"><span class="fa fa-plus"></span> Developers</a>
+                </h4>
+            </div>
+            <div id="collapseDevelopers" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <p>The platform uses <a href="http://angularjs.org">AngularJS</a> for client side and <a href="http://www.dropwizard.io">Dropwizard</a> for server side.</p>
+                    <h2 id="steps-for-setting-up-development-environment">Steps for setting up development environment</h2>
+                    <p>Install <a href="http://git-scm.com">Git</a>, <a href="http://nodejs.org">node.js</a>, <a href="https://www.java.com">JDK 8</a>, and <a href="http://maven.apache.org/">Maven 3</a>.</p>
+                    <p>Install Yeoman:</p>
+                    <pre><code>npm install -g yo</code></pre>
+                    <p>Install Bower:</p>
+                    <pre><code>npm install -g bower</code></pre>
+                    <p>Install grunt:</p>
+                    <pre><code>npm install -g grunt</code></pre>
+                    <h2 id="setting-up-the-database">Setting up the database</h2>
+                    <p>Install <a href="https://www.apachefriends.org/download.html">XAMPP</a></p>
+                    <pre><code>  Open xampp control
+  Start Apache and MySQL
+  Click Admin for MySQL</code></pre>
+                    <h2 id="running-the-server">Running the server</h2>
+                    <p>In the SECP directory, run the server:</p>
+                    <pre><code>  npm install
+  bower install
+  mvn compile exec:exec -pl SECP-service</code></pre>
+                    <p>Your server will run at <a href="http://localhost:8080">http://localhost:8080</a>.</p>
+                    <h2 id="running-the-client">Running the client</h2>
+                    <p>In the SECP directory, run the client:</p>
+                    <pre><code>  grunt server</code></pre>
+                    <p>The Grunt server will run at <a href="http://localhost:9000">http://localhost:9000</a>. It will proxy REST requests to the Dropwizard server running at <a href="http://localhost:8080">http://localhost:8080</a>.</p>
+                    <p>The Grunt server supports hot reloading of client-side HTML/CSS/Javascript file changes, while the Dropwizard service supports hot reloading of Java class file changes. This means you do not have to stop the server when you make changes.</p>
+                    <h2 id="information-about-editing-the-code">Information about editing the code</h2>
+                    <p>The project is making use of angular-dropwizard generator plugin. For more Information, please visit <a href="https://www.npmjs.com/package/generator-angular-dropwizard">Angular-Dropwizard</a> website.</p>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseDependencies"><span class="fa fa-plus"></span> System Dependencies</a>
+                </h4>
+            </div>
+            <div id="collapseDependencies" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <p>The following dependencies are required for SECP to behave correctly. Dependency management was done through Bower. Please refer to <a href="https://github.com/tosinoni/SECP/blob/master/bower.json">bower.json</a>, <a href="https://github.com/tosinoni/SECP/blob/master/pom.xml">pom.xml</a> and <a href="https://github.com/tosinoni/SECP/blob/master/package.json">package.json</a> for any clarification required.</p>
+                    <table style="margin: 0px auto;" class="tg">
+                        <tr>
+                            <th class="tg-7bjz">Dependency</th>
+                            <th class="tg-7bjz">Link</th>
+                            <th class="tg-7bjz">Version</th>
+                        </tr>
+                        <tr>
+                            <td class="tg-031e">angular-bootstrap</td>
+                            <td class="tg-031e">https://angularjs.org/</td>
+                            <td class="tg-031e">0.10.0</td>
+                        </tr>
+                        <tr>
+                            <td class="tg-031e">angular-resource</td>
+                            <td class="tg-031e">https://angularjs.org/</td>
+                            <td class="tg-031e">1.6.7</td>
+                        </tr>
+                        <tr>
+                            <td class="tg-031e">angular-route</td>
+                            <td class="tg-031e">https://angularjs.org/</td>
+                            <td class="tg-031e">1.6.7</td>
+                        </tr>
+                        <tr>
+                            <td class="tg-031e">angular-ui-date</td>
+                            <td class="tg-031e">https://angular-ui.github.io/</td>
+                            <td class="tg-031e">0.0.3</td>
+                        </tr>
+                        <tr>
+                            <td class="tg-031e">angular</td>
+                            <td class="tg-031e">https://angularjs.org/</td>
+                            <td class="tg-031e">1.6.7</td>
+                        </tr>
+                        <tr>
+                            <td class="tg-031e">bootstrap-css</td>
+                            <td class="tg-031e">https://github.com/codemix/bootstrap-css</td>
+                            <td class="tg-031e">3.0.0</td>
+                        </tr>
+                        <tr>
+                            <td class="tg-031e">jquery</td>
+                            <td class="tg-031e">https://github.com/jquery/jquery</td>
+                            <td class="tg-031e">3.2.1</td>
+                        </tr>
+                        <tr>
+                            <td class="tg-031e">lodash</td>
+                            <td class="tg-031e">https://github.com/lodash/lodash</td>
+                            <td class="tg-031e">2.4.1</td>
+                        </tr>
+                        <tr>
+                            <td class="tg-031e">components-font-awesome</td>
+                            <td class="tg-031e">https://github.com/components/font-awesome</td>
+                            <td class="tg-031e">4.7.0</td>
+                        </tr>
+                        <tr>
+                            <td class="tg-031e">jquery.nicescroll</td>
+                            <td class="tg-031e">https://github.com/inuyaksa/jquery.nicescroll</td>
+                            <td class="tg-031e">3.7.6</td>
+                        </tr>
+                        <tr>
+                            <td class="tg-031e">sweetalert2</td>
+                            <td class="tg-031e">https://github.com/sweetalert2/sweetalert2</td>
+                            <td class="tg-031e">6.11.2</td>
+                        </tr>
+                        <tr>
+                            <td class="tg-031e">simple-line-icons</td>
+                            <td class="tg-031e">https://github.com/thesabbir/simple-line-icons</td>
+                            <td class="tg-031e">2.4.1</td>
+                        </tr>
+                        <tr>
+                            <td class="tg-031e">angular-route-styles</td>
+                            <td class="tg-031e">https://github.com/tennisgent/angular-route-styles</td>
+                            <td class="tg-031e">*</td>
+                        </tr>
+                        <tr>
+                            <td class="tg-031e">angular-jwt</td>
+                            <td class="tg-031e">https://github.com/auth0/angular-jwt</td>
+                            <td class="tg-031e">0.1.9</td>
+                        </tr>
+                        <tr>
+                            <td class="tg-yw4l">select2</td>
+                            <td class="tg-yw4l">https://github.com/select2/select2</td>
+                            <td class="tg-yw4l">4.0.5</td>
+                        </tr>
+                        <tr>
+                            <td class="tg-yw4l">moment</td>
+                            <td class="tg-yw4l">https://github.com/moment/moment</td>
+                            <td class="tg-yw4l">2.19.3</td>
+                        </tr>
+                        <tr>
+                            <td class="tg-yw4l">fingerprint</td>
+                            <td class="tg-yw4l">https://github.com/Valve/fingerprintjs</td>
+                            <td class="tg-yw4l">0.5.5</td>
+                        </tr>
+                        <tr>
+                            <td class="tg-yw4l">datatables.net</td>
+                            <td class="tg-yw4l">https://datatables.net/download/index</td>
+                            <td class="tg-yw4l">1.10.16</td>
+                        </tr>
+                        <tr>
+                            <td class="tg-yw4l">datatables.net-jqui</td>
+                            <td class="tg-yw4l">https://datatables.net/download/index</td>
+                            <td class="tg-yw4l">2.1.1</td>
+                        </tr>
+                        <tr>
+                            <td class="tg-yw4l">datatables.net-select</td>
+                            <td class="tg-yw4l">https://datatables.net/download/index</td>
+                            <td class="tg-yw4l">1.2.3</td>
+                        </tr>
+                        <tr>
+                            <td class="tg-yw4l">datatables.net-select-jqui</td>
+                            <td class="tg-yw4l">https://datatables.net/download/index</td>
+                            <td class="tg-yw4l">1.2.3</td>
+                        </tr>
+                        <tr>
+                            <td class="tg-yw4l">toastr</td>
+                            <td class="tg-yw4l">https://github.com/CodeSeven/toastr</td>
+                            <td class="tg-yw4l">2.1.3</td>
+                        </tr>
+                        <tr>
+                            <td class="tg-yw4l">localforage</td>
+                            <td class="tg-yw4l">https://github.com/localForage/localForage</td>
+                            <td class="tg-yw4l">1.5.6</td>
+                        </tr>
+                        <tr>
+                            <td class="tg-yw4l">angular-mocks</td>
+                            <td class="tg-yw4l">https://angularjs.org/</td>
+                            <td class="tg-yw4l">1.6.7</td>
+                        </tr>
+                        <tr>
+                            <td class="tg-yw4l">angular-scenario</td>
+                            <td class="tg-yw4l">https://angularjs.org/</td>
+                            <td class="tg-yw4l">1.6.7</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseRequirements"><span class="fa fa-plus"></span> Resource Requirements</a>
+                </h4>
+            </div>
+            <div id="collapseRequirements" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <p>The following requirements are not mandatory as the application is ran on Amazon Web Services. However, these requirements were used by the developers of SECP locally.</p>
+                    <table style="margin: 0px auto;" class="tg">
+                        <tr>
+                            <th class="tg-0zr0">Component</th>
+                            <th class="tg-5794">Requirement</th>
+                        </tr>
+                        <tr>
+                            <td class="tg-yw4l">IDE</td>
+                            <td class="tg-yw4l">IntelliJ IDEA Ultimate 2017.2</td>
+                        </tr>
+                        <tr>
+                            <td class="tg-yw4l">OS</td>
+                            <td class="tg-yw4l">Windows 10, 64-bit</td>
+                        </tr>
+                        <tr>
+                            <td class="tg-yw4l">RAM</td>
+                            <td class="tg-yw4l">8GB RAM</td>
+                        </tr>
+                        <tr>
+                            <td class="tg-yw4l">CPU</td>
+                            <td class="tg-yw4l">Intel Core i7-4510 CPU @2.60 GHz</td>
+                        </tr>
+                        <tr>
+                            <td class="tg-yw4l">XAMPP</td>
+                            <td class="tg-yw4l">v3.2.2</td>
+                        </tr>
+                        <tr>
+                            <td class="tg-yw4l">NPM</td>
+                            <td class="tg-yw4l">v5.6.0</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <p class="noteHowTo"><strong>Note:</strong> Click on the linked heading text to expand or collapse accordion panels.</p>
+</div>
+</body>

@@ -32,6 +32,11 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
         controller: 'HomeController',
         css: 'css/home.css',
       })
+      .when('/docs', {
+        templateUrl: 'views/home/docs.html',
+        controller: 'DocsController',
+        css: 'css/docs.css',
+      })
       .when('/login', {
         templateUrl: 'views/login/login.html',
         controller: 'LoginController',
