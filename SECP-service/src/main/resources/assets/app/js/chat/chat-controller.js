@@ -64,6 +64,7 @@ angular.module('SECP')
           if(index < 0) {
               Group.getProfile(groupID).then(function (contact) {
                   $scope.contacts.push(contact);
+                  index = _.findIndex($scope.contacts, function(o) { return contact.groupID == groupID; });
                   $scope.contacts[index].lastMessage = message;
               })
           } else {

@@ -209,7 +209,8 @@ public class UserController {
         Set<Long> newGroupIDS = new HashSet<>();
 
         //get user's new group
-        Set<Group> groupsForUser = groupDAO.findGroupsForUser(user.getId()).stream()
+        Set<Group> groupsForUser = groupDAO.findAllPublicGroups().stream()
+            .filter(group -> isUserInGroup(group, user))
             .map(group -> {
                 group.getUsers().add(user);
                 groupDAO.save(group);
@@ -228,6 +229,22 @@ public class UserController {
         return groupsForUser;
     }
 
+    private boolean isUserInGroup(Group group, User user) {
+        if (group != null) {
+           if(Util.isCollectionEmpty(group.getPermissions()) && Util.isCollectionEmpty(group.getRoles())) {
+               return  true;
+           } else if(!Util.isCollectionEmpty(group.getPermissions()) && Util.isCollectionEmpty(group.getRoles())) {
+               return group.getPermissions().contains(user.getPermission());
+           } else if(Util.isCollectionEmpty(group.getPermissions()) && !Util.isCollectionEmpty(group.getRoles())) {
+               return !Sets.intersection(group.getRoles(), user.getRoles()).isEmpty();
+           } else {
+               return group.getPermissions().contains(user.getPermission()) &&
+                   !Sets.intersection(group.getRoles(), user.getRoles()).isEmpty();
+           }
+        }
+
+        return false;
+    }
     private void validatePermission(RolesOrPermissionDTO permission)
     {
         if (permission == null) {

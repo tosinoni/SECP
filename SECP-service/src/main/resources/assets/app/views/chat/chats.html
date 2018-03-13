@@ -30,15 +30,7 @@
                                     <div class="col-xs-12 mg-btm-10">
                                         <textarea id="btn-input" ng-model="messageInput" ng-keydown="sendMessageUsingEnter($event)" class="form-control input-sm" placeholder="Type your message here..."></textarea>
                                     </div>
-                                    <div class="col-xs-8">
-                                        <button class="btn btn-green btn-sm">
-                                            <i class="fa fa-camera"></i>
-                                        </button>
-                                        <button class="btn btn-green btn-sm">
-                                            <i class="fa fa-file"></i>
-                                        </button>
-                                    </div>
-                                    <div class="col-xs-4" >
+                                    <div class="col-xs-12" >
                                         <button ng-disabled="!messageInput" class="btn btn-green btn-sm pull-right" ng-click="sendMessage()">
                                             <i class="fa fa-paper-plane"></i> Send
                                         </button>

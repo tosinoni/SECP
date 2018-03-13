@@ -12,6 +12,23 @@ angular.module('SECP')
       var service = {};
       service.callbacks = [];
 
+      function socketCloseListener() {
+          if($rootScope.isAuthenticated) {
+              let userID = localStorage.getItem('userID');
+              //var url = protocol + "://" + host + "/chat/" + userID;
+              var url = "ws://localhost:8080/chat/" + userID;
+
+              let newWs = new WebSocket(url);
+              newWs.onmessage = function (event) {
+                  angular.forEach(service.callbacks, function (callback) {
+                      callback(event.data);
+                  });
+              };
+              newWs.onclose = socketCloseListener;
+
+              service.ws = newWs;
+          }
+      }
       function connect() {
           let userID = localStorage.getItem('userID');
           //var url = protocol + "://" + host + "/chat/" + userID;
@@ -26,6 +43,7 @@ angular.module('SECP')
                   callback(event.data);
               });
           };
+          ws.onclose = socketCloseListener;
 
           service.ws = ws;
       }
@@ -33,10 +51,6 @@ angular.module('SECP')
           connect : connect,
 
           send : function (message) {
-              console.log(service.ws)
-              if(service.ws.readyState === service.ws.CLOSED){
-                  connect();
-              }
               message.senderDeviceName = new Fingerprint().get();
               service.ws.send(JSON.stringify(message));
               },
