@@ -1,11 +1,10 @@
 angular.module('SECP')
-    .controller('AuditViewController', function ($scope, Admin, $location, EncryptionService) {
+    .controller('AuditViewController', function ($scope, Admin, $location, EncryptionService, Chat) {
 
         let routeParams = $location.search();
 
         if (!_.isEmpty(routeParams)) {
             $scope.name = routeParams.name;
-            console.log(routeParams.groups);
             EncryptionService.getDecryptedSecretKeys().then(function (userSecretKeys) {
                 if (userSecretKeys) {
                     $scope.secretKeysForChat = userSecretKeys;
@@ -15,8 +14,12 @@ angular.module('SECP')
             });
 
             $scope.contactSelected = function (contact) {
+                Chat.getMessages(contact).then(function(data) {
+                    if(data) {
+                        $scope.messages = data.reverse();
+                    }
+                });
                 $scope.selectedChat = contact;
-                $scope.messages = contact.messages.reverse();
             };
         } else {
             swal("Audit failed", "please select an audit mode", "error");

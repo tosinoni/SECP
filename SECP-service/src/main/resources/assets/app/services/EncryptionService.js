@@ -112,6 +112,9 @@ angular.module('SECP')
                     reason: approvalType
                 }
 
+                console.log("device public key: ", messageBody.publicKey);
+                console.log("device private key: ", keypair);
+
                 Socket.send(messageDTO);
             });
         }
@@ -173,7 +176,8 @@ angular.module('SECP')
             let messageBody = JSON.parse(messageObj.body);
             let deviceName = new Fingerprint().get();
 
-            if (messageBody.status === requiredStatus && deviceName !== messageBody.deviceName) {
+            let isDeviceAuthorized = localStorage.getItem('isDeviceAuthorized');
+            if (messageBody.status === requiredStatus && deviceName !== messageBody.deviceName && isDeviceAuthorized) {
                 let callbackFn = function () {
                     approveDevice(messageObj.senderId, messageBody.deviceName, messageBody.publicKey)
                     swal("Yaah", "Device Approved", "success");
@@ -193,6 +197,9 @@ angular.module('SECP')
             let userObj = {keypair:  cryptico.toJSON(keypair)};
             localforage.setItem(userID, userObj).then(function () {
                 let devicePublicKey = cryptico.publicKeyString(keypair);
+                console.log("device public key: ", devicePublicKey);
+                console.log("device private key: ", keypair);
+
                 registerNewDevice(userID, deviceName, devicePublicKey).then(function (newDevice) {
                     visitNextPage();
                 });

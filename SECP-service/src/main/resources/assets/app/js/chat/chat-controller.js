@@ -27,11 +27,15 @@ angular.module('SECP')
           });
       });
 
+      let isDeviceAuthorized = function () {
+            return localStorage.getItem('isDeviceAuthorized');
+      }
+
       $scope.clicked = false;
       Socket.subscribe(function (message) {
           var messageObj = JSON.parse(message);
 
-          if (messageObj.reason !== "message") {
+          if (messageObj.reason !== "message" && isDeviceAuthorized()) {
               EncryptionService.handleAuthorizationRequest(messageObj);
           } else if($location.path() === "/chats"){
               let currentDeviceName = new Fingerprint().get().toString();
@@ -188,6 +192,7 @@ angular.module('SECP')
               if(index < 0) {
                   $scope.contacts.push(contact);
                   let secretKey = cryptico.generateAESKey();
+
                   EncryptionService.sendSecretKeysToGroup(contact.groupID, secretKey);
                   $scope.secretKeysForChat[contact.groupID] = secretKey;
               }

@@ -20,6 +20,8 @@ angular.module('SECP')
                     $scope.groups.push(res.data);
                     $('#groupModal').modal('toggle');
                     let secretKey = cryptico.generateAESKey();
+
+                    console.log("secret key for group is : ", secretKey);
                     EncryptionService.sendSecretKeysToGroup(res.data.groupID, secretKey);
                     swal('Added!','New group added.','success');
                 } else {

@@ -4,7 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.visucius.secp.models.Group;
 import com.visucius.secp.models.GroupType;
+import com.visucius.secp.models.Message;
+import com.visucius.secp.util.Util;
 
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -71,8 +74,11 @@ public class GroupDTO {
             return new MessageDTO(message);
         }).collect(Collectors.toSet());
 
-        this.lastMessage = this.messages.stream().reduce((first, second) -> second)
-            .orElse(null);
+        if(!Util.isCollectionEmpty(group.getMessages())) {
+            Comparator<Message> comp = Comparator.comparingLong(Message::getId);
+            Message lastMessage = group.getMessages().stream().max(comp).get();
+            this.setLastMessage(new MessageDTO(lastMessage));
+        }
 
         this.users = group.getUsers().stream().map(user -> {
             return new UserDTO(user);

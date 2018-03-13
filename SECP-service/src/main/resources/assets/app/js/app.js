@@ -187,7 +187,7 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
   })
   .run(function($rootScope,Auth,authManager, Socket, EncryptionService, $location) {
 
-      let isDeviceAuthorized = function () {
+      $rootScope.isDeviceAuthorized = function () {
           return localStorage.getItem('isDeviceAuthorized');
       }
 
@@ -227,7 +227,7 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
       $rootScope.getHomeUrl = function() {
         if(Auth.isTokenExpired()) {
             return '/';
-        } else if(!isDeviceAuthorized()) {
+        } else if(!$rootScope.isDeviceAuthorized()) {
             return '/authenticate'
         } else if(!$rootScope.isAdmin) {
             return '/chats'
@@ -238,7 +238,7 @@ angular.module('SECP', ['ngResource', 'ngRoute', 'ui.bootstrap', 'ui.date',
       $rootScope.$on("$locationChangeStart", function(event) {
         // handle route changes
         if(!Auth.isTokenExpired()) {
-            if(isDeviceAuthorized()) {
+            if($rootScope.isDeviceAuthorized()) {
                 Auth.isUserAnAdmin().then(function (res) {
                     $rootScope.isAdmin = res;
                 });

@@ -35,10 +35,10 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav">
-                    <li ng-cloak ng-show="isAdmin"><a href="/chats">Chat</a></li>
-                    <li ng-cloak ng-show="isAdmin"><a href="/portal/manage">Manage</a></li>
-                    <li ng-cloak ng-show="isAdmin"><a href="/portal/audit">Audit</a></li>
-                    <li ng-cloak ng-show="isAdmin"><a href="/portal/configure">Configure</a></li>
+                    <li ng-cloak ng-show="isAdmin && isDeviceAuthorized()"><a href="/chats">Chat</a></li>
+                    <li ng-cloak ng-show="isAdmin && isDeviceAuthorized()"><a href="/portal/manage">Manage</a></li>
+                    <li ng-cloak ng-show="isAdmin && isDeviceAuthorized()"><a href="/portal/audit">Audit</a></li>
+                    <li ng-cloak ng-show="isAdmin && isDeviceAuthorized()"><a href="/portal/configure">Configure</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li ng-cloak ng-show="!isAuthenticated">
