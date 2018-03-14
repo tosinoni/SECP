@@ -25,8 +25,6 @@ angular.module('SECP')
                 let secretObj = {};
                 if (device.publicKey) {
                     //encrypt the secret key with the users public key
-                    console.log(secretKey);
-                    console.log(device.publicKey);
                     let EncryptionResult = cryptico.encrypt(JSON.stringify(secretKey), device.publicKey);
                     secretObj.groupID = groupID;
                     secretObj.deviceID = device.deviceID;

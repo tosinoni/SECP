@@ -15,8 +15,8 @@ angular.module('SECP')
       function socketCloseListener() {
           if($rootScope.isAuthenticated) {
               let userID = localStorage.getItem('userID');
-              //var url = protocol + "://" + host + "/chat/" + userID;
-              var url = "ws://localhost:8080/chat/" + userID;
+              var url = protocol + "://" + host + "/chat/" + userID;
+              //var url = "ws://localhost:8080/chat/" + userID;
 
               let newWs = new WebSocket(url);
               newWs.onmessage = function (event) {
@@ -31,8 +31,8 @@ angular.module('SECP')
       }
       function connect() {
           let userID = localStorage.getItem('userID');
-          //var url = protocol + "://" + host + "/chat/" + userID;
-          var url = "ws://localhost:8080/chat/" + userID;
+          var url = protocol + "://" + host + "/chat/" + userID;
+          //var url = "ws://localhost:8080/chat/" + userID;
 
           if (service.ws)
               return;
